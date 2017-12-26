@@ -4,7 +4,7 @@
             [clojure.test.check.clojure-test :refer :all]
             [clojure.test.check.generators :as gen]
             [clojure.test.check.properties :as prop]
-            [sre.core :refer :all]
+            [sre.core :refer [bind]]
             [sre.plan.constraint :refer :all]))
 
 (defconstraint Element [element])
@@ -27,5 +27,3 @@
                                 (bind Element [x])
                                 (bind Element [y])
                                 (bind Element [z])))))
-
-

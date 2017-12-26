@@ -2,14 +2,30 @@
   (:require [clojure
              [pprint :as pprint]
              [string :as str]])
+  (:refer-clojure :exclude [name])
   (:import java.io.Writer))
+
+(defprotocol INamed
+  (name [this]))
 
 (defprotocol IBind
   "Something that can be bound to values"
   (bind [this vals])
   (bind-map [this val-map] "Binds this to the given variable key-value mapping"))
 
+(defprotocol IConfig
+  "Configuration used to store constraints, operations, etc."
+  (constraints [this] "Constraints provided by this config")
+  (operations [this] "Operations provided by this config")
+  (costs [this] "Operation cost estimator provided by this config")
+  (tasks [this] "Tasks provided by this config")
+  (cost-calculator [this] "Cost calculator used by this config"))
+
+
 (defrecord Binding [type bindings])
+
+(def variable? keyword?)
+(def constant? (comp not variable?))
 
 (defn pprint-binding [b]
   (pprint/pprint-logical-block

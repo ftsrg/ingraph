@@ -1,5 +1,5 @@
 (ns sre.plan.op
-  (:refer-clojure :exclude [type])
+  (:refer-clojure :exclude [type name])
   (:require [clojure.algo.generic.functor :refer :all]
             [clojure.set :refer :all]
             [clojure.pprint :as pprint]

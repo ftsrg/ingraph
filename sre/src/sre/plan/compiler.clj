@@ -15,8 +15,8 @@
              [estimation :as estimation]
              [lookup :as lookup]]
             [taoensso.tufte :as profiler :refer [defnp]])
+  (:refer-clojure :exclude [name])
   (:import [java.io BufferedReader StringReader]
-           sre.plan.config.IConfig
            [sre.plan.estimation Cost]
            sre.plan.lookup.ConstraintLookup))
 
@@ -154,7 +154,7 @@
   (let [index             (- (:free-count cell) (count (:done present-binding))) ; 3:9
         column            (get plans index)
         ordered-cells     (get column :ordered-cells)
-        cost-calculator   (estimation/update-cost (:cost-calculator cell) op-cost)
+        cost-calculator   (estimation/append (:cost-calculator cell) op-cost)
         constr-lkp        (reduce lookup/bind (:constr-lkp cell) (map (fn [[_ type bindings]]
                                                                         (constraint/->ConstraintBinding type bindings))
                                                                       (:done present-binding)))
@@ -200,7 +200,7 @@
                 (assoc-in [index :cells-by-free free] cell)))))
       :else        plans)))
 
-(defn bind-present [config cell non-past-op-bindings]
+(defn bind-present [cell config non-past-op-bindings]
   (for [non-past-binding non-past-op-bindings
         ;; remember that for bindings will result in a mapcat (just like in Scala)
         ;; so using this can look weird but generally a single non-past op
@@ -220,24 +220,24 @@
         ;; yeah, it smells that we have two different representations for the damn same thing
         ;; so refactor once you have the fatigue
         :let             [op-binding (bind-map (:op present-binding) (:var-lkp present-binding))
-                          op-cost ((config/costs config) (:type op-binding) (:bindings op-binding) (:constr-lkp cell))]]
+                          op-cost (estimation/calculate (:cost-calculator cell) config op-binding (:constr-lkp cell))]]
     [op-cost present-binding op-binding]))
 
-(defn step [^Integer k ^IConfig config plans ^SearchPlanCell cell]
+(defn step [^Integer k config plans ^SearchPlanCell cell]
   (maybe/from-maybe
    ;; try and bind an immediate step. look how cool it is that I can use bind-present here!
    ;; It is because for is actually lazy
-   (m/mlet [immediate-binding (maybe/seq->maybe (bind-present config cell (:<non-past-op-bindings< cell)))]
+   (m/mlet [immediate-binding (maybe/seq->maybe (bind-present cell config (:<non-past-op-bindings< cell)))]
            (m/return (insert-cell cell k plans immediate-binding)))
    ;; no immediate step, default to normal action (from-maybe option default) is similar to Scala option.getOrElse(default))
    ;; the idea here is that we have operations in non-past-op-bindings that may or may not be applicable at the moment
    ;; because we haven't checked them for required constraints. so first figure out the applicable ops
-   (let [regular-bindings (bind-present config cell (:non-past-op-bindings cell))]
+   (let [regular-bindings (bind-present cell config (:non-past-op-bindings cell))]
      (if (seq regular-bindings) ; this is the idiomatic way in Clojure to check for a non-empty sequence (http://clojuredocs.org/clojure.core/empty_q)
        ;; insert regular steps
        (reduce (partial insert-cell cell k) plans regular-bindings)
        ;; if no regular steps are available, try inserting a deferred step
-       (maybe/from-maybe (m/mlet [deferred-binding (maybe/seq->maybe (bind-present config cell (:>non-past-op-bindings> cell)))]
+       (maybe/from-maybe (m/mlet [deferred-binding (maybe/seq->maybe (bind-present cell config (:>non-past-op-bindings> cell)))]
                                  (m/return (insert-cell cell k plans deferred-binding)))
                          plans)))))
 
@@ -249,17 +249,17 @@
   of operations that satisfy the given constraints.
   Another difference is the generalized cost-calculator. While the original article was very specific about how to calculate costs
   it hinted that the only requirement is that it should be incrementally computable. Thus here the cost calculator should be
-  supplied can be supplied by the invoker."
+  supplied by the invoker."
   [^ConstraintLookup constr-lkp
-   ^IConfig config {^Cost cost-calculator     :cost-calculator
-                    ^Integer k                :k
-                    :or                       {cost-calculator   estimation/default-cost-calculator
-                                               k                 10}}]
+   config
+   ^Cost cost-calculator
+   {^Integer k                :k
+    :or                       {k                 10}}]
   ;; comments starting with x:y mark that the line corresponds to the algorithm
   ;; listing `x` line `y` from the above mentioned paper.
   ;; it hopefully gives a good reference what the code does.
   ;; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
-  (let [ops                      (config/operations config)
+  (let [ops                      (operations config)
         n                        (count (lookup/lookup constr-lkp :free))
         step                     (partial step k config)
         {immediate :immediate regular :regular deferred :deferred} (->> ops (group-by :disposition))

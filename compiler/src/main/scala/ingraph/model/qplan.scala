@@ -60,7 +60,7 @@ case class DuplicateElimination(child: QNode) extends UnaryQNode {}
 case class Expand(src: VertexAttribute,
                   trg: VertexAttribute,
                   edge: AbstractEdgeAttribute,
-                  direction: Direction,
+                  dir: Direction,
                   child: QNode) extends UnaryQNode with NavigationDescriptor {
   override def output = child.output ++ Seq(edge, trg)
 }
@@ -102,8 +102,8 @@ case class Sort(order: Seq[SortOrder], child: QNode) extends UnaryQNode {}
 
 case class Top(skipExpr: Expression, limitExpr: Expression, child: QNode) extends UnaryQNode {}
 
-case class Unwind(collection: Expression, element: Attribute, child: QNode) extends UnaryQNode {
-  override def output = Seq() // child.output.updated(child.output.indexOf(element), element)
+case class Unwind(unwindAttribute: UnwindAttribute, child: QNode) extends UnaryQNode {
+  override def output = child.output ++ Seq(unwindAttribute) // child.output.updated(child.output.indexOf(element), element)
   // TODO indexOf might be unable to find the attribute
 }
 

@@ -53,21 +53,21 @@ object ReturnBuilder {
     val returnItems = returnBody.getReturnItems.get(0)
 
     // pre-create elements to project to which will be copied to BeamerOperator.elements
-    val _elements = ListBuffer[cExpr.NamedExpression]()
+    val _elements = ListBuffer[expr.ReturnItem]()
 
     if ("*".equals(returnItems.getAll)) {
       //TODO: when resolving,
       // - add the non-dontCare vertex variables to the return list sorted by variable name
       // - add the non-dontCare edge variables to the return list sorted by variable name
-      _elements += UnresolvedStar(None)
+      _elements += expr.ReturnItem(UnresolvedStar(None))
     }
     for (returnItem <- returnItems.getItems.asScala) {
       val e = ExpressionBuilder.buildExpressionNoJoinAllowed(returnItem.getExpression)
 
       if (returnItem.getAlias == null)
-        _elements += UnresolvedAlias(e)
+        _elements += expr.ReturnItem(e)
       else
-        _elements += cExpr.Alias(e, returnItem.getAlias.getName)()
+        _elements += expr.ReturnItem(e, Some(returnItem.getAlias.getName))
     }
 
     //TODO: check after resolving: if (_elements.empty) unrecoverableError('''RETURN items processed and resulted in no columns values to return''')

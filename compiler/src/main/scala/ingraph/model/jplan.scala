@@ -2,7 +2,7 @@ package ingraph.model.jplan
 
 import ingraph.model.expr
 import ingraph.model.expr.types.TProjectList
-import ingraph.model.expr.{EdgeAttribute, ProjectionDescriptor, VertexLabelUpdate}
+import ingraph.model.expr.{EdgeAttribute, ProjectionDescriptor, UnwindAttribute, VertexLabelUpdate}
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical._
@@ -72,8 +72,8 @@ case class Grouping(aggregationCriteria: Seq[Expression], projectList: TProjectL
 case class Selection(condition: Expression,
                      child: JNode) extends UnaryJNode {}
 
-case class Unwind(collection: Expression, element: Attribute, child: JNode) extends UnaryJNode {
-  override def output = Seq() // child.output.updated(child.output.indexOf(element), element)
+case class Unwind(unwindAttribute: UnwindAttribute, child: JNode) extends UnaryJNode {
+  override def output = child.output ++ Seq(unwindAttribute) // child.output.updated(child.output.indexOf(element), element)
   // TODO indexOf might be unable to find the attribute
 }
 

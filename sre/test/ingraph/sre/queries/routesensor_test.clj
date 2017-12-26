@@ -14,16 +14,12 @@
 
 (tufte/add-basic-println-handler! {})
 
-(defn compile-pattern [def-sym k]
-  (let [def @(resolve def-sym)]
-    (tufte/profile {} (tufte/p (-> def-sym str keyword) (pattern/compile (:pattern def) (:config def) {:k k})))))
-
-(def rs-proto-1 (tufte/profile {} (utils/compile-pattern 'rs/p-1 5)))
+(def rs-proto-1 (tufte/profile {} (utils/compile-pattern 'rs/p-1 [] 5)))
 
 (comment
   "eval this to get the tasks -->" (pprint/pprint (utils/get-tasks rs-proto-1)))
 
-(def rs-proto-2 (tufte/profile {} (utils/compile-pattern 'rs/p-2 5)))
+(def rs-proto-2 (tufte/profile {} (utils/compile-pattern 'rs/p-2 [] 5)))
 
 (comment
   "eval this to get the tasks -->" (pprint/pprint (utils/get-tasks rs-proto-2)))

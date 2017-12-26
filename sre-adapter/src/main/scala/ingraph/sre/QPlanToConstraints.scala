@@ -18,7 +18,7 @@ object QPlanToConstraints {
       case qplan.Selection(condition, child) => ???
       case qplan.DuplicateElimination(child) => ???
       case qplan.AllDifferent(edges, child) => ???
-      case qplan.Unwind(collection, element, child) => ???
+      case qplan.Unwind(unwindAttribute, child) => ???
 
       // binary
       case qplan.Union(all, l, r) => ???

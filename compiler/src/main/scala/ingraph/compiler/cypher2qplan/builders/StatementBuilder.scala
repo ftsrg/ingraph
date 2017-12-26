@@ -4,7 +4,6 @@ import ingraph.compiler.cypher2qplan.structures.MatchDescriptor
 import ingraph.compiler.cypher2qplan.util.GrammarUtil
 import ingraph.model.qplan.QNode
 import ingraph.model.{expr, qplan}
-import org.apache.spark.sql.catalyst.analysis.UnresolvedAlias
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -139,19 +138,18 @@ object StatementBuilder {
     //FIXME: continue processing clauses
     //return afterReturn
 
-    // .filter( c => c.isInstanceOf[oc.With] || c.isInstanceOf[oc.Return] )
+    // process Unwind if any.
     val singleQuery_unwindClauseList: Seq[oc.Unwind] = clauses.flatMap{ case u: oc.Unwind => Some(u) case _ => None }
 
     // each query part has 0 or 1 UNWIND clause.
     // use of foldLeft below is purely to substitute the corresponding if expression
     if (singleQuery_unwindClauseList.length > 1) {
-      throw new RuntimeException("Multiple unwind clauses found in a query part, though it shold be handled when splitting query to query parts.")
+      throw new RuntimeException("Multiple unwind clauses found in a query part, though it should be handled when splitting query to query parts.")
     }
     val afterUnwind: QNode = singleQuery_unwindClauseList.foldLeft(afterReturn)(
       (prev, unwind) => {
-        val expr = ExpressionBuilder.buildExpressionNoJoinAllowed(unwind.getExpression)
-        val variable = AttributeBuilder.buildAttribute(unwind.getVariable)
-        qplan.Unwind(UnresolvedAlias(expr), variable, prev)
+        val expression = ExpressionBuilder.buildExpressionNoJoinAllowed(unwind.getExpression)
+        qplan.Unwind(expr.UnwindAttribute(expression, unwind.getVariable.getName), prev)
       }
     )
 

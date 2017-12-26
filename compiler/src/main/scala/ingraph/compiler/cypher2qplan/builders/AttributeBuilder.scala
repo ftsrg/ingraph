@@ -37,7 +37,7 @@ object AttributeBuilder {
         case _ => expr.EdgeAttribute(name, els, props, isAnonymous = isAnon)
       }
     } else {
-      expr.EdgeAttribute(generateUniqueName, EdgeLabelSet(), isAnonymous = true)
+      expr.EdgeAttribute(generateUniqueName, isAnonymous = true)
     }
   }
 

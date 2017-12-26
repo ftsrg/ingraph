@@ -11,48 +11,48 @@
   (:require [clojure.set :refer :all]
             [clojure.pprint :refer :all]
             [sre.core :refer :all]
+            [sre.plan.estimation :as estimation]
             [sre.plan.op :refer :all])
   (:import (clojure.lang IPersistentSet MultiFn)
            (sre.plan.op Op)))
-
-(defprotocol IConfig
-  "Configuration used to store constraints, operations, etc."
-  (name [this] "Returns the name of this config ")
-  (constraints [this] "Constraints provided by this config")
-  (operations [this] "Operations provided by this config")
-  (costs [this] "Operation cost estimator provided by this config")
-  (tasks [this] "Tasks provided by this config"))
 
 (def ^:private dispatch-op (fn ^Op [op & rest] op))
 
 (def ^:private h (make-hierarchy))
 
-(defrecord Config [^String name ^IPersistentSet constraints ^IPersistentSet ops ^MultiFn costs ^MultiFn tasks]
-  IConfig
+(defrecord Config [^String name ^IPersistentSet constraints ^IPersistentSet ops ^MultiFn costs ^MultiFn tasks cost-calculator]
+  INamed
   (name [this] name)
+  IConfig
   (constraints [this] constraints)
   (operations [this] ops)
   (costs [this] costs)
-  (tasks [this] tasks))
+  (tasks [this] tasks)
+  (cost-calculator [this] (:cost-calculator this)))
 
 (defn config
   "Creates a config. Optionally you can specify an underlying config upon which
   this one will be layered. Constraints and operations will be united, name will be overshadowed
   cost and task methods will be coalesced in a way that first the upper config will be checked then
   if not found dispatch will fall through to the underlying multimethod."
-  ([name constrs ops cost-methods task-methods underlying]
+  ([name constrs ops cost-methods task-methods cost-calculator underlying]
    (let [cost-dispatch (MultiFn. (str name "-cost") dispatch-op :default #'h)
          tasks-dispatch (MultiFn. (str name "-tasks") dispatch-op :default #'h)
          constrs (union constrs (if underlying (constraints underlying)))
          ops (union ops (if underlying (operations underlying)))
          cost-methods (merge (if underlying (-> underlying costs methods)) cost-methods)
-         task-methods (merge (if underlying (-> underlying tasks methods)) task-methods)]
+         task-methods (merge (if underlying (-> underlying tasks methods)) task-methods)
+         cost-calculator (cond
+                           cost-calculator cost-calculator
+                           underlying (cost-calculator underlying)
+                           :else estimation/default-cost-calculator)]
+
      ;; sidefx below!
      (doseq [[dispatch-val mfn] cost-methods]
        (.addMethod cost-dispatch dispatch-val mfn))
      (doseq [[dispatch-val mfn] task-methods]
        (.addMethod tasks-dispatch dispatch-val mfn))
-     (->Config name constraints ops cost-dispatch tasks-dispatch)))
+     (->Config name constraints ops cost-dispatch tasks-dispatch cost-calculator)))
   ([name constrs ops cost-methods task-methods] (config name
                                                           (into #{} constrs)
                                                           (into #{} ops)
@@ -90,8 +90,9 @@
   ```
 
   Now you can get all ops from myconfig/ops etc."
-  [name]
-  (let [factory-name (str *ns* "." name "Config")
+  [name & rest]
+  (let [[{cost-calculator# :cost-calculator :or {cost-calculator# `estimation/default-cost-calculator}}] rest
+        factory-name (str *ns* "." name "Config")
         factory-prefix (str name "Config-")]
     `(do
        (def ^:private ~'-name (str '~name))
@@ -100,14 +101,18 @@
        (defmulti ^:private ~'-costs ~dispatch-op)
        (defmulti ^:private ~'-tasks ~dispatch-op)
 
-       (def ~name (reify IConfig
-                    (name [~'this] ~'-name)
-                    (constraints [~'this] ~'-constraints)
-                    (operations [~'this] ~'-ops)
-                    (costs [~'this] ~'-costs)
-                    (tasks [~'this] ~'-tasks)))
-
-       (defn ~(symbol (str factory-prefix "getInstance")) [] ~name)
-       (gen-class :name ~factory-name
-                  :prefix ~factory-prefix
-                  :methods [^:static [~'getInstance [] sre.plan.config.IConfig]]))))
+       (let [config# (reify
+                       INamed
+                       (name [~'this] ~'-name)
+                       IConfig
+                       (constraints [~'this] ~'-constraints)
+                       (operations [~'this] ~'-ops)
+                       (costs [~'this] ~'-costs)
+                       (tasks [~'this] ~'-tasks)
+                       (cost-calculator [~'this] ~cost-calculator#))]
+         (defn- ~'-cost-calculator [] (cost-calculator config#))
+         (def ~name config#)
+         (defn ~(symbol (str factory-prefix "getInstance")) [] ~name)
+         (gen-class :name ~factory-name
+           :prefix ~factory-prefix
+           :methods [^:static [~'getInstance [] sre.core.IConfig]])))))

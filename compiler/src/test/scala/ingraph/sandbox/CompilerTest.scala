@@ -12,39 +12,33 @@ class CompilerTest extends FunSuite {
 
   val log = true
 
-  case class CompilationStages(
-                                unresolvedQPlan: QNode,
-                                resolvedQPlan: QNode,
-                                jplan: JNode,
-                                fplan: FNode
-                              )
+  case class CompilationStages(qplan: QNode,
+                               jplan: JNode,
+                               fplan: FNode)
 
   def compile(query: String): CompilationStages = {
     val cypher = CypherParser.parseString(query)
-    val unresolvedQPlan = CypherToQPlan.build(cypher)
-    val resolvedQPlan = QPlanResolver.resolveQPlan(unresolvedQPlan)
-    val jplan = QPlanToJPlan.transform(resolvedQPlan)
+    val qplan = CypherToQPlan.build(cypher)
+    val jplan = QPlanToJPlan.transform(qplan)
     val fplan = SchemaInferencer.transform(jplan)
+
 
     if (log) {
       println("=============================================================================")
       println("Query:")
       println(query)
       println("-----------------------------------------------------------------------------")
-      println("Unresolved QPlan:")
-      println(unresolvedQPlan)
-      println("-----------------------------------------------------------------------------")
-      println("Resolved QPlan:")
-      println(resolvedQPlan)
+      println("QPlan:")
+      println(qplan)
       println("-----------------------------------------------------------------------------")
       println("JPlan:")
       println(jplan)
       println("-----------------------------------------------------------------------------")
       println("FPlan:")
-      //      println(fplan)
+      println(fplan)
     }
 
-    return CompilationStages(unresolvedQPlan, resolvedQPlan, jplan, fplan)
+    return CompilationStages(qplan, jplan, fplan)
   }
 
   def getLeafNodes(plan: FNode): Seq[FNode] = {
