@@ -63,7 +63,7 @@ class DataManipulationTest extends FunSuite {
     assert(whereIsAdapter.result() == Seq(Vector(-4964420948893066024L, "poweeeer")))
   }
 
-  test("create matched vertex works") {
+  ignore("create matched vertex works") {
     val indexer = initializeIndexer()
 
     val oneOff = "MATCH (t: Train) WHERE t.power = t.power CREATE (e: Engine {power: t.power})"
