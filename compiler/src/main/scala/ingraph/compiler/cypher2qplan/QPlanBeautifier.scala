@@ -44,6 +44,7 @@ object QPlanBeautifier {
       // FIXME: projection should be introduced by the compiler, and also match it here
     case qplan.Selection(cExpr.Not(e), qplan.LeftOuterJoin(base, filter)) if checkForAntijoin(e, filter) => qplan.AntiJoin(base, filter)
     case qplan.Selection(cExpr.Not(e), qplan.LeftOuterJoin(filter, base)) if checkForAntijoin(e, filter) => qplan.AntiJoin(base, filter)
+    case qplan.Selection(cExpr.Literal(true, BooleanType), child) => child
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
   }
 
@@ -70,8 +71,8 @@ object QPlanBeautifier {
     while (check1 && exprQueue.nonEmpty) {
       exprQueue.dequeue() match {
         case cExpr.And(c1, c2) => exprQueue.enqueue(c1, c2)
-        case cExpr.IsNotNull(expr.EdgeAttribute(n, l, p, ia)) => attributesOfCondition.append(expr.EdgeAttribute(n, l, p, ia))
-        case cExpr.IsNotNull(expr.VertexAttribute(n, l, p, ia)) => attributesOfCondition.append(expr.VertexAttribute(n, l, p, ia))
+        case cExpr.IsNotNull(expr.EdgeAttribute(n, l, p, ia, rn)) => attributesOfCondition.append(expr.EdgeAttribute(n, l, p, ia, rn))
+        case cExpr.IsNotNull(expr.VertexAttribute(n, l, p, ia, rn)) => attributesOfCondition.append(expr.VertexAttribute(n, l, p, ia, rn))
         case cExpr.IsNotNull(UnresolvedAttribute(nameParts)) => attributesOfCondition.append(UnresolvedAttribute(nameParts))
         case _ => check1 = false
       }

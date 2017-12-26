@@ -2,7 +2,7 @@
   (:require [ingraph.sre
              [ingraph-proto-1 :as proto-1]
              [ingraph-proto-2 :as proto-2]]
-            [sre.core :refer :all]
+            [sre.core :refer [bind]]
             [sre.plan.pattern :as pattern]))
 
 (def p-1

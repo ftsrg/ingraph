@@ -7,6 +7,7 @@
             [sre.plan.task :refer [ISearch search]]
             [taoensso.tufte :refer [defnp p]]
             [clojure.pprint :as pprint])
+  (:refer-clojure :exclude [name])
   (:import [clojure.lang LazySeq PersistentList]))
 
 (set! *warn-on-reflection* true)
@@ -41,7 +42,7 @@
   (-> variables (select-keys bindings) (remap-keys key-map)))
 
 
-(defnp ^:private conj-step-search [this bindings variables ctx]
+(defnp conj-step-search [this bindings variables ctx]
   (let [{subtasks :subtasks outer-vars :outer-vars inner-vars :inner-vars} this
         key-map (zipmap bindings outer-vars)
         variables (rebind-variables variables bindings key-map)

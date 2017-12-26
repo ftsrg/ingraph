@@ -8,7 +8,7 @@
              [compiler :as compiler]
              [config :as config]
              [constraint :as c]
-             [estimation :refer [->CostCalculator]]
+             [estimation :as estimation]
              [lookup :as lkp]
              [op :as op]
              [task :as task]])
@@ -17,13 +17,12 @@
 (defprotocol IPattern
   "IPattern is rule that has to be satisfied by a search. Every pattern is compiled into a unique Constraint and
   a corresponding Op that satisfies the constraint."
-  (name [this])
   (outer-vars [this])
   (constraint [this])
   (op [this])
-  (compile [this compiler config]))
+  (compile [this config estimator-args compiler-opts]))
 
-(extend-type Constraint IPattern (compile [this config compiler-opts] [this nil nil nil]))
+(extend-type Constraint IPattern (compile [this config estimator-args compiler-opts] [this nil nil nil]))
 
 (defprotocol IPatternBinding (hoist [this ctx]))
 
@@ -40,33 +39,35 @@
   (bind-map [this val-map]
     (map->Binding {:type     this
                    :bindings (fmap #(val-map %1) (:outer-vars this))}))
-  IPattern
+  INamed
   (name [this] (:name this))
+  IPattern
   (outer-vars [this] (:outer-vars this))
   (op [this] (:op this))
   (constraint [this] (:constraint this))
-  (compile [this config compiler-opts]
+  (compile [this config estimator-args compiler-opts]
     (try
       (let [compiled-stuff (reduce (fn [a x] (map #(if (some? (second %)) (conj (first %) (second %)) (first %)) (zip a x)))
                                    [#{} [] [] {} {}]
                                    (for [{t :type b :bindings} pattern-bindings
-                                         :let [conf-update (compile t config compiler-opts)
+                                         :let [conf-update (compile t config estimator-args compiler-opts)
                                                cb (bind (first conf-update) b)]]
                                      (cons cb conf-update)))
             ;; create constraint lookup table for the search planner
             [cbs & config-updates] compiled-stuff
-
             ;; explode implications
             reqs (apply c/union* reqs)
             cbs (apply c/union* cbs)
             constr-lkp (lkp/constraint-lookup (difference cbs reqs) reqs)
             ;; update config by applying all configuration updates in order to resolve any
             ;; nested patterns
-            config (apply config/config (concat [name] config-updates [config]))
+            config (apply config/config (concat [name] config-updates [(cost-calculator config) config]))
             ;; run the search planner
-            plan @(compiler/run constr-lkp config compiler-opts)
-            cost (-> plan :cost-calculator)
-            task-bindings (map #(->Binding ((config/tasks config) (:type %)) (:bindings %)) (:ops plan))
+            cc (apply estimation/init-cost-calculator (concat [(cost-calculator config)] estimator-args))
+            plan @(compiler/run constr-lkp config cc compiler-opts)
+            {c :c p :p} (-> plan :cost-calculator)
+            cost (estimation/append cc {:c c :p p})
+            task-bindings (map #(->Binding ((tasks config) (:type %)) (:bindings %)) (:ops plan))
             task (exec/->ConjStep task-bindings outer-vars inner-vars)]
         [constraint op {op (constantly cost)} {op (constantly task)}])
       (catch Throwable t
@@ -91,16 +92,18 @@
   (bind-map [this val-map]
     (map->Binding {:type     this
                    :bindings (fmap #(val-map %1) (:outer-vars this))}))
-  IPattern
+
+  INamed
   (name [this] (:name this))
+  IPattern
   (outer-vars [this] (:outer-vars this))
   (op [this] (:op this))
   (constraint [this] (:constraint this))
-  (compile [this config compiler-opts]
+  (compile [this config estimator-args compiler-opts]
     (try
-      (let [[inner-constr inner-op inner-cost inner-task] (compile pattern config compiler-opts)
+      (let [[inner-constr inner-op inner-cost inner-task] (compile pattern config estimator-args compiler-opts)
             ;; TODO find good cost
-            cost (->CostCalculator 1000.0 0.5)
+            cost (estimation/->SimpleCostCalculator 1000.0 0.5)
             task (exec/->NotExistsStep ((inner-task inner-op)))]
         [constraint op {op (constantly cost)} {op (constantly task)}]))))
 

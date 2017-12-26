@@ -34,10 +34,9 @@ test {
 }
 
 dependencies {
-
   compile project(':indexer')
   compile 'com.taoensso:tufte:1.1.2'
-  compile 'org.clojure:clojure:1.8.0'
+  compile group: 'org.clojure', name: 'clojure', version: clojureVersion
   compile 'org.clojure:algo.generic:0.1.2'
   compile 'net.mikera:core.matrix:0.60.3'
   compile 'funcool:cats:2.1.0'

@@ -45,5 +45,3 @@
          (let [[v e w] bindings]
            (if (= (variables v) 1)
              [(variables e "1->2" w 2)])))
-
-(def cost-calculator default-cost-calculator)

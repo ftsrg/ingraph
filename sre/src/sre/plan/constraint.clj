@@ -7,6 +7,7 @@
             [clojure.algo.generic.functor :refer :all]
             [sre.core :refer :all]
             [clojure.string :as str])
+  (:refer-clojure :exclude [name])
   (:import clojure.lang.IPersistentSet
            java.io.Writer))
 
