@@ -2,7 +2,7 @@ package ingraph.compiler.qplan2jplan
 
 import ingraph.model.expr.PropertyAttribute
 import ingraph.model.fplan._
-import ingraph.model.{fplan, jplan}
+import ingraph.model.{expr, fplan, jplan}
 import ingraph.model.jplan.JNode
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression}
 
@@ -86,7 +86,8 @@ object SchemaInferencer {
     }) ++ expression.children.flatMap(extractAttributes(_))
   }
 
-  def extractAttributes(projectList: Seq[NamedExpression]): Seq[Attribute] = {
+  def extractAttributes(projectList: expr.types.TProjectList): Seq[Attribute] = {
+    // this will descend into ReturnItem.child as it is a UnaryExpression
     projectList.flatMap(extractAttributes(_))
   }
 
