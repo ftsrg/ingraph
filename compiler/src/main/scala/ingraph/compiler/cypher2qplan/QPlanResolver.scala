@@ -117,6 +117,7 @@ object QPlanResolver {
                         case ea: expr.ElementAttribute => nextQueryPartNameResolverScope.put(ea.name, (rc.resolvedName.get, rc))
                         case pa: expr.PropertyAttribute => nextQueryPartNameResolverScope.put(s"${pa.elementAttribute.name}$$${pa.name}", (rc.resolvedName.get, rc))
                         case ua: expr.UnwindAttribute => nextQueryPartNameResolverScope.put(ua.name, (rc.resolvedName.get, rc))
+                        case ea: expr.ExpressionAttribute => nextQueryPartNameResolverScope.put(ea.name, (rc.resolvedName.get, rc))
                         case _ => throw new RuntimeException(s"Unexpected type found in return item position: ${rc.getClass}")
                       }
                       rc.resolvedName
@@ -183,8 +184,9 @@ object QPlanResolver {
               // handle PropertyAttribute chained from previous query part under some alias
               case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name, elementAttribute, resolvedName = rn)
               case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, resolvedName = rn)
-              // fallback for expressions
-              case e: cExpr.Expression => e
+              case expr.ExpressionAttribute(e, name, _) => expr.ExpressionAttribute(e, name, resolvedName = rn)
+              // fallback for expressions: expression references get wrapped into ExpressionAttribute upon resolution
+              case e: cExpr.Expression => expr.ExpressionAttribute(e, elementName, resolvedName = rn)
             }
           }
           case _ => throw new RuntimeException(s"Unresolvable name ${elementName}.")

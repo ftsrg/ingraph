@@ -12,7 +12,10 @@ class TrainBenchmarkCompilationTest extends FunSuite {
     TrainBenchmarkCompilationTest.testQueryString(
       """WITH 'dummy' AS x
         |MATCH (p:Person)-[:LIVES]->(c:City)
-        |RETURN p as p, count(c) AS cities, x""".stripMargin)
+        |WITH p as p, count(c) AS cities, x
+        |MATCH (p:Person)-[:VISITED]->(c:Country)
+        |WITH p, cities, count(c) AS countries, x
+        |RETURN *""".stripMargin)
 
   }
 
