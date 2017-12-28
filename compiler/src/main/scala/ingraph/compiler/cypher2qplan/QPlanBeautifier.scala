@@ -53,6 +53,9 @@ object QPlanBeautifier {
     case cExpr.And(l, cExpr.Literal(true, BooleanType)) => l
     case cExpr.Or(cExpr.Literal(false, BooleanType), r) => r
     case cExpr.Or(l, cExpr.Literal(false, BooleanType)) => l
+    case cExpr.Not(cExpr.Not(e)) => e
+    case cExpr.UnaryPositive(e) => e
+    case cExpr.UnaryMinus(cExpr.UnaryMinus(e)) => e
   }
 
   /**
