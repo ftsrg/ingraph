@@ -10,12 +10,10 @@ class TrainBenchmarkCompilationTest extends FunSuite {
 
   test("Random test from cypher string") {
     TrainBenchmarkCompilationTest.testQueryString(
-      """WITH 'dummy' AS x
-        |MATCH (p:Person)-[:LIVES]->(c:City)
-        |WITH p as p, count(c) AS cities, x
-        |MATCH (p:Person)-[:VISITED]->(c:Country)
-        |WITH p, cities, count(c) AS countries, x
-        |RETURN *""".stripMargin)
+      """MATCH (segment:Segment)
+        |WHERE segment.length <= 0
+        |RETURN segment, segment.length AS length
+        |     , case segment.length when 0 then 'zero' when 0-1 then 'almost OK' else 'too bad' end AS lengthComment""".stripMargin)
 
   }
 

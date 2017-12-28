@@ -41,7 +41,7 @@ object ExpressionBuilder {
       //TODO: case e: oc.Parameter => buildExpressionAux(e, joins)
       case e: oc.StringConstant => LiteralBuilder.buildStringLiteral(e)
       case e: oc.VariableRef => AttributeBuilder.buildAttribute(e)
-      //TODO: case e: oc.CaseExpression => buildExpressionAux(e, joins)
+      case e: oc.CaseExpression => buildExpressionCase(e)
       //TODO: case e: oc.ExpressionList => buildExpressionAux(e, joins)
       //TODO: case e: oc.IndexExpression => buildExpressionAux(e, joins)
       case e: oc.NullConstant => cExpr.Literal(null)
@@ -191,50 +191,36 @@ object ExpressionBuilder {
 //      null
 //    }
 //  }
-//
-//  def buildExpressionAux(e: oc.CaseExpression): cExpr.Expression = {
-//    if (!(e.expression instanceof CaseExpression)) {
-//      ce.l.unrecoverableError("Outer CaseExpressions should contain a CaseExpression")
-//    }
-//    val caseExpr = e.expression as CaseExpression
-//
-//    // do we process a simple case expression,
-//    // i.e. when there is a single value we search for
-//    var boolean isSimple = false
-//
-//    val retVal = if (caseExpr.caseExpression === null) {
-//      modelFactory.createGenericCaseExpression => [
-//      expressionContainer = ce.tlc
-//      ]
-//    } else {
-//      isSimple = true
-//      modelFactory.createSimpleCaseExpression => [
-//      expressionContainer = ce.tlc
-//      test = ComparableElementBuilder.buildComparableElement(caseExpr.caseExpression, ce)
-//      ]
-//    }
-//
-//    // WHEN when THEN then
-//    for (ca: caseExpr.caseAlternatives) {
-//      val case_ = modelFactory.createCase => [
-//      then = buildExpression(ca.then, ce)
-//      ]
-//      if (isSimple) {
-//        case_.when = ComparableElementBuilder.buildComparableElement(ca.when, ce)
-//      } else {
-//        case_.when = LogicalExpressionBuilder.buildLogicalExpressionNoJoinAllowed(ca.when, ce)
-//      }
-//      retVal.cases.add(case_)
-//    }
-//
-//    // ELSE elseExpression
-//    if (caseExpr.elseExpression !== null) {
-//      retVal.fallback = buildExpression(caseExpr.elseExpression, ce)
-//    }
-//
-//    retVal
-//  }
-//
+
+  def buildExpressionCase(e: oc.CaseExpression): cExpr.Expression = {
+    e.getExpression match {
+      case caseExpr: oc.CaseExpression => {
+        val elseExpr: Option[cExpr.Expression] = caseExpr.getElseExpression match {
+          case e: Any => Some(buildExpressionNoJoinAllowed(e))
+          case _ => None
+        }
+
+        val branches: Seq[(cExpr.Expression, cExpr.Expression)] = caseExpr.getCaseAlternatives.asScala.map( ca => { //(condExpr, valueExpr)
+          (buildExpressionNoJoinAllowed(ca.getWhen), buildExpressionNoJoinAllowed(ca.getThen))
+        })
+
+        caseExpr.getCaseExpression match {
+          case e: Any => {
+            val simpleCaseExpression: cExpr.Expression = buildExpressionNoJoinAllowed(e)
+            val emulatedBranches: Seq[(cExpr.Expression, cExpr.Expression)] = branches.map({
+              case (condExpr, valueExpr) => {
+                (cExpr.EqualTo(simpleCaseExpression, condExpr), valueExpr)
+              }
+            })
+            cExpr.CaseWhen(emulatedBranches, elseExpr)
+          }
+          case _ => cExpr.CaseWhen(branches, elseExpr)
+        }
+      }
+      case _ => throw new RuntimeException("According to the grammar implementation, outer CaseExpressions should contain a CaseExpression")
+    }
+  }
+
 //  def buildExpressionAux(el: oc.ExpressionList): cExpr.Expression = {
 //    val emptyList = modelFactory.createEmptyListExpression => [
 //    head = null
