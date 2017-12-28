@@ -109,10 +109,10 @@ object QPlanResolver {
               val resolvedProjectListBuf = ListBuffer.empty[expr.ReturnItem]
               for (ri <- projectList) {
                 val resolvedChild = r(ri.child)
-                val resolvedName: Option[String] = resolvedChild match {
-                  case rc: expr.ResolvableName => ri.alias match {
-                    case Some(alias) => nextSnr(alias, rc)
-                    case _ => {
+                val resolvedName: Option[String] = ri.alias match {
+                  case Some(alias) => nextSnr(alias, resolvedChild)
+                  case None => resolvedChild match {
+                    case rc: expr.ResolvableName => {
                       rc match {
                         case ea: expr.ElementAttribute => nextQueryPartNameResolverScope.put(ea.name, (rc.resolvedName.get, rc))
                         case pa: expr.PropertyAttribute => nextQueryPartNameResolverScope.put(s"${pa.elementAttribute.name}$$${pa.name}", (rc.resolvedName.get, rc))
@@ -121,8 +121,8 @@ object QPlanResolver {
                       }
                       rc.resolvedName
                     }
+                    case rc => nextSnr("_expr", rc)
                   }
-                  case rc => nextSnr("_expr", rc)
                 }
                 resolvedProjectListBuf.append(ReturnItem(resolvedChild, ri.alias, resolvedName))
               }
@@ -183,6 +183,8 @@ object QPlanResolver {
               // handle PropertyAttribute chained from previous query part under some alias
               case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name, elementAttribute, resolvedName = rn)
               case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, resolvedName = rn)
+              // fallback for expressions
+              case e: cExpr.Expression => e
             }
           }
           case _ => throw new RuntimeException(s"Unresolvable name ${elementName}.")

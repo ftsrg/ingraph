@@ -10,10 +10,9 @@ class TrainBenchmarkCompilationTest extends FunSuite {
 
   test("Random test from cypher string") {
     TrainBenchmarkCompilationTest.testQueryString(
-      """MATCH (n)
-        |WITH n
-        |UNWIND n.favColors AS favColor
-        |RETURN n, favColor""".stripMargin)
+      """WITH 'dummy' AS x
+        |MATCH (p:Person)-[:LIVES]->(c:City)
+        |RETURN p as p, count(c) AS cities, x""".stripMargin)
 
   }
 
