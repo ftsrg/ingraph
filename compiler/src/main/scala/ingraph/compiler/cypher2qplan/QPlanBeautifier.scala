@@ -45,10 +45,10 @@ object QPlanBeautifier {
     case qplan.Selection(cExpr.Not(e), qplan.LeftOuterJoin(base, filter)) if checkForAntijoin(e, filter) => qplan.AntiJoin(base, filter)
     case qplan.Selection(cExpr.Not(e), qplan.LeftOuterJoin(filter, base)) if checkForAntijoin(e, filter) => qplan.AntiJoin(base, filter)
     case qplan.Selection(cExpr.Literal(true, BooleanType), child) => child
-    case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
+    case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionBeautifier), child)
   }
 
-  val expressionResolver: PartialFunction[Expression, Expression] = {
+  val expressionBeautifier: PartialFunction[Expression, Expression] = {
     case cExpr.And(cExpr.Literal(true, BooleanType), r) => r
     case cExpr.And(l, cExpr.Literal(true, BooleanType)) => l
     case cExpr.Or(cExpr.Literal(false, BooleanType), r) => r
