@@ -32,6 +32,10 @@ object ExpressionBuilder {
       //FIXME: case e: oc.StartsWithExpression => cExpr.StartsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
       case e: oc.ExpressionNodeLabelsAndPropertyLookup => AttributeBuilder.buildAttribute(e)
       case e: oc.ExpressionPlusMinus => buildExpressionArithmetic(e, joins)
+      case e: oc.Expression if Set("-", "+") contains e.getOperator => e.getOperator match {
+        case "-" => cExpr.UnaryMinus(buildExpression(e.getLeft, joins))
+        case "+" => cExpr.UnaryPositive(buildExpression(e.getLeft, joins))
+      }
       case e: oc.ExpressionMulDiv => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionPower => buildExpressionArithmetic(e, joins)
       //FIXME#206: this should pass function name unresolved

@@ -13,7 +13,7 @@ class TrainBenchmarkCompilationTest extends FunSuite {
       """MATCH (segment:Segment)
         |WHERE segment.length <= 0
         |RETURN segment, segment.length AS length
-        |     , case segment.length when 0 then 'zero' when 0-1 then 'almost OK' else 'too bad' end AS lengthComment""".stripMargin)
+        |     , case segment.length when +0 then 'zero' when -1 then 'almost OK' else 'too bad' end AS lengthComment""".stripMargin)
 
   }
 
