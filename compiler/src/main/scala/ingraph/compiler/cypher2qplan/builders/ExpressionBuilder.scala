@@ -22,7 +22,7 @@ object ExpressionBuilder {
       case e: oc.ExpressionAnd => cExpr.And(buildExpression(e.getLeft, joins), buildExpression(e.getRight, joins))
       case e: oc.ExpressionOr => cExpr.Or(buildExpression(e.getLeft, joins), buildExpression(e.getRight, joins))
       case e: oc.ExpressionXor => buildExpressionXor(e, joins)
-      case e if "not".equalsIgnoreCase(e.getOperator) => cExpr.Not(buildExpression(e.getLeft, joins))
+      case e: oc.ExpressionNot => cExpr.Not(buildExpression(e.getLeft, joins))
       //TODO: case e: oc.InCollectionExpression => buildExpressionAux(e, joins)
       case e: oc.IsNotNullExpression => cExpr.IsNotNull(expr.EStub()) //FIXME: ce.vb.buildRelalgVariable(e.left)
       case e: oc.IsNullExpression => cExpr.IsNull(expr.EStub()) //FIXME: ce.vb.buildRelalgVariable(e.left)
@@ -32,10 +32,7 @@ object ExpressionBuilder {
       //FIXME: case e: oc.StartsWithExpression => cExpr.StartsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
       case e: oc.ExpressionNodeLabelsAndPropertyLookup => AttributeBuilder.buildAttribute(e)
       case e: oc.ExpressionPlusMinus => buildExpressionArithmetic(e, joins)
-      case e: oc.Expression if Set("-", "+") contains e.getOperator => e.getOperator match {
-        case "-" => cExpr.UnaryMinus(buildExpression(e.getLeft, joins))
-        case "+" => cExpr.UnaryPositive(buildExpression(e.getLeft, joins))
-      }
+      case e: oc.ExpressionUnaryPlusMinus => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionMulDiv => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionPower => buildExpressionArithmetic(e, joins)
       //FIXME#206: this should pass function name unresolved
@@ -157,6 +154,16 @@ object ExpressionBuilder {
     e.getOperator match {
       case "+" => cExpr.Add(l, r)
       case "-" => cExpr.Subtract(l, r)
+    }
+  }
+
+  def buildExpressionArithmetic(e: oc.ExpressionUnaryPlusMinus, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+    // process them only once because of the possible joins there
+    val l = buildExpression(e.getLeft, joins)
+
+    e.getOperator match {
+      case "-" => cExpr.UnaryMinus(l)
+      case "+" => cExpr.UnaryPositive(l)
     }
   }
 
