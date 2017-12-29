@@ -203,32 +203,27 @@ object ExpressionBuilder {
 //    }
 //  }
 
-  def buildExpressionCase(e: oc.CaseExpression): cExpr.Expression = {
-    e.getExpression match {
-      case caseExpr: oc.CaseExpression => {
-        val elseExpr: Option[cExpr.Expression] = caseExpr.getElseExpression match {
-          case e: Any => Some(buildExpressionNoJoinAllowed(e))
-          case _ => None
-        }
+  def buildExpressionCase(caseExpr: oc.CaseExpression): cExpr.Expression = {
+    val elseExpr: Option[cExpr.Expression] = caseExpr.getElseExpression match {
+      case e: Any => Some(buildExpressionNoJoinAllowed(e))
+      case _ => None
+    }
 
-        val branches: Seq[(cExpr.Expression, cExpr.Expression)] = caseExpr.getCaseAlternatives.asScala.map( ca => { //(condExpr, valueExpr)
-          (buildExpressionNoJoinAllowed(ca.getWhen), buildExpressionNoJoinAllowed(ca.getThen))
-        })
+    val branches: Seq[(cExpr.Expression, cExpr.Expression)] = caseExpr.getCaseAlternatives.asScala.map( ca => { //(condExpr, valueExpr)
+      (buildExpressionNoJoinAllowed(ca.getWhen), buildExpressionNoJoinAllowed(ca.getThen))
+    })
 
-        caseExpr.getCaseExpression match {
-          case e: Any => {
-            val simpleCaseExpression: cExpr.Expression = buildExpressionNoJoinAllowed(e)
-            val emulatedBranches: Seq[(cExpr.Expression, cExpr.Expression)] = branches.map({
-              case (condExpr, valueExpr) => {
-                (cExpr.EqualTo(simpleCaseExpression, condExpr), valueExpr)
-              }
-            })
-            cExpr.CaseWhen(emulatedBranches, elseExpr)
+    caseExpr.getCaseExpression match {
+      case e: Any => {
+        val simpleCaseExpression: cExpr.Expression = buildExpressionNoJoinAllowed(e)
+        val emulatedBranches: Seq[(cExpr.Expression, cExpr.Expression)] = branches.map({
+          case (condExpr, valueExpr) => {
+            (cExpr.EqualTo(simpleCaseExpression, condExpr), valueExpr)
           }
-          case _ => cExpr.CaseWhen(branches, elseExpr)
-        }
+        })
+        cExpr.CaseWhen(emulatedBranches, elseExpr)
       }
-      case _ => throw new RuntimeException("According to the grammar implementation, outer CaseExpressions should contain a CaseExpression")
+      case _ => cExpr.CaseWhen(branches, elseExpr)
     }
   }
 
