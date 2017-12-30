@@ -89,4 +89,20 @@ class RandomCompilationTest extends CompilerTest {
         |ORDER BY 2+3 DESC, l.width ASC""".stripMargin
     )
   }
+
+  test("Random: expression IS NULL") {
+    compile(
+      """MATCH (n:Person)
+        |WHERE n.name IS NULL
+        |RETURN n, n.name""".stripMargin
+    )
+  }
+
+  test("Random: expression IS NOT NULL") {
+    compile(
+      """MATCH (n:Person)
+        |WHERE n.name IS NOT NULL
+        |RETURN n, n.name""".stripMargin
+    )
+  }
 }
