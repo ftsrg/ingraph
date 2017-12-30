@@ -11,9 +11,13 @@ class TrainBenchmarkCompilationTest extends FunSuite {
   test("Random test from cypher string") {
     TrainBenchmarkCompilationTest.testQueryString(
       """MATCH (segment:Segment)
-        |WHERE NOT NOT NOT (segment.length > 0)
-        |RETURN segment, segment.length AS length
-        |     , case segment.length when +0 then 'zero' when --+-1 then 'almost OK' else 'too bad' end AS lengthComment""".stripMargin)
+        |RETURN segment AS s
+        |UNION
+        |MATCH (segment2:Segment)
+        |RETURN segment2 AS s
+        |UNION ALL
+        |MATCH (segment3:Segment)
+        |RETURN segment3 AS s""".stripMargin)
 
   }
 

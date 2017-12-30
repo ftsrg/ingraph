@@ -14,7 +14,7 @@ object StatementBuilder {
   def dispatchBuildStatement(statement: oc.Statement): qplan.QNode = {
     statement match {
       case s: oc.SingleQuery => buildStatement(s)
-      case s: oc.RegularQuery => buildStatement(s)
+      case s: oc.CombinedQuery => buildStatement(s)
     }
   }
 
@@ -65,13 +65,11 @@ object StatementBuilder {
     result
   }
 
-  def buildStatement(q: oc.RegularQuery): qplan.QNode = {
-    // the Xtext grammar actually produces a left deep parse tree of a union
-    // so this might be wither a SingleQuery or a RegularQuery, in case of more union's
-    var result = dispatchBuildStatement(q.getSingleQuery)
+  def buildStatement(q: oc.CombinedQuery): qplan.QNode = {
+    var result = buildStatement(q.getSingleQuery)
 
     for (u <- q.getUnion.asScala) {
-      result = qplan.Union(u.isAll, result, dispatchBuildStatement(u.getSingleQuery))
+      result = qplan.Union(u.isAll, result, buildStatement(u.getSingleQuery))
     }
 
     // FIXME: validator
