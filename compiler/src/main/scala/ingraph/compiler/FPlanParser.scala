@@ -9,7 +9,7 @@ object FPlanParser {
     SchemaInferencer.transform(
       QPlanToJPlan.transform(
         CypherToQPlan.build(
-          CypherParser.parseString(query), "test"
+          CypherParser.parseString(query), Some("test")
         )
       )
     )
