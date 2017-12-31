@@ -1,7 +1,7 @@
 package ingraph.sandbox
 
 import ingraph.compiler.CypherToQPlan
-import ingraph.compiler.cypher2qplan.{CypherParser, QPlanResolver}
+import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
 import ingraph.emf.util.PrettyPrinter
 import ingraph.model.fplan.{FNode, LeafFNode}
@@ -72,11 +72,11 @@ class CompilerTest extends FunSuite {
         println("-" * separatorLength)
       }
     }
-    if (config.printQuery) formatPlan(query, Some("Query"))
-    if (config.printCypher) formatPlan(PrettyPrinter.format(cypher), Some("Parsed query"))
-    if (config.printQPlan) formatPlan(qplan)
-    if (config.printJPlan) formatPlan(jplan)
-    if (config.printFPlan) formatPlan(fplan)
+    if (config.printQuery ) formatStuff(query, Some("Query"))
+    if (config.printCypher) formatStuff(PrettyPrinter.format(cypher), Some("Parsed query"))
+    if (config.printQPlan ) formatStuff(qplan)
+    if (config.printJPlan ) formatStuff(jplan)
+    if (config.printFPlan ) formatStuff(fplan)
 
     return CompilationStages(qplan, jplan, fplan)
   }
@@ -88,22 +88,23 @@ class CompilerTest extends FunSuite {
 
   /**
     * Formats a {Q,J,F}Plan, or virtually anything and send to the out channel
-    * @param plan {Q,J,F}Plan instance, or any other that has toString
+    * @param stuff {Q,J,F}Plan instance, or any other that has toString. In sace null is passed, nothing will be sent to the out channel.
     * @param heading The heading line for the formatted plan. In case it was a {Q,J,F}Plan, this heading is inferred if omitted, otherwise this must be supplied.
     * @param out The out channel method, defaults to println
     */
-  def formatPlan(plan: Any, heading: Option[String] = None, out: String => Unit = println): Unit = {
+  def formatStuff(stuff: Any, heading: Option[String] = None, out: String => Unit = println): Unit = {
     val _heading: String = heading.getOrElse(
-      plan match {
+      stuff match {
         case _: QNode => "QPlan"
         case _: JNode => "JPlan"
         case _: FNode => "FPlan"
+        case null => return
       }
     )
 
     out(s"${_heading}:")
     out("-" * (_heading.length + 1))
-    out(plan.toString)
+    out(stuff.toString)
     out("-" * separatorLength)
   }
 }
