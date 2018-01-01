@@ -56,15 +56,6 @@ class CompilerTest extends FunSuite {
   }
 
   def compile(query: String, queryName: Option[String] = None): CompilationStages = {
-    val cypher = CypherParser.parseString(query)
-    val qplan = CypherToQPlan.build_IKnowWhatImDoing(cypher
-      , queryName
-      , skipResolve = config.skipQPlanResolve
-      , skipBeautify = config.skipQPlanBeautify
-    )
-    val jplan = if (config.compileQPlanOnly) null else QPlanToJPlan.transform(qplan)
-    val fplan = if (config.compileQPlanOnly) null else SchemaInferencer.transform(jplan)
-
     if (config.printAny) {
       println("=" * separatorLength)
       if (queryName.isDefined) {
@@ -73,9 +64,21 @@ class CompilerTest extends FunSuite {
       }
     }
     if (config.printQuery ) formatStuff(query, Some("Query"))
+
+    val cypher = CypherParser.parseString(query)
     if (config.printCypher) formatStuff(PrettyPrinter.format(cypher), Some("Parsed query"))
+
+    val qplan = CypherToQPlan.build_IKnowWhatImDoing(cypher
+      , queryName
+      , skipResolve = config.skipQPlanResolve
+      , skipBeautify = config.skipQPlanBeautify
+    )
     if (config.printQPlan ) formatStuff(qplan)
+
+    val jplan = if (config.compileQPlanOnly) null else QPlanToJPlan.transform(qplan)
     if (config.printJPlan ) formatStuff(jplan)
+
+    val fplan = if (config.compileQPlanOnly) null else SchemaInferencer.transform(jplan)
     if (config.printFPlan ) formatStuff(fplan)
 
     return CompilationStages(qplan, jplan, fplan)
