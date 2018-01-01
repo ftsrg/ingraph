@@ -2,17 +2,18 @@
 
 for i in `seq -w 1 25`; do
 
-TESTNAME="bi-$i"
+TESTNUM="bi-$i"
+TESTTITLE=$(cat ${TESTNUM}.cypher | sed -n -e '/^\/\/ Q'$((10#$i))'\./ s/^\/\/ Q[0-9]\+. /: /p')
 cat <<HERE
-  ignore("${TESTNAME} from file") {
-    val stages=compileFromFile("${TESTNAME}")
+  ignore("${TESTNUM} from file${TESTTITLE}") {
+    val stages=compileFromFile("${TESTNUM}")
   }
 
-  ignore("bi-$i") {
+  ignore("bi-$i${TESTTITLE}") {
     val stages = compile(
 HERE
 
-    cat ${TESTNAME}.cypher | sed -n -e '1 s/^/      """/p' -e '/^$/ d' -e '2,$ s/^/        |/p'
+    cat ${TESTNUM}.cypher | sed -n -e '1 s/^/      """/p' -e '/^$/ d' -e '2,$ s/^/        |/p'
 
 cat <<HERE
       """.stripMargin)
