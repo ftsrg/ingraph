@@ -39,7 +39,7 @@ object ExpressionBuilder {
       case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName.getName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
       case _: oc.Count => UnresolvedFunction(Function.COUNT_ALL.getPrettyName, Seq[cExpr.Expression](), false)
       case e: oc.NumberConstant => LiteralBuilder.buildNumberLiteral(e)
-      //TODO: case e: oc.Parameter => buildExpressionAux(e, joins)
+      case e: oc.Parameter => buildParameter(e)
       case e: oc.StringConstant => LiteralBuilder.buildStringLiteral(e)
       case e: oc.VariableRef => AttributeBuilder.buildAttribute(e)
       case e: oc.CaseExpression => buildExpressionCase(e)
@@ -285,10 +285,9 @@ object ExpressionBuilder {
 //    ]
 //  }
 //
-//  protected def buildRelalgParameter(expression: oc.Parameter): cExpr.Expression = {
-//    modelFactory.createParameter => [
-//    name = expression.parameter
-//    expressionContainer = ce.tlc
-//    ]
-//  }
+  def buildParameter(e: oc.Parameter): expr.Parameter = {
+    e.getParameter match {
+      case name: String => expr.Parameter(name)
+    }
+  }
 }

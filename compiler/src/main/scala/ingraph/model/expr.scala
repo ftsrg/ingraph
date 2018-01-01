@@ -20,7 +20,12 @@ trait ProjectionDescriptor {
 }
 
 
-trait ExpressionBase extends Expression {}
+trait ExpressionBase extends Expression {
+  override def nullable: Boolean = true
+  override def dataType: DataType = throw new UnresolvedException(this, "dataType")
+  override def eval(input: InternalRow): Any = ???
+  override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
+}
 
 /**
   * This represents a name that should be created upon reference resolution.
@@ -86,6 +91,10 @@ abstract class AttributeBase extends Attribute {
 
   override def eval(input: InternalRow): Any = ???
   override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
+}
+
+case class Parameter(name: String) extends ExpressionBase {
+  override def children: Seq[Expression] = Seq()
 }
 
 // just wraps an expression into "? :> Attribute"

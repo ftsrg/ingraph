@@ -2,11 +2,11 @@ package ingraph.sandbox
 
 class BiCompilerTest extends CompilerTest {
   override val config = CompilerTestConfig(querySuitePath = Some("ldbc-snb-bi")
-    , compileQPlanOnly = false
+    , compileQPlanOnly = true
     , skipQPlanResolve = false
     , skipQPlanBeautify = false
-    , printQuery = true
-    , printCypher = false
+    , printQuery = false
+    , printCypher = true
     , printQPlan = true
     , printJPlan = true
     , printFPlan = true
@@ -601,7 +601,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-17")
   }
 
-  ignore("bi-17") {
+  test("bi-17") {
     val stages = compile(
       """// Q17. Friend triangles
         |/*
