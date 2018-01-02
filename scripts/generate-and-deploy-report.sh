@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # you need to set the GH_TOKEN and GH_REF environment variables for the `deploy.sh` script to work
 
