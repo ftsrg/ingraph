@@ -100,7 +100,7 @@ case class Selection(condition: Expression, child: QNode) extends UnaryQNode {}
 
 case class Sort(order: Seq[SortOrder], child: QNode) extends UnaryQNode {}
 
-case class Top(skipExpr: Expression, limitExpr: Expression, child: QNode) extends UnaryQNode {}
+case class Top(skipExpr: Option[Expression] = None, limitExpr: Option[Expression] = None, child: QNode) extends UnaryQNode {}
 
 case class Unwind(unwindAttribute: UnwindAttribute, child: QNode) extends UnaryQNode {
   override def output = child.output ++ Seq(unwindAttribute) // child.output.updated(child.output.indexOf(element), element)

@@ -2,14 +2,14 @@ package ingraph.sandbox
 
 class RandomCompilationTest extends CompilerTest {
   override val config = CompilerTestConfig(querySuitePath = None
-    , compileQPlanOnly = true
+    , compileQPlanOnly = false
     , skipQPlanResolve = false
     , skipQPlanBeautify = false
     , printQuery = false
     , printCypher = true
     , printQPlan = true
-    , printJPlan = false
-    , printFPlan = false
+    , printJPlan = true
+    , printFPlan = true
   )
 
   test("Random test from cypher string") {
@@ -103,6 +103,34 @@ class RandomCompilationTest extends CompilerTest {
       """MATCH (n:Person)
         |WHERE n.name IS NOT NULL
         |RETURN n, n.name""".stripMargin
+    )
+  }
+
+  test("Random: LIMIT w/o SKIP") {
+    compile(
+      """MATCH (p:Person)
+        |RETURN p
+        |ORDER BY 1
+        |LIMIT 10""".stripMargin
+    )
+  }
+
+  test("Random: SKIP w/o LIMIT") {
+    compile(
+      """MATCH (p:Person)
+        |RETURN p
+        |ORDER BY 1
+        |SKIP 3""".stripMargin
+    )
+  }
+
+  test("Random: SKIP w/ LIMIT") {
+    compile(
+      """MATCH (p:Person)
+        |RETURN p
+        |ORDER BY 1
+        |SKIP 3
+        |LIMIT 10""".stripMargin
     )
   }
 }

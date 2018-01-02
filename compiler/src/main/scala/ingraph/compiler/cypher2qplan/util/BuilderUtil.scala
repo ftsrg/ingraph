@@ -1,5 +1,6 @@
 package ingraph.compiler.cypher2qplan.util
 
+import ingraph.compiler.cypher2qplan.builders.{ExpressionBuilder, LiteralBuilder}
 import ingraph.model.expr
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
@@ -39,12 +40,12 @@ object BuilderUtil {
     else if (isLeftArrow) expr.In else expr.Out
   }
 
-  def convertToSkipLimitConstant(expression: oc.Expression): cExpr.Expression = {
+  def convertToSkipLimitConstant(expression: oc.Expression): Option[cExpr.Expression] = {
     expression match {
-      case e if e == null => null //this is in-line with a null-safe call on expression as it was used before
-      case e: oc.NumberConstant => expr.EStub("Number Literal") //FIXME: LiteralBuilder.buildNumberLiteral(expression, ce)
-      case e: oc.Parameter => expr.EStub("Parameter") //FIXME: buildRelalgParameter(expression, ce)
-      case e => expr.EStub(s"Only NumberConstants and parameters are supported as SKIP/LIMIT values, got ${e.getClass.getName}")
+      case null => None //this is in-line with a null-safe call on expression as it was used before
+      case e: oc.NumberConstant => Some(LiteralBuilder.buildNumberLiteral(e))
+      case e: oc.Parameter => Some(ExpressionBuilder.buildParameter(e))
+      case e => throw new RuntimeException(s"Only NumberConstants and parameters are supported as SKIP/LIMIT values, got ${e.getClass.getName}")
     }
   }
 }
