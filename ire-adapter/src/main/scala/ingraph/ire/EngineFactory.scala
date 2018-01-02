@@ -155,10 +155,8 @@ object EngineFactory {
       // This is the mighty EMF, so there are no default values, obviously
       def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Long]
 
-      // FIXME: Option.getOrElse(null) emulates old behaviour: before skipExpr and limitExpr became Option, they contained null in some cases
-      // FIXME (cont): but SortAndTopNode does not seem to handle missing values, i.e. missing limit value. skip might default to 0, but I know no suitable integer default for limit
-      val skip: Long = getInt(op.jnode.skipExpr.getOrElse(null))
-      val limit: Long = getInt(op.jnode.limitExpr.getOrElse(null))
+      val skip: Option[Long] = op.jnode.skipExpr.map(getInt)
+      val limit: Option[Long] = op.jnode.limitExpr.map(getInt)
       val sortKeys = op.jnode.order.map(
         e => ExpressionParser.parseValue(e, variableLookup)).toVector
       newLocal(Props(new SortAndTopNode(
