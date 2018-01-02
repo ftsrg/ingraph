@@ -1,6 +1,7 @@
 package ingraph.sandbox
 
 class TrainBenchmarkCompilationTest extends CompilerTest {
+
   override val config = CompilerTestConfig(querySuitePath = Some("trainbenchmark")
     , compileQPlanOnly = true
     , skipQPlanResolve = false
@@ -35,4 +36,5 @@ class TrainBenchmarkCompilationTest extends CompilerTest {
   test("SemaphoreNeighbor.cypher") {
     compileFromFile("SemaphoreNeighbor")
   }
+
 }
