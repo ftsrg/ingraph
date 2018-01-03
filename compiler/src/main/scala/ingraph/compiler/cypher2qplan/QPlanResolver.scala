@@ -2,6 +2,7 @@ package ingraph.compiler.cypher2qplan
 
 import java.util.concurrent.atomic.AtomicLong
 
+import ingraph.compiler.cypher2qplan.util.TransformUtil
 import ingraph.model.expr.{ProjectionDescriptor, ResolvableName, ReturnItem}
 import ingraph.model.qplan.{QNode, UnaryQNode}
 import ingraph.model.{expr, misc, qplan}
@@ -251,7 +252,10 @@ object QPlanResolver {
       projectionResolveHelper(resolvedProjectList, child)
     }
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
-    case qplan.Top(skipExpr, limitExpr, child) => qplan.Top(skipExpr.transform(expressionResolver), limitExpr.transform(expressionResolver), child)
+    case qplan.Top(skipExpr, limitExpr, child) => qplan.Top(
+      TransformUtil.transformOption(skipExpr, expressionResolver)
+      , TransformUtil.transformOption(limitExpr, expressionResolver)
+      , child)
     case qplan.Unwind(expr.UnwindAttribute(collection, alias, resolvedName), child) => qplan.Unwind(expr.UnwindAttribute(collection.transform(expressionResolver), alias, resolvedName), child)
     // DML
     case qplan.Delete(attributes, detach, child) => qplan.Delete(resolveAttributes(attributes, child), detach, child)

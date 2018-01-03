@@ -118,8 +118,8 @@ object ReturnBuilder {
     val op3 = if (skip == null && limit == null) {
       op2
     } else {
-      val s = if (skip == null) null else BuilderUtil.convertToSkipLimitConstant(skip.getSkip)
-      val l = if (limit == null) null else BuilderUtil.convertToSkipLimitConstant(limit.getLimit)
+      val s = if (skip == null) None else BuilderUtil.convertToSkipLimitConstant(skip.getSkip)
+      val l = if (limit == null) None else BuilderUtil.convertToSkipLimitConstant(limit.getLimit)
       qplan.Top(s, l, op2)
     }
 

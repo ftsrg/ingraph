@@ -28,10 +28,17 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
     }
   )
 
-  ignore("SortAndTopNode") {
+  test("Sort with Limit works") {
     val query = "MATCH (n: Segment) RETURN n ORDER BY n DESC SKIP 5 LIMIT 10"
     val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
     val expected = ((1400 to 1410).toSet - 1405).toList.sorted.reverse.map(n => Vector(n.toLong))
+    assert(results == expected)
+  }
+
+  test("Sort without Limit works") {
+    val query = "MATCH (n: Segment) RETURN n ORDER BY n DESC SKIP 1100"
+    val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
+    val expected = (7 to 9).reverse.map(n => Vector(n.toLong))
     assert(results == expected)
   }
 }

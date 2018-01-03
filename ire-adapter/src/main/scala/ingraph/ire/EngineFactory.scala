@@ -155,8 +155,8 @@ object EngineFactory {
       // This is the mighty EMF, so there are no default values, obviously
       def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Long]
 
-      val skip: Long = getInt(op.jnode.skipExpr)
-      val limit: Long = getInt(op.jnode.limitExpr)
+      val skip: Option[Long] = op.jnode.skipExpr.map(getInt)
+      val limit: Option[Long] = op.jnode.limitExpr.map(getInt)
       val sortKeys = op.jnode.order.map(
         e => ExpressionParser.parseValue(e, variableLookup)).toVector
       newLocal(Props(new SortAndTopNode(

@@ -77,8 +77,8 @@ case class Unwind(unwindAttribute: UnwindAttribute, child: JNode) extends UnaryJ
   // TODO indexOf might be unable to find the attribute
 }
 
-case class SortAndTop(skipExpr: Expression,
-                      limitExpr: Expression,
+case class SortAndTop(skipExpr: Option[Expression],
+                      limitExpr: Option[Expression],
                       order: Seq[SortOrder],
                       child: JNode) extends UnaryJNode {}
 
