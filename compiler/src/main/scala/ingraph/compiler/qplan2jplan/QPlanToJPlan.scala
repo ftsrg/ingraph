@@ -22,6 +22,8 @@ object QPlanToJPlan {
         case el: expr.EdgeListAttribute => jplan.Join(transform(child), expandToEdgeLists(src, trg, el, dir))
       }
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => jplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
+      // if Sort operator found w/o Top, then skip and limit defaults to None
+      case qplan.Sort(order, child) => jplan.SortAndTop(None, None, order, transform(child))
       case qplan.Production(child) => jplan.Production(transform(child))
       case qplan.Projection(projectList, child) => jplan.Projection(projectList, transform(child))
       case qplan.Grouping(aggregationCriteria, projectList, child) => jplan.Grouping(aggregationCriteria, projectList, transform(child))

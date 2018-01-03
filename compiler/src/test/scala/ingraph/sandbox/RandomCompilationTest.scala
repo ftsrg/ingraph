@@ -133,4 +133,20 @@ class RandomCompilationTest extends CompilerTest {
         |LIMIT 10""".stripMargin
     )
   }
+
+  test("Random: ORDER BY Person.name, w/o SKIP/LIMIT") {
+    compile(
+      """MATCH (p:Person)
+        |RETURN p
+        |ORDER BY p.name""".stripMargin
+    )
+  }
+
+  test("Random: ORDER BY multiple expressions, w/o SKIP/LIMIT") {
+    compile(
+      """MATCH (p:Person)
+        |RETURN p
+        |ORDER BY p.age, p.name desc""".stripMargin
+    )
+  }
 }

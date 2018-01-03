@@ -86,31 +86,12 @@ object ReturnBuilder {
     val op2 = if (order == null) {
       op1
     } else {
-      //FIXME: implement this
-//      // use of lazy map OK as passed to addAll and used only once - jmarton, 2017-01-07
-//      val sortEntries = order.orderBy.map [
-//      val sortDirection = if (sort !== null && sort.startsWith("DESC"))
-//        OrderDirection.DESCENDING
-//      else
-//        OrderDirection.ASCENDING
-//
-//      val sortExpression = switch expression {
-//        // for variable name resolution, ExpressionVariables need to be taken into account and have higher priority
-//        ExpressionNodeLabelsAndPropertyLookup: ce.vb.buildVariableExpression(expression, true)
-//        VariableRef: ce.vb.buildVariableExpression(expression, true)
-//        default: ExpressionBuilder.buildExpression(expression, ce)
-//      }
-//      modelFactory.createSortEntry => [
-//      direction = sortDirection
-//      expression = sortExpression
-//      ]
-//      ]
-//
-//      val sortOperator = modelFactory.createSortOperator => [
-//      entries.addAll(sortEntries)
-//      input = op1
-//      ]
-      qplan.Sort(Seq[cExpr.SortOrder](), op1)
+      val sortEntries: Seq[cExpr.SortOrder] = order.getOrderBy.asScala.map( oe => {
+        val sortExpression = ExpressionBuilder.buildExpressionNoJoinAllowed(oe.getExpression)
+        val sortDirection: cExpr.SortDirection = if (oe.getSort != null && oe.getSort.toUpperCase.startsWith("DESC")) cExpr.Descending else cExpr.Ascending
+        cExpr.SortOrder(sortExpression, sortDirection)
+      } )
+      qplan.Sort(sortEntries, op1)
     }
 
     val skip = returnBody.getSkip
