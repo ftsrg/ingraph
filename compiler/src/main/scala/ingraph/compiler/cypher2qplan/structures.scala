@@ -5,19 +5,11 @@ import org.apache.spark.sql.catalyst.{expressions => cExpr}
 
 /**
   * Components of an openCypher (OPTIONAL) MATCH clause.
+  * @param op Tree build from the patterns in a MATCH clause.
+  * @param condition Condition from the attached WHERE clause.
+  * @param optional if an OPTIONAL MATCH is described
   */
-class MatchDescriptor {
-  /**
-    * Tree build of the patterns in a MATCH clause.
-    */
-  var op: Option[qplan.QNode] = None
-
-  /**
-    * Condition from the attached WHERE clause.
-    */
-  var condition: Option[cExpr.Expression] = None
+case class MatchDescriptor(op: Option[qplan.QNode] = None, condition: Option[cExpr.Expression] = None, optional: Option[Boolean] = None) {
   def hasCondition: Boolean = condition.isDefined
-
-  var optional: Option[Boolean] = None
   def isOptional: Boolean = optional.contains(true)
 }

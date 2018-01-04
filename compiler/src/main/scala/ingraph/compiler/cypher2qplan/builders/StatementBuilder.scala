@@ -200,9 +200,7 @@ object StatementBuilder {
     *         and condition attribute holds the filter condition.
     */
   def buildMatchDescriptor(m: oc.Match): MatchDescriptor = {
-    val result = new MatchDescriptor()
-
-    result.optional = Some(m.isOptional)
+    val optionalMatch = Some(m.isOptional)
 
     val edgeAttributesOfMatchClause = mutable.HashSet.empty[expr.EdgeAttribute]
     // handle comma-separated patternParts in the MATCH clause
@@ -225,24 +223,19 @@ object StatementBuilder {
       // left outer joins extracted from the patterns in the where clause
       val joinOperationsOfWhereClause = ListBuffer.empty[qplan.QNode]
 
-      result.condition = Some(ExpressionBuilder.buildExpression(m.getWhere.getExpression, joinOperationsOfWhereClause))
-        //FIXME: LogicalExpressionBuilder.buildLogicalExpression(m.where.expression, joinOperationsOfWhereClause, ce)
+      val condition = Some(ExpressionBuilder.buildExpression(m.getWhere.getExpression, joinOperationsOfWhereClause))
 
-      result.op = if (joinOperationsOfWhereClause.isEmpty) {
-        Some(allDifferentOperator)
-      } else {
-        /*
-         * add allDifferentOperator before the joins derived from the where clause
-         * and create the tree of left outer joins
-         */
-        Some(
-          joinOperationsOfWhereClause.foldLeft[qplan.QNode]( allDifferentOperator )( (b, a) => qplan.LeftOuterJoin(b, a) )
-        )
-      }
+      /*
+       * add allDifferentOperator before the joins derived from the where clause (if any)
+       * and create the tree of left outer joins
+       */
+      val op = Some(
+        joinOperationsOfWhereClause.foldLeft[qplan.QNode]( allDifferentOperator )( (b, a) => qplan.LeftOuterJoin(b, a) )
+      )
+
+      MatchDescriptor(op, condition, optionalMatch)
     } else {
-      result.op =  Some(allDifferentOperator)
+      MatchDescriptor(Some(allDifferentOperator), optional=optionalMatch)
     }
-
-    result
   }
 }
