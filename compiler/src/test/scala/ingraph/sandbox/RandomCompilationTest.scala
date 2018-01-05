@@ -149,4 +149,12 @@ class RandomCompilationTest extends CompilerTest {
         |ORDER BY p.age, p.name desc""".stripMargin
     )
   }
+
+  test("Random: ORDER BY with aliases exchanged") {
+    compile(
+      """MATCH (p:Person)-->(c:Car)
+        |RETURN p as c, c as p
+        |ORDER BY c.name""".stripMargin
+    )
+  }
 }

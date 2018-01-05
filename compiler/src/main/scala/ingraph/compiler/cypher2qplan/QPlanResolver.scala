@@ -135,7 +135,9 @@ object QPlanResolver {
             }
             // case {Projection, Grouping} skipped because it is introduced in a later resolution stage
             case qplan.Selection(condition, _) => qplan.Selection(r(condition), child)
-            case qplan.Sort(order, _) => qplan.Sort(order, child)
+            case qplan.Sort(order, _) => qplan.Sort(order.map( oi => {oi match {
+              case cExpr.SortOrder(sortExpr, dir, no, se) => cExpr.SortOrder(r(sortExpr), dir, no, se)
+            }}), child)
             case qplan.Top(skipExpr, limitExpr, _) => qplan.Top(skipExpr, limitExpr, child)
             case qplan.Create(attributes, _) => qplan.Create(attributes, child)
             case qplan.Delete(attributes, detach, _) => qplan.Delete(attributes, detach, child)
