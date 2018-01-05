@@ -14,30 +14,31 @@ import scala.collection.mutable.ListBuffer
 
 object AttributeBuilder {
   def buildAttribute(n: oc.NodePattern): expr.VertexAttribute = {
-    val nv = n.getVariable
     val nls = BuilderUtil.parseToVertexLabelSet(n.getNodeLabels)
     val props = LiteralBuilder.buildProperties(n.getProperties)
 
-    if (nv == null) {
-      expr.VertexAttribute(generateUniqueName, nls, props, isAnonymous = true)
-    } else {
-      expr.VertexAttribute(nv.getName, nls, props, isAnonymous = false)
+    Option(n.getVariable) match {
+      case Some(nv) => expr.VertexAttribute(nv.getName, nls, props, isAnonymous = false)
+      case None => expr.VertexAttribute(generateUniqueName, nls, props, isAnonymous = true)
     }
   }
 
   def buildAttribute(el: oc.RelationshipPattern): expr.AbstractEdgeAttribute = {
-    if (el.getDetail != null) {
-      val ev = el.getDetail.getVariable
-      val (name, isAnon) = if (ev == null) (generateUniqueName, true) else (ev.getName, false)
-      val els = BuilderUtil.parseToEdgeLabelSet(el.getDetail.getTypes)
-      val props = LiteralBuilder.buildProperties(el.getDetail.getProperties)
+    Option(el.getDetail) match {
+      case Some(elDetail) => {
+        val (name, isAnon) = Option(elDetail.getVariable) match {
+          case Some(ev) => (ev.getName, false)
+          case None => (generateUniqueName, true)
+        }
+        val els = BuilderUtil.parseToEdgeLabelSet(elDetail.getTypes)
+        val props = LiteralBuilder.buildProperties(elDetail.getProperties)
 
-      el.getDetail.getRange match {
-        case r: oc.RangeLiteral => expr.EdgeListAttribute(name, els, props, isAnonymous = isAnon, StringUtil.toOptionInt(r.getLower), StringUtil.toOptionInt(r.getUpper))
-        case _ => expr.EdgeAttribute(name, els, props, isAnonymous = isAnon)
+        Option(elDetail.getRange) match {
+          case Some(r) => expr.EdgeListAttribute(name, els, props, isAnonymous = isAnon, StringUtil.toOptionInt(r.getLower), StringUtil.toOptionInt(r.getUpper))
+          case None => expr.EdgeAttribute(name, els, props, isAnonymous = isAnon)
+        }
       }
-    } else {
-      expr.EdgeAttribute(generateUniqueName, isAnonymous = true)
+      case None => expr.EdgeAttribute(generateUniqueName, isAnonymous = true)
     }
   }
 
