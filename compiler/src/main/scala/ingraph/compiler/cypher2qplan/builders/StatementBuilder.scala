@@ -18,8 +18,7 @@ object StatementBuilder {
     }
   }
 
-  /**
-    * Builds the qplan for a single query built from several query parts.
+  /** Builds the qplan for a single query built from several query parts.
     */
   def buildStatement(q: oc.SingleQuery): qplan.QNode = {
     val clauses = q.getClauses.asScala.toVector // we are to use indexed access
@@ -32,13 +31,12 @@ object StatementBuilder {
     // Do some checks on the clauses of the single query
     //FIXME: Validator.checkSingleQueryClauseSequence(clauses, ce.l)
 
-    /**
-      * Process each query part.
-      *
-      * A query part has the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
-      *
-      * Note: GrammarUtil.isCudClause is currently limited to CREATE and DELETE clauses.
-      */
+    /* Process each query part.
+     *
+     * A query part has the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
+     *
+     * Note: GrammarUtil.isCudClause is currently limited to CREATE and DELETE clauses.
+     */
     var from = 0
     for (i <- clauses.indices) {
       val current = clauses(i)
@@ -52,7 +50,7 @@ object StatementBuilder {
         || current.isInstanceOf[oc.Unwind]
         || current.isInstanceOf[oc.Return]
       ) {
-        // [fromX, toX) is the range of clauses that form a subquery
+        // [fromX, toX) is the range of clauses that form a query part
         val fromX = from
         val toX = i + 1
 
@@ -80,79 +78,51 @@ object StatementBuilder {
     result
   }
 
-  /**
-    * This is the workhorse for building the graph relational algebra expression for a single query part.
+  /** This is the workhorse for building the graph relational algebra expression for a single query part.
     *
     * @param chain is the compiled form of the query parts processed so far. This will be put at the appropriate place.
     */
   protected def buildQueryPart(clauses: Seq[oc.Clause], chain: qplan.QNode): qplan.QNode = {
-
 //    // FIXME: do some checks on the MATCH clauses
 //    Validator.checkSubQueryMatchClauseSequence(clauses.filter(typeof(Match)), ce.l)
 //    // FIXME: do some checks on the clause sequence of this subquery
 //    Validator.checkSubQueryClauseSequence(clauses, ce.l)
-//
-    /*
-     * We compile all MATCH clauses and attach to a (left outer) join operator.
-     * The first one will not be used to chain match clauses together,
-     * but it will be used to chain query parts together.
-     * In case of the first query part, a dual source will be put there
-     * when chaining together query parts (in buildStatement(oc.SingleQuery) parent call).
-     */
-    val q_MatchList = clauses.flatMap{
-      case m: oc.Match => Some(buildMatchDescriptor(m))
-      case _ => None
-    }
-//          .filter( c => c.isInstanceOf[oc.Match] )
-//          .map( m => buildMatchDescriptor(m.asInstanceOf[oc.Match]) )
 
-    /*
-     * content will be built starting from what is passed in as chain, i.e. the tree built from query parts so far.
-     *
-     * This is achieved by starting from a Join(chain, Dual)
+    /* We compile all MATCH clauses and chain them together using different join operations.
+     * We start from what was passed in as chain, i.e. the tree built from query parts so far.
      */
-    val content = q_MatchList.foldLeft(
-      chain //qplan.Join(chain, qplan.Dual())
-      )(
-        (b, a) => a match {
-          case MatchDescriptor(true , opTree, Some(condition)) => qplan.ThetaLeftOuterJoin(b, opTree, condition)
-          case MatchDescriptor(true , opTree, None           ) => qplan.LeftOuterJoin(b, opTree)
-          case MatchDescriptor(false, opTree, Some(condition)) => qplan.Selection(condition, qplan.Join(b, opTree))
-          case MatchDescriptor(false, opTree, None           ) => qplan.Join(b, opTree)
+    val content: QNode = clauses.foldLeft(chain)(
+      (prev, clause) => clause match {
+        case m: oc.Match => buildMatchDescriptor(m) match {
+          case MatchDescriptor(true , opTree, Some(condition)) => qplan.ThetaLeftOuterJoin(prev, opTree, condition)
+          case MatchDescriptor(true , opTree, None           ) => qplan.LeftOuterJoin(prev, opTree)
+          case MatchDescriptor(false, opTree, Some(condition)) => qplan.Selection(condition, qplan.Join(prev, opTree))
+          case MatchDescriptor(false, opTree, None           ) => qplan.Join(prev, opTree)
         }
-      )
+        case _ => prev
+      }
+    )
 
-    val singleQuery_returnOrWithClause = clauses.flatMap{
-      case w: oc.With => Some(w)
-      case r: oc.Return => Some(r)
-      case _ => None
-    }
-    val afterReturn = if (singleQuery_returnOrWithClause.isEmpty) {
-      content
-    } else {
-      ReturnBuilder.dispatchBuildReturn(singleQuery_returnOrWithClause.head, content)
-    }
-
-    //FIXME: continue processing clauses
-    //return afterReturn
-
-    // process Unwind if any.
-    val singleQuery_unwindClauseList: Seq[oc.Unwind] = clauses.flatMap{ case u: oc.Unwind => Some(u) case _ => None }
-
-    // each query part has 0 or 1 UNWIND clause.
-    // use of foldLeft below is purely to substitute the corresponding if expression
-    if (singleQuery_unwindClauseList.length > 1) {
-      throw new RuntimeException("Multiple unwind clauses found in a query part, though it should be handled when splitting query to query parts.")
-    }
-    val afterUnwind: QNode = singleQuery_unwindClauseList.foldLeft(afterReturn)(
-      (prev, unwind) => {
-        val expression = ExpressionBuilder.buildExpressionNoJoinAllowed(unwind.getExpression)
-        qplan.Unwind(expr.UnwindAttribute(expression, unwind.getVariable.getName), prev)
+    /* Process WITH/RETURN and UNWIND clauses if any.
+     *
+     * Each query part has 0 or 1 WITH/RETURN clause, and also 0 or 1 UNWIND.
+     * Note: we don't care about possible repetition of WITH/RETURN and UNWIND clauses as it does not affect compilation.
+     * Clause order is already checked when query was split to query parts.
+     */
+    val afterReturnAndUnwind: QNode = clauses.foldLeft(content)(
+      (prev, clause) => clause match {
+        case w: oc.With   => ReturnBuilder.dispatchBuildReturn(w, prev)
+        case r: oc.Return => ReturnBuilder.dispatchBuildReturn(r, prev)
+        case u: oc.Unwind => {
+          val expression = ExpressionBuilder.buildExpressionNoJoinAllowed(u.getExpression)
+          qplan.Unwind(expr.UnwindAttribute(expression, u.getVariable.getName), prev)
+        }
+        case _ => prev
       }
     )
 
     // process CUD operations
-    val afterCud = clauses.foldLeft(afterUnwind)(
+    val afterCud: QNode = clauses.foldLeft(afterReturnAndUnwind)(
       (prev, clause) => clause match {
         case c: oc.Create => CudBuilder.buildCreateOperator(c, prev)
         case c: oc.Delete => CudBuilder.buildDeleteOperator(c, prev)
@@ -163,24 +133,8 @@ object StatementBuilder {
       }
     )
 
-
-    //    val afterCud = {
-//      var Operator op = afterUnwind
-//
-//      for (cudClause: clauses.filter([GrammarUtil.isCudClause(it)])) {
-//        op = switch cudClause {
-//          Create: CudBuilder.buildCreateOperator(cudClause, op, ce)
-//          Delete: CudBuilder.buildDeleteOperator(cudClause, op, ce)
-//          default: {
-//            ce.l.unsupported('''Currently we only support CREATE and DELETE of the possible CUD operations. Found: «cudClause.class.name».''')
-//            null
-//          }
-//        }
-//      }
-//
-//      op
-//    }
-    return afterCud
+    // return the result of query part compilation
+    afterCud
   }
 
   /**
@@ -219,21 +173,22 @@ object StatementBuilder {
       pattern_PatternPartList.foldLeft[qplan.QNode]( qplan.Dual() )( (b, a) => qplan.Join(b, a) )
     )
 
-    if (m.getWhere != null) {
-      // left outer joins extracted from the patterns in the where clause
-      val joinOperationsOfWhereClause = ListBuffer.empty[qplan.QNode]
+    Option(m.getWhere) match {
+      case Some(where) => {
+        // left outer joins extracted from the patterns in the where clause
+        val joinOperationsOfWhereClause = ListBuffer.empty[qplan.QNode]
 
-      val condition = Some(ExpressionBuilder.buildExpression(m.getWhere.getExpression, joinOperationsOfWhereClause))
+        val condition = Some(ExpressionBuilder.buildExpression(where.getExpression, joinOperationsOfWhereClause))
 
-      /*
-       * add allDifferentOperator before the joins derived from the where clause (if any)
-       * and create the tree of left outer joins
-       */
-      val op = joinOperationsOfWhereClause.foldLeft[qplan.QNode]( allDifferentOperator )( (b, a) => qplan.LeftOuterJoin(b, a) )
+        /*
+         * add allDifferentOperator before the joins derived from the where clause (if any)
+         * and create the tree of left outer joins
+         */
+        val op = joinOperationsOfWhereClause.foldLeft[qplan.QNode]( allDifferentOperator )( (b, a) => qplan.LeftOuterJoin(b, a) )
 
-      MatchDescriptor(optionalMatch, op, condition)
-    } else {
-      MatchDescriptor(optionalMatch, allDifferentOperator)
+        MatchDescriptor(optionalMatch, op, condition)
+      }
+      case None => MatchDescriptor(optionalMatch, allDifferentOperator)
     }
   }
 }
