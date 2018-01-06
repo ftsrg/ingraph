@@ -115,10 +115,10 @@ object StatementBuilder {
       chain //qplan.Join(chain, qplan.Dual())
       )(
         (b, a) => a match {
-          case md if  md.isOptional &&  md.hasCondition => qplan.ThetaLeftOuterJoin(b, md.op.get, md.condition.get)
-          case md if  md.isOptional && !md.hasCondition => qplan.LeftOuterJoin(b, md.op.get)
-          case md if !md.isOptional &&  md.hasCondition => qplan.Selection(md.condition.get, qplan.Join(b, md.op.get))
-          case md if !md.isOptional && !md.hasCondition => qplan.Join(b, md.op.get)
+          case MatchDescriptor(true , opTree, Some(condition)) => qplan.ThetaLeftOuterJoin(b, opTree, condition)
+          case MatchDescriptor(true , opTree, None           ) => qplan.LeftOuterJoin(b, opTree)
+          case MatchDescriptor(false, opTree, Some(condition)) => qplan.Selection(condition, qplan.Join(b, opTree))
+          case MatchDescriptor(false, opTree, None           ) => qplan.Join(b, opTree)
         }
       )
 
@@ -200,7 +200,7 @@ object StatementBuilder {
     *         and condition attribute holds the filter condition.
     */
   def buildMatchDescriptor(m: oc.Match): MatchDescriptor = {
-    val optionalMatch = Some(m.isOptional)
+    val optionalMatch = m.isOptional
 
     val edgeAttributesOfMatchClause = mutable.HashSet.empty[expr.EdgeAttribute]
     // handle comma-separated patternParts in the MATCH clause
@@ -229,13 +229,11 @@ object StatementBuilder {
        * add allDifferentOperator before the joins derived from the where clause (if any)
        * and create the tree of left outer joins
        */
-      val op = Some(
-        joinOperationsOfWhereClause.foldLeft[qplan.QNode]( allDifferentOperator )( (b, a) => qplan.LeftOuterJoin(b, a) )
-      )
+      val op = joinOperationsOfWhereClause.foldLeft[qplan.QNode]( allDifferentOperator )( (b, a) => qplan.LeftOuterJoin(b, a) )
 
-      MatchDescriptor(op, condition, optionalMatch)
+      MatchDescriptor(optionalMatch, op, condition)
     } else {
-      MatchDescriptor(Some(allDifferentOperator), optional=optionalMatch)
+      MatchDescriptor(optionalMatch, allDifferentOperator)
     }
   }
 }
