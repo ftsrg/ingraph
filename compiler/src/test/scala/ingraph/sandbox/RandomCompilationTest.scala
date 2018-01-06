@@ -146,7 +146,7 @@ class RandomCompilationTest extends CompilerTest {
     compile(
       """MATCH (p:Person)
         |RETURN p
-        |ORDER BY p.age, p.name desc""".stripMargin
+        |ORDER BY p.age, p.age asc, p.name desc""".stripMargin
     )
   }
 

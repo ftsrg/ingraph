@@ -52,58 +52,49 @@ object ReturnBuilder {
     // but it should be w/o .get(0)
     val returnItems = returnBody.getReturnItems.get(0)
 
-    // pre-create elements to project to which will be copied to BeamerOperator.elements
-    val _elements = ListBuffer[expr.ReturnItem]()
+    // this will hold the project list compiled
+    val elements = ListBuffer[expr.ReturnItem]()
 
     if ("*".equals(returnItems.getAll)) {
       //TODO: when resolving,
       // - add the non-dontCare vertex variables to the return list sorted by variable name
       // - add the non-dontCare edge variables to the return list sorted by variable name
-      _elements += expr.ReturnItem(UnresolvedStar(None))
+      elements += expr.ReturnItem(UnresolvedStar(None))
     }
     for (returnItem <- returnItems.getItems.asScala) {
       val e = ExpressionBuilder.buildExpressionNoJoinAllowed(returnItem.getExpression)
-
-      if (returnItem.getAlias == null)
-        _elements += expr.ReturnItem(e)
-      else
-        _elements += expr.ReturnItem(e, Some(returnItem.getAlias.getName))
+      Option(returnItem.getAlias).fold(elements += expr.ReturnItem(e))( (alias) => elements += expr.ReturnItem(e, Some(alias.getName)) )
     }
 
-    //TODO: check after resolving: if (_elements.empty) unrecoverableError('''RETURN items processed and resulted in no columns values to return''')
+    //TODO: check after resolving: if (elements.empty) unrecoverableError('''RETURN items processed and resulted in no column values to return''')
 
     // We create an unresolved projection which is to be resolved to either Projection or Grouping
-    val projection = qplan.UnresolvedProjection(_elements, content)
+    val projection = qplan.UnresolvedProjection(elements, content)
 
     // add duplicate-elimination operator if return DISTINCT was specified
-    val op1 = if (distinct) {
-      qplan.DuplicateElimination(projection)
-    } else {
-      projection
-    }
+    val op1 = if (distinct) qplan.DuplicateElimination(projection) else projection
 
-    val order = returnBody.getOrder
-    val op2 = if (order == null) {
-      op1
-    } else {
-      val sortEntries: Seq[cExpr.SortOrder] = order.getOrderBy.asScala.map( oe => {
-        val sortExpression = ExpressionBuilder.buildExpressionNoJoinAllowed(oe.getExpression)
-        val sortDirection: cExpr.SortDirection = if (oe.getSort != null && oe.getSort.toUpperCase.startsWith("DESC")) cExpr.Descending else cExpr.Ascending
-        cExpr.SortOrder(sortExpression, sortDirection)
-      } )
-      qplan.Sort(sortEntries, op1)
-    }
+    val op2 = Option(returnBody.getOrder).fold(op1)(
+      (order) => {
+        val sortEntries: Seq[cExpr.SortOrder] = order.getOrderBy.asScala.map(oe => {
+          val sortExpression = ExpressionBuilder.buildExpressionNoJoinAllowed(oe.getExpression)
+          val sortDirection: cExpr.SortDirection = Option(oe.getSort)
+            .filter( _.toUpperCase.startsWith("DESC") ) // not null and DESC -> Some("DESC"), else none
+            .fold[cExpr.SortDirection](cExpr.Ascending)( _ => cExpr.Descending)
+          cExpr.SortOrder(sortExpression, sortDirection)
+        })
+        qplan.Sort(sortEntries, op1)
+      }
+    )
 
-    val skip = returnBody.getSkip
-    val limit = returnBody.getLimit
-    val op3 = if (skip == null && limit == null) {
-      op2
-    } else {
-      val s = if (skip == null) None else BuilderUtil.convertToSkipLimitConstant(skip.getSkip)
-      val l = if (limit == null) None else BuilderUtil.convertToSkipLimitConstant(limit.getLimit)
-      qplan.Top(s, l, op2)
+    val op3 = (Option(returnBody.getSkip), Option(returnBody.getLimit)) match {
+      case (None, None) => op2
+      case (skipOpt, limitOpt) => {
+        val s = skipOpt.flatMap( (skip)  => BuilderUtil.convertToSkipLimitConstant(skip.getSkip) )
+        val l = limitOpt.flatMap( (limit) => BuilderUtil.convertToSkipLimitConstant(limit.getLimit) )
+        qplan.Top(s, l, op2)
+      }
     }
-
     op3
   }
 }
