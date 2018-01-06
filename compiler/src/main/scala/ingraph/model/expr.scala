@@ -72,7 +72,7 @@ abstract class AbstractReturnItem(child: Expression, alias: Option[String] = Non
 
   def toAttribute: Attribute = this.child match {
     case a: Attribute => a
-    case e => ExpressionAttribute(e, ???, None)
+    case e => ExpressionAttribute(e, "_expr", None)
   }
 }
 

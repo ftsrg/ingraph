@@ -65,7 +65,7 @@ object ExpressionBuilder {
     val logicalExp = buildExpression(e, dummyJoins)
     if (!dummyJoins.isEmpty) {
       //FIXME: proper error handling
-      throw new RuntimeException("Joins found when building a logical expression in generic expression position.")
+      throw new RuntimeException("Pattern expression (joins) found when building a logical expression in generic expression position.")
     }
 
     logicalExp

@@ -19,27 +19,13 @@ object ReturnBuilder {
 
   def buildWithClause(w: oc.With, content: qplan.QNode): qplan.QNode = {
     val rb = buildReturnBody(w.isDistint, w.getReturnBody, content)
-    if (w.getWhere == null) {
-      rb
-    } else {
-      //FIXME: implement proper WHERE sub-clause handling
-      // when doing so, check the current openCypher grammar if it also allows WHERE sub-clause for RETURN
 
-//      // left outer joins extracted from the patterns in the where clause
-//      // should remain empty in WITH WHERE
-//      val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
-//
-//      val selectionOperator = modelFactory.createSelectionOperator => [
-//      input = rb
-//      condition = LogicalExpressionBuilder.buildLogicalExpression(w.where.expression, joinOperationsOfWhereClause, ce)
-//      ]
-//
-//      if (joinOperationsOfWhereClause.length !== 0) {
-//        ce.l.unsupported('''Pattern expression found in WITH ... WHERE, which is unsupported. Consider moving this expression to MATCH...WHERE.''')
-//      }
-
-      qplan.Selection(expr.EStub("WITH WHERE"), rb)
-    }
+    Option(w.getWhere).fold(rb)(
+      (where) => {
+        val condition = ExpressionBuilder.buildExpressionNoJoinAllowed(where.getExpression)
+        qplan.Selection(condition, rb)
+      }
+    )
   }
 
 

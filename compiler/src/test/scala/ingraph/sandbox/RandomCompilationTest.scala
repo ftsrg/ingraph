@@ -157,4 +157,15 @@ class RandomCompilationTest extends CompilerTest {
         |ORDER BY c.name""".stripMargin
     )
   }
+
+  test("Random: WITH..WHERE") {
+    compile(
+      """MATCH (p:Person)-->(c:Car)
+        |WITH p, count(c) as carNumber
+        |WHERE carNumber > 1
+        |MATCH (p)-->(c:Car)
+        |RETURN p, c
+      """.stripMargin
+    )
+  }
 }

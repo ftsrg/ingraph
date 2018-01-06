@@ -173,8 +173,8 @@ object StatementBuilder {
       pattern_PatternPartList.foldLeft[qplan.QNode]( qplan.Dual() )( (b, a) => qplan.Join(b, a) )
     )
 
-    Option(m.getWhere) match {
-      case Some(where) => {
+    Option(m.getWhere).fold( MatchDescriptor(optionalMatch, allDifferentOperator) )(
+      (where)  => {
         // left outer joins extracted from the patterns in the where clause
         val joinOperationsOfWhereClause = ListBuffer.empty[qplan.QNode]
 
@@ -188,7 +188,6 @@ object StatementBuilder {
 
         MatchDescriptor(optionalMatch, op, condition)
       }
-      case None => MatchDescriptor(optionalMatch, allDifferentOperator)
-    }
+    )
   }
 }
