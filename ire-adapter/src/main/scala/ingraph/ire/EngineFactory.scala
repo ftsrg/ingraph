@@ -158,7 +158,7 @@ object EngineFactory {
       val skip: Option[Long] = op.jnode.skipExpr.map(getInt)
       val limit: Option[Long] = op.jnode.limitExpr.map(getInt)
       val sortKeys = op.jnode.order.map(
-        e => ExpressionParser.parseValue(e, variableLookup)).toVector
+        e => ExpressionParser.parseValue(e.child, variableLookup)).toVector
       newLocal(Props(new SortAndTopNode(
         expr.child,
         op.jnode.order.length,
