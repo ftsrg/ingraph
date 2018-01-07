@@ -34,9 +34,7 @@ object ReturnBuilder {
     * i.e. the distinct flag and the ReturnBody.
     */
   def buildReturnBody(distinct: Boolean, returnBody: oc.ReturnBody, content: qplan.QNode): qplan.QNode = {
-    // FIXME (in the grammar): returnBody.returnItems.get(0) is the actual return item list
-    // but it should be w/o .get(0)
-    val returnItems = returnBody.getReturnItems.get(0)
+    val returnItems = returnBody.getReturnItems
 
     // this will hold the project list compiled
     val elements = ListBuffer[expr.ReturnItem]()

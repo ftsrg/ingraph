@@ -175,4 +175,14 @@ class RandomCompilationTest extends CompilerTest {
         |RETURN n1, n2
       """.stripMargin)
   }
+
+  test("Random: 2-part query featuring WITH") {
+    compile(
+      """MATCH (p:Person)
+        |WITH DISTINCT p
+        |MATCH (p)-->(c:Car)
+        |RETURN p, c
+      """.stripMargin
+    )
+  }
 }
