@@ -41,11 +41,12 @@ object BuilderUtil {
   }
 
   def convertToSkipLimitConstant(expression: oc.Expression): Option[cExpr.Expression] = {
-    expression match {
-      case null => None //this is in-line with a null-safe call on expression as it was used before
+    Option(expression).fold[ Option[cExpr.Expression] ](
+      None //this is in-line with a null-safe call on expression as it was used before
+    )( _ match {
       case e: oc.NumberConstant => Some(LiteralBuilder.buildNumberLiteral(e))
       case e: oc.Parameter => Some(ExpressionBuilder.buildParameter(e))
       case e => throw new RuntimeException(s"Only NumberConstants and parameters are supported as SKIP/LIMIT values, got ${e.getClass.getName}")
-    }
+    })
   }
 }

@@ -18,7 +18,6 @@ object LiteralBuilder {
       case _: NumberFormatException => {
         //FIXME: WARNING
         println("WARNING: " + s"Unable to parse ${e.getValue} as integer.")
-        null
       }
     }
 
@@ -56,10 +55,8 @@ object LiteralBuilder {
     }
   }
   def buildPropertyMap(pm: oc.MapLiteral): eTypes.TPropertyMap = {
-    if (pm == null) {
-      Map()
-    } else {
-      pm.getEntries.asScala.map( (e) => Tuple2[String, cExpr.Expression](e.getKey, ExpressionBuilder.buildExpressionNoJoinAllowed(e.getValue)) ).toMap
-    }
+    Option(pm).fold[ eTypes.TPropertyMap ]( Map() )(
+      _.getEntries.asScala.map( (e) => Tuple2[String, cExpr.Expression](e.getKey, ExpressionBuilder.buildExpressionNoJoinAllowed(e.getValue)) ).toMap
+    )
   }
 }
