@@ -3,6 +3,7 @@ package ingraph.compiler.cypher2qplan
 import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.compiler.cypher2qplan.util.TransformUtil
+import ingraph.compiler.exceptions.CompilerException
 import ingraph.model.expr.{ProjectionDescriptor, ResolvableName, ReturnItem}
 import ingraph.model.qplan.{QNode, UnaryQNode}
 import ingraph.model.{expr, misc, qplan}
@@ -60,7 +61,7 @@ object QPlanResolver {
          */
         case b: qplan.BinaryQNode => qNodeStack.push(b.left, b.right)
         case _: qplan.LeafQNode => {}
-        case x => throw new RuntimeException(s"Unexpected type found in the QPlan tree: ${x.getClass}")
+        case x => throw new CompilerException(s"Unexpected type found in the QPlan tree: ${x.getClass}")
       }
     }
 
@@ -69,7 +70,7 @@ object QPlanResolver {
     // return the re-constructed tree
     operandStack.length match {
       case 1 => operandStack.pop
-      case _ => throw new RuntimeException(s"A single item expected in the stack after re-assembling the QNode tree at name resolution. Instead, it has ${operandStack.length} entries.")
+      case _ => throw new CompilerException(s"A single item expected in the stack after re-assembling the QNode tree at name resolution. Instead, it has ${operandStack.length} entries.")
     }
   }
 
@@ -119,7 +120,7 @@ object QPlanResolver {
                         case pa: expr.PropertyAttribute => nextQueryPartNameResolverScope.put(s"${pa.elementAttribute.name}$$${pa.name}", (rc.resolvedName.get, rc))
                         case ua: expr.UnwindAttribute => nextQueryPartNameResolverScope.put(ua.name, (rc.resolvedName.get, rc))
                         case ea: expr.ExpressionAttribute => nextQueryPartNameResolverScope.put(ea.name, (rc.resolvedName.get, rc))
-                        case _ => throw new RuntimeException(s"Unexpected type found in return item position: ${rc.getClass}")
+                        case _ => throw new CompilerException(s"Unexpected type found in return item position: ${rc.getClass}")
                       }
                       rc.resolvedName
                     }
@@ -192,7 +193,7 @@ object QPlanResolver {
               case e: cExpr.Expression => expr.ExpressionAttribute(e, elementName, resolvedName = rn)
             }
           }
-          case _ => throw new RuntimeException(s"Unresolvable name ${elementName}.")
+          case _ => throw new CompilerException(s"Unresolvable name ${elementName}.")
         }
 
         if (nameParts.length == 1) {
@@ -205,11 +206,11 @@ object QPlanResolver {
               expr.PropertyAttribute(propertyName, ea, snr(s"${ea.name}$$${propertyName}",
                 expr.PropertyAttribute(propertyName, ea)) // this is a dirty hack to tell the resolver that we are about to resolve a PropertyAttribute instance
               )
-            case _ => throw new RuntimeException(s"Unexpected type found in basis position of property dereferencing: ${elementAttribute.getClass}")
+            case _ => throw new CompilerException(s"Unexpected type found in basis position of property dereferencing: ${elementAttribute.getClass}")
           }
         }
       }
-      case _ => throw new RuntimeException(s"Unexpected number of name parts, namely ${nameParts.length} for ${nameParts}")
+      case _ => throw new CompilerException(s"Unexpected number of name parts, namely ${nameParts.length} for ${nameParts}")
     }
     // fallback: no-op resolution.
     case x => x
@@ -219,7 +220,7 @@ object QPlanResolver {
   def snrGen(nameResolverScope: TNameResolverScope): (String, cExpr.Expression) => Option[String] = (baseName, target) => {
     val resolvedName: String = nameResolverScope.get(baseName) match {
       case Some((rn, entry)) => if (entry.getClass != target.getClass) {
-        throw new RuntimeException(s"Name collision across types: ${baseName}. In the cache, it is ${entry.getClass}, but now it was passed as ${target.getClass}")
+        throw new CompilerException(s"Name collision across types: ${baseName}. In the cache, it is ${entry.getClass}, but now it was passed as ${target.getClass}")
       } else {
         rn
       }
@@ -278,7 +279,7 @@ object QPlanResolver {
     val transformedAttributes = attributes.flatMap( a => child.output.find( co => co.name == a.name ) )
 
     if (attributes.length != transformedAttributes.length) {
-      throw new RuntimeException(s"Unable to resolve all attributes. Resolved ${transformedAttributes.length} out of ${attributes.length}")
+      throw new CompilerException(s"Unable to resolve all attributes. Resolved ${transformedAttributes.length} out of ${attributes.length}")
     }
 
     transformedAttributes
@@ -333,7 +334,7 @@ object QPlanResolver {
         false
       }
       // This should never be reached, as projectList is expr.types.TProjectList
-      case x => throw new RuntimeException(s"Unexpected type found in return item position: ${x.getClass}")
+      case x => throw new CompilerException(s"Unexpected type found in return item position: ${x.getClass}")
     }))
 
     if (seenAggregate) {

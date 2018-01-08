@@ -1,6 +1,7 @@
 package ingraph.compiler.cypher2qplan.util
 
 import ingraph.compiler.cypher2qplan.builders.{ExpressionBuilder, LiteralBuilder}
+import ingraph.compiler.exceptions.CompilerException
 import ingraph.model.expr
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
@@ -46,7 +47,7 @@ object BuilderUtil {
     )( _ match {
       case e: oc.NumberConstant => Some(LiteralBuilder.buildNumberLiteral(e))
       case e: oc.Parameter => Some(ExpressionBuilder.buildParameter(e))
-      case e => throw new RuntimeException(s"Only NumberConstants and parameters are supported as SKIP/LIMIT values, got ${e.getClass.getName}")
+      case e => throw new CompilerException(s"Only NumberConstants and parameters are supported as SKIP/LIMIT values, got ${e.getClass.getName}")
     })
   }
 }

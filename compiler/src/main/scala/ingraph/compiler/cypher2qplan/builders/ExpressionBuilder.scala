@@ -2,6 +2,7 @@ package ingraph.compiler.cypher2qplan.builders
 
 import java.util
 
+import ingraph.compiler.exceptions.CompilerException
 import ingraph.model.misc.Function
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
@@ -48,7 +49,7 @@ object ExpressionBuilder {
       case e: oc.NullConstant => cExpr.Literal(null)
       case e: oc.BoolConstant => LiteralBuilder.buildBoolLiteral(e)
 
-      case e => throw new RuntimeException("TODO: " + s"Unhandled parameter types: ${util.Arrays.asList[Object](e)}")
+      case e => throw new CompilerException("TODO: " + s"Unhandled parameter types: ${util.Arrays.asList[Object](e)}")
     }
   }
 
@@ -65,7 +66,7 @@ object ExpressionBuilder {
     val logicalExp = buildExpression(e, dummyJoins)
     if (!dummyJoins.isEmpty) {
       //FIXME: proper error handling
-      throw new RuntimeException("Pattern expression (joins) found when building a logical expression in generic expression position.")
+      throw new CompilerException("Pattern expression (joins) found when building a logical expression in generic expression position.")
     }
 
     logicalExp

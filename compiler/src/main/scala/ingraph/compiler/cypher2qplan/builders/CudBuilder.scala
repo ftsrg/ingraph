@@ -1,6 +1,7 @@
 package ingraph.compiler.cypher2qplan.builders
 
 import ingraph.compiler.cypher2qplan.util.BuilderUtil
+import ingraph.compiler.exceptions.CompilerException
 import ingraph.model.expr._
 import ingraph.model.expr.types.VertexLabel
 import ingraph.model.qplan
@@ -34,7 +35,7 @@ object CudBuilder {
         val nextVertex: VertexAttribute = AttributeBuilder.buildAttribute(pec.getNodePattern)
         val edgeAttribute: EdgeAttribute = AttributeBuilder.buildAttribute(pec.getRelationshipPattern) match {
           case e: EdgeAttribute => e
-          case _ => throw new RuntimeException(s"Single edge pattern required when CREATE'ing relationships")
+          case _ => throw new CompilerException(s"Single edge pattern required when CREATE'ing relationships")
         }
         val direction: Direction = BuilderUtil.convertToDirection(pec.getRelationshipPattern)
         // put vertex before the edge itself

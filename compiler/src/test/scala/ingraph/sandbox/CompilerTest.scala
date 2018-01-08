@@ -2,6 +2,7 @@ package ingraph.sandbox
 
 import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.CypherParser
+import ingraph.compiler.exceptions.CompilerException
 import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
 import ingraph.emf.util.PrettyPrinter
 import ingraph.model.fplan.{FNode, LeafFNode}
@@ -31,7 +32,7 @@ class CompilerTest extends FunSuite {
 
   def constructQueryFilePath(fileBaseName: String): String = {
     if (config.querySuitePath.isEmpty) {
-      throw new RuntimeException("QPlan compilation requested from file, but querySuitePath was not supplied in the compiler test config")
+      throw new CompilerException("QPlan compilation requested from file, but querySuitePath was not supplied in the compiler test config")
     }
     s"../queries/${config.querySuitePath.get}/${fileBaseName}.cypher"
   }
