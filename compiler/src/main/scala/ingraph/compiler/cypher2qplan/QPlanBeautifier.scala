@@ -1,6 +1,7 @@
 package ingraph.compiler.cypher2qplan
 
 import ingraph.compiler.cypher2qplan.builders.AttributeBuilder
+import ingraph.compiler.exceptions.ExpandChainException
 import ingraph.model.expr.ElementAttribute
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
@@ -88,7 +89,7 @@ object QPlanBeautifier {
     val attributesOfFilter = try {
       AttributeBuilder.extractAttributesFromExpandChain(filter)
     } catch {
-      case _: RuntimeException => {
+      case _: ExpandChainException => {
         check2 = false
         ListBuffer.empty[cExpr.Expression]
       }

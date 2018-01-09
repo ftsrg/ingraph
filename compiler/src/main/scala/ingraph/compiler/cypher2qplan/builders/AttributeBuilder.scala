@@ -3,7 +3,7 @@ package ingraph.compiler.cypher2qplan.builders
 import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.compiler.cypher2qplan.util.{BuilderUtil, StringUtil}
-import ingraph.compiler.exceptions.CompilerException
+import ingraph.compiler.exceptions._
 import ingraph.model.expr.{EdgeLabelSet, ElementAttribute}
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
@@ -66,9 +66,10 @@ object AttributeBuilder {
     * Extract vertex and edge attributes from the pattern.
     *
     * Check if filter is a chain of Expand operators on top of a single GetVertices, and attributes are properly chained
-    * and if not, RuntimeException is thrown.
+    * and if not, ExpandChainException is thrown.
     *
     * @param pattern
+    * @throws ExpandChainException
     * @return
     */
   def extractAttributesFromExpandChain(pattern: qplan.QNode): ListBuffer[Expression] = {
@@ -79,7 +80,8 @@ object AttributeBuilder {
       currOp match {
         case qplan.GetVertices(v) if chainElem == null || v == chainElem => relationshipVariableExpressions.append(v); currOp = null; chainElem = null
         case qplan.Expand(src, trg, edge, _, child) if chainElem == null || trg == chainElem => relationshipVariableExpressions.append(trg, edge); currOp = child; chainElem = src
-        case _ => throw new CompilerException("We should never see this condition: Expand and Getvertices not properly chained or other node type encountered.")
+        case qplan.GetVertices(_) | qplan.Expand(_, _, _, _, _) => throw new ExpandChainException("We should never see this condition: Expand and Getvertices not properly chained")
+        case e => throw new CompilerException("Unexpected node type encountered: ${e.getClass.getName}.")
       }
     }
 
