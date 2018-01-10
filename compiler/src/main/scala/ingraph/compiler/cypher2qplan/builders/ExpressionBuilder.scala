@@ -2,7 +2,7 @@ package ingraph.compiler.cypher2qplan.builders
 
 import java.util
 
-import ingraph.compiler.exceptions.CompilerException
+import ingraph.compiler.exceptions.{CompilerException, PatternNotAllowedException}
 import ingraph.model.misc.Function
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
@@ -58,6 +58,8 @@ object ExpressionBuilder {
     * in contexts where no join clauses should be generated.
     *
     * We use this outside of WHERE clauses.
+    *
+    * @throws PatternNotAllowedException if pattern expression (join) was found despite not allowed
     */
   def buildExpressionNoJoinAllowed(e: oc.Expression): cExpr.Expression = {
     // there should be no join clauses added when we build
@@ -66,7 +68,7 @@ object ExpressionBuilder {
     val logicalExp = buildExpression(e, dummyJoins)
     if (!dummyJoins.isEmpty) {
       //FIXME: proper error handling
-      throw new CompilerException("Pattern expression (joins) found when building a logical expression in generic expression position.")
+      throw new PatternNotAllowedException("Pattern expression (joins) found when building a logical expression in generic expression position.")
     }
 
     logicalExp
