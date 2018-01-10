@@ -191,6 +191,14 @@ class RandomCompilationTest extends CompilerTest {
       """RETURN [1, 2+3, 'foo', 'bar'] AS l
       """.stripMargin)
   }
+
+  test("Random: compile IN expression") {
+    compile(
+      """MATCH (p:Person)
+        |WHERE 'en' IN p.languages
+        |RETURN p.name, p.languages
+      """.stripMargin)
+  }
 }
 
 /** Random compiler tests that must stop after QPlan compilation.

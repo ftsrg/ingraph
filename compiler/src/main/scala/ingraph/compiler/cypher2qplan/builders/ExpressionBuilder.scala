@@ -24,7 +24,6 @@ object ExpressionBuilder {
       case e: oc.ExpressionOr => cExpr.Or(buildExpression(e.getLeft, joins), buildExpression(e.getRight, joins))
       case e: oc.ExpressionXor => buildExpressionXor(e, joins)
       case e: oc.ExpressionNot => cExpr.Not(buildExpression(e.getLeft, joins))
-      //TODO: case e: oc.InCollectionExpression => buildExpressionAux(e, joins)
       case e: oc.IsNotNullExpression => cExpr.IsNotNull(buildExpressionNoJoinAllowed(e.getLeft))
       case e: oc.IsNullExpression => cExpr.IsNull(buildExpressionNoJoinAllowed(e.getLeft))
       case e: oc.ParenthesizedExpression => buildExpression(e.getExpression, joins)
@@ -39,6 +38,7 @@ object ExpressionBuilder {
       //FIXME#206: this should pass function name unresolved
       case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName.getName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
       case _: oc.Count => UnresolvedFunction(Function.COUNT_ALL.getPrettyName, Seq[cExpr.Expression](), false)
+      case e: oc.InCollectionExpression => UnresolvedFunction(Function.IN_COLLECTION.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false)
       case e: oc.NumberConstant => LiteralBuilder.buildNumberLiteral(e)
       case e: oc.Parameter => buildParameter(e)
       case e: oc.StringConstant => LiteralBuilder.buildStringLiteral(e)
@@ -119,18 +119,6 @@ object ExpressionBuilder {
       case ">=" => cExpr.GreaterThanOrEqual(l, r)
     }
   }
-
-//  /**
-//    * Processes IN by creating a function invocation: IN_COLLECTION(ANY, LIST expression)
-//    */
-//  def buildExpressionAux(e: oc.InCollectionExpression, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
-//    modelFactory.createFunctionLogicalExpression => [
-//    functor = Function.IN_COLLECTION
-//    arguments.add(buildExpression(e.left))
-//    arguments.add(buildExpression(e.right))
-//    expressionContainer = ce.tlc
-//    ]
-//  }
 
 //  def buildExpressionAux(e: oc.Parameter): cExpr.Expression = {
 //    modelFactory.createParameterComparableExpression => [
