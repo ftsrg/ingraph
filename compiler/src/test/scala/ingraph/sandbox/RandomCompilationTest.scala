@@ -185,4 +185,46 @@ class RandomCompilationTest extends CompilerTest {
       """.stripMargin
     )
   }
+
+  test("Random: compile list literal") {
+    compile(
+      """RETURN [1, 2+3, 'foo', 'bar'] AS l
+      """.stripMargin)
+  }
+}
+
+/** Random compiler tests that must stop after QPlan compilation.
+  *
+  * This is because of limitations of the following stages.
+  * See note for each of the cases.
+  *
+  * On the long term, this should contain no test cases.
+  */
+class RandomQPlanCompilationTest extends CompilerTest {
+  override val config = CompilerTestConfig(querySuitePath = None
+    , compileQPlanOnly = true
+    , skipQPlanResolve = false
+    , skipQPlanBeautify = false
+    , printQuery = false
+    , printCypher = true
+    , printQPlan = true
+    , printJPlan = true
+    , printFPlan = true
+  )
+
+  /* FPlan error:
+'Unwind unwindattribute(listexpression(1, 2, 3), li, Some(li#0))
++- Dual
+ (of class ingraph.model.jplan.Unwind)
+scala.MatchError: 'Unwind unwindattribute(listexpression(1, 2, 3), li, Some(li#0))
++- Dual
+ (of class ingraph.model.jplan.Unwind)
+	at ingraph.compiler.qplan2jplan.SchemaInferencer$.transform(SchemaInferencer.scala:18)
+   */
+  test("Random: compile UNWIND w/ list literal") {
+    compile(
+      """UNWIND [1, 2, 3] as li
+        |RETURN li AS l
+      """.stripMargin)
+  }
 }

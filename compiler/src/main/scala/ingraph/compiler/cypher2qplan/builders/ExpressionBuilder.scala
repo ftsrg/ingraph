@@ -44,7 +44,7 @@ object ExpressionBuilder {
       case e: oc.StringConstant => LiteralBuilder.buildStringLiteral(e)
       case e: oc.VariableRef => AttributeBuilder.buildAttribute(e)
       case e: oc.CaseExpression => buildExpressionCase(e)
-      //TODO: case e: oc.ExpressionList => buildExpressionAux(e, joins)
+      case e: oc.ExpressionList => expr.ListExpression( e.getExpressions.asScala.map( buildExpressionNoJoinAllowed(_) ) )
       //TODO: case e: oc.IndexExpression => buildExpressionAux(e, joins)
       case e: oc.NullConstant => cExpr.Literal(null)
       case e: oc.BoolConstant => LiteralBuilder.buildBoolLiteral(e)
@@ -230,30 +230,6 @@ object ExpressionBuilder {
     }
   }
 
-//  def buildExpressionAux(el: oc.ExpressionList): cExpr.Expression = {
-//    val emptyList = modelFactory.createEmptyListExpression => [
-//    head = null
-//    tail = null
-//    expressionContainer = ce.tlc
-//    ]
-//    // the tail of the first expression will be the list that was built
-//    val first = modelFactory.createListExpression => [
-//    tail = emptyList
-//    ]
-//    var recent = first
-//
-//    for (e : el.expressions) {
-//      recent.tail = modelFactory.createListExpression => [
-//      head = buildExpression(e, ce)
-//      tail = emptyList
-//      expressionContainer = ce.tlc
-//      ]
-//      recent = recent.tail
-//    }
-//
-//    first.tail
-//  }
-//
 //  def buildExpressionAux(ie: oc.IndexExpression): cExpr.Expression = {
 //    var IndexAccessExpression retVal
 //    if (ie.expression === null) {

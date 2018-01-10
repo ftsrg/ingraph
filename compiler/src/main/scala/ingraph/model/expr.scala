@@ -103,6 +103,19 @@ case class ExpressionAttribute(expr: Expression, override val name: String, over
 // this is the attribute built by unwinding a list
 case class UnwindAttribute(list: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName
 
+/** Represents a list expression.
+  *
+  * In openCypher, list is a first class citizen among data types,
+  * and also properties may hold lists.
+  *
+  * This is different that of in Spark Catalyst, where this is represented directly as Seq[Expression]
+  * used only for "value in list"-like expressions.
+  *
+  * @param list the sequence of list elements
+  */
+case class ListExpression(list: Seq[Expression]) extends ExpressionBase {
+  override def children: Seq[Expression] = list
+}
 
 // formerly GraphElementVariable
 abstract class GraphAttribute(override val name: String) extends AttributeBase
