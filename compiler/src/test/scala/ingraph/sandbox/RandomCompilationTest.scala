@@ -199,6 +199,30 @@ class RandomCompilationTest extends CompilerTest {
         |RETURN p.name, p.languages
       """.stripMargin)
   }
+
+  test("Random: compile STARTS WITH") {
+    compile(
+      """RETURN 'foo' STARTS WITH 'f' AS b
+      """.stripMargin)
+  }
+
+  test("Random: compile ENDS WITH") {
+    compile(
+      """RETURN 'foo' ENDS WITH 'oo' AS b
+      """.stripMargin)
+  }
+
+  test("Random: compile CONTAINS") {
+    compile(
+      """RETURN 'bar' CONTAINS 'a' AS b
+      """.stripMargin)
+  }
+
+  test("Random: compile regexp matching") {
+    compile(
+      """RETURN 'foo' =~ 'o+' AS b
+      """.stripMargin)
+  }
 }
 
 /** Random compiler tests that must stop after QPlan compilation.

@@ -17,8 +17,6 @@ object ExpressionBuilder {
 
   def buildExpression(expression: oc.Expression, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
     expression match {
-      //FIXME: case e: oc.ContainsExpression => cExpr.Contains(buildExpression(e.getLeft), buildExpression(e.getRight))
-      //FIXME: case e: oc.EndsWithExpression => cExpr.EndsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
       case e: oc.ExpressionComparison => buildExpressionComparision(e, joins)
       case e: oc.ExpressionAnd => cExpr.And(buildExpression(e.getLeft, joins), buildExpression(e.getRight, joins))
       case e: oc.ExpressionOr => cExpr.Or(buildExpression(e.getLeft, joins), buildExpression(e.getRight, joins))
@@ -27,9 +25,7 @@ object ExpressionBuilder {
       case e: oc.IsNotNullExpression => cExpr.IsNotNull(buildExpressionNoJoinAllowed(e.getLeft))
       case e: oc.IsNullExpression => cExpr.IsNull(buildExpressionNoJoinAllowed(e.getLeft))
       case e: oc.ParenthesizedExpression => buildExpression(e.getExpression, joins)
-      //TODO: case e: oc.RegExpMatchingExpression => buildExpressionAux(e, joins)
       case e: oc.RelationshipsPattern => buildExpressionPattern(e, joins)
-      //FIXME: case e: oc.StartsWithExpression => cExpr.StartsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
       case e: oc.ExpressionNodeLabelsAndPropertyLookup => AttributeBuilder.buildAttribute(e)
       case e: oc.ExpressionPlusMinus => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionUnaryPlusMinus => buildExpressionArithmetic(e, joins)
@@ -39,6 +35,12 @@ object ExpressionBuilder {
       case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName.getName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
       case _: oc.Count => UnresolvedFunction(Function.COUNT_ALL.getPrettyName, Seq[cExpr.Expression](), false)
       case e: oc.InCollectionExpression => UnresolvedFunction(Function.IN_COLLECTION.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false)
+      // String predicates
+      case e: oc.ContainsExpression => UnresolvedFunction(Function.CONTAINS.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false) //cExpr.Contains
+      case e: oc.StartsWithExpression => UnresolvedFunction(Function.STARTS_WITH.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false) //cExpr.StartsWith
+      case e: oc.EndsWithExpression => UnresolvedFunction(Function.ENDS_WITH.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false) //cExpr.EndsWith
+      case e: oc.RegExpMatchingExpression => UnresolvedFunction(Function.REGEX_LIKE.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false)
+      // End string predicates
       case e: oc.NumberConstant => LiteralBuilder.buildNumberLiteral(e)
       case e: oc.Parameter => buildParameter(e)
       case e: oc.StringConstant => LiteralBuilder.buildStringLiteral(e)
@@ -81,19 +83,6 @@ object ExpressionBuilder {
 
     cExpr.Or(cExpr.And(l, cExpr.Not(r)), cExpr.And(cExpr.Not(l), r))
   }
-
-//  def buildExpressionAux(e: oc.RegExpMatchingExpression, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
-//    val fe = modelFactory.createFunctionLogicalExpression => [
-//    expressionContainer = ce.tlc
-//    ]
-//
-//    fe.functor = Function.REGEX_LIKE
-//
-//    fe.arguments.add(buildExpression(e.left))
-//    fe.arguments.add(buildExpression(e.right))
-//
-//    fe
-//  }
 
   def buildExpressionPattern(e: oc.RelationshipsPattern, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
     val currentPattern = PatternBuilder.buildPattern(e)
