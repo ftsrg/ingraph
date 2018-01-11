@@ -5,25 +5,12 @@ class BiCompilerTest extends CompilerTest {
     , compileQPlanOnly = true
     , skipQPlanResolve = false
     , skipQPlanBeautify = false
-    , printQuery = false
-    , printCypher = true
+    , printQuery = true
+    , printCypher = false
     , printQPlan = true
     , printJPlan = true
     , printFPlan = true
   )
-
-  test("17") {
-    val stages = compile(
-      """MATCH (country:Country {name: 'Austria'})
-        |MATCH (a:Person)-[:isLocatedIn]->(:City)-[:isPartOf]->(country)
-        |MATCH (b:Person)-[:isLocatedIn]->(:City)-[:isPartOf]->(country)
-        |MATCH (c:Person)-[:isLocatedIn]->(:City)-[:isPartOf]->(country)
-        |MATCH (a)-[:knows]-(b), (b)-[:knows]-(c), (c)-[:knows]-(a)
-        |WHERE a.id < b.id
-        |  AND b.id < c.id
-        |RETURN count(*)
-      """.stripMargin)
-  }
 
   ignore("bi-01 from file: Posting summary") {
     val stages=compileFromFile("bi-01")
@@ -91,8 +78,8 @@ class BiCompilerTest extends CompilerTest {
         |MATCH
         |  (country:Country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(person:Person)
         |  <-[:HAS_CREATOR]-(message:Message)-[:HAS_TAG]->(tag:Tag)
-        |WHERE message.creationDate >= $date1
-        |  AND message.creationDate <= $date2
+        |WHERE message.creationDate >= $startDate
+        |  AND message.creationDate <= $endDate
         |  AND (country.name = $country1 OR country.name = $country2)
         |WITH
         |  country.name AS countryName,
@@ -214,15 +201,16 @@ class BiCompilerTest extends CompilerTest {
         |WITH collect(forum) AS popularForums
         |UNWIND popularForums AS forum
         |MATCH
-        |  (forum)-[:HAS_MEMBER]->(person:Person)<-[:HAS_CREATOR]-(post:Post)
-        |  <-[:CONTAINER_OF]-(popularForum:Forum)
+        |  (forum)-[:HAS_MEMBER]->(person:Person)
+        |OPTIONAL MATCH
+        |  (person)<-[:HAS_CREATOR]-(post:Post)<-[:CONTAINER_OF]-(popularForum:Forum)
         |WHERE popularForum IN popularForums
         |RETURN
         |  person.id,
         |  person.firstName,
         |  person.lastName,
         |  person.creationDate,
-        |  count(post) AS postCount
+        |  count(DISTINCT post) AS postCount
         |ORDER BY
         |  postCount DESC,
         |  person.id ASC
@@ -265,16 +253,16 @@ class BiCompilerTest extends CompilerTest {
     val stages = compile(
       """// Q7. Most authoritative users on a given topic
         |/*
-        |  :param { tag: 'Charles_V,_Holy_Roman_Emperor' }
+        |  :param { tag: 'Arnold_Schwarzenegger' }
         |*/
-        |MATCH
-        |  (tag:Tag {name: $tag})<-[:HAS_TAG]-(:Message)-[:HAS_CREATOR]->(person1:Person)
-        |MATCH
-        |  (person1)<-[:HAS_CREATOR]-(message:Message)-[:HAS_TAG]->(tag),
-        |  (message)<-[:LIKES]-(person2:Person)<-[:HAS_CREATOR]-(:Message)<-[l:LIKES]-(person3:Person)
+        |MATCH (tag:Tag {name: $tag})
+        |MATCH (tag)<-[:HAS_TAG]-(message1:Message)-[:HAS_CREATOR]->(person1:Person)
+        |MATCH (tag)<-[:HAS_TAG]-(message2:Message)-[:HAS_CREATOR]->(person1)
+        |OPTIONAL MATCH (message2)<-[:LIKES]-(person2:Person)
+        |OPTIONAL MATCH (person2)<-[:HAS_CREATOR]-(message3:Message)<-[like:LIKES]-(p3:Person)
         |RETURN
         |  person1.id,
-        |  count(DISTINCT l) AS authorityScore
+        |  count(DISTINCT like) AS authorityScore
         |ORDER BY
         |  authorityScore DESC,
         |  person1.id ASC
@@ -353,32 +341,55 @@ class BiCompilerTest extends CompilerTest {
       """// Q10. Central Person for a Tag
         |/*
         |  :param {
-        |    tag: 'Che_Guevara',
-        |    date: 20110721220000000
+        |    tag: 'John_Rhys-Davies',
+        |    date: 20120122000000000
         |  }
         |*/
-        |MATCH (tag:Tag {name: $tag}), (person:Person)
+        |MATCH (tag:Tag {name: $tag})
         |// score
-        |OPTIONAL MATCH (person)-[i:HAS_INTEREST]->(tag)
-        |OPTIONAL MATCH (person)<-[:HAS_CREATOR]-(m:Message)-[:HAS_TAG]->(tag)
-        |WHERE m.creationDate > $date
+        |OPTIONAL MATCH (tag)<-[interest:HAS_INTEREST]-(person:Person)
+        |WITH tag, collect(person) AS interestedPersons
+        |OPTIONAL MATCH (tag)<-[:HAS_TAG]-(message:Message)-[:HAS_CREATOR]->(person:Person)
+        |         WHERE message.creationDate > $date
+        |WITH tag, interestedPersons + collect(person) AS persons
+        |UNWIND persons AS person
+        |// poor man's disjunct union (should be changed to UNION + post-union processing in the future)
+        |WITH DISTINCT tag, person
+        |OPTIONAL MATCH (tag)<-[interest:HAS_INTEREST]-(person:Person)
         |WITH
         |  tag,
         |  person,
-        |  count(i)*100 + count(m) AS score
-        |// friendsScore
-        |OPTIONAL MATCH (person)-[:KNOWS]-(friend:Person)
-        |OPTIONAL MATCH (friend)-[i:HAS_INTEREST]->(tag)
-        |OPTIONAL MATCH (friend)<-[:HAS_CREATOR]-(m:Message)-[:HAS_TAG]->(tag)
-        |WHERE m.creationDate > $date
+        |  100 * count(interest) AS score
+        |OPTIONAL MATCH (tag)<-[:HAS_TAG]-(message:Message)-[:HAS_CREATOR]->(person)
+        |         WHERE message.creationDate > $date
+        |WITH
+        |  tag,
+        |  person,
+        |  score + count(message) AS score
+        |MATCH (person)-[:KNOWS]-(friend)
+        |WITH
+        |  tag,
+        |  person,
+        |  score,
+        |  friend
+        |OPTIONAL MATCH (tag)<-[interest:HAS_INTEREST]-(friend:Person)
+        |WITH
+        |  tag,
+        |  person,
+        |  score,
+        |  friend,
+        |  100 * count(interest) AS friendScore
+        |OPTIONAL MATCH (tag)<-[:HAS_TAG]-(message:Message)-[:HAS_CREATOR]->(friend)
+        |         WHERE message.creationDate > $date
         |WITH
         |  person,
         |  score,
-        |  count(i)*100 + count(m) AS individualFriendsScore
+        |  friend,
+        |  friendScore + count(message) AS friendScore
         |RETURN
         |  person.id,
         |  score,
-        |  sum(individualFriendsScore) AS friendsScore
+        |  sum(friendScore) AS friendsScore
         |ORDER BY
         |  score + friendsScore DESC,
         |  person.id ASC
@@ -404,16 +415,15 @@ class BiCompilerTest extends CompilerTest {
         |  (country:Country {name: $country})<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-
         |  (person:Person)<-[:HAS_CREATOR]-(reply:Comment)-[:REPLY_OF]->(message:Message),
         |  (reply)-[:HAS_TAG]->(tag:Tag)
-        |OPTIONAL MATCH
-        |  (:Person)-[like:LIKES]->(reply)
         |WHERE NOT (message)-[:HAS_TAG]->(:Tag)<-[:HAS_TAG]-(reply)
         |  AND size([word IN blacklist WHERE reply.content CONTAINS word | word]) = 0
+        |OPTIONAL MATCH
+        |  (:Person)-[like:LIKES]->(reply)
         |RETURN
         |  person.id,
         |  tag.name,
         |  count(DISTINCT like) AS countLikes,
-        |  count(DISTINCT reply) AS countReplies,
-        |  reply.content
+        |  count(DISTINCT reply) AS countReplies
         |ORDER BY
         |  countLikes DESC,
         |  person.id ASC,
@@ -464,7 +474,8 @@ class BiCompilerTest extends CompilerTest {
         |/*
         |  :param { country: 'Burma' }
         |*/
-        |MATCH (:Country {name: $country})<-[:IS_LOCATED_IN]-(message:Message)-[:HAS_TAG]->(tag:Tag)
+        |MATCH (:Country {name: $country})<-[:IS_LOCATED_IN]-(message:Message)
+        |OPTIONAL MATCH (message)-[:HAS_TAG]->(tag:Tag)
         |WITH
         |  message.creationDate/10000000000000   AS year,
         |  message.creationDate/100000000000%100 AS month,
@@ -476,6 +487,10 @@ class BiCompilerTest extends CompilerTest {
         |  year,
         |  month,
         |  collect([tag.name, popularity]) AS popularTags
+        |WITH
+        |  year,
+        |  month,
+        |  [popularTag IN popularTags WHERE popularTag[0] IS NOT NULL] AS popularTags
         |RETURN
         |  year,
         |  month,
@@ -502,10 +517,10 @@ class BiCompilerTest extends CompilerTest {
         |  }
         |*/
         |MATCH (person:Person)<-[:HAS_CREATOR]-(post:Post)<-[:REPLY_OF*0..]-(reply:Message)
-        |WHERE post.creationDate >= $startDate
-        |  AND post.creationDate <= $endDate
-        |  AND reply.creationDate   >= $startDate
-        |  AND reply.creationDate   <= $endDate
+        |WHERE  post.creationDate >= $startDate
+        |  AND  post.creationDate <= $endDate
+        |  AND reply.creationDate >= $startDate
+        |  AND reply.creationDate <= $endDate
         |RETURN
         |  person.id,
         |  person.firstName,
@@ -601,7 +616,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-17")
   }
 
-  test("bi-17: Friend triangles") {
+  ignore("bi-17: Friend triangles") {
     val stages = compile(
       """// Q17. Friend triangles
         |/*
@@ -628,22 +643,26 @@ class BiCompilerTest extends CompilerTest {
       """// Q18. How many persons have a given number of posts
         |/*
         |  :param {
-        |    date: 20100822040000000,
-        |    lengthThreshold: 240,
+        |    date: 20110722000000000,
+        |    lengthThreshold: 20,
         |    languages: ['ar']
         |  }
         |*/
-        |// note: thresholds like 20 are way too low
-        |MATCH
-        |  (person:Person)<-[:HAS_CREATOR]-(message:Message)-[:REPLY_OF*0..]->(post:Post)
+        |MATCH (person:Person)
+        |OPTIONAL MATCH (person)<-[:HAS_CREATOR]-(message:Message)-[:REPLY_OF*0..]->(post:Post)
         |WHERE message.content IS NOT NULL
-        |  AND message.length <= $lengthThreshold
+        |  AND message.length < $lengthThreshold
         |  AND message.creationDate > $date
         |  AND post.language IN $languages
-        |WITH person, count(message) AS messageCount
-        |RETURN messageCount, count(person) AS personCount
-        |ORDER BY messageCount DESC
-        |LIMIT 100
+        |WITH
+        |  person,
+        |  count(message) AS messageCount
+        |RETURN
+        |  messageCount,
+        |  count(person) AS personCount
+        |ORDER BY
+        |  personCount DESC,
+        |  messageCount DESC
       """.stripMargin)
   }
 
@@ -729,8 +748,8 @@ class BiCompilerTest extends CompilerTest {
       """// Q21. Zombies in a country
         |/*
         |  :param {
-        |    country: 'Spain',
-        |    endDate: 20130101050000000
+        |    country: 'Ethiopia',
+        |    endDate: 20130101000000000
         |  }
         |*/
         |MATCH (country:Country {name: $country})
@@ -739,48 +758,55 @@ class BiCompilerTest extends CompilerTest {
         |  $endDate/10000000000000   AS endDateYear,
         |  $endDate/100000000000%100 AS endDateMonth
         |MATCH
-        |  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-
-        |  (person:Person)<-[:HAS_CREATOR]-(message:Message)
-        |WHERE person.creationDate < $endDate
+        |  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(zombie:Person)
+        |OPTIONAL MATCH
+        |  (zombie)<-[:HAS_CREATOR]-(message:Message)
+        |WHERE zombie.creationDate  < $endDate
         |  AND message.creationDate < $endDate
         |WITH
         |  country,
-        |  person,
+        |  zombie,
         |  endDateYear,
         |  endDateMonth,
-        |  message.creationDate/10000000000000   AS personCreationYear,
-        |  message.creationDate/100000000000%100 AS personCreationMonth,
+        |  zombie.creationDate/10000000000000   AS zombieCreationYear,
+        |  zombie.creationDate/100000000000%100 AS zombieCreationMonth,
         |  count(message) AS messageCount
         |WITH
         |  country,
-        |  person,
-        |  (endDateYear  - personCreationYear ) * 12 +
-        |  (endDateMonth - personCreationMonth) AS months,
+        |  zombie,
+        |  12 * (endDateYear  - zombieCreationYear )
+        |     + (endDateMonth - zombieCreationMonth)
+        |     + 1 AS months,
         |  messageCount
         |WHERE messageCount / months < 1
         |WITH
         |  country,
-        |  collect(person) AS zombies
-        |MATCH
-        |  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-
-        |  (person:Person)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(fan:Person)
-        |WHERE fan.creationDate < $endDate
+        |  collect(zombie) AS zombies
+        |UNWIND zombies AS zombie
+        |OPTIONAL MATCH
+        |  (zombie)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(likerZombie:Person)
+        |WHERE likerZombie IN zombies
         |WITH
-        |  zombies,
-        |  person,
-        |  collect(fan) AS fans
+        |  zombie,
+        |  count(likerZombie) AS zombieLikeCount
+        |OPTIONAL MATCH
+        |  (zombie)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(likerPerson:Person)
+        |WHERE likerPerson.creationDate < $endDate
         |WITH
-        |  person,
-        |  size([f IN fans WHERE f in zombies]) AS zombieLikeCount,
-        |  toFloat(size(fans)) AS totalLikeCount
+        |  zombie,
+        |  zombieLikeCount,
+        |  count(likerPerson) AS totalLikeCount
         |RETURN
-        |  person.id,
+        |  zombie.id,
         |  zombieLikeCount,
         |  totalLikeCount,
-        |  zombieLikeCount / totalLikeCount AS zombieScore
+        |  CASE totalLikeCount
+        |    WHEN 0 THEN 0
+        |    ELSE zombieLikeCount / toFloat(totalLikeCount)
+        |  END AS zombieScore
         |ORDER BY
         |  zombieScore DESC,
-        |  person.id ASC
+        |  zombie.id ASC
         |LIMIT 100
       """.stripMargin)
   }
@@ -794,45 +820,29 @@ class BiCompilerTest extends CompilerTest {
       """// Q22. International dialog
         |/*
         |  :param {
-        |    country1: 'Japan',
-        |    country2: 'Ethiopia'
+        |    country1: 'Mexico',
+        |    country2: 'Indonesia'
         |  }
         |*/
         |MATCH
-        |  (country1:Country {name: $country1})<-[:IS_PART_OF]-
-        |  (city1:City)<-[:IS_LOCATED_IN]-(person1:Person),
-        |  (country2:Country {name: $country2})<-[:IS_PART_OF]-
-        |  (city2:City)<-[:IS_LOCATED_IN]-(person2:Person)
+        |  (country1:Country {name: $country1})<-[:IS_PART_OF]-(city1:City)<-[:IS_LOCATED_IN]-(person1:Person),
+        |  (country2:Country {name: $country2})<-[:IS_PART_OF]-(city2:City)<-[:IS_LOCATED_IN]-(person2:Person)
         |WITH person1, person2, city1, 0 AS score
         |// subscore 1
-        |OPTIONAL MATCH
-        |  (person1)<-[:HAS_CREATOR]-(c:Comment)-[:REPLY_OF]->
-        |  (:Message)-[:HAS_CREATOR]->(person2)
-        |WITH
-        |  person1, person2, city1,
-        |  score + (CASE c WHEN null THEN 0 ELSE 4 END) AS score
+        |OPTIONAL MATCH (person1)<-[:HAS_CREATOR]-(c:Comment)-[:REPLY_OF]->(:Message)-[:HAS_CREATOR]->(person2)
+        |WITH DISTINCT person1, person2, city1, score + (CASE c WHEN null THEN 0 ELSE  4 END) AS score
         |// subscore 2
-        |OPTIONAL MATCH
-        |  (person1)<-[:HAS_CREATOR]-(m:Message)<-[:REPLY_OF]-
-        |  (:Comment)-[:HAS_CREATOR]->(person2)
-        |WITH
-        |  person1, person2, city1,
-        |  score + (CASE m WHEN null THEN 0 ELSE 1 END) AS score
+        |OPTIONAL MATCH (person1)<-[:HAS_CREATOR]-(m:Message)<-[:REPLY_OF]-(:Comment)-[:HAS_CREATOR]->(person2)
+        |WITH DISTINCT person1, person2, city1, score + (CASE m WHEN null THEN 0 ELSE  1 END) AS score
         |// subscore 3
         |OPTIONAL MATCH (person1)-[k:KNOWS]-(person2)
-        |WITH
-        |  person1, person2, city1,
-        |  score + (CASE k WHEN null THEN 0 ELSE 15 END) AS score
+        |WITH DISTINCT person1, person2, city1, score + (CASE k WHEN null THEN 0 ELSE 15 END) AS score
         |// subscore 4
         |OPTIONAL MATCH (person1)-[:LIKES]->(m:Message)-[:HAS_CREATOR]->(person2)
-        |WITH
-        |  person1, person2, city1,
-        |  score + (CASE m WHEN null THEN 0 ELSE 10 END) AS score
+        |WITH DISTINCT person1, person2, city1, score + (CASE m WHEN null THEN 0 ELSE 10 END) AS score
         |// subscore 5
         |OPTIONAL MATCH (person1)<-[:HAS_CREATOR]-(m:Message)<-[:LIKES]-(person2)
-        |WITH
-        |  person1, person2, city1,
-        |  score + (CASE m WHEN null THEN 0 ELSE 1 END) AS score
+        |WITH DISTINCT person1, person2, city1, score + (CASE m WHEN null THEN 0 ELSE  1 END) AS score
         |// preorder
         |ORDER BY
         |  city1.name ASC,
@@ -841,7 +851,7 @@ class BiCompilerTest extends CompilerTest {
         |  person2.id ASC
         |WITH
         |  city1,
-        |  // using a list might be faster, but the browser editor does not like it
+        |  // using a list might be faster, but the browser query editor does not like it
         |  collect({score: score, person1: person1, person2: person2})[0] AS top
         |RETURN
         |  top.person1.id,
@@ -863,24 +873,24 @@ class BiCompilerTest extends CompilerTest {
     val stages = compile(
       """// Q23. Holiday destinations
         |/*
-        |  :param { country: 'Spain' }
+        |  :param { country: 'Egypt' }
         |*/
         |MATCH
-        |  (homeCountry:Country {name: $country})<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-
-        |  (:Person)<-[:HAS_CREATOR]-(message:Message)-[:IS_LOCATED_IN]->(:City)-[:IS_PART_OF]->(country:Country)
-        |WHERE homeCountry <> country
+        |  (home:Country {name: $country})<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-
+        |  (:Person)<-[:HAS_CREATOR]-(message:Message)-[:IS_LOCATED_IN]->(destination:Country)
+        |WHERE home <> destination
         |WITH
         |  message,
-        |  country,
+        |  destination,
         |  message.creationDate/100000000000%100 AS month
         |RETURN
         |  count(message) AS messageCount,
-        |  country.name,
+        |  destination.name,
         |  month
         |ORDER BY
         |  messageCount DESC,
-        |  country.name ASC,
-        |  month DESC
+        |  destination.name ASC,
+        |  month ASC
         |LIMIT 100
       """.stripMargin)
   }
@@ -895,18 +905,19 @@ class BiCompilerTest extends CompilerTest {
         |/*
         |  :param { tagClass: 'Single' }
         |*/
-        |MATCH
-        |  (:TagClass {name: $tagClass})<-[:HAS_TYPE]-(:Tag)<-[:HAS_TAG]-(message:Message)<-[:LIKES]-(person:Person),
-        |  (message)-[:IS_LOCATED_IN]->(:Country)-[:IS_PART_OF]->(continent:Continent)
+        |MATCH (:TagClass {name: $tagClass})<-[:HAS_TYPE]-(:Tag)<-[:HAS_TAG]-(message:Message)
+        |WITH DISTINCT message
+        |MATCH (message)-[:IS_LOCATED_IN]->(:Country)-[:IS_PART_OF]->(continent:Continent)
+        |OPTIONAL MATCH (message)<-[like:LIKES]-(:Person)
         |WITH
         |  message,
-        |  person,
-        |  message.creationDate/10000000000000 AS year,
+        |  message.creationDate/10000000000000   AS year,
         |  message.creationDate/100000000000%100 AS month,
+        |  like,
         |  continent
         |RETURN
-        |  count(message) AS messageCount,
-        |  count(person) AS likeCount,
+        |  count(DISTINCT message) AS messageCount,
+        |  count(like) AS likeCount,
         |  year,
         |  month,
         |  continent.name
