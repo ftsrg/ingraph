@@ -158,7 +158,8 @@ class RandomCompilationTest extends CompilerTest {
     )
   }
 
-  test("Random: WITH..WHERE") {
+  // See: slizaa/slizaa-opencypher-xtext#24
+  ignore("Random: WITH..WHERE") {
     compile(
       """MATCH (p:Person)-->(c:Car)
         |WITH p, count(c) as carNumber
