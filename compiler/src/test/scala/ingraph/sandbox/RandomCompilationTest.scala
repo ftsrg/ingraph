@@ -169,6 +169,16 @@ class RandomCompilationTest extends CompilerTest {
     )
   }
 
+  test("Random: WITH..WHERE simple") {
+    compile(
+      """MATCH (p:Person)-->(c:Car)
+        |WITH p, count(c) as carNumber
+        |WHERE carNumber > 1
+        |RETURN p
+      """.stripMargin
+    )
+  }
+
   test("Random: variable length path") {
     compile(
       """MATCH (n1)-[p*3..]->(n2)
