@@ -32,7 +32,7 @@ object ExpressionBuilder {
       case e: oc.ExpressionMulDiv => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionPower => buildExpressionArithmetic(e, joins)
       //FIXME#206: this should pass function name unresolved
-      case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName.getName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
+      case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
       case _: oc.Count => UnresolvedFunction(Function.COUNT_ALL.getPrettyName, Seq[cExpr.Expression](), false)
       case e: oc.InCollectionExpression => UnresolvedFunction(Function.IN_COLLECTION.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false)
       // String predicates

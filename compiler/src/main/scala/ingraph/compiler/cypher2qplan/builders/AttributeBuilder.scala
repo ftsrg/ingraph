@@ -47,7 +47,7 @@ object AttributeBuilder {
     UnresolvedAttribute(Seq(e.getLeft.asInstanceOf[oc.VariableRef].getVariableRef.getName, e.getPropertyLookups.get(0).getPropertyKeyName))
   }
 
-  def buildAttribute(v: oc.Variable): UnresolvedAttribute = {
+  def buildAttribute(v: oc.VariableDeclaration): UnresolvedAttribute = {
     UnresolvedAttribute(v.getName)
   }
 
