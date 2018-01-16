@@ -3,7 +3,7 @@ package ingraph.compiler.cypher2qplan
 import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.compiler.cypher2qplan.util.TransformUtil
-import ingraph.compiler.exceptions.CompilerException
+import ingraph.compiler.exceptions.{CompilerException, NameResolutionException}
 import ingraph.model.expr.{ProjectionDescriptor, ResolvableName, ReturnItem}
 import ingraph.model.qplan.{QNode, UnaryQNode}
 import ingraph.model.{expr, misc, qplan}
@@ -77,8 +77,12 @@ object QPlanResolver {
   protected def reAssembleTreeResolvingNames(qPlanPolishNotation: mutable.Stack[qplan.QNode], operandStack: mutable.Stack[qplan.QNode]) = {
     // this will hold those names that are in scope, so no new resolution should be invented
     var nameResolverScope = mutable.Map[String, (String, cExpr.Expression)]()
+    // HACK: this will hold the previous name resolving scope, which will be used for Sort and Top operators
+    var oldNameResolverScope: Option[ mutable.Map[String, (String, cExpr.Expression)] ] = None
     // scoped name resolver shorthand
-    def r[T <: Expression](v: T): T = v.transform(expressionNameResolver(snrGen(nameResolverScope), nameResolverScope)).asInstanceOf[T]
+    def r[T <: Expression](v: T): T = r2(v, nameResolverScope)
+    // scoped name resolver shorthand allowing to pass in the nameResolverScope
+    def r2[T <: Expression](v: T, nrs: mutable.Map[String, (String, cExpr.Expression)]): T = v.transform(expressionNameResolver(snrGen(nrs), nrs)).asInstanceOf[T]
 
     // re-assemble the tree resolving names
     while (qPlanPolishNotation.nonEmpty) {
@@ -131,14 +135,21 @@ object QPlanResolver {
               }
               val resolvedProjectList: expr.types.TProjectList = resolvedProjectListBuf.toSeq
 
+              // retain old name resolver scope
+              oldNameResolverScope = Some(nameResolverScope)
               nameResolverScope = nextQueryPartNameResolverScope
               qplan.UnresolvedProjection(resolvedProjectList, child)
             }
             // case {Projection, Grouping} skipped because it is introduced in a later resolution stage
             case qplan.Selection(condition, _) => qplan.Selection(r(condition), child)
-            case qplan.Sort(order, _) => qplan.Sort(order.map( oi => {oi match {
-              case cExpr.SortOrder(sortExpr, dir, no, se) => cExpr.SortOrder(r(sortExpr), dir, no, se)
-            }}), child)
+            case qplan.Sort(order, _) => qplan.Sort(order.map( _ match {
+              case cExpr.SortOrder(sortExpr, dir, no, se) => try {
+                cExpr.SortOrder(r(sortExpr), dir, no, se)
+              } catch {
+                // in case of name resolution problem, we fall back to the last name resolution scope, if available. If again can't resolve, we throw the exception
+                case nre: NameResolutionException => cExpr.SortOrder(r2(sortExpr, oldNameResolverScope.getOrElse(throw nre)), dir, no, se)
+              }
+            }), child)
             case qplan.Top(skipExpr, limitExpr, _) => qplan.Top(skipExpr, limitExpr, child)
             case qplan.Create(attributes, _) => qplan.Create(attributes, child)
             case qplan.Delete(attributes, detach, _) => qplan.Delete(attributes, detach, child)
@@ -193,7 +204,7 @@ object QPlanResolver {
               case e: cExpr.Expression => expr.ExpressionAttribute(e, elementName, resolvedName = rn)
             }
           }
-          case _ => throw new CompilerException(s"Unresolvable name ${elementName}.")
+          case _ => throw new NameResolutionException(elementName)
         }
 
         if (nameParts.length == 1) {

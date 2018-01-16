@@ -16,7 +16,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-01")
   }
 
-  ignore("bi-01: Posting summary") {
+  test("bi-01: Posting summary") {
     val stages = compile(
       """// Q1. Posting summary
         |/*
@@ -157,7 +157,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-04")
   }
 
-  ignore("bi-04: Popular topics in a country") {
+  test("bi-04: Popular topics in a country") {
     val stages = compile(
       """// Q4. Popular topics in a country
         |/*
@@ -222,7 +222,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-06")
   }
 
-  ignore("bi-06: Most active Posters of a given Topic") {
+  test("bi-06: Most active Posters of a given Topic") {
     val stages = compile(
       """// Q6. Most active Posters of a given Topic
         |/*
@@ -249,7 +249,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-07")
   }
 
-  ignore("bi-07: Most authoritative users on a given topic") {
+  test("bi-07: Most authoritative users on a given topic") {
     val stages = compile(
       """// Q7. Most authoritative users on a given topic
         |/*
@@ -274,7 +274,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-08")
   }
 
-  ignore("bi-08: Related Topics") {
+  test("bi-08: Related Topics") {
     val stages = compile(
       """// Q8. Related Topics
         |/*
@@ -299,7 +299,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-09")
   }
 
-  ignore("bi-09: Forum with related Tags") {
+  test("bi-09: Forum with related Tags") {
     val stages = compile(
       """// Q9. Forum with related Tags
         |/*
@@ -436,7 +436,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-12")
   }
 
-  ignore("bi-12: Trending Posts") {
+  test("bi-12: Trending Posts") {
     val stages = compile(
       """// Q12. Trending Posts
         |/*
@@ -507,7 +507,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-14")
   }
 
-  ignore("bi-14: Top thread initiators") {
+  test("bi-14: Top thread initiators") {
     val stages = compile(
       """// Q14. Top thread initiators
         |/*
@@ -538,7 +538,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-15")
   }
 
-  ignore("bi-15: Social normals") {
+  test("bi-15: Social normals") {
     val stages = compile(
       """// Q15. Social normals
         |/*
@@ -616,7 +616,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-17")
   }
 
-  ignore("bi-17: Friend triangles") {
+  test("bi-17: Friend triangles") {
     val stages = compile(
       """// Q17. Friend triangles
         |/*
@@ -638,7 +638,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-18")
   }
 
-  ignore("bi-18: How many persons have a given number of posts") {
+  test("bi-18: How many persons have a given number of posts") {
     val stages = compile(
       """// Q18. How many persons have a given number of posts
         |/*
@@ -670,7 +670,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-19")
   }
 
-  ignore("bi-19: Stranger's interaction") {
+  test("bi-19: Stranger's interaction") {
     val stages = compile(
       """// Q19. Stranger's interaction
         |/*
@@ -719,7 +719,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-20")
   }
 
-  ignore("bi-20: High-level topics") {
+  test("bi-20: High-level topics") {
     val stages = compile(
       """// Q20. High-level topics
         |/*
@@ -869,7 +869,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-23")
   }
 
-  ignore("bi-23: Holiday destinations") {
+  test("bi-23: Holiday destinations") {
     val stages = compile(
       """// Q23. Holiday destinations
         |/*
@@ -899,7 +899,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-24")
   }
 
-  ignore("bi-24: Messages by Topic and Continent") {
+  test("bi-24: Messages by Topic and Continent") {
     val stages = compile(
       """// Q24. Messages by Topic and Continent
         |/*
