@@ -16,7 +16,6 @@ package object types {
 }
 trait ProjectionDescriptor {
   def projectList: TProjectList
-  protected def projectOutput: Seq[Attribute] = projectList.map(_.toAttribute)
 }
 
 
@@ -31,7 +30,7 @@ trait ExpressionBase extends Expression {
   * This represents a name that should be created upon reference resolution.
   * For each plan, if two stuff has resolvedName in common, they refer to the same thing.
   */
-trait ResolvableName {
+trait ResolvableName extends Attribute {
   def resolvedName: TResolvedName
 }
 
@@ -61,19 +60,31 @@ case class FunctionInvocation(functor: ingraph.model.misc.Function, children: Se
 }
 
 //TODO: extract isAnonymous to a trait
-case class ReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends AbstractReturnItem(child, alias, resolvedName)
+case class ReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends AbstractReturnItem(child, alias, resolvedName) {
+  override def withNullability(newNullability: Boolean): Attribute = ???
+  override def withQualifier(newQualifier: Option[String]): Attribute = ???
+  override def withName(newName: String): Attribute = ???
+  override def withMetadata(newMetadata: Metadata): Attribute = ???
+  override def newInstance(): Attribute = ???
+  override def name: String = ???
+  override def exprId: ExprId = ???
+  override def qualifier: Option[String] = ???
+  override def eval(input: InternalRow): Any = ???
+}
 
-abstract class AbstractReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends UnaryExpression with ResolvableName {
+abstract class AbstractReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends ResolvableName {
   def isAnonymous: Boolean = alias.isEmpty
 
   override def nullable: Boolean = ???
   override def dataType: DataType = child.dataType
   override def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
 
-  def toAttribute: Attribute = this.child match {
+  override def toAttribute: Attribute = this.child match {
     case a: Attribute => a
     case e => ExpressionAttribute(e, "_expr", None)
   }
+
+  //override def children: Seq[ResolvableName] = ???
 }
 
 abstract class AttributeBase extends Attribute {

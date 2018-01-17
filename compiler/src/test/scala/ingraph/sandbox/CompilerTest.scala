@@ -3,7 +3,7 @@ package ingraph.sandbox
 import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.compiler.exceptions.CompilerConfigurationException
-import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
+import ingraph.compiler.qplan2jplan.{QPlanToJPlan, JPlanToFPlan}
 import ingraph.emf.util.PrettyPrinter
 import ingraph.model.fplan.{FNode, LeafFNode}
 import ingraph.model.jplan.JNode
@@ -79,7 +79,7 @@ class CompilerTest extends FunSuite {
     val jplan = if (config.compileQPlanOnly) null else QPlanToJPlan.transform(qplan)
     if (config.printJPlan ) formatStuff(jplan)
 
-    val fplan = if (config.compileQPlanOnly) null else SchemaInferencer.transform(jplan)
+    val fplan = if (config.compileQPlanOnly) null else JPlanToFPlan.transform(jplan)
     if (config.printFPlan ) formatStuff(fplan)
 
     return CompilationStages(qplan, jplan, fplan)

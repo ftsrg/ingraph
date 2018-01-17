@@ -1,18 +1,22 @@
 package ingraph.compiler.qplan2jplan
 
-import ingraph.model.expr.PropertyAttribute
+import ingraph.model.expr.types.TProjectList
+import ingraph.model.expr.{PropertyAttribute, ResolvableName, ReturnItem}
 import ingraph.model.fplan._
 import ingraph.model.{expr, fplan, jplan}
 import ingraph.model.jplan.JNode
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression}
 
-object SchemaInferencer {
+/**
+  * Performs schema inferencing to transform a JPlan to an FPlan.
+  */
+object JPlanToFPlan {
 
   def transform(jnode: JNode): FNode = {
     transform(jnode, Seq())
   }
 
-  private def transform(jnode: JNode, extraAttributes: Seq[NamedExpression]): FNode = {
+  private def transform(jnode: JNode, extraAttributes: Seq[ResolvableName]): FNode = {
     val ea = extraAttributes.distinct
 
     jnode match {
@@ -22,19 +26,20 @@ object SchemaInferencer {
       case o: jplan.GetVertices  => fplan.GetVertices(ea, o)
       case o: jplan.Dual         =>
         if (ea.nonEmpty) {
-          throw new IllegalStateException(s"Dual node cannot hold extra attributes (${ea})")
+          throw new IllegalStateException(s"Dual node cannot hold extra attributes: ${ea}")
         }
         fplan.Dual(o)
 
       // unary
       case o: jplan.Projection =>
-        val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
+        val xx = extractAttributes(o.projectList)
+        val newExtra = xx.filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))
         fplan.Projection(ea, o, transform(o.child, ea ++ newExtra))
       case o: jplan.Grouping =>
-        val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
+        val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))
         fplan.Grouping(ea, o, transform(o.child, ea ++ newExtra))
       case o: jplan.Selection =>
-        val newExtra = extractAttributes(o.condition).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
+        val newExtra = extractAttributes(o.condition).filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))
         fplan.Selection(ea, o, transform(o.child, ea ++ newExtra))
       case o: jplan.Unwind =>
         fplan.Unwind(ea, o, transform(o.child, ea ++ extractAttributes(o.unwindAttribute.list)))
@@ -58,7 +63,7 @@ object SchemaInferencer {
         )
       case j: jplan.EquiJoinLike => {
         val eaLeft = propagate(ea, j.left.output)
-        val eaRight = propagate(ea, j.right.output).filter(x => !eaLeft.map(_.name).contains(x.name))
+        val eaRight = propagate(ea, j.right.output).filter(x => !eaLeft.map(_.resolvedName).contains(x.resolvedName))
 
         val left = transform(j.left, eaLeft)
         val right = transform(j.right, eaRight)
@@ -79,27 +84,27 @@ object SchemaInferencer {
   /**
     * propagate property attributes to wherever their element is
     */
-  def propagate(extraAttributes: Seq[NamedExpression], inputSchema: Seq[NamedExpression]): Seq[NamedExpression] = {
+  def propagate(extraAttributes: Seq[ResolvableName], inputSchema: Seq[ResolvableName]): Seq[ResolvableName] = {
     extraAttributes
       .flatMap {
         case a: PropertyAttribute => Some(a)
         case _ => None
       }
-      .filter(a => inputSchema.map(_.name).contains(a.elementAttribute.name))
+      .filter(a => inputSchema.map(_.resolvedName).contains(a.elementAttribute.resolvedName))
 
     // !inputSchema.contains(a) // do we need this?
   }
 
-  def extractAttributes(expression: Expression): Seq[Attribute] = {
+  def extractAttributes(expression: Expression): Seq[ResolvableName] = {
     (expression match {
-      case a: Attribute => Seq(a)
+      case a: ReturnItem => extractAttributes(a.child)
+      case a: PropertyAttribute => Seq(a)
       case _ => Seq()
     }) ++ expression.children.flatMap(extractAttributes(_))
   }
 
-  def extractAttributes(projectList: expr.types.TProjectList): Seq[Attribute] = {
-    // this will descend into ReturnItem.child as it is a UnaryExpression
-    projectList.flatMap(extractAttributes(_))
+  def extractAttributes(projectList: TProjectList): Seq[ResolvableName] = {
+    projectList.flatMap(a => extractAttributes(a))
   }
 
 }

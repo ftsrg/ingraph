@@ -2,32 +2,32 @@ package ingraph.model.jplan
 
 import ingraph.model.expr
 import ingraph.model.expr.types.TProjectList
-import ingraph.model.expr.{EdgeAttribute, ProjectionDescriptor, UnwindAttribute, VertexLabelUpdate}
+import ingraph.model.expr._
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical._
 
-// abstract classes and traits
 trait JNode extends LogicalPlan {
   override def children: Seq[JNode]
+  override def output: Seq[ResolvableName]
 }
 
 abstract class LeafJNode extends GenericLeafNode[JNode] with JNode {}
 abstract class UnaryJNode extends GenericUnaryNode[JNode] with JNode {
-  override def output: Seq[Attribute] = child.output
+  override def output: Seq[ResolvableName] = child.output
 }
 abstract class BinaryJNode extends GenericBinaryNode[JNode] with JNode {}
 
 trait JoinLike extends BinaryJNode {
-  def common: Seq[Attribute] = left.output.filter(right.output.contains(_))
+  def common: Seq[ResolvableName] = left.output.filter(right.output.contains(_))
 }
 trait EquiJoinLike extends JoinLike {
-  override def output: Seq[Attribute] = left.output ++ right.output.filter(left.output.contains(_))
+  override def output: Seq[ResolvableName] = left.output ++ right.output.filter(left.output.contains(_))
 }
 
 // leaf nodes
 case class GetVertices(v: expr.VertexAttribute) extends LeafJNode {
-  override def output: Seq[Attribute] = Seq(v)
+  override def output: Seq[ResolvableName] = Seq(v)
 }
 
 case class GetEdges(src: expr.VertexAttribute,
@@ -59,14 +59,14 @@ case class DuplicateElimination(child: JNode) extends UnaryJNode {}
 case class Production(child: JNode) extends UnaryJNode {}
 
 abstract class AbstractProjection(projectList: TProjectList, child: JNode) extends UnaryJNode with ProjectionDescriptor {
-  override def output = projectOutput
+  override def output = projectList
 }
 
 case class UnresolvedProjection(override val projectList: TProjectList, override val child: JNode) extends AbstractProjection(projectList, child)
 case class Projection(override val projectList: TProjectList, override val child: JNode) extends AbstractProjection(projectList, child)
 
 case class Grouping(aggregationCriteria: Seq[Expression], projectList: TProjectList, child: JNode) extends UnaryJNode with ProjectionDescriptor {
-  override def output = projectOutput
+  override def output = projectList
 }
 
 case class Selection(condition: Expression,
@@ -86,11 +86,11 @@ case class SortAndTop(skipExpr: Option[Expression],
 case class Union(bag: Boolean,
                  left: JNode,
                  right: JNode) extends BinaryJNode {
-  override def output: Seq[Attribute] = left.output
+  override def output: Seq[ResolvableName] = left.output
 }
 
 case class AntiJoin(left: JNode, right: JNode) extends BinaryJNode with JoinLike {
-  override def output: Seq[Attribute] = left.output
+  override def output: Seq[ResolvableName] = left.output
 }
 
 case class Join(left: JNode, right: JNode) extends BinaryJNode with EquiJoinLike {}
