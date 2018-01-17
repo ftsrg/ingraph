@@ -36,6 +36,8 @@ object SchemaInferencer {
       case o: jplan.Selection =>
         val newExtra = extractAttributes(o.condition).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
         fplan.Selection(ea, o, transform(o.child, ea ++ newExtra))
+      case o: jplan.Unwind =>
+        fplan.Unwind(ea, o, transform(o.child, ea ++ extractAttributes(o.unwindAttribute.list)))
       // the rest is just the same, isn't it?
       case o: jplan.AllDifferent         => fplan.AllDifferent        (ea, o, transform(o.child, ea))
       case o: jplan.DuplicateElimination => fplan.DuplicateElimination(ea, o, transform(o.child, ea))
