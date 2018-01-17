@@ -9,10 +9,12 @@ import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 /**
   * QNodes for building a qplan tree
   */
-trait QNode extends LogicalPlan {}
+trait QNode extends LogicalPlan {
+  override def output: Seq[ResolvableName]
+}
 abstract class LeafQNode extends GenericLeafNode[QNode] with QNode
 abstract class UnaryQNode extends GenericUnaryNode[QNode] with QNode {
-  override def output: Seq[Attribute] = child.output
+  override def output: Seq[ResolvableName] = child.output
 }
 abstract class BinaryQNode extends GenericBinaryNode[QNode] with QNode
 
@@ -78,7 +80,7 @@ case class Production(child: QNode) extends UnaryQNode {}
   * - Evaluate other functions, e.g. sin(x), substring(s, from, to), toBoolean(s), etc.
   */
 abstract class AbstractProjection(projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
-  override def output = projectOutput
+  override def output = projectList
 }
 
 /**
@@ -93,7 +95,7 @@ case class Projection(override val projectList: TProjectList, override val child
   * If Projection operator was the renaissance man, this is Baroque of the relational graph algebra model.
   */
 case class Grouping(aggregationCriteria: Seq[Expression], projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
-  override def output = projectOutput
+  override def output = projectList
 }
 
 case class Selection(condition: Expression, child: QNode) extends UnaryQNode {}
@@ -109,16 +111,16 @@ case class Unwind(unwindAttribute: UnwindAttribute, child: QNode) extends UnaryQ
 
 // binary nodes
 case class Union(all: Boolean, left: QNode, right: QNode) extends BinaryQNode {
-  override def output: Seq[Attribute] = left.output
+  override def output: Seq[ResolvableName] = left.output
 }
 
 abstract class JoinLike extends BinaryQNode {
   def commonAttributes = left.output.filterNot(right.output.contains(_))
-  override def output: Seq[Attribute] = left.output ++ right.output
+  override def output: Seq[ResolvableName] = left.output ++ right.output
 }
 
 abstract class EquiJoinLike extends JoinLike {
-  override def output: Seq[Attribute] = left.output ++ right.output.filterNot(commonAttributes.contains(_))
+  override def output: Seq[ResolvableName] = left.output ++ right.output.filterNot(commonAttributes.contains(_))
 }
 
 case class Join(left: QNode, right: QNode) extends EquiJoinLike {}
@@ -135,17 +137,17 @@ case class LeftOuterJoin(left: QNode, right: QNode) extends EquiJoinLike {}
 case class ThetaLeftOuterJoin(left: QNode, right: QNode, condition: Expression) extends EquiJoinLike {}
 
 case class AntiJoin(left: QNode, right: QNode) extends EquiJoinLike {
-  override def output: Seq[Attribute] = left.output
+  override def output: Seq[ResolvableName] = left.output
 }
 
 // DML operators
 abstract class CudOperator(child: QNode) extends UnaryQNode
 
-case class Create(attributes: Seq[Attribute], child: QNode) extends CudOperator(child)
+case class Create(attributes: Seq[ResolvableName], child: QNode) extends CudOperator(child)
 
-case class Delete(attributes: Seq[Attribute], detach: Boolean, child: QNode) extends CudOperator(child)
+case class Delete(attributes: Seq[ResolvableName], detach: Boolean, child: QNode) extends CudOperator(child)
 
-case class Merge(attributes: Seq[Attribute], child: QNode) extends CudOperator(child)
+case class Merge(attributes: Seq[ResolvableName], child: QNode) extends CudOperator(child)
 
 case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child)
 

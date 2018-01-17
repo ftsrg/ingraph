@@ -286,7 +286,7 @@ object QPlanResolver {
     * @param child
     * @return
     */
-  protected def resolveAttributes(attributes: Seq[cExpr.Attribute], child: qplan.QNode): Seq[cExpr.Attribute] = {
+  protected def resolveAttributes(attributes: Seq[ResolvableName], child: qplan.QNode): Seq[ResolvableName] = {
     val transformedAttributes = attributes.flatMap( a => child.output.find( co => co.name == a.name ) )
 
     if (attributes.length != transformedAttributes.length) {
@@ -303,7 +303,7 @@ object QPlanResolver {
     * @param invert iff true, match is inverted, i.e. only those are returned which were not found
     * @return
     */
-  protected def filterForAttributesOfChildOutput(attributes: Seq[cExpr.Attribute], child: qplan.QNode, invert: Boolean = false): Seq[cExpr.Attribute] = {
+  protected def filterForAttributesOfChildOutput(attributes: Seq[ResolvableName], child: qplan.QNode, invert: Boolean = false): Seq[ResolvableName] = {
     attributes.flatMap( a => if ( invert.^(child.output.exists( co => co.name == a.name )) ) Some(a) else None )
   }
 

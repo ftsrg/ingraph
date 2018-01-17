@@ -1,14 +1,15 @@
 package ingraph.sandbox
 
 import ingraph.compiler.FPlanParser
-import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
+import ingraph.compiler.cypher2qplan.QPlanResolver
+import ingraph.compiler.qplan2jplan.{JPlanToFPlan, QPlanToJPlan}
 import ingraph.model.expr._
 import ingraph.model.fplan._
 import ingraph.model.{jplan, qplan}
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
-class SchemaInferencerTest extends FunSuite {
+class JPlanToFPlanTest extends FunSuite {
 
   test("infer schema #1") {
     val v = VertexAttribute("v")
@@ -16,11 +17,11 @@ class SchemaInferencerTest extends FunSuite {
     val de = qplan.DuplicateElimination(gv)
 
     val qp = de
-    val ip = QPlanToJPlan.transform(qp)
-    val ep = SchemaInferencer.transform(ip)
+    val jp = QPlanToJPlan.transform(qp)
+    val fp = JPlanToFPlan.transform(jp)
 
-    assert(ep.internalSchema.size == 1)
-    assert(ep.children(0).internalSchema.size == 1)
+    assert(fp.internalSchema.size == 1)
+    assert(fp.children(0).internalSchema.size == 1)
   }
 
   test("infer schema #2") {
@@ -33,23 +34,46 @@ class SchemaInferencerTest extends FunSuite {
     val projectList = Seq(ReturnItem(name))
     val condition = GreaterThan(age, Literal(27))
 
-    val qp = qplan.Projection(
+    val qp = qplan.UnresolvedProjection(
       projectList,
       qplan.Selection(
         condition,
         qplan.GetVertices(n)
       )
     )
+    val rqp = QPlanResolver.resolveQPlan(qp)
+    val jp = QPlanToJPlan.transform(rqp)
+    val fp = JPlanToFPlan.transform(jp)
 
-    val ip = QPlanToJPlan.transform(qp)
-    val ep = SchemaInferencer.transform(ip)
-
-    assert(ep.internalSchema.size == 1)
-    assert(ep.children(0).internalSchema.size == 3)
-    assert(ep.children(0).children(0).internalSchema.size == 3)
+    assert(fp.internalSchema.size == 1)
+    assert(fp.children(0).internalSchema.size == 3)
+    assert(fp.children(0).children(0).internalSchema.size == 3)
   }
 
-  test("infer schema for joins") {
+  test("infer schema #3") {
+    val vls = VertexLabelSet(Set("Person"), NonEmpty)
+
+    val n = VertexAttribute("n", vls)
+    val name = PropertyAttribute("name", n)
+    val projectList = Seq(ReturnItem(name))
+
+    val qp = qplan.UnresolvedProjection(
+      projectList,
+      qplan.GetVertices(n)
+    )
+    val rqp = QPlanResolver.resolveQPlan(qp)
+    val jp = QPlanToJPlan.transform(rqp)
+    val fp = JPlanToFPlan.transform(jp)
+
+    println(rqp)
+    println(jp)
+    println(fp)
+    println(fp.children(0).extraAttributes)
+    assert(fp.internalSchema.size == 1)
+    assert(fp.children(0).internalSchema.size == 2)
+  }
+
+  ignore("infer schema for joins") {
     val vls = VertexLabelSet(Set("Person"), NonEmpty)
     val el = EdgeLabelSet(Set("KNOWS"), NonEmpty)
 
@@ -73,8 +97,8 @@ class SchemaInferencerTest extends FunSuite {
         )
       )
     )
-    val ep = SchemaInferencer.transform(qp)
-    val join = ep.children(0).children(0).asInstanceOf[Join]
+    val fp = JPlanToFPlan.transform(qp)
+    val join = fp.children(0).children(0).asInstanceOf[Join]
 
     assert(join.leftMask == Seq(0))
     assert(join.rightMask == Seq(0))
@@ -82,7 +106,7 @@ class SchemaInferencerTest extends FunSuite {
     assert(join.children(1).internalSchema.size == 4)
   }
 
-  test("infer schema for PosLength") {
+  test("infer schema for Projection") {
     val vls = VertexLabelSet(Set("Segment"), NonEmpty)
 
     val segment = VertexAttribute("segment", vls)
@@ -90,52 +114,53 @@ class SchemaInferencerTest extends FunSuite {
 
     val projectList = Seq(ReturnItem(segment), ReturnItem(length))
 
-    val qp = qplan.Projection(
+    val qp = qplan.UnresolvedProjection(
       projectList,
       qplan.GetVertices(segment)
     )
 
-    val ip = QPlanToJPlan.transform(qp)
-    val ep = SchemaInferencer.transform(ip)
+    val rqp = QPlanResolver.resolveQPlan(qp)
+    val jp = QPlanToJPlan.transform(rqp)
+    val fp = JPlanToFPlan.transform(jp)
 
-    assert(ep.internalSchema.size == 2)
-    assert(ep.children(0).internalSchema.size == 2)
+    assert(fp.internalSchema.size == 2)
+    assert(fp.children(0).internalSchema.size == 2)
   }
 
-  ignore("infer schema for PosLength from Cypher without filtering") {
-    val ep = FPlanParser.parse(
+  test("infer schema for PosLength from Cypher without filtering") {
+    val fp = FPlanParser.parse(
       """MATCH (segment:Segment)
         |RETURN segment, segment.length AS length
         |""".stripMargin)
-    ep match {
+    fp match {
       case
         Production(_, _,
         Projection(_, _,
         AllDifferent(_, _, v: GetVertices)
         )
         ) =>
-        assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
+        assert(v.internalSchema.map(_.name) == Seq("segment", "length"))
     }
   }
 
-  ignore("infer schema for PosLength from Cypher with filtering") {
-    val ep = FPlanParser.parse(
+  test("infer schema for PosLength from Cypher with filtering") {
+    val fp = FPlanParser.parse(
       """MATCH (segment:Segment)
         |WHERE segment.length <= 0
         |RETURN segment, segment.length AS length
         |""".stripMargin)
-    ep match {
+    fp match {
       case
         Production(_, _,
           Projection(_, _,
             Selection(_, _,
               AllDifferent(_, _, v: GetVertices)))) =>
-        assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
+        assert(v.internalSchema.map(_.name) == Seq("segment", "length"))
     }
   }
 
   test("infer schema for RouteSensor from Cypher") {
-    val ep = FPlanParser.parse(
+    val fp = FPlanParser.parse(
       """MATCH (route:Route)
         |  -[:follows]->(swP:SwitchPosition)
         |  -[:target]->(sw:Switch)
@@ -143,58 +168,53 @@ class SchemaInferencerTest extends FunSuite {
         |WHERE NOT (route)-[:requires]->(sensor)
         |RETURN route, sensor, swP, sw
         |""".stripMargin)
-    println(ep)
 
-    val antijoin = ep.children(0).children(0).asInstanceOf[AntiJoin]
+    val antijoin = fp.children(0).children(0).asInstanceOf[AntiJoin]
     assert(antijoin.leftMask == List(0, 6))
     assert(antijoin.rightMask == List(0, 2))
   }
 
   test("infer schema for RouteSensorPositive from Cypher") {
-    val ep = FPlanParser.parse(
+    val fp = FPlanParser.parse(
       """MATCH (route:Route)
         |  -[:follows]->(swP:SwitchPosition)
         |  -[:target]->(sw:Switch)
         |  -[:monitoredBy]->(sensor:Sensor)
         |RETURN route, sensor, swP, sw
         |""".stripMargin)
-    println(ep)
-    assert(ep.children(0).children(0).children(0).internalSchema.size == 7)
-    assert(ep.children(0).children(0).children(0).children(0).internalSchema.size == 5)
-    assert(ep.children(0).children(0).children(0).children(1).internalSchema.size == 3)
+    assert(fp.children(0).children(0).children(0).internalSchema.size == 7)
+    assert(fp.children(0).children(0).children(0).children(0).internalSchema.size == 5)
+    assert(fp.children(0).children(0).children(0).children(1).internalSchema.size == 3)
   }
 
   test("infer schema for SwitchMonitored from Cypher") {
-    val ep = FPlanParser.parse(
+    val fp = FPlanParser.parse(
       """MATCH (sw:Switch)
         |WHERE NOT (sw)-[:monitoredBy]->(:Sensor)
         |RETURN sw
         |""".stripMargin)
+    // TODO: assert
   }
 
-  test("infer schema for simple path") {
-    val ep = FPlanParser.parse(
+  ignore("infer schema for simple path") {
+    val fp = FPlanParser.parse(
       """MATCH (a:A)-[:R1]->(b:B)-[:R2]->(c:C)
         |RETURN a, b, c
         |""".stripMargin)
-    //    println(ep.inode)
-    //    println(ep.children(0).internalSchema)
-    //    println(ep.children(0).children(0).internalSchema)
-    //    println(ep.children(0).children(0).children(0).internalSchema)
-    //    println(ep.children(0).children(0).children(0).children(0).internalSchema)
-    //    println(ep.children(0).children(0).children(0).children(1).internalSchema)
+    // TODO: assert
   }
 
   test("infer schema for SwitchMonitored") {
-    val ep = FPlanParser.parse(
+    val fp = FPlanParser.parse(
       """MATCH (sw:Switch)
         |WHERE NOT (sw)-[:monitoredBy]->(:Sensor)
         |RETURN sw
         |""".stripMargin)
+    // TODO: assert
   }
 
   test("infer schema for ConnectedSegments") {
-    val ep = FPlanParser.parse(
+    val fp = FPlanParser.parse(
       """MATCH
         |  (sensor:Sensor)<-[mb1:monitoredBy]-(segment1:Segment),
         |  (segment1:Segment)-[ct1:connectsTo]->
@@ -209,19 +229,19 @@ class SchemaInferencerTest extends FunSuite {
         |  (segment6:Segment)-[mb6:monitoredBy]->(sensor:Sensor)
         |RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
         |""".stripMargin)
-//    println(ep)
-//    println(ep.children(0).children(0).children(0).internalSchema)
-//    println(ep.children(0).children(0).children(0).asInstanceOf[Join].leftMask)
-//    println(ep.children(0).children(0).children(0).asInstanceOf[Join].rightMask)
+    // TODO: assert
+//    println(fp)
+//    println(fp.children(0).children(0).children(0).internalSchema)
+//    println(fp.children(0).children(0).children(0).asInstanceOf[Join].leftMask)
+//    println(fp.children(0).children(0).children(0).asInstanceOf[Join].rightMask)
   }
 
-  test("infer schema for Cartesian product") {
-    val ep = FPlanParser.parse(
+  ignore("infer schema for Cartesian product") {
+    val fp = FPlanParser.parse(
       """MATCH (n), (m)
         |RETURN n.value, m.value
       """.stripMargin
     )
-//    println(ep)
   }
 
 }
