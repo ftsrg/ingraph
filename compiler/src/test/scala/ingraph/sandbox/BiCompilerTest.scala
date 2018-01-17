@@ -2,7 +2,7 @@ package ingraph.sandbox
 
 class BiCompilerTest extends CompilerTest {
   override val config = CompilerTestConfig(querySuitePath = Some("ldbc-snb-bi")
-    , compileQPlanOnly = true
+    , compileQPlanOnly = false
     , skipQPlanResolve = false
     , skipQPlanBeautify = false
     , printQuery = true
