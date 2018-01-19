@@ -233,6 +233,33 @@ class RandomCompilationTest extends CompilerTest {
       """RETURN 'foo' =~ 'o+' AS b
       """.stripMargin)
   }
+
+  test("Random: multiple labels in the label predicate") {
+    compile(
+      """MATCH (p)
+        |WHERE p:Person:Teacher
+        |RETURN p
+      """.stripMargin
+    )
+  }
+
+  test("Random: property lookup and multiple labels in the label predicate") {
+    compile(
+      """MATCH (p)
+        |WHERE p:Person:Teacher
+        |RETURN p
+      """.stripMargin
+    )
+  }
+
+  ignore("Random: property lookup on map and multiple labels in the label predicate") {
+    compile(
+      """MATCH (p)
+        |WHERE {foo: p}.foo:Person:Teacher
+        |RETURN p
+      """.stripMargin
+    )
+  }
 }
 
 /** Random compiler tests that must stop after QPlan compilation.
