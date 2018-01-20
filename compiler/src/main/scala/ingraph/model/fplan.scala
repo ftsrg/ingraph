@@ -1,16 +1,14 @@
 package ingraph.model.fplan
 
-import ingraph.compiler.qplan2jplan.JPlanToFPlan
 import ingraph.model.expr.ResolvableName
 import ingraph.model.jplan
-import ingraph.model.jplan._
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
 import org.apache.spark.sql.catalyst.expressions.Attribute
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 trait FNode extends LogicalPlan {
   def extraAttributes: Seq[ResolvableName]
-  def jnode: JNode
+  def jnode: jplan.JNode
   def internalSchema: Seq[ResolvableName]
   override def children: Seq[FNode]
   override def output: Seq[Attribute] = jnode.output
@@ -71,16 +69,13 @@ case class Projection(extraAttributes: Seq[ResolvableName],
                       jnode: jplan.Projection,
                       child: FNode
                      ) extends UnaryFNode {
-  ///// !!!!!!!
-  override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ extraAttributes//.flatMap(JPlanToFPlan.extractAttributes(_))
-  //override def internalSchema: Seq[ResolvableName] = inode.projectList
+  override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ extraAttributes
 }
 
 case class Grouping(extraAttributes: Seq[ResolvableName],
                       jnode: jplan.Grouping,
                       child: FNode
                      ) extends UnaryFNode {
-  ///// what's worse than bad code? bad code DUPLICATED. sorry, will work on removing this
   override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ extraAttributes
 }
 
@@ -130,11 +125,10 @@ case class LeftOuterJoin(extraAttributes: Seq[ResolvableName],
                          right: FNode
                         ) extends BinaryFNode with EquiJoinLike {}
 
-case class ThetaLeftOuterJoin(
-                               extraAttributes: Seq[ResolvableName],
-                               jnode: jplan.ThetaLeftOuterJoin,
-                               left: FNode,
-                               right: FNode) extends BinaryFNode with EquiJoinLike {}
+case class ThetaLeftOuterJoin(extraAttributes: Seq[ResolvableName],
+                              jnode: jplan.ThetaLeftOuterJoin,
+                              left: FNode,
+                              right: FNode) extends BinaryFNode with EquiJoinLike {}
 
 case class Create(extraAttributes: Seq[ResolvableName],
                   jnode: jplan.Create,
