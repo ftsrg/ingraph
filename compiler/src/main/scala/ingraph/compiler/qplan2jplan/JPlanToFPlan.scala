@@ -1,22 +1,20 @@
 package ingraph.compiler.qplan2jplan
 
+import ingraph.model.expr._
 import ingraph.model.expr.types.TProjectList
-import ingraph.model.expr.{PropertyAttribute, ResolvableName, ReturnItem}
-import ingraph.model.fplan._
-import ingraph.model.{expr, fplan, jplan}
-import ingraph.model.jplan.JNode
-import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression}
+import ingraph.model.{fplan, jplan}
+import org.apache.spark.sql.catalyst.expressions.Expression
 
 /**
   * Performs schema inferencing to transform a JPlan to an FPlan.
   */
 object JPlanToFPlan {
 
-  def transform(jnode: JNode): FNode = {
+  def transform(jnode: jplan.JNode): fplan.FNode = {
     transform(jnode, Seq())
   }
 
-  private def transform(jnode: JNode, extraAttributes: Seq[ResolvableName]): FNode = {
+  private def transform(jnode: jplan.JNode, extraAttributes: Seq[ResolvableName]): fplan.FNode = {
     val ea = extraAttributes.distinct
 
     jnode match {
@@ -32,8 +30,7 @@ object JPlanToFPlan {
 
       // unary
       case o: jplan.Projection =>
-        val xx = extractAttributes(o.projectList)
-        val newExtra = xx.filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))
+        val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))
         fplan.Projection(ea, o, transform(o.child, ea ++ newExtra))
       case o: jplan.Grouping =>
         val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))

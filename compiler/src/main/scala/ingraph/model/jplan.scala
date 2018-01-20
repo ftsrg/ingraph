@@ -1,10 +1,9 @@
 package ingraph.model.jplan
 
-import ingraph.model.expr
-import ingraph.model.expr.types.TProjectList
 import ingraph.model.expr._
+import ingraph.model.expr.types.TProjectList
 import ingraph.model.treenodes._
-import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
+import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical._
 
 trait JNode extends LogicalPlan {
@@ -26,21 +25,21 @@ trait EquiJoinLike extends JoinLike {
 }
 
 // leaf nodes
-case class GetVertices(v: expr.VertexAttribute) extends LeafJNode {
+case class GetVertices(v: VertexAttribute) extends LeafJNode {
   override def output: Seq[ResolvableName] = Seq(v)
 }
 
-case class GetEdges(src: expr.VertexAttribute,
-                    trg: expr.VertexAttribute,
-                    edge: expr.EdgeAttribute,
+case class GetEdges(src: VertexAttribute,
+                    trg: VertexAttribute,
+                    edge: EdgeAttribute,
                     directed: Boolean)
   extends LeafJNode {
   override def output = Seq(src, edge, trg)
 }
 
-case class GetEdgeLists(src: expr.VertexAttribute,
-                    trg: expr.VertexAttribute,
-                    edge: expr.EdgeListAttribute,
+case class GetEdgeLists(src: VertexAttribute,
+                    trg: VertexAttribute,
+                    edge: EdgeListAttribute,
                     directed: Boolean)
   extends LeafJNode {
   override def output = Seq(src, edge, trg)
@@ -97,10 +96,9 @@ case class Join(left: JNode, right: JNode) extends BinaryJNode with EquiJoinLike
 
 case class LeftOuterJoin(left: JNode, right: JNode) extends BinaryJNode with EquiJoinLike {}
 
-case class ThetaLeftOuterJoin(
-                               left: JNode,
-                               right: JNode,
-                               condition: Expression) extends BinaryJNode with EquiJoinLike {
+case class ThetaLeftOuterJoin(left: JNode,
+                              right: JNode,
+                              condition: Expression) extends BinaryJNode with EquiJoinLike {
 }
 
 // DML operators

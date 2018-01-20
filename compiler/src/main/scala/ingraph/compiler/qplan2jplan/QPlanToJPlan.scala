@@ -1,12 +1,10 @@
 package ingraph.compiler.qplan2jplan
 
 import ingraph.model.expr._
-import ingraph.model.jplan.JNode
-import ingraph.model.qplan.QNode
-import ingraph.model.{expr, jplan, qplan}
+import ingraph.model.{jplan, qplan}
 
 object QPlanToJPlan {
-  def transform(plan: QNode): JNode = {
+  def transform(plan: qplan.QNode): jplan.JNode = {
     plan match {
       // leaf
       case qplan.GetVertices(v) => jplan.GetVertices(v)
@@ -14,12 +12,12 @@ object QPlanToJPlan {
 
       // unary read
       case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => edge match {
-        case e: expr.EdgeAttribute => expandToEdges(src, trg, e, dir)
-        case el: expr.EdgeListAttribute => expandToEdgeLists(src, trg, el, dir)
+        case e: EdgeAttribute => expandToEdges(src, trg, e, dir)
+        case el: EdgeListAttribute => expandToEdgeLists(src, trg, el, dir)
       }
       case qplan.Expand(src, trg, edge, dir, child) => edge match {
-        case e: expr.EdgeAttribute => jplan.Join(transform(child), expandToEdges(src, trg, e, dir))
-        case el: expr.EdgeListAttribute => jplan.Join(transform(child), expandToEdgeLists(src, trg, el, dir))
+        case e: EdgeAttribute => jplan.Join(transform(child), expandToEdges(src, trg, e, dir))
+        case el: EdgeListAttribute => jplan.Join(transform(child), expandToEdgeLists(src, trg, el, dir))
       }
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => jplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
       // if Sort operator found w/o Top, then skip and limit defaults to None

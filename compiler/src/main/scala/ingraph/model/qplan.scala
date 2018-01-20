@@ -3,7 +3,7 @@ package ingraph.model.qplan
 import ingraph.model.expr._
 import ingraph.model.expr.types.TProjectList
 import ingraph.model.treenodes._
-import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
+import org.apache.spark.sql.catalyst.expressions.{Expression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 /**
@@ -17,7 +17,6 @@ abstract class UnaryQNode extends GenericUnaryNode[QNode] with QNode {
   override def output: Seq[ResolvableName] = child.output
 }
 abstract class BinaryQNode extends GenericBinaryNode[QNode] with QNode
-
 
 /**
   * A stub leaf node for the qplan indicating incomplete compilation.
@@ -70,7 +69,7 @@ case class Expand(src: VertexAttribute,
 case class Production(child: QNode) extends UnaryQNode {}
 
 /**
-  * The Projection operator is the renaissance man of the Rete network.
+  * The Projection operator is the renaissance man of the query plan specification.
   *
   * It can:
   * - Project variables to a schema, i.e. only keeping a certain set of variables.

@@ -61,6 +61,14 @@ case class FunctionInvocation(functor: ingraph.model.misc.Function, children: Se
 
 //TODO: extract isAnonymous to a trait
 case class ReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends AbstractReturnItem(child, alias, resolvedName) {
+}
+
+abstract class AbstractReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends ResolvableName {
+  def isAnonymous: Boolean = alias.isEmpty
+
+  override def nullable: Boolean = ???
+  override def dataType: DataType = child.dataType
+  override def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
   override def withNullability(newNullability: Boolean): Attribute = ???
   override def withQualifier(newQualifier: Option[String]): Attribute = ???
   override def withName(newName: String): Attribute = ???
@@ -70,14 +78,6 @@ case class ReturnItem(child: Expression, alias: Option[String] = None, override 
   override def exprId: ExprId = ???
   override def qualifier: Option[String] = ???
   override def eval(input: InternalRow): Any = ???
-}
-
-abstract class AbstractReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends ResolvableName {
-  def isAnonymous: Boolean = alias.isEmpty
-
-  override def nullable: Boolean = ???
-  override def dataType: DataType = child.dataType
-  override def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
 
   override def toAttribute: Attribute = this.child match {
     case a: Attribute => a
