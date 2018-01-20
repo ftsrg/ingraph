@@ -1,7 +1,9 @@
 package ingraph.model.tplan
 
+import ingraph.model.expr.UnwindAttribute
 import ingraph.model.fplan
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
+import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 trait TNode extends LogicalPlan {
@@ -43,15 +45,18 @@ case class DuplicateElimination(fnode: fplan.DuplicateElimination, child: TNode)
 
 case class Production(fnode: fplan.Production, child: TNode) extends UnaryTNode {}
 
-case class Projection(fnode: fplan.Projection, child: TNode) extends UnaryTNode {}
+case class Projection(projectionTuple: Seq[Expression], fnode: fplan.Projection, child: TNode) extends UnaryTNode {}
 
-case class Grouping(fnode: fplan.Grouping, child: TNode) extends UnaryTNode {}
+case class Grouping(aggregationCriteria: Seq[Expression], projectionTuple: Seq[Expression], fnode: fplan.Grouping, child: TNode) extends UnaryTNode {}
 
-case class Selection(fnode: fplan.Selection,child: TNode) extends UnaryTNode {}
+case class Selection(condition: Expression, fnode: fplan.Selection,child: TNode) extends UnaryTNode {}
 
-case class Unwind(fnode: fplan.Unwind, child: TNode) extends UnaryTNode {}
+case class Unwind(unwindAttribute: UnwindAttribute, fnode: fplan.Unwind, child: TNode) extends UnaryTNode {}
 
-case class SortAndTop(fnode: fplan.SortAndTop, child: TNode) extends UnaryTNode {}
+case class SortAndTop(skipExpr: Option[Expression],
+                      limitExpr: Option[Expression],
+                      fnode: fplan.SortAndTop,
+                      child: TNode) extends UnaryTNode {}
 
 // binary nodes
 case class Union(fnode: fplan.Union, left: TNode, right: TNode) extends BinaryTNode {}
@@ -71,6 +76,7 @@ case class LeftOuterJoin(leftMask: Seq[Int], rightMask: Seq[Int],
                         ) extends BinaryTNode with EquiJoinLike {}
 
 case class ThetaLeftOuterJoin(leftMask: Seq[Int], rightMask: Seq[Int],
+                              condition: Expression,
                               fnode: fplan.ThetaLeftOuterJoin,
                               left: TNode, right: TNode) extends BinaryTNode with EquiJoinLike {}
 
