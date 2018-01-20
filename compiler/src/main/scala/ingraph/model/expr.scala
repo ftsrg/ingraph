@@ -104,6 +104,13 @@ abstract class AttributeBase extends Attribute {
   override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
 }
 
+case class TupleIndexLiteralAttribute(val index: Int, val side: Option[Side] = None) extends AttributeBase {
+  override def name: String = ???
+}
+abstract class Side
+case class Left() extends Side
+case class Right() extends Side
+
 case class Parameter(name: String) extends ExpressionBase {
   override def children: Seq[Expression] = Seq()
 }

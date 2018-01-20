@@ -97,11 +97,11 @@ object JPlanToFPlan {
       case a: ReturnItem => extractAttributes(a.child)
       case a: PropertyAttribute => Seq(a)
       case _ => Seq()
-    }) ++ expression.children.flatMap(extractAttributes(_))
+    }) ++ expression.children.flatMap(a => extractAttributes(a))
   }
 
   def extractAttributes(projectList: TProjectList): Seq[ResolvableName] = {
-    projectList.flatMap(a => extractAttributes(a))
+    projectList.flatMap(extractAttributes(_))
   }
 
 }
