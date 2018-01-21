@@ -247,7 +247,7 @@ class RandomCompilationTest extends CompilerTest {
   test("Random: property lookup and multiple labels in the label predicate") {
     compile(
       """MATCH (p)
-        |WHERE p:Person:Teacher
+        |WHERE p.foo:Person:Teacher
         |RETURN p
       """.stripMargin
     )
@@ -258,6 +258,24 @@ class RandomCompilationTest extends CompilerTest {
       """MATCH (p)
         |WHERE {foo: p}.foo:Person:Teacher
         |RETURN p
+      """.stripMargin
+    )
+  }
+
+  test("Random: multiple property lookup on map and multiple labels in the label predicate") {
+    compile(
+      """MATCH (p)
+        |WHERE p:Person:Teacher
+        |RETURN p
+      """.stripMargin
+    )
+  }
+
+  ignore("Random: REMOVE") {
+    compile(
+      """MATCH (a:Person {name: 'Alice'})-[:KNOWS]->(b:Person {name: 'Bob'})
+        |REMOVE CASE WHEN a.age>b.age THEN a ELSE b END.age.hair.boot
+        |RETURN a, b
       """.stripMargin
     )
   }
