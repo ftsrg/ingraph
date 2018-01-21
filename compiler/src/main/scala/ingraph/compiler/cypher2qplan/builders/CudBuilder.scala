@@ -6,7 +6,7 @@ import ingraph.model.expr._
 import ingraph.model.expr.types.VertexLabel
 import ingraph.model.qplan
 import ingraph.model.qplan.QNode
-import org.slizaa.neo4j.opencypher.openCypher.{RemoveItem, SetItem}
+import org.slizaa.neo4j.opencypher.openCypher.{SetItem}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -190,8 +190,8 @@ object CudBuilder {
   def buildRemoveOperator(element: oc.Remove, child: qplan.QNode): QNode = {
     val vertexLabelUpdates = element.getRemoveItems.asScala.map(
       r => r match {
-        //case pe: oc.PropertyExpression => ???
-        case r: RemoveItem => {
+        //case r: oc.RemoveItemProperty => ???
+        case r: oc.RemoveItemLabel => {
           val vertex = AttributeBuilder.buildAttribute(r.getVariable).asInstanceOf[VertexAttribute] // here come the
           // ClassCastException
           val labels: Set[VertexLabel] = r.getNodeLabels.getNodeLabels.asScala.map(_.getLabelName).toSet
