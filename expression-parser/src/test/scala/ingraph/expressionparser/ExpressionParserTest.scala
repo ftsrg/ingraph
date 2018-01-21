@@ -1,14 +1,14 @@
 package ingraph.expressionparser
 
 import hu.bme.mit.ire.datatypes.Tuple
-import ingraph.compiler.FPlanParser
+import ingraph.compiler.TPlanParser
 import ingraph.model.fplan._
 import org.scalatest.WordSpec
 
 class ExpressionParserTest extends WordSpec {
 
   def parseFilter(query: String): (Tuple) => Boolean = {
-    val selection = FPlanParser.parse(query)
+    val selection = TPlanParser.parse(query)
       .asInstanceOf[Production].child
       .asInstanceOf[Projection].child
       .asInstanceOf[Selection]
