@@ -13,8 +13,10 @@ import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.expressionparser.ExpressionParser
 import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
 import ingraph.model.expr._
-import ingraph.model.fplan.{FNode, SchemaToMap, UnaryFNode, _}
+import ingraph.model.fplan
 import ingraph.model.jplan
+import ingraph.model.tplan
+import ingraph.model.tplan._
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression}
 
 import scala.collection.mutable
@@ -26,12 +28,10 @@ abstract class AnnotatedRelationalEngine extends RelationalEngine {
 
 object EngineFactory {
 
-  def getSchema(node: FNode): Map[String, Int] = SchemaToMap.schemaToMapNames(node)
-
-  case class ForwardConnection(parent: FNode, child: (ReteMessage) => Unit)
+  case class ForwardConnection(parent: TNode, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
 
-  def createQueryEngine(plan: FNode, indexer: Indexer): AnnotatedRelationalEngine =
+  def createQueryEngine(plan: TNode, indexer: Indexer): AnnotatedRelationalEngine =
     new AnnotatedRelationalEngine {
       override val production: ActorRef = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
@@ -45,7 +45,7 @@ object EngineFactory {
       while (remaining.nonEmpty) {
         val expr = remaining.remove(0)
         expr.parent match {
-          case op: LeafFNode =>
+          case op: LeafTNode =>
             op match {
               case op: GetVertices => getVertices(op, expr)
               case op: GetEdges => getEdges(op, expr)
@@ -53,7 +53,7 @@ object EngineFactory {
               expr.child(ChangeSet(positive=Vector(Vector())))
             }
 
-          case op: UnaryFNode =>
+          case op: UnaryTNode =>
             val node: (ReteMessage) => Unit = op match {
               case op: Production => production
 //              case op: Grouping => instantiateGrouping(op, expr)
@@ -70,14 +70,14 @@ object EngineFactory {
             }
             remaining += ForwardConnection(op.child, node)
 
-          case op: BinaryFNode =>
+          case op: BinaryTNode =>
             val node: ActorRef = op match {
-              case op: Union => newLocal(Props(new UnionNode(expr.child, op.jnode.bag)))
+              case op: Union => newLocal(Props(new UnionNode(expr.child, op.fnode.jnode.bag)))
               case op: JoinLike =>
                 val child = expr.child
-                val leftTupleWidth = op.left.internalSchema.length
-                val rightTupleWidth = op.right.internalSchema.length
-                val leftMask = op.leftMask
+                val leftTupleWidth  = op.left. fnode.internalSchema.length
+                val rightTupleWidth = op.right.fnode.internalSchema.length
+                val leftMask:  Seq[Int] = op.leftMask
                 val rightMask: Seq[Int] = op.rightMask
 
                 op match {
@@ -102,45 +102,52 @@ object EngineFactory {
 
     // leaf nodes
     private def getVertices(op: GetVertices, expr: ForwardConnection) = {
-      val labels = op.jnode.v.labels.vertexLabels.toSeq
+      val labels = op.fnode.jnode.v.labels.vertexLabels.toSeq
       vertexConverters.addBinding(labels, op)
-      inputs += (op.jnode.v.name -> expr.child)
+      inputs += (op.fnode.jnode.v.name -> expr.child)
     }
 
     private def getEdges(op: GetEdges, expr: ForwardConnection) = {
-      val labels = op.jnode.edge.labels.edgeLabels.toSeq
+      val labels = op.fnode.jnode.edge.labels.edgeLabels.toSeq
       for (label <- labels) {
         edgeConverters.addBinding(label, op)
-        if (!op.jnode.directed) {
-          val reverse = GetEdges(op.extraAttributes,
-            jplan.GetEdges(op.jnode.trg, op.jnode.src, op.jnode.edge, op.jnode.directed))
+        if (!op.fnode.jnode.directed) {
+          val reverse = tplan.GetEdges(
+            fplan.GetEdges(op.fnode.extraAttributes,
+              jplan.GetEdges(
+                op.fnode.jnode.trg,
+                op.fnode.jnode.src,
+                op.fnode.jnode.edge,
+                op.fnode.jnode.directed)
+              )
+          )
           edgeConverters.addBinding(label, reverse)
         }
       }
-      inputs += (op.jnode.edge.name -> expr.child)
+      inputs += (op.fnode.jnode.edge.name -> expr.child)
     }
 
     // unary nodes
 
 //    private def instantiateGrouping(op: Grouping, expr: ForwardConnection) = {
 //      val variableLookup = getSchema(op.child)
-//      val aggregates = op.jnode.projectList.flatMap(
+//      val aggregates = op.fnode.jnode.projectList.flatMap(
 //        e => ExpressionParser.parseAggregate(e, variableLookup)
 //      )
 //      val functions = () => aggregates.map(
 //        _._2() // GOOD LUCK UNDERSTANDING THIS
 //      )
-//      val aggregationCriteria = op.jnode.aggregationCriteria.map(e => (e, ExpressionParser.parseValue(e, variableLookup)))
+//      val aggregationCriteria = op.fnode.jnode.aggregationCriteria.map(e => (e, ExpressionParser.parseValue(e, variableLookup)))
 //      val projectionVariableLookup: Map[String, Int] =
 //        aggregationCriteria.zipWithIndex.map( a => a._1._1.fullName -> a._2.asInstanceOf[Integer] ).toMap ++
-//        aggregates.zipWithIndex.map( az => az._1._1 -> (az._2 + op.jnode.aggregationCriteria.size()))
+//        aggregates.zipWithIndex.map( az => az._1._1 -> (az._2 + op.fnode.jnode.aggregationCriteria.size()))
 //      val projectionExpressions = op.internalSchema.map( e => ExpressionParser.parseValue(e, projectionVariableLookup))
 //      newLocal(Props(new AggregationNode(expr.child, aggregationCriteria.map(_._2), functions, projectionExpressions)))
 //    }
 
     private def selection(op: Selection, expr: ForwardConnection) = {
       val variableLookup = getSchema(op.child)
-      newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.jnode.condition, variableLookup))))
+      newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.fnode.jnode.condition, variableLookup))))
     }
 
     private def projection(op: Projection, expr: ForwardConnection) = {
@@ -152,26 +159,25 @@ object EngineFactory {
     private def sortAndTop(op: SortAndTop, expr: ForwardConnection) = {
       val variableLookup = getSchema(op.child)
 
-      // This is the mighty EMF, so there are no default values, obviously
       def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Long]
 
-      val skip: Option[Long] = op.jnode.skipExpr.map(getInt)
-      val limit: Option[Long] = op.jnode.limitExpr.map(getInt)
-      val sortKeys = op.jnode.order.map(
+      val skip: Option[Long] = op.fnode.jnode.skipExpr.map(getInt)
+      val limit: Option[Long] = op.fnode.jnode.limitExpr.map(getInt)
+      val sortKeys = op.fnode.jnode.order.map(
         e => ExpressionParser.parseValue(e.child, variableLookup)).toVector
       newLocal(Props(new SortAndTopNode(
         expr.child,
-        op.jnode.order.length,
+        op.fnode.jnode.order.length,
         sortKeys,
         skip,
         limit,
-        op.jnode.order.map(_.direction == Ascending).toVector
+        op.fnode.jnode.order.map(_.direction == Ascending).toVector
       )))
     }
 
     private def allDifferent(op: AllDifferent, expr: ForwardConnection) = {
       val schema = getSchema(op.child)
-      val indices = op.jnode.edges.map(v => schema(v.name))
+      val indices = op.fnode.jnode.edges.map(v => schema(v.name))
 
       def allDifferent(r: Tuple): Boolean = {
         val seen = mutable.HashSet[Any]()
@@ -219,7 +225,7 @@ object EngineFactory {
 
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
       val lookup = getSchema(op.child)
-      val creatorDefs: Seq[Attribute] = op.jnode.attributes
+      val creatorDefs: Seq[Attribute] = op.fnode.jnode.attributes
       val creatorFunctions: Seq[(Tuple, AlreadyCreated) => Any] = for (element <- creatorDefs)
         yield element match {
           case n: RichEdgeAttribute =>
@@ -260,14 +266,14 @@ object EngineFactory {
 
     private def delete(op: Delete, indexer: Indexer, expr: ForwardConnection) = {
       val lookup = getSchema(op.child)
-      if (op.jnode.detach) {
+      if (op.fnode.jnode.detach) {
         // detach delete not supported yet
         // and we should throw an exception in case the user tries to delete a nodes with existing
         // relationships
         // "To delete this node, you must first delete its relationships."
         ???
       }
-      val removals: Seq[(Tuple) => Unit] = for (element <- op.jnode.attributes)
+      val removals: Seq[(Tuple) => Unit] = for (element <- op.fnode.jnode.attributes)
       // .getExpression.asInstanceOf[VariableExpression].getVariable TODO check
         yield element match {
           case e: EdgeAttribute =>
