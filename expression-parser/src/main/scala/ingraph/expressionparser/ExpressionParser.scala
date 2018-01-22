@@ -1,70 +1,68 @@
-package ingraph.expressionparser
+package ingraph.parse
 
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
-import ingraph.model.expr.{FunctionInvocation, TupleIndexLiteralAttribute, VertexAttribute}
-import ingraph.model.misc.FunctionCategory
-import org.apache.spark.sql.catalyst.analysis.UnresolvedAlias
-import org.apache.spark.sql.catalyst.expressions.{Add, Alias, And, Attribute, BinaryArithmetic, BinaryComparison, BinaryOperator, CaseWhen, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Remainder, Subtract}
+import ingraph.expressionparser.FunctionLookup
+import ingraph.model.expr.{FunctionInvocation, TupleIndexLiteralAttribute}
+import org.apache.spark.sql.catalyst.expressions.{Add, And, BinaryArithmetic, BinaryComparison, BinaryOperator, CaseWhen, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Remainder, Subtract}
 import org.apache.spark.unsafe.types.UTF8String
 
 
 object ExpressionParser {
-  def parse(expression: Expression): (Tuple) => Boolean =
-    expression match {
-      case Not(exp) =>
-        (t: Tuple) =>
-            val operand: (Tuple => Boolean) = parse(exp)
-            !operand(t)
-      case IsNull(exp) =>
-        def left: (Tuple) => Any = parseValue(exp)
-        left(_) == null
-      case IsNotNull(exp) =>
-        def left: (Tuple) => Any = parseValue(exp)
-        left(_) != null
-      case exp: BinaryComparison =>
-        val left: (Tuple => Any) = parseValue(exp.left)
-        val right: (Tuple => Any) = parseValue(exp.right)
-        exp match {
-          case _: EqualTo => (t: Tuple) => left(t) == right(t)
-          case _: LessThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) <= 0
-          case _: LessThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) < 0
-          case _: GreaterThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) >= 0
-          case _: GreaterThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) > 0
-        }
-      case exp: BinaryOperator =>
-        val left: (Tuple => Boolean) = parse(exp.left)
-        val right: (Tuple => Boolean) = parse(exp.right)
-        exp match {
-          case _: And => (t: Tuple) => left(t) && right(t)
-          case _: Or => (t: Tuple) => left(t) || right(t)
-        }
-      case l: Literal =>
-        (t: Tuple) => l.value.asInstanceOf[Boolean]
-    }
+  def apply[T](exp: Expression): Tuple => T = {
+    val e = parse(exp)
+    t => e(t).asInstanceOf[T]
+  }
 
-  def parseValue(exp: Expression): (Tuple) => Any = exp match {
+  private def parse(exp: Expression): Tuple => Any = exp match {
     case Literal(value, _) =>
       value match {
         case s: UTF8String => _ => s.toString
         case v => _ => v
       }
+    case Not(e) =>
+      (t: Tuple) =>
+        val operand = ExpressionParser[Boolean](e)
+        !operand(t)
+    case IsNull(e) =>
+      def left: Tuple => Any = parse(e)
+      left(_) == null
+    case IsNotNull(e) =>
+      def left: Tuple => Any = parse(e)
+      left(_) != null
+    case exp: BinaryComparison =>
+      val left: Tuple => Any = parse(exp.left)
+      val right: Tuple => Any = parse(exp.right)
+      exp match {
+        case _: EqualTo => (t: Tuple) => left(t) == right(t)
+        case _: LessThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) <= 0
+        case _: LessThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) < 0
+        case _: GreaterThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) >= 0
+        case _: GreaterThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) > 0
+      }
+    case op: BinaryArithmetic =>
+      val left = parse(op.left)
+      val right = parse(op.right)
+      op match {
+        case _: Add => tuple => GenericMath.add(left(tuple), right(tuple))
+        case _: Subtract => tuple => GenericMath.subtract(left(tuple), right(tuple))
+        case _: Multiply => tuple => GenericMath.multiply(left(tuple), right(tuple))
+        case _: Divide => tuple => GenericMath.divide(left(tuple), right(tuple))
+        case _: Remainder => tuple => ???
+        case _: Pmod => tuple =>  GenericMath.mod(left(tuple), right(tuple))
+      }
+    case exp: BinaryOperator =>
+      val left: Tuple => Boolean = ExpressionParser[Boolean](exp.left)
+      val right: Tuple => Boolean = ExpressionParser[Boolean](exp.right)
+      exp match {
+        case _: And => (t: Tuple) => left(t) && right(t)
+        case _: Or => (t: Tuple) => left(t) || right(t)
+      }
     case TupleIndexLiteralAttribute(index, _) =>
       tuple  => tuple(index)
-    case op: BinaryArithmetic =>
-      val left = parseValue(op.left)
-      val right = parseValue(op.right)
-        op match {
-          case _: Add => tuple => GenericMath.add(left(tuple), right(tuple))
-          case _: Subtract => tuple => GenericMath.subtract(left(tuple), right(tuple))
-          case _: Multiply => tuple => GenericMath.multiply(left(tuple), right(tuple))
-          case _: Divide => tuple => GenericMath.divide(left(tuple), right(tuple))
-          case _: Remainder => tuple => ???
-          case _: Pmod => tuple =>  GenericMath.mod(left(tuple), right(tuple))
-        }
+
     case invoc: FunctionInvocation =>
-      val children: Seq[Tuple => Any] = invoc.children.map(parseValue)
+      val children: Seq[Tuple => Any] = invoc.children.map(parse)
       children.length match {
         case 0 => tuple => FunctionLookup.fun0(invoc.functor)()
         case 1 => tuple => FunctionLookup.fun1(invoc.functor)(children.head(tuple))
@@ -73,8 +71,8 @@ object ExpressionParser {
       }
     case exp: CaseWhen =>
       println(exp)
-      val cases = exp.branches.map(c => (parse(c._1), parseValue(c._2)))
-      val fallback: Tuple => Any = exp.elseValue.map(parseValue)
+      val cases = exp.branches.map(c => (ExpressionParser[Boolean](c._1), parse(c._2)))
+      val fallback: Tuple => Any = exp.elseValue.map(parse)
         .getOrElse((t: Tuple) => throw new Exception("Run into non-existent ELSE clause"))
       def caseFunction(tuple: Tuple): Any = {
         for ((w, t) <- cases)
@@ -83,24 +81,6 @@ object ExpressionParser {
         fallback(tuple)
       }
       caseFunction
-//    case exp: UnaryExpression =>
-//      val first: (Tuple) => Any = parseValue(exp.child, lookup)
-//      val function: (Tuple) => Any = t => FunctionLookup.fun1(exp)(first(t))
-//      tuple => function(tuple)
-//    case exp: BinaryExpression =>
-//      val first: (Tuple) => Any = parseValue(exp.left, lookup)
-//      val second: (Tuple) => Any = parseValue(exp.right, lookup)
-//      val function: (Tuple) => Any = t => FunctionLookup.fun2(exp)(first(t), second(t))
-//      tuple => function(tuple)
-//    case exp: TernaryExpression =>
-//      val first: (Tuple) => Any = parseValue(exp.children(0), lookup)
-//      val second: (Tuple) => Any = parseValue(exp.children(1), lookup)
-//      val third: (Tuple) => Any = parseValue(exp.children(2), lookup)
-//      val function: (Tuple) => Any = t => FunctionLookup.fun3(exp)(first(t), second(t), third(t))
-//      tuple => function(tuple)
-
-//    case exp: FunctionExpression if exp.getFunctor.getCategory == FunctionCategory.AGGREGATION =>
-//      tuple => lookup(exp.fullName)
   }
 //
 //
@@ -123,11 +103,5 @@ object ExpressionParser {
 //        val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable.fullName)).map(_.toInt)
 //        List((exp.fullName, () => new StatefulCollect(indices)))
 //      }
-//    case exp: FunctionExpression => parseAggregate(exp.getArguments.get(0), lookup)
-//    case exp: Literal => List()
-//    case exp: VariableExpression => List()
-//    case exp: BinaryArithmeticOperationExpression =>
-//      parseAggregate(exp.getLeftOperand, lookup) ++ parseAggregate(exp.getRightOperand, lookup)
-//  }
 
 }

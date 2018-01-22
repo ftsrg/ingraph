@@ -3,6 +3,7 @@ package ingraph.expressionparser
 import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.compiler.TPlanParser
 import ingraph.model.tplan._
+import ingraph.parse.ExpressionParser
 import org.scalatest.WordSpec
 
 class ExpressionParserTest extends WordSpec {
@@ -13,7 +14,7 @@ class ExpressionParserTest extends WordSpec {
       .asInstanceOf[Projection].child
       .asInstanceOf[Selection]
     println(selection.condition)
-    ExpressionParser.parse(selection.condition)
+    ExpressionParser(selection.condition)
   }
 
   val rocks = "emfrocks"
@@ -74,7 +75,7 @@ class ExpressionParserTest extends WordSpec {
       val projection = plan
         .asInstanceOf[Production].child
         .asInstanceOf[Projection]
-      val func = ExpressionParser.parseValue(projection.projectionTuple.head)
+      val func = ExpressionParser[Any](projection.projectionTuple.head)
       assert(func(Vector(1, "blue")) == 1)
       assert(func(Vector(2, "brown")) == 5)
       assert(func(Vector(3, "red")) == 3)
