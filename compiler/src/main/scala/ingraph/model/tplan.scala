@@ -3,7 +3,7 @@ package ingraph.model.tplan
 import ingraph.model.expr.UnwindAttribute
 import ingraph.model.fplan
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
-import org.apache.spark.sql.catalyst.expressions.Expression
+import org.apache.spark.sql.catalyst.expressions.{Expression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 trait TNode extends LogicalPlan {
@@ -55,6 +55,7 @@ case class Unwind(unwindAttribute: UnwindAttribute, fnode: fplan.Unwind, child: 
 
 case class SortAndTop(skipExpr: Option[Expression],
                       limitExpr: Option[Expression],
+                      order: Seq[SortOrder],
                       fnode: fplan.SortAndTop,
                       child: TNode) extends UnaryTNode {}
 

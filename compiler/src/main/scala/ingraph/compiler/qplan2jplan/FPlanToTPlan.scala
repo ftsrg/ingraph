@@ -2,7 +2,7 @@ package ingraph.compiler.qplan2jplan
 
 import ingraph.model.expr._
 import ingraph.model.{fplan, tplan}
-import org.apache.spark.sql.catalyst.expressions.Expression
+import org.apache.spark.sql.catalyst.expressions.{Expression, SortOrder}
 
 object FPlanToTPlan {
 
@@ -34,7 +34,10 @@ object FPlanToTPlan {
       case o: fplan.Unwind =>
         tplan.Unwind(o.jnode.unwindAttribute, o, transform(o.child))
       // the expressions in SKIP ... LIMIT ... cannot refer to variables, so a simple copy of the expressions is enough
-      case o: fplan.SortAndTop           => tplan.SortAndTop          (o.jnode.skipExpr, o.jnode.limitExpr, o, transform(o.child))
+      case o: fplan.SortAndTop           => tplan.SortAndTop(
+        o.jnode.skipExpr, o.jnode.limitExpr,
+        o.jnode.order.map(transformExpression(_, o.child.internalSchema).asInstanceOf[SortOrder]),
+        o, transform(o.child))
       // identity cases
       case o: fplan.AllDifferent         => tplan.AllDifferent        (o, transform(o.child))
       case o: fplan.DuplicateElimination => tplan.DuplicateElimination(o, transform(o.child))
