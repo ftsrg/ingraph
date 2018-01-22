@@ -146,25 +146,22 @@ object EngineFactory {
 //    }
 
     private def selection(op: Selection, expr: ForwardConnection) = {
-      val variableLookup = getSchema(op.child)
-      newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.fnode.jnode.condition, variableLookup))))
+      newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.condition))))
     }
 
     private def projection(op: Projection, expr: ForwardConnection) = {
-      val lookup = getSchema(op.child)
-      val expressions = op.internalSchema.map(e => ExpressionParser.parseValue(e, lookup)).toVector
+      val expressions = op.projectionTuple.map(e => ExpressionParser.parseValue(e)).toVector
       newLocal(Props(new ProjectionNode(expr.child, expressions)))
     }
 
     private def sortAndTop(op: SortAndTop, expr: ForwardConnection) = {
-      val variableLookup = getSchema(op.child)
 
-      def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Long]
+      def getInt(e: Expression) = ExpressionParser.parseValue(e)(Vector()).asInstanceOf[Long]
 
-      val skip: Option[Long] = op.fnode.jnode.skipExpr.map(getInt)
-      val limit: Option[Long] = op.fnode.jnode.limitExpr.map(getInt)
-      val sortKeys = op.fnode.jnode.order.map(
-        e => ExpressionParser.parseValue(e.child, variableLookup)).toVector
+      val skip: Option[Long] = op.skipExpr.map(getInt)
+      val limit: Option[Long] = op.limitExpr.map(getInt)
+      val sortKeys = op.order.map(
+        e => ExpressionParser.parseValue(e.child)).toVector
       newLocal(Props(new SortAndTopNode(
         expr.child,
         op.fnode.jnode.order.length,
@@ -176,8 +173,8 @@ object EngineFactory {
     }
 
     private def allDifferent(op: AllDifferent, expr: ForwardConnection) = {
-      val schema = getSchema(op.child)
-      val indices = op.fnode.jnode.edges.map(v => schema(v.name))
+      // TODO
+      val indices = op.schema.indices
 
       def allDifferent(r: Tuple): Boolean = {
         val seen = mutable.HashSet[Any]()
@@ -194,15 +191,15 @@ object EngineFactory {
       newLocal(Props(new SelectionNode(expr.child, allDifferent)))
     }
 
-    private def propsParser(lookup: Map[String, Int], v: ElementAttribute): Tuple => Map[String, Any] = {
+    private def propsParser(v: ElementAttribute): Tuple => Map[String, Any] = {
       val parsed = v.properties.map { case (name, expr) =>
-        name -> ExpressionParser.parseValue(expr, lookup)
+        name -> ExpressionParser.parseValue(expr)
       }
       (t: Tuple) => parsed.mapValues(_(t))
     }
 
-    private def vertexCreator(v: VertexAttribute, lookup: Map[String, Int]): (Tuple) => IngraphVertex = {
-      val props = propsParser(lookup, v)
+    private def vertexCreator(v: VertexAttribute): (Tuple) => IngraphVertex = {
+      val props = propsParser(v)
       (t: Tuple) =>
         indexer.addVertex(IngraphVertex(indexer.newId(), v.labels.vertexLabels, props(t)))
     }
@@ -210,7 +207,7 @@ object EngineFactory {
     type AlreadyCreated = mutable.HashMap[Attribute, Long]
     private def createOrLookup(v: VertexAttribute, lookup: Map[String, Int]
                               ): (Tuple,AlreadyCreated) => Long = {
-      val creator: (Tuple) => IngraphVertex = vertexCreator(v, lookup)
+      val creator: (Tuple) => IngraphVertex = vertexCreator(v)
       lookup.get(v.name) match {
         case Some(index: Int) => (t: Tuple, m) => t(index).asInstanceOf[Long]
         case None => (t: Tuple, m: AlreadyCreated) => m.get(v) match {
@@ -224,16 +221,15 @@ object EngineFactory {
     }
 
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
-      val lookup = getSchema(op.child)
       val creatorDefs: Seq[Attribute] = op.fnode.jnode.attributes
       val creatorFunctions: Seq[(Tuple, AlreadyCreated) => Any] = for (element <- creatorDefs)
         yield element match {
           case n: RichEdgeAttribute =>
             // you've got to love the Law of Demeter
             val demeter = n.edge.labels.edgeLabels.head
-            val sourceIndex = createOrLookup(n.src, lookup)
-            val targetIndex = createOrLookup(n.trg, lookup)
-            val props = propsParser(lookup, n)
+            val sourceIndex = createOrLookup(n.src, Map())
+            val targetIndex = createOrLookup(n.trg, Map())
+            val props = propsParser(n)
             (t: Tuple, m: AlreadyCreated) => {
               indexer.addEdge(
                 indexer.newId(),
@@ -244,7 +240,7 @@ object EngineFactory {
               )
             }
           case variable: VertexAttribute =>
-            val create = vertexCreator(variable, lookup)
+            val create = vertexCreator(variable)
             (t: Tuple, m: AlreadyCreated) =>
               if (!m.contains(variable))
                 create(t)
@@ -265,7 +261,6 @@ object EngineFactory {
     }
 
     private def delete(op: Delete, indexer: Indexer, expr: ForwardConnection) = {
-      val lookup = getSchema(op.child)
       if (op.fnode.jnode.detach) {
         // detach delete not supported yet
         // and we should throw an exception in case the user tries to delete a nodes with existing
@@ -274,12 +269,11 @@ object EngineFactory {
         ???
       }
       val removals: Seq[(Tuple) => Unit] = for (element <- op.fnode.jnode.attributes)
-      // .getExpression.asInstanceOf[VariableExpression].getVariable TODO check
         yield element match {
           case e: EdgeAttribute =>
-            (t: Tuple) => indexer.removeEdgeById(t(lookup(e.name)).asInstanceOf[Long])
+            (t: Tuple) => indexer.removeEdgeById(t(0).asInstanceOf[Long])
           case v: VertexAttribute =>
-            (t: Tuple) => indexer.removeVertexById(t(lookup(v.name)).asInstanceOf[Long], detach = true)
+            (t: Tuple) => indexer.removeVertexById(t(0).asInstanceOf[Long], detach = true)
         }
       (m: ReteMessage) => {
         m match {

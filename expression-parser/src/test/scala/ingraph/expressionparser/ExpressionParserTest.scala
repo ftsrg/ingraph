@@ -2,21 +2,19 @@ package ingraph.expressionparser
 
 import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.compiler.TPlanParser
-import ingraph.model.fplan._
+import ingraph.model.tplan._
 import org.scalatest.WordSpec
 
 class ExpressionParserTest extends WordSpec {
 
   def parseFilter(query: String): (Tuple) => Boolean = {
-    val selection = TPlanParser.parse(query)
+    val selection = getPlan(query)
       .asInstanceOf[Production].child
       .asInstanceOf[Projection].child
       .asInstanceOf[Selection]
-    val lookup = getSchema(selection.child)
-    ExpressionParser.parse(selection.jnode.condition, lookup)
+    println(selection.condition)
+    ExpressionParser.parse(selection.condition)
   }
-
-  def getSchema(op: FNode): Map[String, Int] = SchemaToMap.schemaToMapNames(op)
 
   val rocks = "emfrocks"
   "ExpressionParser" should {
@@ -46,9 +44,9 @@ class ExpressionParserTest extends WordSpec {
       assert(!func(Vector(1, 1)))
     }
 
-    "parse complicated routesensor expression" ignore {
+    "parse complicated routesensor expression" in {
       val func = parseFilter("""MATCH (n) WHERE n.a is null and n.e is not null RETURN n.a""")
-      assert(func(Vector(null, 1, 1)))
+      assert(func(Vector(1, null, 1)))
       assert(!func(Vector(1, 1, 1)))
     }
 
@@ -95,4 +93,6 @@ class ExpressionParserTest extends WordSpec {
 //    }
 
   }
+
+  private def getPlan(query: String) = TPlanParser.parse(query)
 }
