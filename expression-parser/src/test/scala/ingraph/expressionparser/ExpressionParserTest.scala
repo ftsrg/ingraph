@@ -60,25 +60,27 @@ class ExpressionParserTest extends WordSpec {
         """MATCH (n) WHERE substring(toString(1324), 2)=left("244", 2) RETURN n.id""")
       assert(func(Vector(24, 1)))
     }
-//    "parse Case structures" in {
-//      val plan = getPlan(
-//        """MATCH (n)
-//          |RETURN
-//          |CASE n.eye
-//          |WHEN 'blue'
-//          |THEN 1
-//          |WHEN 'brown'
-//          |THEN 2 + 3
-//          |ELSE 3 END AS result""".stripMargin)
-//      val projection = plan.getRootExpression
-//        .asInstanceOf[ProductionOperator].getInput
-//        .asInstanceOf[ProjectionOperator]
-//      val lookup = getSchema(projection.getInput)
-//      val func = ExpressionParser.parseValue(projection.getElements.get(0).getExpression, lookup)
-//      assert(func(Vector(1, "blue")) == 1)
-//      assert(func(Vector(2, "brown")) == 5)
-//      assert(func(Vector(3, "red")) == 3)
-//    }
+
+    "parse Case structures" in {
+      val plan = getPlan(
+        """MATCH (n)
+          |RETURN
+          |CASE n.eye
+          |WHEN 'blue'
+          |THEN 1
+          |WHEN 'brown'
+          |THEN 2 + 3
+          |ELSE 3 END AS result""".stripMargin)
+      val projection = plan
+        .asInstanceOf[Production].child
+        .asInstanceOf[Projection]
+      val func = ExpressionParser.parseValue(projection.projectionTuple.head)
+      assert(func(Vector(1, "blue")) == 1)
+      assert(func(Vector(2, "brown")) == 5)
+      assert(func(Vector(3, "red")) == 3)
+    }
+
+
 //    "parse exists" in {
 //      val plan = getPlan(
 //        """MATCH (n)

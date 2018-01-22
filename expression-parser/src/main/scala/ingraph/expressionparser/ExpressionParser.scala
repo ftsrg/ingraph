@@ -64,13 +64,25 @@ object ExpressionParser {
           case _: Pmod => tuple =>  GenericMath.mod(left(tuple), right(tuple))
         }
     case invoc: FunctionInvocation =>
-      val children: Seq[Tuple => Any] = invoc.children.map(parseValue(_))
+      val children: Seq[Tuple => Any] = invoc.children.map(parseValue)
       children.length match {
         case 0 => tuple => FunctionLookup.fun0(invoc.functor)()
         case 1 => tuple => FunctionLookup.fun1(invoc.functor)(children.head(tuple))
         case 2 => tuple => FunctionLookup.fun2(invoc.functor)(children(0)(tuple), children(1)(tuple))
         case 3 => tuple => FunctionLookup.fun3(invoc.functor)(children(0)(tuple), children(1)(tuple), children(2)(tuple))
       }
+    case exp: CaseWhen =>
+      println(exp)
+      val cases = exp.branches.map(c => (parse(c._1), parseValue(c._2)))
+      val fallback: Tuple => Any = exp.elseValue.map(parseValue)
+        .getOrElse((t: Tuple) => throw new Exception("Run into non-existent ELSE clause"))
+      def caseFunction(tuple: Tuple): Any = {
+        for ((w, t) <- cases)
+          if (w(tuple))
+            return t(tuple)
+        fallback(tuple)
+      }
+      caseFunction
 //    case exp: UnaryExpression =>
 //      val first: (Tuple) => Any = parseValue(exp.child, lookup)
 //      val function: (Tuple) => Any = t => FunctionLookup.fun1(exp)(first(t))
@@ -89,19 +101,6 @@ object ExpressionParser {
 
 //    case exp: FunctionExpression if exp.getFunctor.getCategory == FunctionCategory.AGGREGATION =>
 //      tuple => lookup(exp.fullName)
-//    case exp: SimpleCaseExpression =>
-//      val testExpression = parseValue(exp.getTest, lookup)
-//      import collection.JavaConverters._
-//      val cases = exp.getCases.asScala.map(c => (parseValue(c.getWhen, lookup), parseValue(c.getThen, lookup)))
-//      val fallback = parseValue(exp.getFallback, lookup)
-//      def caseFunction(tuple: Tuple): Any = {
-//        val actual = testExpression(tuple)
-//        for ((w, t) <- cases)
-//          if (w(tuple) == actual)
-//            return t(tuple)
-//        fallback(tuple)
-//      }
-//      caseFunction
   }
 //
 //
