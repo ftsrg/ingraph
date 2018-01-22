@@ -104,7 +104,7 @@ abstract class AttributeBase extends Attribute {
   override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
 }
 
-case class TupleIndexLiteralAttribute(val index: Int, val side: Option[Side] = None) extends AttributeBase {
+case class TupleIndexLiteralAttribute(index: Int, side: Option[Side] = None) extends AttributeBase {
   override def name: String = ???
 }
 abstract class Side
