@@ -7,16 +7,13 @@ import hu.bme.mit.ire.engine.RelationalEngine
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode, UnionNode}
 import hu.bme.mit.ire.nodes.unary._
-import hu.bme.mit.ire.nodes.unary.aggregation.AggregationNode
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
-import ingraph.expressionparser.ExpressionParser
-import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
 import ingraph.model.expr._
-import ingraph.model.fplan
-import ingraph.model.jplan
-import ingraph.model.tplan
+import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
+import ingraph.model.{fplan, jplan, tplan}
 import ingraph.model.tplan._
+import ingraph.parse.ExpressionParser
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression}
 
 import scala.collection.mutable
@@ -146,22 +143,22 @@ object EngineFactory {
 //    }
 
     private def selection(op: Selection, expr: ForwardConnection) = {
-      newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.condition))))
+      newLocal(Props(new SelectionNode(expr.child, ExpressionParser[Boolean](op.condition))))
     }
 
     private def projection(op: Projection, expr: ForwardConnection) = {
-      val expressions = op.projectionTuple.map(e => ExpressionParser.parseValue(e)).toVector
+      val expressions = op.projectionTuple.map(e => ExpressionParser[Any](e)).toVector
       newLocal(Props(new ProjectionNode(expr.child, expressions)))
     }
 
     private def sortAndTop(op: SortAndTop, expr: ForwardConnection) = {
 
-      def getInt(e: Expression) = ExpressionParser.parseValue(e)(Vector()).asInstanceOf[Long]
+      def getInt(e: Expression) = ExpressionParser[Long](e)(Vector())
 
       val skip: Option[Long] = op.skipExpr.map(getInt)
       val limit: Option[Long] = op.limitExpr.map(getInt)
       val sortKeys = op.order.map(
-        e => ExpressionParser.parseValue(e.child)).toVector
+        e => ExpressionParser[Any](e.child)).toVector
       newLocal(Props(new SortAndTopNode(
         expr.child,
         op.fnode.jnode.order.length,
@@ -193,7 +190,7 @@ object EngineFactory {
 
     private def propsParser(v: ElementAttribute): Tuple => Map[String, Any] = {
       val parsed = v.properties.map { case (name, expr) =>
-        name -> ExpressionParser.parseValue(expr)
+        name -> ExpressionParser[Any](expr)
       }
       (t: Tuple) => parsed.mapValues(_(t))
     }
