@@ -22,7 +22,7 @@ class DataManipulationTest extends FunSuite {
     indexer
   }
 
-  test("delete and create edge work") {
+  ignore("delete and create edge work") {
     val indexer = initializeIndexer()
 
     val oneOff = """MATCH (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment)
@@ -40,7 +40,7 @@ class DataManipulationTest extends FunSuite {
     }
   }
 
-  test("delete vertex works") {
+  ignore("delete vertex works") {
     val indexer = initializeIndexer()
 
     val oneOff = "MATCH (t:Train) DELETE t"
@@ -85,7 +85,7 @@ class DataManipulationTest extends FunSuite {
     assert(whereIsAdapter.result() == Seq(Vector(6137546356583794141L, -594798593157429144L)))
   }
 
-  test("create matched single edges") {
+  ignore("create matched single edges") {
     val indexer = initializeIndexer()
 
     val create = "MATCH (seg:Segment) CREATE (seg)-[m:MonitoredBy]->(s:Sensor)"
