@@ -4,8 +4,8 @@ import ingraph.compiler.TPlanParser
 import ingraph.compiler.cypher2qplan.QPlanResolver
 import ingraph.compiler.qplan2jplan.{JPlanToFPlan, QPlanToJPlan}
 import ingraph.model.expr._
-import ingraph.model.fplan._
-import ingraph.model.{jplan, qplan}
+import ingraph.model._
+import ingraph.model.{jplan, fplan, qplan}
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
@@ -98,7 +98,7 @@ class JPlanToFPlanTest extends FunSuite {
       )
     )
     val fp = JPlanToFPlan.transform(qp)
-    val join = fp.children(0).children(0).asInstanceOf[Join]
+    val join = fp.children(0).children(0).asInstanceOf[fplan.Join]
 
     assert(join.leftMask == Seq(0))
     assert(join.rightMask == Seq(0))
@@ -132,14 +132,14 @@ class JPlanToFPlanTest extends FunSuite {
       """MATCH (segment:Segment)
         |RETURN segment, segment.length AS length
         |""".stripMargin)
+    import tplan._
     fp match {
       case
-        Production(_, _,
-        Projection(_, _,
-        AllDifferent(_, _, v: GetVertices)
-        )
-        ) =>
-        assert(v.internalSchema.map(_.name) == Seq("segment", "length"))
+        Production(_,
+          Projection(_, _,
+           AllDifferent(_, v: GetVertices)
+          )) =>
+        assert(v.fnode.internalSchema.map(_.name) == Seq("segment", "length"))
     }
   }
 
@@ -149,13 +149,15 @@ class JPlanToFPlanTest extends FunSuite {
         |WHERE segment.length <= 0
         |RETURN segment, segment.length AS length
         |""".stripMargin)
+    import tplan._
     fp match {
       case
-        Production(_, _,
+        Production(_,
           Projection(_, _,
             Selection(_, _,
-              AllDifferent(_, _, v: GetVertices)))) =>
-        assert(v.internalSchema.map(_.name) == Seq("segment", "length"))
+              AllDifferent(_, v: GetVertices
+            )))) =>
+        assert(v.fnode.internalSchema.map(_.name) == Seq("segment", "length"))
     }
   }
 
@@ -169,7 +171,7 @@ class JPlanToFPlanTest extends FunSuite {
         |RETURN route, sensor, swP, sw
         |""".stripMargin)
 
-    val antijoin = fp.children(0).children(0).asInstanceOf[AntiJoin]
+    val antijoin = fp.children(0).children(0).asInstanceOf[tplan.AntiJoin]
     assert(antijoin.leftMask == List(0, 6))
     assert(antijoin.rightMask == List(0, 2))
   }
@@ -182,9 +184,9 @@ class JPlanToFPlanTest extends FunSuite {
         |  -[:monitoredBy]->(sensor:Sensor)
         |RETURN route, sensor, swP, sw
         |""".stripMargin)
-    assert(fp.children(0).children(0).children(0).internalSchema.size == 7)
-    assert(fp.children(0).children(0).children(0).children(0).internalSchema.size == 5)
-    assert(fp.children(0).children(0).children(0).children(1).internalSchema.size == 3)
+    assert(fp.children(0).children(0).children(0).fnode.internalSchema.size == 7)
+    assert(fp.children(0).children(0).children(0).children(0).fnode.internalSchema.size == 5)
+    assert(fp.children(0).children(0).children(0).children(1).fnode.internalSchema.size == 3)
   }
 
   test("infer schema for SwitchMonitored from Cypher") {
