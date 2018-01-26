@@ -40,7 +40,7 @@ class JsaTest extends CompilerTest {
   test("countnodes.cypher") {
     compileFromFile("countnodes")
   }
-  test("deletegraph.cypher") {
+  ignore("deletegraph.cypher") {
     compileFromFile("deletegraph")
   }
   test("divisionByZero_simpleVariable.cypher") {
@@ -52,43 +52,43 @@ class JsaTest extends CompilerTest {
   test("ExceptionThrown.cypher") {
     compileFromFile("ExceptionThrown")
   }
-  test("exportAlias_importAlias.cypher") {
+  ignore("exportAlias_importAlias.cypher") {
     compileFromFile("exportAlias_importAlias")
   }
-  test("exportAlias_importDefault.cypher") {
+  ignore("exportAlias_importDefault.cypher") {
     compileFromFile("exportAlias_importDefault")
   }
-  test("exportAlias_importName.cypher") {
+  ignore("exportAlias_importName.cypher") {
     compileFromFile("exportAlias_importName")
   }
-  test("exportDeclaration_importAlias.cypher") {
+  ignore("exportDeclaration_importAlias.cypher") {
     compileFromFile("exportDeclaration_importAlias")
   }
-  test("exportDeclaration_importName.cypher") {
+  ignore("exportDeclaration_importName.cypher") {
     compileFromFile("exportDeclaration_importName")
   }
-  test("exportDefaultDeclaration_importAlias.cypher") {
+  ignore("exportDefaultDeclaration_importAlias.cypher") {
     compileFromFile("exportDefaultDeclaration_importAlias")
   }
-  test("exportDefaultDeclaration_importDefault.cypher") {
+  ignore("exportDefaultDeclaration_importDefault.cypher") {
     compileFromFile("exportDefaultDeclaration_importDefault")
   }
-  test("exportDefaultDeclaration_importName.cypher") {
+  ignore("exportDefaultDeclaration_importName.cypher") {
     compileFromFile("exportDefaultDeclaration_importName")
   }
-  test("exportDefaultName_importAlias.cypher") {
+  ignore("exportDefaultName_importAlias.cypher") {
     compileFromFile("exportDefaultName_importAlias")
   }
-  test("exportDefaultName_importDefault.cypher") {
+  ignore("exportDefaultName_importDefault.cypher") {
     compileFromFile("exportDefaultName_importDefault")
   }
-  test("exportDefaultName_importName.cypher") {
+  ignore("exportDefaultName_importName.cypher") {
     compileFromFile("exportDefaultName_importName")
   }
-  test("exportName_importAlias.cypher") {
+  ignore("exportName_importAlias.cypher") {
     compileFromFile("exportName_importAlias")
   }
-  test("exportName_importName.cypher") {
+  ignore("exportName_importName.cypher") {
     compileFromFile("exportName_importName")
   }
   test("ExpressionStatement.cypher") {
@@ -151,10 +151,10 @@ class JsaTest extends CompilerTest {
   test("RegExp.cypher") {
     compileFromFile("RegExp")
   }
-  test("removecfg.cypher") {
+  ignore("removecfg.cypher") {
     compileFromFile("removecfg")
   }
-  test("removefile.cypher") {
+  ignore("removefile.cypher") {
     compileFromFile("removefile")
   }
   ignore("setcommithash.cypher") {
