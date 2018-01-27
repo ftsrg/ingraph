@@ -287,6 +287,14 @@ class RandomCompilationTest extends CompilerTest {
       """.stripMargin
     )
   }
+
+  test("Random: DELETE friends of Alice") {
+    compile(
+      """MATCH (a:Person {name: 'Alice'})-[:KNOWS]->(b:Person)
+        |DETACH DELETE b
+      """.stripMargin
+    )
+  }
 }
 
 /** Random compiler tests that must stop after QPlan compilation.

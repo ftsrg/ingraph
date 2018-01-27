@@ -155,8 +155,7 @@ object CudBuilder {
       case v: oc.VariableRef => Some(AttributeBuilder.buildAttribute(v))
       case _ => None
     }
-//    qplan.Delete(attributes, element.isDetach, child)
-    throw new CompilerException("")
+    qplan.UnresolvedDelete(attributes, element.isDetach, child)
   }
 
   /**
