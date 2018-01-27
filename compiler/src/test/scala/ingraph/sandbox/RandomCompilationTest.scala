@@ -279,6 +279,14 @@ class RandomCompilationTest extends CompilerTest {
       """.stripMargin
     )
   }
+
+  test("Random: count(*)") {
+    compile(
+      """MATCH (a:Person {name: 'Alice'})-[:KNOWS]->(b:Person)
+        |RETURN a, count(*)
+      """.stripMargin
+    )
+  }
 }
 
 /** Random compiler tests that must stop after QPlan compilation.

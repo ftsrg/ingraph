@@ -262,7 +262,7 @@ object QPlanResolver {
     // Unary
 //    case qplan.Projection(projectList, child) => qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
     case qplan.UnresolvedProjection(projectList, child) => {
-      val resolvedProjectList = projectList.map(_.transform(expressionResolver).asInstanceOf[expr.ReturnItem])
+      val resolvedProjectList = projectList.map( pi => expr.ReturnItem(pi.child.transform(expressionResolver), pi.alias, pi.resolvedName) )
       projectionResolveHelper(resolvedProjectList, child)
     }
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
