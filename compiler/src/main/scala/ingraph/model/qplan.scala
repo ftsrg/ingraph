@@ -4,6 +4,7 @@ import ingraph.model.expr._
 import ingraph.model.expr.types.TProjectList
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Expression, SortOrder}
+import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 /**
@@ -144,6 +145,7 @@ abstract class CudOperator(child: QNode) extends UnaryQNode
 
 case class Create(attributes: Seq[ResolvableName], child: QNode) extends CudOperator(child)
 
+case class UnresolvedDelete(attributes: Seq[UnresolvedAttribute], detach: Boolean, child: QNode) extends CudOperator(child)
 case class Delete(attributes: Seq[ResolvableName], detach: Boolean, child: QNode) extends CudOperator(child)
 
 case class Merge(attributes: Seq[ResolvableName], child: QNode) extends CudOperator(child)

@@ -152,7 +152,7 @@ object QPlanResolver {
             }), child)
             case qplan.Top(skipExpr, limitExpr, _) => qplan.Top(skipExpr, limitExpr, child)
             case qplan.Create(attributes, _) => qplan.Create(attributes, child)
-            case qplan.Delete(attributes, detach, _) => qplan.Delete(attributes, detach, child)
+            case qplan.UnresolvedDelete(attributes, detach, _) => qplan.UnresolvedDelete(attributes, detach, child)
             case qplan.Merge(attributes, _) => qplan.Merge(attributes, child)
             case qplan.SetNode(vertexLabelUpdates, _) => qplan.SetNode(vertexLabelUpdates, child)
             case qplan.Remove(vertexLabelUpdates, _) => qplan.Remove(vertexLabelUpdates, child)
@@ -262,7 +262,7 @@ object QPlanResolver {
     // Unary
 //    case qplan.Projection(projectList, child) => qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
     case qplan.UnresolvedProjection(projectList, child) => {
-      val resolvedProjectList = projectList.map(_.transform(expressionResolver).asInstanceOf[expr.ReturnItem])
+      val resolvedProjectList = projectList.map( pi => expr.ReturnItem(pi.child.transform(expressionResolver), pi.alias, pi.resolvedName) )
       projectionResolveHelper(resolvedProjectList, child)
     }
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
@@ -272,7 +272,7 @@ object QPlanResolver {
       , child)
     case qplan.Unwind(expr.UnwindAttribute(collection, alias, resolvedName), child) => qplan.Unwind(expr.UnwindAttribute(collection.transform(expressionResolver), alias, resolvedName), child)
     // DML
-    case qplan.Delete(attributes, detach, child) => qplan.Delete(resolveAttributes(attributes, child), detach, child)
+    case qplan.UnresolvedDelete(attributes, detach, child) => qplan.Delete(resolveAttributes(attributes, child), detach, child)
     case qplan.Create(attributes, child) => qplan.Create(filterForAttributesOfChildOutput(attributes, child, invert=true), child)
   }
 
@@ -286,7 +286,7 @@ object QPlanResolver {
     * @param child
     * @return
     */
-  protected def resolveAttributes(attributes: Seq[ResolvableName], child: qplan.QNode): Seq[ResolvableName] = {
+  protected def resolveAttributes(attributes: Seq[cExpr.NamedExpression], child: qplan.QNode): Seq[ResolvableName] = {
     val transformedAttributes = attributes.flatMap( a => child.output.find( co => co.name == a.name ) )
 
     if (attributes.length != transformedAttributes.length) {
