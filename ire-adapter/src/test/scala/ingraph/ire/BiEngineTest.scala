@@ -2,6 +2,13 @@ package ingraph.ire
 
 class BiEngineTest extends EngineTest {
 
+  test("bi-101: Count persons") {
+    val stages = run(
+      """MATCH (p:Person)-[:IS_LOCATED_IN]->(c:country)
+        |RETURN p, count(c) AS cc
+      """.stripMargin)
+  }
+
   test("bi-01: Posting summary") {
     val stages = run(
       """// Q1. Posting summary
