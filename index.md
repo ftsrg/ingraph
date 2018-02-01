@@ -32,7 +32,7 @@ ingraph is suited for the following technical challenges:
 
 ingraph is not efficient/expressive enough for the following technical challenges:
 
-* Queries that are evaluated only evaluated once or infrequently (i.e. batch processing, daily analysis) [our main goal for the summer of 2017 is to resolve this issue, so stay tuned]
+* Queries that are evaluated only evaluated once or infrequently (i.e. batch processing, daily analysis)
 * Graph analytics involving PageRank, community detection, etc.
 
 Currently, the ingraph project is not mature enough for production use. Instead, it should be used in prototypes and performance experiments.
