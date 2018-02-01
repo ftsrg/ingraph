@@ -54,6 +54,7 @@ Incremental openCypher queries can also be beneficial for:
 # Related projects
 
 * [Grapflow](http://graphflow.io/) also aims to provide "continuous subgraph queries", based their extension of the openCypher query language, openCypher++.
+* [Strider](https://github.com/renxiangnan/strider) supports incremental queries on distributed RDF data.
 
 # Publications
 
