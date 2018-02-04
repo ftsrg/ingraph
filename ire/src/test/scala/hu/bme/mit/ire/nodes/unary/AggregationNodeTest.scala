@@ -30,7 +30,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     "count with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3, 0),
-        () => Vector(new StatefulCount()), functionMask(0, 1, 2)))) // sex and the city
+        () => Vector(new StatefulCount()), Vector(0, 1, 2)))) // sex and the city
       counter ! ChangeSet(positive = tupleBag(odin))
       expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", 1))))
       counter ! ChangeSet(positive = tupleBag(thor))
@@ -54,7 +54,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     "collect with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3, 0),
-        () => Vector(new StatefulCollect(Vector(2))), functionMask(0, 1, 2)))) // (sex, city): (weapon)
+        () => Vector(new StatefulCollect(Vector(2))), Vector(0, 1, 2)))) // (sex, city): (weapon)
       counter ! ChangeSet(positive = tupleBag(odin))
       expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", cypherList(Vector("Gungnir"))))))
       counter ! ChangeSet(positive = tupleBag(thor))
@@ -99,7 +99,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     "sum with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
-        () => Vector(new StatefulSum(4)), functionMask(0, 1)))) // sex, sum for height
+        () => Vector(new StatefulSum(4)), Vector(0, 1)))) // sex, sum for height
       counter ! ChangeSet(positive = tupleBag(odin))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(1))
       counter ! ChangeSet(positive = tupleBag(thor))
@@ -113,7 +113,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     "average with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
-        () => Vector(new StatefulAverage(4)), functionMask(0, 1)))) // sex, sum for height
+        () => Vector(new StatefulAverage(4)), Vector(0, 1)))) // sex, sum for height
       counter ! ChangeSet(positive = tupleBag(odin))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(1))
       counter ! ChangeSet(positive = tupleBag(thor))
@@ -135,7 +135,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
 
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val stddev = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
-        () => Vector(new StatefulStandardDeviation(4)), functionMask(0, 1)))) // sex, sum for height
+        () => Vector(new StatefulStandardDeviation(4)), Vector(0, 1)))) // sex, sum for height
       stddev ! ChangeSet(positive = tupleBag(t1))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(0))
       stddev ! ChangeSet(positive = tupleBag(t2))
@@ -165,7 +165,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
 
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val stddev = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
-        () => Vector(new StatefulStandardDeviationSample(4)), functionMask(0, 1)))) // sex, sum for height
+        () => Vector(new StatefulStandardDeviationSample(4)), Vector(0, 1)))) // sex, sum for height
       stddev ! ChangeSet(positive = tupleBag(t1))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(0))
       stddev ! ChangeSet(positive = tupleBag(t2))
