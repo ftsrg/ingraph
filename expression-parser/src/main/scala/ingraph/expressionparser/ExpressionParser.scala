@@ -1,16 +1,18 @@
 package ingraph.parse
 
 import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.nodes.unary.aggregation.{StatefulAggregate, StatefulCollect}
 import hu.bme.mit.ire.util.GenericMath
 import ingraph.expressionparser.FunctionLookup
-import ingraph.model.expr.{FunctionInvocation, TupleIndexLiteralAttribute}
+import ingraph.model.expr.{FunctionInvocation, Parameter, TupleIndexLiteralAttribute}
+import ingraph.model.misc.FunctionCategory
 import org.apache.spark.sql.catalyst.expressions.{Add, And, BinaryArithmetic, BinaryComparison, BinaryOperator, CaseWhen, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Remainder, Subtract}
 import org.apache.spark.unsafe.types.UTF8String
 
 
 object ExpressionParser {
   def apply[T](exp: Expression): Tuple => T = {
-    val e = parse(exp)
+    val e: Tuple => Any = parse(exp)
     t => e(t).asInstanceOf[T]
   }
 
@@ -64,10 +66,18 @@ object ExpressionParser {
     case invoc: FunctionInvocation =>
       val children: Seq[Tuple => Any] = invoc.children.map(parse)
       children.length match {
-        case 0 => tuple => FunctionLookup.fun0(invoc.functor)()
-        case 1 => tuple => FunctionLookup.fun1(invoc.functor)(children.head(tuple))
-        case 2 => tuple => FunctionLookup.fun2(invoc.functor)(children(0)(tuple), children(1)(tuple))
-        case 3 => tuple => FunctionLookup.fun3(invoc.functor)(children(0)(tuple), children(1)(tuple), children(2)(tuple))
+        case 0 =>
+          val fun = FunctionLookup.fun0(invoc.functor)
+          tuple => fun()
+        case 1 =>
+          val fun = FunctionLookup.fun1(invoc.functor)
+          tuple => fun(children.head(tuple))
+        case 2 =>
+          val fun = FunctionLookup.fun2(invoc.functor)
+          tuple => (children(0)(tuple), children(1)(tuple))
+        case 3 =>
+          val fun = FunctionLookup.fun3(invoc.functor)
+          tuple => fun (children(0)(tuple), children(1)(tuple), children(2)(tuple))
       }
     case exp: CaseWhen =>
       println(exp)
