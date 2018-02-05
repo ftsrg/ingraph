@@ -3,7 +3,7 @@ package ingraph.compiler.cypher2qplan
 import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.compiler.cypher2qplan.util.TransformUtil
-import ingraph.compiler.exceptions.{CompilerException, NameResolutionException}
+import ingraph.compiler.exceptions.{CompilerException, IllegalAggregationException, NameResolutionException}
 import ingraph.model.expr.{ProjectionDescriptor, ResolvableName, ReturnItem}
 import ingraph.model.qplan.{QNode, UnaryQNode}
 import ingraph.model.{expr, misc, qplan}
@@ -335,17 +335,24 @@ object QPlanResolver {
     // those having no aggregation function in top-level position will form the aggregation criteria if at least one aggregation is seen
     val aggregationCriteriaCandidate: ListBuffer[Expression] = ListBuffer.empty
 
-    val seenAggregate = projectList.foldLeft[Boolean](false)((b, a) => b || (a.child match {
-      // FIXME: UnresolvedStar is also allowed until it is resolved
-      case UnresolvedStar(_) => false
-      case e: cExpr.Expression => if (isAggregatingFunctionInvocation(e)) {
-        true
-      } else {
-        aggregationCriteriaCandidate += e
-        false
+    val seenAggregate = projectList.foldLeft[Boolean](false)((b, a) => b || ({
+      val projectItem = a.child
+      // validate aggregation semantics: no aggregation function is allowed at non top-level
+      projectItem.children.foreach( c => c.find(isAggregatingFunctionInvocation).fold[Unit](Unit)( e => throw new IllegalAggregationException(e.toString) ) )
+
+      // see if this return item is an aggregation
+      projectItem match {
+        // FIXME: UnresolvedStar is also allowed until it is resolved
+        case UnresolvedStar(_) => false
+        case e: cExpr.Expression => if (isAggregatingFunctionInvocation(e)) {
+          true
+        } else {
+          aggregationCriteriaCandidate += e
+          false
+        }
+        // This should never be reached, as projectList is expr.types.TProjectList
+        case x => throw new CompilerException(s"Unexpected type found in return item position: ${x.getClass}")
       }
-      // This should never be reached, as projectList is expr.types.TProjectList
-      case x => throw new CompilerException(s"Unexpected type found in return item position: ${x.getClass}")
     }))
 
     if (seenAggregate) {

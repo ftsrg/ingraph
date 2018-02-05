@@ -24,7 +24,8 @@ class BiCompilerTest extends CompilerTest {
         |*/
         |MATCH (message:Message)
         |WHERE message.creationDate <= $date
-        |WITH toFloat(count(message)) AS totalMessageCount // this should be a subquery once Cypher supports it
+        |WITH count(message) AS totalMessageCountInt // this should be a subquery once Cypher supports it
+        |WITH toFloat(totalMessageCountInt) AS totalMessageCount
         |MATCH (message:Message)
         |WHERE message.creationDate <= $date
         |  AND message.content IS NOT NULL
@@ -554,7 +555,8 @@ class BiCompilerTest extends CompilerTest {
         |  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(friend1:Person),
         |  (person1)-[:KNOWS]-(friend1)
         |WITH country, person1, count(friend1) AS friend1Count
-        |WITH country, floor(avg(friend1Count)) AS socialNormal
+        |WITH country, avg(friend1Count) AS socialNormalFloat
+        |WITH country, floor(socialNormalFloat) AS socialNormal
         |MATCH
         |  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(person2:Person)
         |MATCH
