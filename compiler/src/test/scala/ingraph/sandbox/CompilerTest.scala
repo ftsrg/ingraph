@@ -26,7 +26,7 @@ case class CompilerTestConfig(querySuitePath: Option[String] = None
   def printAny: Boolean = printQuery || printCypher || printQPlan || printJPlan || printFPlan
 }
 
-class CompilerTest extends FunSuite {
+abstract class CompilerTest extends FunSuite {
   val config = CompilerTestConfig()
   val separatorLength = 77
 
