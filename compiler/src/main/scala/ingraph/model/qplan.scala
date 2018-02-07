@@ -12,6 +12,7 @@ import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
   */
 trait QNode extends LogicalPlan {
   override def output: Seq[ResolvableName]
+  def expressionChildren: Seq[Expression] = Seq()
 }
 abstract class LeafQNode extends GenericLeafNode[QNode] with QNode
 abstract class UnaryQNode extends GenericUnaryNode[QNode] with QNode {
@@ -48,6 +49,7 @@ abstract class PlaceHolder() extends AbstractQStub() {}
 // leaf nodes
 case class GetVertices(v: VertexAttribute) extends LeafQNode {
   override def output = Seq(v)
+  override def expressionChildren = Seq(v)
 }
 
 case class Dual() extends LeafQNode {
@@ -55,7 +57,9 @@ case class Dual() extends LeafQNode {
 }
 
 // unary nodes
-case class AllDifferent(edges: Seq[EdgeAttribute], child: QNode) extends UnaryQNode {}
+case class AllDifferent(edges: Seq[EdgeAttribute], child: QNode) extends UnaryQNode {
+  override def expressionChildren = edges
+}
 
 case class DuplicateElimination(child: QNode) extends UnaryQNode {}
 
@@ -65,6 +69,7 @@ case class Expand(src: VertexAttribute,
                   dir: Direction,
                   child: QNode) extends UnaryQNode with NavigationDescriptor {
   override def output = child.output ++ Seq(edge, trg)
+  override def expressionChildren = Seq(src, trg, edge)
 }
 
 case class Production(child: QNode) extends UnaryQNode {}
@@ -81,6 +86,7 @@ case class Production(child: QNode) extends UnaryQNode {}
   */
 abstract class AbstractProjection(projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
   override def output = projectList
+  override def expressionChildren = projectList
 }
 
 /**
@@ -96,17 +102,25 @@ case class Projection(override val projectList: TProjectList, override val child
   */
 case class Grouping(aggregationCriteria: Seq[Expression], projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
   override def output = projectList
+  override def expressionChildren = projectList ++ aggregationCriteria
 }
 
-case class Selection(condition: Expression, child: QNode) extends UnaryQNode {}
+case class Selection(condition: Expression, child: QNode) extends UnaryQNode {
+  override def expressionChildren = Seq(condition)
+}
 
-case class Sort(order: Seq[SortOrder], child: QNode) extends UnaryQNode {}
+case class Sort(order: Seq[SortOrder], child: QNode) extends UnaryQNode {
+  override def expressionChildren = order
+}
 
-case class Top(skipExpr: Option[Expression] = None, limitExpr: Option[Expression] = None, child: QNode) extends UnaryQNode {}
+case class Top(skipExpr: Option[Expression] = None, limitExpr: Option[Expression] = None, child: QNode) extends UnaryQNode {
+  override def expressionChildren = Seq(skipExpr, limitExpr).flatten
+}
 
 case class Unwind(unwindAttribute: UnwindAttribute, child: QNode) extends UnaryQNode {
   override def output = child.output ++ Seq(unwindAttribute) // child.output.updated(child.output.indexOf(element), element)
   // TODO indexOf might be unable to find the attribute
+  override def expressionChildren = Seq(unwindAttribute)
 }
 
 // binary nodes
@@ -134,7 +148,9 @@ case class LeftOuterJoin(left: QNode, right: QNode) extends EquiJoinLike {}
   *
   * Note: this never filters on its left input!
   */
-case class ThetaLeftOuterJoin(left: QNode, right: QNode, condition: Expression) extends EquiJoinLike {}
+case class ThetaLeftOuterJoin(left: QNode, right: QNode, condition: Expression) extends EquiJoinLike {
+  override def expressionChildren = Seq(condition)
+}
 
 case class AntiJoin(left: QNode, right: QNode) extends EquiJoinLike {
   override def output: Seq[ResolvableName] = left.output
@@ -143,13 +159,25 @@ case class AntiJoin(left: QNode, right: QNode) extends EquiJoinLike {
 // DML operators
 abstract class CudOperator(child: QNode) extends UnaryQNode
 
-case class Create(attributes: Seq[ResolvableName], child: QNode) extends CudOperator(child)
+case class Create(attributes: Seq[ResolvableName], child: QNode) extends CudOperator(child) {
+  override def expressionChildren = attributes
+}
 
-case class UnresolvedDelete(attributes: Seq[UnresolvedAttribute], detach: Boolean, child: QNode) extends CudOperator(child)
-case class Delete(attributes: Seq[ResolvableName], detach: Boolean, child: QNode) extends CudOperator(child)
+case class UnresolvedDelete(attributes: Seq[UnresolvedAttribute], detach: Boolean, child: QNode) extends CudOperator(child) {
+  override def expressionChildren = attributes
+}
+case class Delete(attributes: Seq[ResolvableName], detach: Boolean, child: QNode) extends CudOperator(child) {
+  override def expressionChildren = attributes
+}
 
-case class Merge(attributes: Seq[ResolvableName], child: QNode) extends CudOperator(child)
+case class Merge(attributes: Seq[ResolvableName], child: QNode) extends CudOperator(child) {
+  override def expressionChildren = attributes
+}
 
-case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child)
+case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child) {
+  override def expressionChildren = vertexLabelUpdates.map( vlu => vlu.vertex ).toSeq
+}
 
-case class Remove(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child)
+case class Remove(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child) {
+  override def expressionChildren = vertexLabelUpdates.map( vlu => vlu.vertex ).toSeq
+}
