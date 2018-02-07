@@ -74,10 +74,10 @@ object ExpressionParser {
           tuple => fun(children.head(tuple))
         case 2 =>
           val fun = FunctionLookup.fun2(invoc.functor)
-          tuple => (children(0)(tuple), children(1)(tuple))
+          tuple => fun(children(0)(tuple), children(1)(tuple))
         case 3 =>
           val fun = FunctionLookup.fun3(invoc.functor)
-          tuple => fun (children(0)(tuple), children(1)(tuple), children(2)(tuple))
+          tuple => fun(children(0)(tuple), children(1)(tuple), children(2)(tuple))
       }
     case exp: CaseWhen =>
       println(exp)
