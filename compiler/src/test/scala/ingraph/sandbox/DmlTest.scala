@@ -29,19 +29,19 @@ class DmlTest extends FunSuite {
     println(plan)
   }
 
-  ignore("should compile simple DELETE for a vertex") {
+  test("should compile simple DELETE for a vertex") {
     val cypher = CypherParser.parseString("MATCH (n:Person) DELETE n")
     val plan = CypherToQPlan.build(cypher)
     println(plan)
   }
 
-  ignore("should compile simple DELETE for an edge") {
+  test("should compile simple DELETE for an edge") {
     val cypher = CypherParser.parseString("MATCH (p1:Person)-[r:KNOWS]-(p2:Person) DELETE r")
     val plan = CypherToQPlan.build(cypher)
     println(plan)
   }
 
-  ignore("should compile simple DELETE for an entire pattern") {
+  test("should compile simple DELETE for an entire pattern") {
     val cypher = CypherParser.parseString("MATCH (p1:Person)-[r:KNOWS]-(p2:Person) DELETE p1, r, p2")
     val plan = CypherToQPlan.build(cypher)
     println(plan)

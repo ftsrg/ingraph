@@ -41,4 +41,10 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
     val expected = (7 to 9).reverse.map(n => Vector(n.toLong))
     assert(results == expected)
   }
+
+  test("basic aggregations") {
+    val query = "MATCH (s: Switch) RETURN count(s)"
+    val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
+    assert(results == List(Vector(40)))
+  }
 }
