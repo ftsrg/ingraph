@@ -2,13 +2,16 @@ package ingraph.sandbox
 
 import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.CypherParser
-import ingraph.compiler.exceptions.CompilerConfigurationException
+import ingraph.compiler.exceptions.{CompilerConfigurationException, IncompleteCompilationException, IncompleteResolutionException}
 import ingraph.compiler.qplan2jplan.{FPlanToTPlan, JPlanToFPlan, QPlanToJPlan}
 import ingraph.emf.util.PrettyPrinter
+import ingraph.model.expr.EStub
 import ingraph.model.fplan.{FNode, LeafFNode}
 import ingraph.model.jplan.JNode
-import ingraph.model.qplan.QNode
+import ingraph.model.qplan.{QNode, QStub, UnresolvedDelete, UnresolvedProjection}
 import ingraph.model.tplan.TNode
+import ingraph.model.treenodes.{ExpressionTreeNode, IngraphTreeNode, QPlanTreeNode}
+import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction}
 import org.scalatest.FunSuite
 
 case class CompilerTestConfig(querySuitePath: Option[String] = None
@@ -79,6 +82,9 @@ abstract class CompilerTest extends FunSuite {
     )
     if (config.printQPlan ) formatStuff(qplan)
 
+    assertNoStub(qplan)
+    if (!config.skipQPlanResolve) assertResolved(qplan)
+
     val jplan = if (config.compileQPlanOnly) null else QPlanToJPlan.transform(qplan)
     if (config.printJPlan ) formatStuff(jplan)
 
@@ -117,6 +123,26 @@ abstract class CompilerTest extends FunSuite {
     out("-" * (_heading.length + 1))
     out(stuff.toString)
     out("-" * separatorLength)
+  }
+
+  def assertNoStub(q: QNode): Unit = {
+    val itn = IngraphTreeNode(q)
+    IngraphTreeNode.find( (n) => n match {
+      case QPlanTreeNode(QStub(_)) => true
+      case ExpressionTreeNode(EStub(_)) => true
+      case _ => false
+    }, itn).fold[Unit](Unit)( e => throw new IncompleteCompilationException(e.toString))
+  }
+
+  def assertResolved(q: QNode): Unit = {
+    val itn = IngraphTreeNode(q)
+    IngraphTreeNode.find( (n) => n match {
+      case QPlanTreeNode(UnresolvedDelete(_, _, _)) => true
+      case QPlanTreeNode(UnresolvedProjection(_, _)) => true
+      case ExpressionTreeNode(UnresolvedAttribute(_)) => true
+      case ExpressionTreeNode(UnresolvedFunction(_, _, _)) => true
+      case _ => false
+    }, itn).fold[Unit](Unit)( e => throw new IncompleteResolutionException(e.toString))
   }
 }
 
