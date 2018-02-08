@@ -9,10 +9,6 @@ import ingraph.model.tplan.{GetEdges, GetVertices}
 class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertices]],
                                edgeConverters: Map[String, Set[GetEdges]]) extends IdParser with EntityToTupleMapper {
 
-  private val vertexLookup: Map[String, (Set[String], Set[GetVertices])] = for ((labels, operators) <- vertexConverters;
-                                                                                        label <- labels)
-    yield label -> (labels, operators)
-
   override def idParser(obj: Any): Any = obj
 
   var transaction: Transaction = _
@@ -47,29 +43,23 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
   }
 
   def addVertex(vertex: IngraphVertex): Unit = {
-    vertex.labels.find(vertexLookup.contains).foreach(
-      f => {
-        val (labels, operators) = vertexLookup(f)
-        if (labels.subsetOf(vertex.labels)) {
-          for (operator <- operators) {
-            val tuple = elementToNode(vertex, operator.fnode.internalSchema.map(_.name))
-            transaction.add(operator.fnode.jnode.v.name, tuple)
-          }
+    vertexConverters.filter(p => p._1.subsetOf(vertex.labels)).foreach {
+      f =>
+        for (operator <- f._2) {
+          val tuple = elementToNode(vertex, operator.fnode.internalSchema.map(_.name))
+          transaction.add(operator.fnode.jnode.v.name, tuple)
         }
-      })
+    }
   }
 
   def removeVertex(vertex: IngraphVertex): Unit = {
-    vertex.labels.find(vertexLookup.contains).foreach(
-      f => {
-        val (labels, operators) = vertexLookup(f)
-        if (labels.subsetOf(vertex.labels)) {
-          for (operator <- operators) {
-            val tuple = elementToNode(vertex, operator.fnode.internalSchema.map(_.name))
-            transaction.remove(operator.fnode.jnode.v.name, tuple)
-          }
+    vertexConverters.filter(p => p._1.subsetOf(vertex.labels)).foreach {
+      f =>
+        for (operator <- f._2) {
+          val tuple = elementToNode(vertex, operator.fnode.internalSchema.map(_.name))
+          transaction.remove(operator.fnode.jnode.v.name, tuple)
         }
-      })
+    }
   }
 
   private def edgeToTupleType(edge: IngraphEdge, operator: GetEdges): Tuple = {
