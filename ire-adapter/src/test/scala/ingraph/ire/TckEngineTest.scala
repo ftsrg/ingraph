@@ -44,7 +44,7 @@ class TckEngineTest extends FunSuite {
 //  }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L52
-  ignore("TCK test: Use multiple MATCH clauses to do a Cartesian product") {
+  test("Use multiple MATCH clauses to do a Cartesian product") {
     val results = run(
       """CREATE ({value: 1}),
         |  ({value: 2}),
@@ -53,12 +53,16 @@ class TckEngineTest extends FunSuite {
       """MATCH (n), (m)
         |RETURN n.value AS n, m.value AS m
       """.stripMargin
+//      """MATCH (n)
+//        |RETURN n.value AS x
+//      """.stripMargin
     )
     println(results)
+    assert(results.size == 9)
   }
 
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L97
-//  test("TCK test: Filter out based on node prop name") {
+//  test("Filter out based on node prop name") {
 //    val stages = compile(
 //      """MATCH ()-[rel:X]-(a)
 //        |WHERE a.name = 'Andres'
@@ -69,7 +73,7 @@ class TckEngineTest extends FunSuite {
 //  }
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131
-//  test("TCK test: Filter based on rel prop name") {
+//  test("Filter based on rel prop name") {
 //    val stages = compile(
 //      """MATCH (node)-[r:KNOWS]->(a)
 //        |WHERE r.name = 'monkey'
@@ -80,7 +84,7 @@ class TckEngineTest extends FunSuite {
 //  }
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L167
-//  test("TCK test: Get neighbours") {
+//  test("Get neighbours") {
 //    val stages = compile(
 //      """MATCH (n1)-[rel:KNOWS]->(n2)
 //        |RETURN n1, n2
@@ -90,7 +94,7 @@ class TckEngineTest extends FunSuite {
 //  }
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L183
-//  test("TCK test: Get two related nodes") {
+//  test("Get two related nodes") {
 //    val stages = compile(
 //      """MATCH ()-[rel:KNOWS]->(x)
 //        |RETURN x
@@ -100,7 +104,7 @@ class TckEngineTest extends FunSuite {
 //  }
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L202
-//  test("TCK test: Get related to related to") {
+//  test("Get related to related to") {
 //    val stages = compile(
 //      """MATCH (n)-->(a)-->(b)
 //        |RETURN b
@@ -110,7 +114,7 @@ class TckEngineTest extends FunSuite {
 //  }
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L218
-//  test("TCK test: Handle comparison between node properties") {
+//  test("Handle comparison between node properties") {
 //    val stages = compile(
 //      """MATCH (n)-[rel]->(x)
 //        |WHERE n.animal = x.animal
@@ -121,7 +125,7 @@ class TckEngineTest extends FunSuite {
 //  }
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
-//  test("TCK test: Handle OR in the WHERE clause") {
+//  test("Handle OR in the WHERE clause") {
 //    val stages = compile(
 //      """MATCH (n)
 //        |WHERE n.p1 = 12 OR n.p2 = 13
@@ -132,7 +136,7 @@ class TckEngineTest extends FunSuite {
 //  }
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L456
-//  test("TCK test: Return relationships by collecting them as a list - undirected") {
+//  test("Return relationships by collecting them as a list - undirected") {
 //    val stages = compile(
 //      """MATCH (a:Start)-[r:REL*2..2]-(b)
 //        |RETURN r
