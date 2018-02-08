@@ -3,11 +3,12 @@ package ingraph.sandbox
 import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.compiler.exceptions.CompilerConfigurationException
-import ingraph.compiler.qplan2jplan.{QPlanToJPlan, JPlanToFPlan}
+import ingraph.compiler.qplan2jplan.{FPlanToTPlan, JPlanToFPlan, QPlanToJPlan}
 import ingraph.emf.util.PrettyPrinter
 import ingraph.model.fplan.{FNode, LeafFNode}
 import ingraph.model.jplan.JNode
 import ingraph.model.qplan.QNode
+import ingraph.model.tplan.TNode
 import org.scalatest.FunSuite
 
 case class CompilerTestConfig(querySuitePath: Option[String] = None
@@ -19,11 +20,12 @@ case class CompilerTestConfig(querySuitePath: Option[String] = None
                              , printQPlan: Boolean = true
                              , printJPlan: Boolean = true
                              , printFPlan: Boolean = true
+                             , printTPlan: Boolean = true
                              ) {
   /**
     * Did we request anything to be printed?
     */
-  def printAny: Boolean = printQuery || printCypher || printQPlan || printJPlan || printFPlan
+  def printAny: Boolean = printQuery || printCypher || printQPlan || printJPlan || printFPlan || printTPlan
 }
 
 abstract class CompilerTest extends FunSuite {
@@ -39,7 +41,8 @@ abstract class CompilerTest extends FunSuite {
 
   case class CompilationStages(qplan: QNode,
                                jplan: JNode,
-                               fplan: FNode)
+                               fplan: FNode,
+                               tplan: TNode)
 
   /**
     * Compile a query read from a cypher file.
@@ -47,7 +50,7 @@ abstract class CompilerTest extends FunSuite {
     * Finds the file using constructQueryFilePath, so override it if default implementation is not enough.
     *
     * @param queryFileBaseName The basename of the file, i.e. w/o extension, that holds the query to be compiled.
-    * @return the {Q,J,F}Plan stages of the compilation
+    * @return the {Q,J,F,T}Plan stages of the compilation
     */
   def compileFromFile(queryFileBaseName: String): CompilationStages = {
     val source = scala.io.Source.fromFile(constructQueryFilePath(queryFileBaseName))
@@ -82,7 +85,10 @@ abstract class CompilerTest extends FunSuite {
     val fplan = if (config.compileQPlanOnly) null else JPlanToFPlan.transform(jplan)
     if (config.printFPlan ) formatStuff(fplan)
 
-    return CompilationStages(qplan, jplan, fplan)
+    val tplan = if (config.compileQPlanOnly) null else FPlanToTPlan.transform(fplan)
+    if (config.printFPlan ) formatStuff(tplan)
+
+    return CompilationStages(qplan, jplan, fplan, tplan)
   }
 
   def getLeafNodes(plan: FNode): Seq[FNode] = {
@@ -91,9 +97,9 @@ abstract class CompilerTest extends FunSuite {
   }
 
   /**
-    * Formats a {Q,J,F}Plan, or virtually anything and send to the out channel
-    * @param stuff {Q,J,F}Plan instance, or any other that has toString. In sace null is passed, nothing will be sent to the out channel.
-    * @param heading The heading line for the formatted plan. In case it was a {Q,J,F}Plan, this heading is inferred if omitted, otherwise this must be supplied.
+    * Formats a {Q,J,F,T}Plan, or virtually anything and send to the out channel
+    * @param stuff {Q,J,F,T}Plan instance, or any other that has toString. In sace null is passed, nothing will be sent to the out channel.
+    * @param heading The heading line for the formatted plan. In case it was a {Q,J,F,T}Plan, this heading is inferred if omitted, otherwise this must be supplied.
     * @param out The out channel method, defaults to println
     */
   def formatStuff(stuff: Any, heading: Option[String] = None, out: String => Unit = println): Unit = {
@@ -102,6 +108,7 @@ abstract class CompilerTest extends FunSuite {
         case _: QNode => "QPlan"
         case _: JNode => "JPlan"
         case _: FNode => "FPlan"
+        case _: TNode => "TPlan"
         case null => return
       }
     )
