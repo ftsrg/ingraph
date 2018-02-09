@@ -15,7 +15,7 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
 
   def elementToNode(element: IngraphVertex, required: Seq[String]): Tuple = {
     Vector(idParser(element.id)) ++
-      required.tail.map(key => element.properties(key))
+      required.tail.map(key => element.properties.getOrElse(key, null))
   }
 
   def addEdge(edge: IngraphEdge): Unit = {
@@ -66,9 +66,9 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
     Vector(idParser(edge.sourceVertex.id), idParser(edge.id), idParser(edge.targetVertex.id)) ++
       operator.fnode.internalSchema.drop(3)
         .map {
-          case a if a.nodeName == operator.fnode.jnode.src.name => edge.sourceVertex.properties(a.name)
-          case a if a.nodeName == operator.fnode.jnode.trg.name => edge.targetVertex.properties(a.name)
-          case a if a.nodeName == operator.fnode.jnode.edge.name => edge.properties(a.name)
+          case a if a.nodeName == operator.fnode.jnode.src.name => edge.sourceVertex.properties.getOrElse(a.name, null)
+          case a if a.nodeName == operator.fnode.jnode.trg.name => edge.targetVertex.properties.getOrElse(a.name, null)
+          case a if a.nodeName == operator.fnode.jnode.edge.name => edge.properties.getOrElse(a.name, null)
         }
   }
 }
