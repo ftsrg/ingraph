@@ -1,7 +1,7 @@
 package ingraph.driver.tests;
 
 import ingraph.driver.CypherDriverFactory;
-import org.junit.Test;
+import org.junit.Ignore;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
@@ -10,8 +10,8 @@ import org.neo4j.driver.v1.Transaction;
 
 public class IngraphDriverTest {
 
-	@Test
-	public void test() throws Exception {
+	@Ignore
+	public void test() {
 		try (Driver driver = CypherDriverFactory.createIngraphDriver()) {
 			final Session session = driver.session();
 			final Transaction transaction = session.beginTransaction();

@@ -11,9 +11,9 @@ ext {
   guavaVersion = '22.0'
   junitVersion = '4.12'
   log4jVersion = '1.2.17'
-  neo4jDriverVersion = '1.4.4'
-  neo4jVersion = '3.2.7'
-  neo4jApocVersion = '3.2.3.5'
+  neo4jDriverVersion = '1.5.1'
+  neo4jVersion = '3.3.2'
+  neo4jApocVersion = '3.3.0.1'
   pegdownVersion = '1.6.0'
   scalaShortVersion = '2.11'
   scalaTestVersion = '3.0.1'
@@ -43,7 +43,6 @@ subprojects {
     jcenter()
     maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
     maven { url 'https://repo.eclipse.org/content/groups/viatra2' }
-    maven { url 'https://clojars.org/repo' }
     maven { url 'https://szdavid92.github.io/ingraph-deps' }
   }
 
@@ -69,5 +68,3 @@ subprojects {
     }
   }
 }
-
-// TODO: https://plugins.gradle.org/plugin/com.github.maiflai.scalatest

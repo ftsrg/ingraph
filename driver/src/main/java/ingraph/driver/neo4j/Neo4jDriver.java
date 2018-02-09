@@ -6,13 +6,46 @@ import org.neo4j.driver.v1.AuthToken;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.factory.GraphDatabaseSettings;
+import org.neo4j.test.TestGraphDatabaseFactory;
+
+import java.util.concurrent.CompletionStage;
 
 public class Neo4jDriver extends CypherDriver {
 
 	final Driver driver;
 
 	public Neo4jDriver(final String uri, final AuthToken authToken) {
-		driver = GraphDatabase.driver(uri, authToken);
+		GraphDatabaseSettings.BoltConnector bolt = GraphDatabaseSettings.boltConnector("0");
+
+		String host = "localhost";
+		int port = 7687; // this is the default Neo4j port - we start one higher than this
+		GraphDatabaseService graphDb = null;
+		String address = null;
+		while (port < 65000) {
+			port++;
+			address = String.format("%s:%d", host, port);
+			System.out.println(address);
+			try {
+				graphDb = new TestGraphDatabaseFactory()
+					.newImpermanentDatabaseBuilder()
+					.setConfig(bolt.type, "BOLT")
+					.setConfig(bolt.enabled, "true")
+					.setConfig(bolt.address, address)
+					.newGraphDatabase();
+			} catch (RuntimeException e) {
+				// this is usually a org.neo4j.kernel.lifecycle.LifecycleException
+				// caused by org.neo4j.helpers.PortBindException
+				e.printStackTrace();
+				System.out.println("Cannot connect on port " + port + ", retrying on a higher port.");
+				continue;
+			}
+			break;
+		}
+		System.out.println(graphDb);
+
+		driver = GraphDatabase.driver("bolt://" + address);
 	}
 
 	@Override
@@ -53,6 +86,11 @@ public class Neo4jDriver extends CypherDriver {
 	@Override
 	public void close() {
 		driver.close();
+	}
+
+	@Override
+	public CompletionStage<Void> closeAsync() {
+		throw new UnsupportedOperationException("unimplemented");
 	}
 
 }
