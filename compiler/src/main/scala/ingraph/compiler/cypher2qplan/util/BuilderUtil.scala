@@ -4,6 +4,7 @@ import ingraph.compiler.cypher2qplan.builders.{ExpressionBuilder, LiteralBuilder
 import ingraph.compiler.exceptions.CompilerException
 import ingraph.model.expr
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
+import org.eclipse.emf.common.util.EList
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -11,7 +12,15 @@ import scala.collection.JavaConverters._
 object BuilderUtil {
   def parseToVertexLabelSet(ll: oc.NodeLabels): expr.VertexLabelSet = {
     if (ll != null && ll.getNodeLabels != null && !ll.getNodeLabels.isEmpty) {
-      expr.VertexLabelSet(ll.getNodeLabels.asScala.map( l => l.getLabelName ).toSet, expr.NonEmpty)
+      parseToVertexLabelSet(ll.getNodeLabels)
+    } else {
+      expr.VertexLabelSet()
+    }
+  }
+
+  def parseToVertexLabelSet(el: EList[oc.NodeLabel]): expr.VertexLabelSet = {
+    if (el != null && !el.isEmpty) {
+      expr.VertexLabelSet(el.asScala.map( l => l.getLabelName ).toSet, expr.NonEmpty)
     } else {
       expr.VertexLabelSet()
     }

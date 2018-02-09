@@ -2,6 +2,7 @@ package ingraph.compiler.cypher2qplan.builders
 
 import java.util
 
+import ingraph.compiler.cypher2qplan.util.BuilderUtil
 import ingraph.compiler.exceptions.{CompilerException, PatternNotAllowedException}
 import ingraph.model.misc.Function
 import ingraph.model.{expr, qplan}
@@ -27,7 +28,7 @@ object ExpressionBuilder {
       case e: oc.ParenthesizedExpression => buildExpression(e.getExpression, joins)
       case e: oc.RelationshipsPattern => buildExpressionPattern(e, joins)
       case e: oc.ExpressionPropertyLookup => AttributeBuilder.buildAttribute(e)
-      case e: oc.ExpressionNodeLabels => expr.EStub("Node label constraints")
+      case e: oc.ExpressionNodeLabels => UnresolvedFunction(Function.NODE_HAS_LABELS.getPrettyName, Seq[cExpr.Expression](buildExpressionNoJoinAllowed(e.getLeft), BuilderUtil.parseToVertexLabelSet(e.getNodeLabels)), false)
       case e: oc.ExpressionPlusMinus => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionUnaryPlusMinus => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionMulDiv => buildExpressionArithmetic(e, joins)
