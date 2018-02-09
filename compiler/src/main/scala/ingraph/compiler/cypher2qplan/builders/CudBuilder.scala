@@ -162,7 +162,7 @@ object CudBuilder {
     * Build and return a merge operator from the MERGE clause and attach child to its input.
     */
   def buildMergeOperator(element: oc.Merge, child: qplan.QNode): QNode = {
-    qplan.Merge(null, child)
+    qplan.Merge(Seq(), child)
   }
 
   /**
