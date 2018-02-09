@@ -94,7 +94,7 @@ object QPlanResolver {
             case qplan.Union(all, _, _) => qplan.Union(all, leftChild, rightChild)
             case qplan.Join(_, _) => qplan.Join(leftChild, rightChild)
             case qplan.LeftOuterJoin(_, _) => qplan.LeftOuterJoin(leftChild, rightChild)
-            case qplan.ThetaLeftOuterJoin(_, _, condition) => qplan.ThetaLeftOuterJoin(leftChild, rightChild, condition)
+            case qplan.ThetaLeftOuterJoin(_, _, condition) => qplan.ThetaLeftOuterJoin(leftChild, rightChild, r(condition))
             // case AntiJoin skipped because it is introduced later in the beautification step
           }
           newOp
@@ -102,7 +102,7 @@ object QPlanResolver {
         case u: qplan.UnaryQNode => {
           val child = operandStack.pop
           val newOp: qplan.UnaryQNode = u match {
-            case qplan.AllDifferent(e, _) => qplan.AllDifferent(e, child)
+            case qplan.AllDifferent(e, _) => qplan.AllDifferent(e.map(r(_)), child)
             case qplan.DuplicateElimination(_) => qplan.DuplicateElimination(child)
             case qplan.Expand(src, trg, edge, dir, _) => qplan.Expand(r(src), r(trg), r(edge), dir, child)
             // resolve names in listexpression, then resolve the unwindattribute itself
@@ -266,6 +266,7 @@ object QPlanResolver {
       projectionResolveHelper(resolvedProjectList, child)
     }
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
+    case qplan.ThetaLeftOuterJoin(left, right, condition) => qplan.ThetaLeftOuterJoin(left, right, condition.transform(expressionResolver))
     case qplan.Top(skipExpr, limitExpr, child) => qplan.Top(
       TransformUtil.transformOption(skipExpr, expressionResolver)
       , TransformUtil.transformOption(limitExpr, expressionResolver)
