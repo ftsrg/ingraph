@@ -8,7 +8,7 @@ import ingraph.model.expr.{ProjectionDescriptor, ResolvableName, ReturnItem}
 import ingraph.model.qplan.{QNode, UnaryQNode}
 import ingraph.model.{expr, misc, qplan}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute, UnresolvedFunction, UnresolvedStar}
-import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 
@@ -266,6 +266,12 @@ object QPlanResolver {
       projectionResolveHelper(resolvedProjectList, child)
     }
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
+    case qplan.Sort(order, child) => qplan.Sort(
+      order.map(_.transform(expressionResolver) match {
+        case so: SortOrder => so
+        case x => throw new CompilerException(s"Unexpected type after resolution: ${x.getClass}")
+      })
+      , child)
     case qplan.ThetaLeftOuterJoin(left, right, condition) => qplan.ThetaLeftOuterJoin(left, right, condition.transform(expressionResolver))
     case qplan.Top(skipExpr, limitExpr, child) => qplan.Top(
       TransformUtil.transformOption(skipExpr, expressionResolver)
