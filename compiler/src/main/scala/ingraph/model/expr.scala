@@ -139,7 +139,9 @@ case class ListExpression(list: Seq[Expression]) extends ExpressionBase {
 // formerly GraphElementVariable
 abstract class GraphAttribute(override val name: String) extends AttributeBase
 
-abstract class LabelSet(status: LabelSetStatus = Empty)
+abstract class LabelSet(status: LabelSetStatus = Empty) extends ExpressionBase {
+  override def children: Seq[Expression] = Seq()
+}
 
 trait NavigationDescriptor {
   def src: VertexAttribute
