@@ -56,6 +56,7 @@ class TckCompilerTest extends CompilerTest {
       """.stripMargin
     )
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 4)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131

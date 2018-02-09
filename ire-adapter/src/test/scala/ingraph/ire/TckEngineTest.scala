@@ -18,7 +18,7 @@ class TckEngineTest extends FunSuite {
   }
 
 //  test("Hello World") {
-//    val stages = compile(
+//    val results = run(
 //      """MATCH (n)
 //        |RETURN n
 //      """.stripMargin
@@ -26,7 +26,7 @@ class TckEngineTest extends FunSuite {
 //  }
 //
 //  test("Filtering for vertices in MATCH") {
-//    val stages = compile(
+//    val results = run(
 //      """MATCH (n {name: 'John'})
 //        |RETURN n
 //      """.stripMargin
@@ -35,7 +35,7 @@ class TckEngineTest extends FunSuite {
 //  }
 //
 //  test("Filtering for edges in MATCH") {
-//    val stages = compile(
+//    val results = run(
 //      """MATCH (n)-[:REL {prop: 'value'}]->(m)
 //        |RETURN n, m
 //      """.stripMargin
@@ -53,28 +53,45 @@ class TckEngineTest extends FunSuite {
       """MATCH (n), (m)
         |RETURN n.value AS n, m.value AS m
       """.stripMargin
-//      """MATCH (n)
-//        |RETURN n.value AS x
-//      """.stripMargin
     )
-    println(results)
     assert(results.size == 9)
   }
 
-//  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L97
-//  test("Filter out based on node prop name") {
-//    val stages = compile(
-//      """MATCH ()-[rel:X]-(a)
-//        |WHERE a.name = 'Andres'
-//        |RETURN a
-//      """.stripMargin
-//    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
-//  }
-//
+  test("Filter out based on node prop name / fragment #1") {
+    val results = run(
+      """CREATE ()""",
+      """MATCH (a)
+        |WHERE a.name = 'x'
+        |RETURN a""".stripMargin
+    )
+    assert(results.size == 3)
+  }
+
+  test("Filter out based on node prop name / fragment #2") {
+    val results = run(
+      """CREATE ({name: 'Someone'})<-[:X]-()-[:X]->({name: 'Andres'})""",
+      """MATCH (a)
+        |RETURN a""".stripMargin
+    )
+    assert(results.size == 3)
+  }
+
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L97
+  ignore("Filter out based on node prop name") {
+    val results = run(
+      """CREATE ({name: 'Someone'})<-[:X]-()-[:X]->({name: 'Andres'})""",
+      """MATCH ()-[rel:X]-(a)
+        |WHERE a.name = 'Andres'
+        |RETURN a
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131
 //  test("Filter based on rel prop name") {
-//    val stages = compile(
+//    val results = run(
 //      """MATCH (node)-[r:KNOWS]->(a)
 //        |WHERE r.name = 'monkey'
 //        |RETURN a
@@ -85,7 +102,7 @@ class TckEngineTest extends FunSuite {
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L167
 //  test("Get neighbours") {
-//    val stages = compile(
+//    val results = run(
 //      """MATCH (n1)-[rel:KNOWS]->(n2)
 //        |RETURN n1, n2
 //      """.stripMargin
@@ -95,7 +112,7 @@ class TckEngineTest extends FunSuite {
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L183
 //  test("Get two related nodes") {
-//    val stages = compile(
+//    val results = run(
 //      """MATCH ()-[rel:KNOWS]->(x)
 //        |RETURN x
 //      """.stripMargin
@@ -105,7 +122,7 @@ class TckEngineTest extends FunSuite {
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L202
 //  test("Get related to related to") {
-//    val stages = compile(
+//    val results = run(
 //      """MATCH (n)-->(a)-->(b)
 //        |RETURN b
 //      """.stripMargin
@@ -115,7 +132,7 @@ class TckEngineTest extends FunSuite {
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L218
 //  test("Handle comparison between node properties") {
-//    val stages = compile(
+//    val results = run(
 //      """MATCH (n)-[rel]->(x)
 //        |WHERE n.animal = x.animal
 //        |RETURN n, x
@@ -126,7 +143,7 @@ class TckEngineTest extends FunSuite {
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
 //  test("Handle OR in the WHERE clause") {
-//    val stages = compile(
+//    val results = run(
 //      """MATCH (n)
 //        |WHERE n.p1 = 12 OR n.p2 = 13
 //        |RETURN n
@@ -137,7 +154,7 @@ class TckEngineTest extends FunSuite {
 //
 //  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L456
 //  test("Return relationships by collecting them as a list - undirected") {
-//    val stages = compile(
+//    val results = run(
 //      """MATCH (a:Start)-[r:REL*2..2]-(b)
 //        |RETURN r
 //      """.stripMargin
