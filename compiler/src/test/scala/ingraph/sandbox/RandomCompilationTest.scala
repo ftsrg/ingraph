@@ -304,6 +304,14 @@ class RandomCompilationTest extends CompilerTest {
       """.stripMargin
     )
   }
+
+  test("Random: MATCH...CREATE based on matched value") {
+    compile(
+      """MATCH (a:Person {name: 'Alice'}), (b:Person)
+        |CREATE (a)-[:KNOWS {foo: a.age}]->(b)
+      """.stripMargin
+    )
+  }
 }
 
 /** Random compiler tests that must stop after QPlan compilation.
