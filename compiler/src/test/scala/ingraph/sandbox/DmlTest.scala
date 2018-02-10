@@ -4,7 +4,7 @@ import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.CypherParser
 import org.scalatest.FunSuite
 
-class DmlTest extends FunSuite {
+class DmlTest extends CompilerTest {
 
   test("should compile MATCH") {
     val cypher = CypherParser.parseString("MATCH (n) RETURN n")

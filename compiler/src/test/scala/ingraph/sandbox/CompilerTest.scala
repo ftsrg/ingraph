@@ -64,10 +64,10 @@ abstract class CompilerTest extends FunSuite {
 
   def compile(query: String, queryName: Option[String] = None): CompilationStages = {
     if (config.printAny) {
-      println("=" * separatorLength)
+      printlnSuppressIfIngraph("=" * separatorLength)
       if (queryName.isDefined) {
-        println(queryName.get)
-        println("-" * separatorLength)
+        printlnSuppressIfIngraph(queryName.get)
+        printlnSuppressIfIngraph("-" * separatorLength)
       }
     }
     if (config.printQuery ) formatStuff(query, Some("Query"))
@@ -106,9 +106,9 @@ abstract class CompilerTest extends FunSuite {
     * Formats a {Q,J,F,T}Plan, or virtually anything and send to the out channel
     * @param stuff {Q,J,F,T}Plan instance, or any other that has toString. In sace null is passed, nothing will be sent to the out channel.
     * @param heading The heading line for the formatted plan. In case it was a {Q,J,F,T}Plan, this heading is inferred if omitted, otherwise this must be supplied.
-    * @param out The out channel method, defaults to println
+    * @param out The out channel method, defaults to suppressing output if INGRAPH_COMPILER_TEST_SUPPRESS_PRINTLN environment variable is defined, and println otherwise
     */
-  def formatStuff(stuff: Any, heading: Option[String] = None, out: String => Unit = println): Unit = {
+  def formatStuff(stuff: Any, heading: Option[String] = None, out: String => Unit = printlnSuppressIfIngraph): Unit = {
     val _heading: String = heading.getOrElse(
       stuff match {
         case _: QNode => "QPlan"
@@ -144,5 +144,17 @@ abstract class CompilerTest extends FunSuite {
       case _ => false
     }, itn).fold[Unit](Unit)( e => throw new IncompleteResolutionException(e.toString))
   }
+
+  /**
+    * println is returned unless condition holds.
+    */
+  def printlnSuppressIf(condition: Boolean): String => Unit =
+    if (condition) _ => {} else Predef.println
+
+  def printlnSuppressIfIngraph = printlnSuppressIf(sys.env.get("INGRAPH_COMPILER_TEST_SUPPRESS_PRINTLN").isDefined)
+
+  /** Override println hack. Use printlnSuppressIfIngraph() instead") */
+  @Deprecated
+  def println(x: Any) = printlnSuppressIfIngraph(x.toString)
 }
 
