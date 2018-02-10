@@ -263,10 +263,18 @@ class RandomCompilationTest extends CompilerTest {
     )
   }
 
-  test("Random: multiple property lookup on map and multiple labels in the label predicate") {
+  ignore("Random: multiple property lookup on map") {
     compile(
       """MATCH (p)
-        |WHERE p:Person:Teacher
+        |RETURN p, {foo: {innerFoo: p}}.foo.innerFoo
+      """.stripMargin
+    )
+  }
+
+  ignore("Random: multiple property lookup on map and multiple labels in the label predicate") {
+    compile(
+      """MATCH (p)
+        |WHERE {foo: {innerFoo: p}}.foo.innerFoo:Person:Teacher
         |RETURN p
       """.stripMargin
     )
