@@ -196,62 +196,33 @@ object EngineFactory {
       (t: Tuple) => parsed.mapValues(_(t))
     }
 
-    private def vertexCreator(v: VertexAttribute): (Tuple) => IngraphVertex = {
-      val props = propsParser(v)
-      (t: Tuple) =>
-        indexer.addVertex(IngraphVertex(indexer.newId(), v.labels.vertexLabels, props(t)))
-    }
-
-    type AlreadyCreated = mutable.HashMap[Attribute, Long]
-    private def createOrLookup(v: VertexAttribute, lookup: Map[String, Int]
-                              ): (Tuple,AlreadyCreated) => Long = {
-      val creator: (Tuple) => IngraphVertex = vertexCreator(v)
-      lookup.get(v.name) match {
-        case Some(index: Int) => (t: Tuple, m) => t(index).asInstanceOf[Long]
-        case None => (t: Tuple, m: AlreadyCreated) => m.get(v) match {
-          case Some(index: Long) => index
-          case None =>
-            val id = creator(t).id
-            m(v) = id
-            id
-        }
-      }
-    }
-
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
-      val creatorDefs: Seq[Attribute] = op.jnode
-      val creatorFunctions: Seq[(Tuple, AlreadyCreated) => Any] = for (element <- creatorDefs)
-        yield element match {
-          case n: RichEdgeAttribute =>
+        val func = op.attribute match {
+          case n: TupleEdgeAttribute =>
             // you've got to love the Law of Demeter
             val demeter = n.edge.labels.edgeLabels.head
-            val sourceIndex = createOrLookup(n.src, Map())
-            val targetIndex = createOrLookup(n.trg, Map())
+            val sourceIndex = ExpressionParser[Long](n.src)
+            val targetIndex = ExpressionParser[Long](n.trg)
             val props = propsParser(n)
-            (t: Tuple, m: AlreadyCreated) => {
+            (t: Tuple) => {
               indexer.addEdge(
                 indexer.newId(),
-                sourceIndex(t, m),
-                targetIndex(t, m),
+                sourceIndex(t),
+                targetIndex(t),
                 demeter,
                 props(t)
               )
             }
           case variable: VertexAttribute =>
-            val create = vertexCreator(variable)
-            (t: Tuple, m: AlreadyCreated) =>
-              if (!m.contains(variable))
-                create(t)
+            val props = propsParser(variable)
+            (t: Tuple) =>
+              indexer.addVertex(IngraphVertex(indexer.newId(), variable.labels.vertexLabels, props(t)))
         }
 
       (m: ReteMessage) => {
         m match {
           case cs: ChangeSet => cs.positive.foreach(
-            tuple => creatorFunctions.foldLeft(new mutable.HashMap[Attribute, Long]()) { case (map, function) =>
-                function(tuple, map)
-                map
-            })
-
+            tuple => func(tuple))
           case _ =>
         }
         expr.child(m)
