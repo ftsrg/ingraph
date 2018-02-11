@@ -5,7 +5,7 @@ import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.compiler.exceptions.{CompilerConfigurationException, IncompleteCompilationException, IncompleteResolutionException}
 import ingraph.compiler.qplan2jplan.{JPlanToFPlan, QPlanToJPlan}
 import ingraph.emf.util.PrettyPrinter
-import ingraph.model.expr.EStub
+import ingraph.model.expr.{EStub, ResolvableName}
 import ingraph.model.fplan.{FNode, LeafFNode}
 import ingraph.model.jplan.JNode
 import ingraph.model.qplan.{QNode, QStub, UnresolvedDelete, UnresolvedProjection}
@@ -134,8 +134,12 @@ abstract class CompilerTest extends FunSuite {
     IngraphTreeNode.find( (n) => n match {
       case QPlanTreeNode(UnresolvedDelete(_, _, _)) => true
       case QPlanTreeNode(UnresolvedProjection(_, _)) => true
-      case ExpressionTreeNode(UnresolvedAttribute(_)) => true
-      case ExpressionTreeNode(UnresolvedFunction(_, _, _)) => true
+      case ExpressionTreeNode(etn) => etn match {
+        case UnresolvedAttribute(_) => true
+        case UnresolvedFunction(_, _, _) => true
+        case rn: ResolvableName => rn.resolvedName.isEmpty
+        case _ => false
+      }
       case _ => false
     }, itn).fold[Unit](Unit)( e => throw new IncompleteResolutionException(e.toString))
   }
