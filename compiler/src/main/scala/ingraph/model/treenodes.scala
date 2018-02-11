@@ -1,13 +1,8 @@
 package ingraph.model.treenodes
 
 import ingraph.compiler.exceptions.CompilerException
-import ingraph.model.fplan.FNode
-import ingraph.model.jplan.JNode
 import ingraph.model.qplan.QNode
-import ingraph.model.tplan.TNode
-import org.apache.spark.sql.catalyst.expressions.Literal
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.catalyst.trees.TreeNode
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 
 

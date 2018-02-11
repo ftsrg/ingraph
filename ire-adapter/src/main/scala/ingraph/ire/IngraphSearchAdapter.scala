@@ -1,8 +1,8 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, TransactionFactory}
-import ingraph.compiler.TPlanParser
+import hu.bme.mit.ire.{TupleCreator, TransactionFactory}
+import ingraph.compiler.FPlanParser
 
 class IngraphSearchAdapter(
     override val querySpecification: String,
@@ -10,13 +10,13 @@ class IngraphSearchAdapter(
     override val indexer: Indexer = new Indexer()
   ) extends AbstractIngraphAdapter {
 
-  override val plan = TPlanParser.parse(querySpecification)
+  override val plan = FPlanParser.parse(querySpecification)
   override val engine = EngineFactory.createQueryEngine(plan, indexer)
 
   val transactionFactory = new TransactionFactory(16)
   transactionFactory.subscribe(engine.inputLookup)
 
-  override val tupleMapper = new Neo4jEntityToTupleMapper(
+  override val tupleMapper = new TupleCreator(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
     engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap) with LongIdParser
 

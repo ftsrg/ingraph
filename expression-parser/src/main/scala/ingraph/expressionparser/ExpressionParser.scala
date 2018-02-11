@@ -60,7 +60,7 @@ object ExpressionParser {
         case _: And => (t: Tuple) => left(t) && right(t)
         case _: Or => (t: Tuple) => left(t) || right(t)
       }
-    case TupleIndexLiteralAttribute(index, _) =>
+    case TupleIndexLiteralAttribute(index, _, _) =>
       tuple  => tuple(index)
 
     case invoc: FunctionInvocation =>
@@ -95,7 +95,7 @@ object ExpressionParser {
   }
 
   def parseAggregate(exp: Expression): Option[(Int, () => StatefulAggregate)] = exp match {
-    case FunctionInvocation(functor, Seq(TupleIndexLiteralAttribute(index, _)), _) =>
+    case FunctionInvocation(functor, Seq(TupleIndexLiteralAttribute(index, _, _)), _) =>
       import ingraph.model.misc.Function._
       val factory = functor match {
         case AVG => () => new StatefulAverage(index)

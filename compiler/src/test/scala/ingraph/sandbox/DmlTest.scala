@@ -2,7 +2,7 @@ package ingraph.sandbox
 
 import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.CypherParser
-import org.scalatest.FunSuite
+import ingraph.model.fplan
 
 class DmlTest extends CompilerTest {
 
@@ -72,9 +72,43 @@ class DmlTest extends CompilerTest {
   }
 
   test("should compile CREATE with two edges") {
-    val cypher = CypherParser.parseString("CREATE (n:Person)-[:LIVES]->(c:City)-[:IS_LOCATED_IN]->(ctr:Country)")
-    val plan = CypherToQPlan.build(cypher)
-    println(plan)
+    val stages = compile("CREATE (n:Person)-[:LIVES]->(c:City)-[:IS_LOCATED_IN]->(ctr:Country)")
+
+    println(stages.jplan.children(0)                                                .output)
+    println(stages.jplan.children(0).children(0)                                    .output)
+    println(stages.jplan.children(0).children(0).children(0)                        .output)
+    println(stages.jplan.children(0).children(0).children(0).children(0)            .output)
+    println(stages.jplan.children(0).children(0).children(0).children(0).children(0).output)
+
+    println("-------")
+    println("-------")
+
+    println(stages.fplan.children(0)                                                .asInstanceOf[fplan.Create].attribute)
+    println(stages.fplan.children(0).children(0)                                    .asInstanceOf[fplan.Create].attribute)
+    println(stages.fplan.children(0).children(0).children(0)                        .asInstanceOf[fplan.Create].attribute)
+    println(stages.fplan.children(0).children(0).children(0).children(0)            .asInstanceOf[fplan.Create].attribute)
+    println(stages.fplan.children(0).children(0).children(0).children(0).children(0).asInstanceOf[fplan.Create].attribute)
+
+    println("-------")
+    println("------->>>>>>>>>")
+
+    println(stages.fplan.children(0)                                                .asInstanceOf[fplan.Create].attribute)
+    println(stages.fplan.children(0).children(0)                                    .asInstanceOf[fplan.Create].attribute)
+    println(stages.fplan.children(0).children(0).children(0)                        .asInstanceOf[fplan.Create].attribute)
+    println(stages.fplan.children(0).children(0).children(0).children(0)            .asInstanceOf[fplan.Create].attribute)
+    println(stages.fplan.children(0).children(0).children(0).children(0).children(0).asInstanceOf[fplan.Create].attribute)
+
+    println("-------")
+    println("-------")
+
+    println(stages.fplan.children(0)                                                .asInstanceOf[fplan.Create].internalSchema)
+    println(stages.fplan.children(0).children(0)                                    .asInstanceOf[fplan.Create].internalSchema)
+    println(stages.fplan.children(0).children(0).children(0)                        .asInstanceOf[fplan.Create].internalSchema)
+    println(stages.fplan.children(0).children(0).children(0).children(0)            .asInstanceOf[fplan.Create].internalSchema)
+    println(stages.fplan.children(0).children(0).children(0).children(0).children(0).asInstanceOf[fplan.Create].internalSchema)
+
+    println("-------")
+    println("-------")
   }
 
   test("should compile CREATE with property map, string literals only") {

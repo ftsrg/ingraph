@@ -1,7 +1,6 @@
 package ingraph.model.expr
 
 import ingraph.model.expr.types._
-import ingraph.model.treenodes.IngraphTreeNode
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression, NamedExpression, UnaryExpression}
@@ -105,7 +104,7 @@ abstract class AttributeBase extends Attribute {
   override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
 }
 
-case class TupleIndexLiteralAttribute(index: Int, side: Option[Side] = None) extends AttributeBase {
+case class TupleIndexLiteralAttribute(index: Int, side: Option[Side] = None, isVertex: Boolean = false) extends AttributeBase {
   override def name: String = ???
 }
 abstract class Side
@@ -187,6 +186,11 @@ case class RichEdgeAttribute(src: VertexAttribute,
                              trg: VertexAttribute,
                              edge: EdgeAttribute,
                              dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous, edge.resolvedName) with NavigationDescriptor
+
+case class TupleEdgeAttribute(src: Expression,
+                             trg: Expression,
+                             edge: EdgeAttribute,
+                             dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous, edge.resolvedName)
 
 // also Anonymous*Attribute has names, though generated unique names like _eN to facilitate reading of text representation
 // but they can be identified in a type-safe manner

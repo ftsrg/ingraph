@@ -1,13 +1,12 @@
 package hu.bme.mit.ire
 
-import java.util.{Iterator => JIterator}
-
 import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.ire.{EntityToTupleMapper, IdParser, IngraphEdge, IngraphVertex}
-import ingraph.model.tplan.{GetEdges, GetVertices}
+import ingraph.model.expr.{EdgeAttribute, PropertyAttribute, VertexAttribute}
+import ingraph.model.fplan.{GetEdges, GetVertices}
 
-class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertices]],
-                               edgeConverters: Map[String, Set[GetEdges]]) extends IdParser with EntityToTupleMapper {
+class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
+                   edgeConverters: Map[String, Set[GetEdges]]) extends IdParser with EntityToTupleMapper {
 
   override def idParser(obj: Any): Any = obj
 
@@ -20,24 +19,24 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
 
   def addEdge(edge: IngraphEdge): Unit = {
     for (operators <- edgeConverters.get(edge.`type`); operator <- operators) {
-      val sourceLabels = operator.fnode.jnode.src.labels.vertexLabels
-      val targetLabels = operator.fnode.jnode.trg.labels.vertexLabels
+      val sourceLabels = operator.jnode.src.labels.vertexLabels
+      val targetLabels = operator.jnode.trg.labels.vertexLabels
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = edgeToTupleType(edge, operator)
-        transaction.add(operator.fnode.jnode.edge.name, tuple)
+        transaction.add(operator.jnode.edge.name, tuple)
       }
     }
   }
 
   def removeEdge(edge: IngraphEdge): Unit = {
     for (operators <- edgeConverters.get(edge.`type`); operator <- operators) {
-      val sourceLabels = operator.fnode.jnode.src.labels.vertexLabels
-      val targetLabels = operator.fnode.jnode.trg.labels.vertexLabels
+      val sourceLabels = operator.jnode.src.labels.vertexLabels
+      val targetLabels = operator.jnode.trg.labels.vertexLabels
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = edgeToTupleType(edge, operator)
-        transaction.remove(operator.fnode.jnode.edge.name, tuple)
+        transaction.remove(operator.jnode.edge.name, tuple)
       }
     }
   }
@@ -46,8 +45,8 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
     vertexConverters.filter(p => p._1.subsetOf(vertex.labels)).foreach {
       f =>
         for (operator <- f._2) {
-          val tuple = elementToNode(vertex, operator.fnode.internalSchema.map(_.name))
-          transaction.add(operator.fnode.jnode.v.name, tuple)
+          val tuple = elementToNode(vertex, operator.internalSchema.map(_.name))
+          transaction.add(operator.jnode.v.name, tuple)
         }
     }
   }
@@ -56,19 +55,21 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
     vertexConverters.filter(p => p._1.subsetOf(vertex.labels)).foreach {
       f =>
         for (operator <- f._2) {
-          val tuple = elementToNode(vertex, operator.fnode.internalSchema.map(_.name))
-          transaction.remove(operator.fnode.jnode.v.name, tuple)
+          val tuple = elementToNode(vertex, operator.internalSchema.map(_.name))
+          transaction.remove(operator.jnode.v.name, tuple)
         }
     }
   }
 
   private def edgeToTupleType(edge: IngraphEdge, operator: GetEdges): Tuple = {
     Vector(idParser(edge.sourceVertex.id), idParser(edge.id), idParser(edge.targetVertex.id)) ++
-      operator.fnode.internalSchema.drop(3)
+      operator.internalSchema.drop(3)
         .map {
-          case a if a.nodeName == operator.fnode.jnode.src.name => edge.sourceVertex.properties.getOrElse(a.name, null)
-          case a if a.nodeName == operator.fnode.jnode.trg.name => edge.targetVertex.properties.getOrElse(a.name, null)
-          case a if a.nodeName == operator.fnode.jnode.edge.name => edge.properties.getOrElse(a.name, null)
+          case PropertyAttribute(name, elementAttribute, _) => elementAttribute match {
+            case e: EdgeAttribute => edge.properties.getOrElse(name, null)
+            case e: VertexAttribute if e == operator.jnode.trg => edge.targetVertex.properties.getOrElse(name, null)
+            case e: VertexAttribute if e == operator.jnode.src => edge.sourceVertex.properties.getOrElse(name, null)
+          }
         }
   }
 }

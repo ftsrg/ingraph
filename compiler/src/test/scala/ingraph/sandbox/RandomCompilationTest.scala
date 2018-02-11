@@ -187,8 +187,7 @@ class RandomCompilationTest extends CompilerTest {
       """.stripMargin)
   }
 
-  //FIXME: FPlanToTPlan
-  ignore("Random: 2-part query featuring WITH") {
+  test("Random: 2-part query featuring WITH") {
     compile(
       """MATCH (p:Person)
         |WITH DISTINCT p
