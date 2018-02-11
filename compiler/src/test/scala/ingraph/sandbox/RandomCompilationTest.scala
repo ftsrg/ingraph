@@ -311,6 +311,23 @@ class RandomCompilationTest extends CompilerTest {
       """.stripMargin
     )
   }
+
+  test("should compile MATCH") {
+    compile("MATCH (n) RETURN n")
+  }
+
+  test("should compile MATCH and UNWIND") {
+    compile("MATCH (n) UNWIND n.favColors AS favColor RETURN n, favColor")
+  }
+
+  test("should compile MATCH and multiple UNWINDs") {
+    compile(
+      """MATCH (n)
+        |UNWIND n.favColors AS favColor
+        |UNWIND n.favMovies AS favMovie
+        |RETURN n, favColor, favMovie
+        |""".stripMargin)
+  }
 }
 
 /** Random compiler tests that must stop after QPlan compilation.

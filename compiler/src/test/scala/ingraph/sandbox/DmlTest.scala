@@ -6,29 +6,6 @@ import ingraph.model.fplan
 
 class DmlTest extends CompilerTest {
 
-  test("should compile MATCH") {
-    val cypher = CypherParser.parseString("MATCH (n) RETURN n")
-    val plan = CypherToQPlan.build(cypher)
-    println(plan)
-  }
-
-  test("should compile MATCH and UNWIND") {
-    val cypher = CypherParser.parseString("MATCH (n) UNWIND n.favColors AS favColor RETURN n, favColor")
-    val plan = CypherToQPlan.build(cypher)
-    println(plan)
-  }
-
-  test("should compile MATCH and multiple UNWINDs") {
-    val cypher = CypherParser.parseString(
-      """MATCH (n)
-        |UNWIND n.favColors AS favColor
-        |UNWIND n.favMovies AS favMovie
-        |RETURN n, favColor, favMovie
-        |""".stripMargin)
-    val plan = CypherToQPlan.build(cypher)
-    println(plan)
-  }
-
   test("should compile simple DELETE for a vertex") {
     val cypher = CypherParser.parseString("MATCH (n:Person) DELETE n")
     val plan = CypherToQPlan.build(cypher)
