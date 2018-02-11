@@ -201,7 +201,7 @@ object SchemaMapper {
 
   def transformExpression(expression: Expression, internalSchema: Seq[ResolvableName]): Expression = {
     expression.transform {
-      case a: ResolvableName => TupleIndexLiteralAttribute(internalSchema.map(_.resolvedName).indexOf(a.resolvedName))
+      case a: ResolvableName => TupleIndexLiteralAttribute(internalSchema.map(_.resolvedName).indexOf(a.resolvedName), isVertex = a.isInstanceOf[VertexAttribute])
       case e: Expression => e
     }
   }
