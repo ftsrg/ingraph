@@ -2,6 +2,7 @@ package hu.bme.mit.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.ire.{EntityToTupleMapper, IdParser, IngraphEdge, IngraphVertex}
+import ingraph.model.expr.{EdgeAttribute, PropertyAttribute, VertexAttribute}
 import ingraph.model.fplan.{GetEdges, GetVertices}
 
 class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertices]],
@@ -64,9 +65,11 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
     Vector(idParser(edge.sourceVertex.id), idParser(edge.id), idParser(edge.targetVertex.id)) ++
       operator.internalSchema.drop(3)
         .map {
-          case a if a.nodeName == operator.jnode.src.name => edge.sourceVertex.properties.getOrElse(a.name, null)
-          case a if a.nodeName == operator.jnode.trg.name => edge.targetVertex.properties.getOrElse(a.name, null)
-          case a if a.nodeName == operator.jnode.edge.name => edge.properties.getOrElse(a.name, null)
+          case PropertyAttribute(name, elementAttribute, _) => elementAttribute match {
+            case e: EdgeAttribute => edge.properties.getOrElse(name, null)
+            case e: VertexAttribute if e == operator.jnode.trg => edge.targetVertex.properties.getOrElse(name, null)
+            case e: VertexAttribute if e == operator.jnode.src => edge.sourceVertex.properties.getOrElse(name, null)
+          }
         }
   }
 }
