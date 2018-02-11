@@ -113,7 +113,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-24")
   }
 
-  ignore("bi-25 from file: Weighted paths") {
+  ignore("bi-25 from file: Weighted interaction paths") {
     val stages=compileFromFile("bi-25")
   }
 
