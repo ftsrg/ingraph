@@ -110,7 +110,7 @@ class BiEngineTest extends EngineTest {
   }
 
   // compiles
-  ignore  ("bi-24 from file: Messages by Topic and Continent") {
+  ignore("bi-24 from file: Messages by Topic and Continent") {
     runFromFile("bi-24")
   }
 
