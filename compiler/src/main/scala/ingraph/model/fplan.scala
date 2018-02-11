@@ -48,7 +48,6 @@ case class Dual(jnode: jplan.Dual) extends LeafFNode {
   override def extraAttributes: Seq[ResolvableName] = Seq()
 }
 
-
 // unary nodes
 case class AllDifferent(extraAttributes: Seq[ResolvableName],
                         jnode: jplan.AllDifferent,
@@ -166,9 +165,7 @@ case class Create(extraAttributes: Seq[ResolvableName],
       )
       TupleEdgeAttribute(tSrc, tTrg, tEdge, dir)
   }
-
-
-    //jnode.attribute.map(SchemaMapper.transformExpression(_, child.internalSchema))
+  override def internalSchema = jnode.output ++ extraAttributes
 }
 
 case class Delete(extraAttributes: Seq[ResolvableName],
