@@ -1,4 +1,4 @@
-// Q25. Weighted paths
+// Q25. Weighted interaction paths
 /*
   :param {
     person1Id: 2199023264119,
