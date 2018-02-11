@@ -151,13 +151,13 @@ case class ThetaLeftOuterJoin(extraAttributes: Seq[ResolvableName],
 case class Create(extraAttributes: Seq[ResolvableName],
                   jnode: jplan.Create,
                   child: FNode) extends UnaryFNode {
-  lazy val attribute: Expression = jnode.attribute match {
+  lazy val attribute: ResolvableName = jnode.attribute match {
     case VertexAttribute(name, labels, properties, isAnonymous, resolvedName) =>
       val tProperties = properties.map((kv) => kv._1 -> SchemaMapper.transformExpression(kv._2, child.internalSchema))
       VertexAttribute(name, labels, tProperties, isAnonymous, resolvedName)
     case RichEdgeAttribute(src, trg, EdgeAttribute(name, labels, properties, isAnonymous, resolvedName), dir) =>
-      val tSrc = SchemaMapper.transformExpression(src, child.internalSchema)
-      val tTrg = SchemaMapper.transformExpression(trg, child.internalSchema)
+      val tSrc = SchemaMapper.transformExpression2(src, child.internalSchema)
+      val tTrg = SchemaMapper.transformExpression2(trg, child.internalSchema)
       val tEdge = EdgeAttribute(
         name, labels,
         properties.map((kv) => kv._1 -> SchemaMapper.transformExpression(kv._2, child.internalSchema)),
@@ -165,7 +165,7 @@ case class Create(extraAttributes: Seq[ResolvableName],
       )
       TupleEdgeAttribute(tSrc, tTrg, tEdge, dir)
   }
-  override def internalSchema = jnode.output ++ extraAttributes
+  override def internalSchema = jnode.output ++ extraAttributes ++ Seq(attribute)
 }
 
 case class Delete(extraAttributes: Seq[ResolvableName],
@@ -202,6 +202,13 @@ object SchemaMapper {
   def transformExpression(expression: Expression, internalSchema: Seq[ResolvableName]): Expression = {
     expression.transform {
       case a: ResolvableName => TupleIndexLiteralAttribute(internalSchema.map(_.resolvedName).indexOf(a.resolvedName))
+      case e: Expression => e
+    }
+  }
+
+  def transformExpression2(expression: Expression, internalSchema: Seq[ResolvableName]): Expression = {
+    expression.transform {
+      case a: ResolvableName => TupleIndexLiteralAttribute(internalSchema.map(_.name).indexOf(a.name))
       case e: Expression => e
     }
   }
