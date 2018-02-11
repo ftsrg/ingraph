@@ -151,9 +151,9 @@ object QPlanResolver {
               }
             }), child)
             case qplan.Top(skipExpr, limitExpr, _) => qplan.Top(skipExpr, limitExpr, child)
-            case qplan.Create(attributes, _) => qplan.Create(attributes, child)
-            case qplan.UnresolvedDelete(attributes, detach, _) => qplan.UnresolvedDelete(attributes, detach, child)
-            case qplan.Merge(attributes, _) => qplan.Merge(attributes, child)
+            case qplan.Create(attributes, _) => qplan.Create(attributes.map(r(_)), child)
+            case qplan.UnresolvedDelete(attributes, detach, _) => qplan.UnresolvedDelete(attributes.map(r(_)), detach, child)
+            case qplan.Merge(attributes, _) => qplan.Merge(attributes.map(r(_)), child)
             case qplan.SetNode(vertexLabelUpdates, _) => qplan.SetNode(vertexLabelUpdates, child)
             case qplan.Remove(vertexLabelUpdates, _) => qplan.Remove(vertexLabelUpdates, child)
           }
@@ -177,6 +177,12 @@ object QPlanResolver {
       else rn match {
         case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, snr(name, rn))
         case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, snr(name, rn))
+        case expr.RichEdgeAttribute(src, trg, edge, dir) => expr.RichEdgeAttribute(
+          src.transform(expressionNameResolver(snr, nameResolverScope)).asInstanceOf[expr.VertexAttribute],
+          trg.transform(expressionNameResolver(snr, nameResolverScope)).asInstanceOf[expr.VertexAttribute],
+          edge.transform(expressionNameResolver(snr, nameResolverScope)).asInstanceOf[expr.EdgeAttribute],
+          dir
+        )
         case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, snr(name, rn))
         case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name,
           // see "scoped name resolver shorthand" above

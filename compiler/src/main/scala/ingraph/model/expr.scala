@@ -18,6 +18,10 @@ trait ProjectionDescriptor {
   def projectList: TProjectList
 }
 
+trait HasExtraChildren {
+  def extraChildren: Seq[Expression]
+}
+
 
 trait ExpressionBase extends Expression {
   override def nullable: Boolean = true
@@ -185,7 +189,9 @@ abstract class AbstractEdgeAttribute(override val name: String, val labels: Edge
 case class RichEdgeAttribute(src: VertexAttribute,
                              trg: VertexAttribute,
                              edge: EdgeAttribute,
-                             dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous, edge.resolvedName) with NavigationDescriptor
+                             dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous, edge.resolvedName) with NavigationDescriptor with HasExtraChildren {
+  override def extraChildren: Seq[Expression] = Seq(src, trg, edge)
+}
 
 case class TupleEdgeAttribute(src: Expression,
                              trg: Expression,

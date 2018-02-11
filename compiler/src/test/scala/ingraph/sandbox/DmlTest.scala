@@ -6,15 +6,15 @@ import ingraph.model.fplan
 
 class DmlTest extends CompilerTest {
 
-  test("should compile simple DELETE for a vertex") {
+  ignore("should compile simple DELETE for a vertex") {
     compile("MATCH (n:Person) DELETE n")
   }
 
-  test("should compile simple DELETE for an edge") {
+  ignore("should compile simple DELETE for an edge") {
     compile("MATCH (p1:Person)-[r:KNOWS]-(p2:Person) DELETE r")
   }
 
-  test("should compile simple DELETE for an entire pattern") {
+  ignore("should compile simple DELETE for an entire pattern") {
     compile("MATCH (p1:Person)-[r:KNOWS]-(p2:Person) DELETE p1, r, p2")
   }
 
