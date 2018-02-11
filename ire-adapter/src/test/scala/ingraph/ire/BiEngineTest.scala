@@ -114,7 +114,7 @@ class BiEngineTest extends EngineTest {
     runFromFile("bi-24")
   }
 
-  ignore("bi-25 from file: Weighted paths") {
+  ignore("bi-25 from file: Weighted interaction paths") {
     runFromFile("bi-25")
   }
 }

@@ -5,7 +5,7 @@ import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode, UnionNode}
+import hu.bme.mit.ire.nodes.binary._
 import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulAggregate}
 import hu.bme.mit.ire.util.BufferMultimap
@@ -81,8 +81,14 @@ object EngineFactory {
 
                 op match {
                   case op: AntiJoin => newLocal(Props(new AntiJoinNode(child, leftMask, rightMask)))
-                  case op: Join => newLocal(Props(new JoinNode(child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
-                  case op: LeftOuterJoin => newLocal(Props(new LeftOuterJoinNode(child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
+                  case op: Join => newLocal(Props(new JoinNode(
+                    child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
+                  case op: LeftOuterJoin => newLocal(Props(new LeftOuterJoinNode(
+                    child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
+                  case op: ThetaLeftOuterJoin =>
+                    val theta = ExpressionParser[Boolean](op.condition)
+                    newLocal(Props(new ThetaLeftOuterJoinNode(
+                      child, leftTupleWidth, rightTupleWidth, leftMask, rightMask, theta)))
 //              case op: TransitiveClosureJoin =>
 //                val minHops = op.getEdgeListVariable.getMinHops
 //                val maxHops = op.getEdgeListVariable.getMaxHops.getMaxHopsType match {
