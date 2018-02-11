@@ -114,6 +114,7 @@ object EngineFactory {
 
     private def getEdges(op: GetEdges, expr: ForwardConnection) = {
       val labels = op.jnode.edge.labels.edgeLabels.toSeq
+      assert(labels.nonEmpty, s"Querying all edges is prohibitively exepensive, please use edge labels on $op")
       for (label <- labels) {
         edgeConverters.addBinding(label, op)
         if (!op.jnode.directed) {
