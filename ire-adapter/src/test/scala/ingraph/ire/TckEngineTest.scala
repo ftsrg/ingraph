@@ -36,7 +36,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L97
-  ignore("Filter out based on node prop name") {
+  test("Filter out based on node prop name") {
     val results = run(
       """CREATE ({name: 'Someone'})<-[:X]-()-[:X]->({name: 'Andres'})""",
       """MATCH ()-[rel:X]-(a)
@@ -57,7 +57,7 @@ class TckEngineTest extends FunSuite {
     assert(results.size == 0)
   }
 
-  ignore("Filter out based on node prop name / fragment #2") {
+  test("Filter out based on node prop name / fragment #2") {
     val results = run(
       """CREATE ({name: 'Someone'})<-[:X]-()-[:X]->({name: 'Andres'})""",
       """MATCH (a)
@@ -67,7 +67,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131
-  ignore("Filter based on rel prop name") {
+  test("Filter based on rel prop name") {
     val results = run(
       """CREATE (:A)<-[:KNOWS {name: 'monkey'}]-()-[:KNOWS {name: 'woot'}]->(:B)""",
       """MATCH (node)-[r:KNOWS]->(a)
@@ -119,7 +119,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L202
-  ignore("Get related to related to") {
+  test("Get related to related to") {
     val results = run(
       """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3})""",
       """MATCH (n)-->(a)-->(b)
@@ -130,7 +130,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L218
-  ignore("Handle comparison between node properties") {
+  test("Handle comparison between node properties") {
     val results = run(
       """CREATE (a:A {animal: 'monkey'}),
         |  (b:B {animal: 'cow'}),
@@ -150,7 +150,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L243
-  ignore("Return two subgraphs with bound undirected relationship") {
+  test("Return two subgraphs with bound undirected relationship") {
     val results = run(
       """CREATE (a:A {value: 1})-[:REL {name: 'r'}]->(b:B {value: 2})
       """.stripMargin,
@@ -162,7 +162,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L260
-  ignore("Return two subgraphs with bound undirected relationship and optional relationship") {
+  test("Return two subgraphs with bound undirected relationship and optional relationship") {
     val results = run(
       """CREATE (a:A {value: 1})-[:REL {name: 'r1'}]->(b:B {value: 2})-[:REL {name: 'r2'}]->(c:C {value: 3})
       """.stripMargin,
@@ -247,7 +247,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L191
-  ignore("Returning bound nodes that are not part of the pattern") {
+  test("Returning bound nodes that are not part of the pattern") {
     val results = run(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (c {name: 'C'})
@@ -262,7 +262,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L210
-  ignore("Two bound nodes pointing to the same node") {
+  test("Two bound nodes pointing to the same node") {
     val results = run(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (x1 {name: 'x1'}), (x2 {name: 'x2'})
@@ -280,7 +280,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L233
-  ignore("Three bound nodes pointing to the same node") {
+  test("Three bound nodes pointing to the same node") {
     val results = run(
       """CREATE (a {name: 'A'}), (b {name: 'B'}), (c {name: 'C'}),
         |       (x1 {name: 'x1'}), (x2 {name: 'x2'})
