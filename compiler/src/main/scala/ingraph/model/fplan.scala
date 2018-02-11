@@ -152,7 +152,23 @@ case class ThetaLeftOuterJoin(extraAttributes: Seq[ResolvableName],
 case class Create(extraAttributes: Seq[ResolvableName],
                   jnode: jplan.Create,
                   child: FNode) extends UnaryFNode {
-  lazy val attributes: Seq[Expression] = jnode.attributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
+  lazy val attribute: Expression = jnode.attribute match {
+    case VertexAttribute(name, labels, properties, isAnonymous, resolvedName) =>
+      val tProperties = properties.map((kv) => kv._1 -> SchemaMapper.transformExpression(kv._2, child.internalSchema))
+      VertexAttribute(name, labels, tProperties, isAnonymous, resolvedName)
+    case RichEdgeAttribute(src, trg, EdgeAttribute(name, labels, properties, isAnonymous, resolvedName), dir) =>
+      val tSrc = SchemaMapper.transformExpression(src, child.internalSchema)
+      val tTrg = SchemaMapper.transformExpression(trg, child.internalSchema)
+      val tEdge = EdgeAttribute(
+        name, labels,
+        properties.map((kv) => kv._1 -> SchemaMapper.transformExpression(kv._2, child.internalSchema)),
+        isAnonymous, resolvedName
+      )
+      TupleEdgeAttribute(tSrc, tTrg, tEdge, dir)
+  }
+
+
+    //jnode.attribute.map(SchemaMapper.transformExpression(_, child.internalSchema))
 }
 
 case class Delete(extraAttributes: Seq[ResolvableName],

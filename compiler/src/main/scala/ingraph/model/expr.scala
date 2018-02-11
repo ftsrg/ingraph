@@ -188,6 +188,11 @@ case class RichEdgeAttribute(src: VertexAttribute,
                              edge: EdgeAttribute,
                              dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous, edge.resolvedName) with NavigationDescriptor
 
+case class TupleEdgeAttribute(src: Expression,
+                             trg: Expression,
+                             edge: EdgeAttribute,
+                             dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous, edge.resolvedName)
+
 // also Anonymous*Attribute has names, though generated unique names like _eN to facilitate reading of text representation
 // but they can be identified in a type-safe manner
 //case class AnonymousVertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map()) extends VertexAttribute(name, labels, properties)

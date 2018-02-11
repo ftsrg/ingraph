@@ -219,7 +219,7 @@ object EngineFactory {
     }
 
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
-      val creatorDefs: Seq[Attribute] = op.jnode.attributes
+      val creatorDefs: Seq[Attribute] = op.jnode
       val creatorFunctions: Seq[(Tuple, AlreadyCreated) => Any] = for (element <- creatorDefs)
         yield element match {
           case n: RichEdgeAttribute =>

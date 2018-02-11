@@ -72,9 +72,8 @@ class DmlTest extends CompilerTest {
   }
 
   test("should compile CREATE with two edges") {
-    val cypher = CypherParser.parseString("CREATE (n:Person)-[:LIVES]->(c:City)-[:IS_LOCATED_IN]->(ctr:Country)")
-    val plan = CypherToQPlan.build(cypher)
-    println(plan)
+    val stages = compile("CREATE (n:Person)-[:LIVES]->(c:City)-[:IS_LOCATED_IN]->(ctr:Country)")
+    println(stages)
   }
 
   test("should compile CREATE with property map, string literals only") {

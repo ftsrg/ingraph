@@ -104,11 +104,11 @@ case class ThetaLeftOuterJoin(left: JNode,
 // DML operators
 abstract class CudOperator(child: JNode) extends UnaryJNode {}
 
-case class Create(attributes: Seq[ResolvableName], child: JNode) extends CudOperator(child) {}
+case class Create(attribute: ResolvableName, child: JNode) extends CudOperator(child) {}
 
 case class Delete(attributes: Seq[ResolvableName], detach: Boolean, child: JNode) extends CudOperator(child) {}
 
-case class Merge(attributes: Seq[ResolvableName], child: JNode) extends CudOperator(child) {}
+case class Merge(attributes: ResolvableName, child: JNode) extends CudOperator(child) {}
 
 case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: JNode) extends CudOperator(child) {}
 
