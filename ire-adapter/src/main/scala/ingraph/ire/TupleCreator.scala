@@ -5,8 +5,8 @@ import ingraph.ire.{EntityToTupleMapper, IdParser, IngraphEdge, IngraphVertex}
 import ingraph.model.expr.{EdgeAttribute, PropertyAttribute, VertexAttribute}
 import ingraph.model.fplan.{GetEdges, GetVertices}
 
-class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertices]],
-                               edgeConverters: Map[String, Set[GetEdges]]) extends IdParser with EntityToTupleMapper {
+class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
+                   edgeConverters: Map[String, Set[GetEdges]]) extends IdParser with EntityToTupleMapper {
 
   override def idParser(obj: Any): Any = obj
 
