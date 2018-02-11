@@ -12,8 +12,9 @@ import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.model.expr._
 import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
-import ingraph.model.{fplan, jplan, tplan}
-import ingraph.model.tplan._
+import ingraph.model.fplan
+import ingraph.model.fplan._
+import ingraph.model.jplan
 import ingraph.parse.ExpressionParser
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression}
 
@@ -26,10 +27,10 @@ abstract class AnnotatedRelationalEngine extends RelationalEngine {
 
 object EngineFactory {
 
-  case class ForwardConnection(parent: TNode, child: (ReteMessage) => Unit)
+  case class ForwardConnection(parent: FNode, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
 
-  def createQueryEngine(plan: TNode, indexer: Indexer): AnnotatedRelationalEngine =
+  def createQueryEngine(plan: FNode, indexer: Indexer): AnnotatedRelationalEngine =
     new AnnotatedRelationalEngine {
       override val production: ActorRef = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
@@ -43,7 +44,7 @@ object EngineFactory {
       while (remaining.nonEmpty) {
         val expr = remaining.remove(0)
         expr.parent match {
-          case op: LeafTNode =>
+          case op: LeafFNode =>
             op match {
               case op: GetVertices => getVertices(op, expr)
               case op: GetEdges => getEdges(op, expr)
@@ -51,7 +52,7 @@ object EngineFactory {
               expr.child(ChangeSet(positive=Vector(Vector())))
             }
 
-          case op: UnaryTNode =>
+          case op: UnaryFNode =>
             val node: (ReteMessage) => Unit = op match {
               case op: Production => production
               case op: Grouping => grouping(op, expr)
@@ -68,13 +69,13 @@ object EngineFactory {
             }
             remaining += ForwardConnection(op.child, node)
 
-          case op: BinaryTNode =>
+          case op: BinaryFNode =>
             val node: ActorRef = op match {
-              case op: Union => newLocal(Props(new UnionNode(expr.child, op.fnode.jnode.bag)))
+              case op: Union => newLocal(Props(new UnionNode(expr.child, op.jnode.bag)))
               case op: JoinLike =>
                 val child = expr.child
-                val leftTupleWidth  = op.left. fnode.internalSchema.length
-                val rightTupleWidth = op.right.fnode.internalSchema.length
+                val leftTupleWidth  = op.left. internalSchema.length
+                val rightTupleWidth = op.right.internalSchema.length
                 val leftMask:  Seq[Int] = op.leftMask
                 val rightMask: Seq[Int] = op.rightMask
 
@@ -100,29 +101,29 @@ object EngineFactory {
 
     // leaf nodes
     private def getVertices(op: GetVertices, expr: ForwardConnection) = {
-      val labels = op.fnode.jnode.v.labels.vertexLabels.toSeq
+      val labels = op.jnode.v.labels.vertexLabels.toSeq
       vertexConverters.addBinding(labels, op)
-      inputs += (op.fnode.jnode.v.name -> expr.child)
+      inputs += (op.jnode.v.name -> expr.child)
     }
 
     private def getEdges(op: GetEdges, expr: ForwardConnection) = {
-      val labels = op.fnode.jnode.edge.labels.edgeLabels.toSeq
+      val labels = op.jnode.edge.labels.edgeLabels.toSeq
       for (label <- labels) {
         edgeConverters.addBinding(label, op)
-        if (!op.fnode.jnode.directed) {
-          val reverse = tplan.GetEdges(
-            fplan.GetEdges(op.fnode.extraAttributes,
+        if (!op.jnode.directed) {
+          val reverse =
+            fplan.GetEdges(op.extraAttributes,
               jplan.GetEdges(
-                op.fnode.jnode.trg,
-                op.fnode.jnode.src,
-                op.fnode.jnode.edge,
-                op.fnode.jnode.directed)
+                op.jnode.trg,
+                op.jnode.src,
+                op.jnode.edge,
+                op.jnode.directed
               )
           )
           edgeConverters.addBinding(label, reverse)
         }
       }
-      inputs += (op.fnode.jnode.edge.name -> expr.child)
+      inputs += (op.jnode.edge.name -> expr.child)
     }
 
     // unary nodes
@@ -161,11 +162,11 @@ object EngineFactory {
         e => ExpressionParser[Any](e.child)).toVector
       newLocal(Props(new SortAndTopNode(
         expr.child,
-        op.fnode.jnode.order.length,
+        op.jnode.order.length,
         sortKeys,
         skip,
         limit,
-        op.fnode.jnode.order.map(_.direction == Ascending).toVector
+        op.jnode.order.map(_.direction == Ascending).toVector
       )))
     }
 
@@ -218,7 +219,7 @@ object EngineFactory {
     }
 
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
-      val creatorDefs: Seq[Attribute] = op.fnode.jnode.attributes
+      val creatorDefs: Seq[Attribute] = op.jnode.attributes
       val creatorFunctions: Seq[(Tuple, AlreadyCreated) => Any] = for (element <- creatorDefs)
         yield element match {
           case n: RichEdgeAttribute =>
@@ -258,14 +259,14 @@ object EngineFactory {
     }
 
     private def delete(op: Delete, indexer: Indexer, expr: ForwardConnection) = {
-      if (op.fnode.jnode.detach) {
+      if (op.jnode.detach) {
         // detach delete not supported yet
         // and we should throw an exception in case the user tries to delete a nodes with existing
         // relationships
         // "To delete this node, you must first delete its relationships."
         ???
       }
-      val removals: Seq[(Tuple) => Unit] = for (element <- op.fnode.jnode.attributes)
+      val removals: Seq[(Tuple) => Unit] = for (element <- op.jnode.attributes)
         yield element match {
           case e: EdgeAttribute =>
             (t: Tuple) => indexer.removeEdgeById(t(0).asInstanceOf[Long])

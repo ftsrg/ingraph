@@ -2,7 +2,7 @@ package ingraph.ire
 
 import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, Transaction}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
-import ingraph.model.tplan.TNode
+import ingraph.model.fplan.FNode
 import org.supercsv.prefs.CsvPreference
 
 import scala.collection.JavaConverters._
@@ -14,7 +14,7 @@ abstract class AbstractIngraphAdapter {
   val queryName: String
   val indexer: Indexer = new Indexer()
 
-  val plan: TNode
+  val plan: FNode
   val tupleMapper: Neo4jEntityToTupleMapper
   val engine: AnnotatedRelationalEngine
   def readCsvJava(nodeFilenames: java.util.Map[String, java.util.List[String]],
@@ -48,7 +48,7 @@ abstract class AbstractIngraphAdapter {
   }
 
   def resultNames() : Seq[String] = {
-    plan.fnode.internalSchema.map(_.toString())
+    plan.internalSchema.map(_.toString())
   }
 
 }

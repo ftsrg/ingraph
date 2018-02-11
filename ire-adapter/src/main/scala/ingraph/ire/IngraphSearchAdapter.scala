@@ -2,7 +2,7 @@ package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, TransactionFactory}
-import ingraph.compiler.TPlanParser
+import ingraph.compiler.FPlanParser
 
 class IngraphSearchAdapter(
     override val querySpecification: String,
@@ -10,7 +10,7 @@ class IngraphSearchAdapter(
     override val indexer: Indexer = new Indexer()
   ) extends AbstractIngraphAdapter {
 
-  override val plan = TPlanParser.parse(querySpecification)
+  override val plan = FPlanParser.parse(querySpecification)
   override val engine = EngineFactory.createQueryEngine(plan, indexer)
 
   val transactionFactory = new TransactionFactory(16)
