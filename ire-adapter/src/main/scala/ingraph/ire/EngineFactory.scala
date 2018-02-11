@@ -211,39 +211,34 @@ object EngineFactory {
                 targetIndex(t),
                 demeter,
                 props(t)
-              )
+              ).id
             }
           case variable: VertexAttribute =>
             val props = propsParser(variable)
             (t: Tuple) =>
-              indexer.addVertex(IngraphVertex(indexer.newId(), variable.labels.vertexLabels, props(t)))
+              indexer.addVertex(IngraphVertex(indexer.newId(), variable.labels.vertexLabels, props(t))).id
         }
 
       (m: ReteMessage) => {
-        m match {
-          case cs: ChangeSet => cs.positive.foreach(
-            tuple => func(tuple))
-          case _ =>
+        val newMessage = m match {
+          case cs: ChangeSet => ChangeSet(positive=cs.positive.map(
+            tuple => tuple :+ func(tuple)))
+          case _ => m
         }
-        expr.child(m)
+        expr.child(newMessage)
       }
     }
 
     private def delete(op: Delete, indexer: Indexer, expr: ForwardConnection) = {
-      if (op.jnode.detach) {
-        // detach delete not supported yet
-        // and we should throw an exception in case the user tries to delete a nodes with existing
-        // relationships
-        // "To delete this node, you must first delete its relationships."
-        ???
+      val removals: Seq[(Tuple) => Unit] = op.attributes.map {
+        index =>
+          val expr = ExpressionParser[Long](index)
+          if (index.isVertex) {
+            (t: Tuple) => indexer.removeVertexById(expr(t), op.jnode.detach)
+          } else {
+            (t: Tuple) => indexer.removeEdgeById(expr(t))
+          }
       }
-      val removals: Seq[(Tuple) => Unit] = for (element <- op.jnode.attributes)
-        yield element match {
-          case e: EdgeAttribute =>
-            (t: Tuple) => indexer.removeEdgeById(t(0).asInstanceOf[Long])
-          case v: VertexAttribute =>
-            (t: Tuple) => indexer.removeVertexById(t(0).asInstanceOf[Long], detach = true)
-        }
       (m: ReteMessage) => {
         m match {
           case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r))
