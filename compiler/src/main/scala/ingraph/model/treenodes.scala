@@ -1,6 +1,6 @@
 package ingraph.model.treenodes
 
-import ingraph.compiler.exceptions.CompilerException
+import ingraph.compiler.exceptions.UnexpectedTypeException
 import ingraph.model.expr.{HasExtraChildren, RichEdgeAttribute}
 import ingraph.model.fplan.FNode
 import ingraph.model.jplan.JNode
@@ -40,7 +40,7 @@ object IngraphTreeNodeType {
   def apply(tn: Any): IngraphTreeNodeType = tn match {
     case e: cExpr.Expression => ExpressionTreeNode(e)
     case q: QNode => QPlanTreeNode(q)
-    case x => throw new CompilerException(s"Unexpected type found: ${x.getClass}")
+    case x => throw new UnexpectedTypeException(x, "IngraphTreeNode construction")
   }
 }
 
