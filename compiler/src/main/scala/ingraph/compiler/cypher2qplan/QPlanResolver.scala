@@ -3,7 +3,7 @@ package ingraph.compiler.cypher2qplan
 import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.compiler.cypher2qplan.util.TransformUtil
-import ingraph.compiler.exceptions.{CompilerException, IllegalAggregationException, NameResolutionException}
+import ingraph.compiler.exceptions.{CompilerException, IllegalAggregationException, NameResolutionException, UnexpectedTypeException}
 import ingraph.model.expr.{ProjectionDescriptor, ResolvableName, ReturnItem}
 import ingraph.model.qplan.{QNode, UnaryQNode}
 import ingraph.model.{expr, misc, qplan}
@@ -61,7 +61,7 @@ object QPlanResolver {
          */
         case b: qplan.BinaryQNode => qNodeStack.push(b.left, b.right)
         case _: qplan.LeafQNode => {}
-        case x => throw new CompilerException(s"Unexpected type found in the QPlan tree: ${x.getClass}")
+        case x => throw new UnexpectedTypeException(x, "QPlan tree")
       }
     }
 
@@ -124,7 +124,7 @@ object QPlanResolver {
                         case pa: expr.PropertyAttribute => nextQueryPartNameResolverScope.put(s"${pa.elementAttribute.name}$$${pa.name}", (rc.resolvedName.get, rc))
                         case ua: expr.UnwindAttribute => nextQueryPartNameResolverScope.put(ua.name, (rc.resolvedName.get, rc))
                         case ea: expr.ExpressionAttribute => nextQueryPartNameResolverScope.put(ea.name, (rc.resolvedName.get, rc))
-                        case _ => throw new CompilerException(s"Unexpected type found in return item position: ${rc.getClass}")
+                        case x => throw new UnexpectedTypeException(x, "return item position")
                       }
                       rc.resolvedName
                     }
@@ -223,7 +223,7 @@ object QPlanResolver {
               expr.PropertyAttribute(propertyName, ea, snr(s"${ea.name}$$${propertyName}",
                 expr.PropertyAttribute(propertyName, ea)) // this is a dirty hack to tell the resolver that we are about to resolve a PropertyAttribute instance
               )
-            case _ => throw new CompilerException(s"Unexpected type found in basis position of property dereferencing: ${elementAttribute.getClass}")
+            case x => throw new UnexpectedTypeException(x, "basis position of property dereferencing")
           }
         }
       }
@@ -275,7 +275,7 @@ object QPlanResolver {
     case qplan.Sort(order, child) => qplan.Sort(
       order.map(_.transform(expressionResolver) match {
         case so: SortOrder => so
-        case x => throw new CompilerException(s"Unexpected type after resolution: ${x.getClass}")
+        case x => throw new UnexpectedTypeException(x, "sort items after resolution")
       })
       , child)
     case qplan.ThetaLeftOuterJoin(left, right, condition) => qplan.ThetaLeftOuterJoin(left, right, condition.transform(expressionResolver))
@@ -364,7 +364,7 @@ object QPlanResolver {
           false
         }
         // This should never be reached, as projectList is expr.types.TProjectList
-        case x => throw new CompilerException(s"Unexpected type found in return item position: ${x.getClass}")
+        case x => throw new UnexpectedTypeException(x, "return item position")
       }
     }))
 

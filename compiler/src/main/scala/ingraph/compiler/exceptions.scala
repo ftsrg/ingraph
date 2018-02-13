@@ -15,3 +15,6 @@ class IllegalAggregationException(val info: String) extends CompilerException(s"
 class IncompleteCompilationException(val info: String) extends CompilerException(s"Incomplete compilation found: ${info}.")
 
 class IncompleteResolutionException(val info: String) extends CompilerException(s"Unresolved part found: ${info}.")
+
+class UnexpectedTypeException(val a: Any, val info: String = "(details not given)")
+  extends CompilerException(s"Unexpected type found: ${a.getClass} at ${info}. String value of the object is: ${a}")
