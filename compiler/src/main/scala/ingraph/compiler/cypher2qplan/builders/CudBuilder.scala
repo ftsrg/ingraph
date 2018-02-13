@@ -6,7 +6,7 @@ import ingraph.model.expr._
 import ingraph.model.expr.types.VertexLabel
 import ingraph.model.qplan
 import ingraph.model.qplan.QNode
-import org.slizaa.neo4j.opencypher.openCypher.{SetItem}
+import org.slizaa.neo4j.opencypher.openCypher.SetItem
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
