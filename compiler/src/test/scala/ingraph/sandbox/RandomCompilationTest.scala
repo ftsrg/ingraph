@@ -296,7 +296,7 @@ class RandomCompilationTest extends CompilerTest {
     )
   }
 
-  ignore("Random: DELETE friends of Alice") {
+  test("Random: DELETE friends of Alice") {
     compile(
       """MATCH (a:Person {name: 'Alice'})-[:KNOWS]->(b:Person)
         |DETACH DELETE b
