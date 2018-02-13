@@ -152,7 +152,7 @@ object QPlanResolver {
             }), child)
             case qplan.Top(skipExpr, limitExpr, _) => qplan.Top(skipExpr, limitExpr, child)
             case qplan.Create(attributes, _) => qplan.Create(attributes.map(r(_)), child)
-            case qplan.UnresolvedDelete(attributes, detach, _) => qplan.UnresolvedDelete(attributes.map(r(_)), detach, child)
+            case qplan.UnresolvedDelete(attributes, detach, _) => qplan.UnresolvedDelete(attributes, detach, child)
             case qplan.Merge(attributes, _) => qplan.Merge(attributes.map(r(_)), child)
             case qplan.SetNode(vertexLabelUpdates, _) => qplan.SetNode(vertexLabelUpdates, child)
             case qplan.Remove(vertexLabelUpdates, _) => qplan.Remove(vertexLabelUpdates, child)
