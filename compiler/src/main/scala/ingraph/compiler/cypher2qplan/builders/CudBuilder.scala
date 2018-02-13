@@ -43,6 +43,8 @@ object CudBuilder {
         chainVertex = nextVertex
       })
 
+      // Note: vertices coming from the graph (i.e. those present in the MATCH clauses) are filtered out upon resolution
+
       edgesAndVertices
     })
 
