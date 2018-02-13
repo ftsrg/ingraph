@@ -1,0 +1,4 @@
+id:ID(Place)|name:STRING|url:STRING|:LABEL
+0|India|http://dbpedia.org/resource/India|Country
+1|New Delphi|http://dbpedia.org/resource/New_Delhi|City
+2|USA|http://dbpedia.org/resource/USA|Country

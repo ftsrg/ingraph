@@ -18,7 +18,7 @@ object CypherToQPlan {
     * @param queryName A name to identify the processed query.
     * @return The QPlan representation of the query.
     */
-  def build(cypher: Cypher, queryName: String = "Unnamed query"): qplan.QNode = {
+  def build(cypher: Cypher, queryName: Option[String] = None): qplan.QNode = {
     build_IKnowWhatImDoing(cypher, queryName, skipResolve = false, skipBeautify = false)
   }
 
@@ -37,7 +37,8 @@ object CypherToQPlan {
     * @param skipBeautify Whether to skip beautifying the query plan or not. For debugging and expreimenting only! Change value at your own risk!
     * @return The QPlan representation of the query.
     */
-  def build_IKnowWhatImDoing(cypher: Cypher, queryName: String, skipResolve: Boolean = false, skipBeautify: Boolean = false): qplan.QNode = {
+  def build_IKnowWhatImDoing(cypher: Cypher, queryName: Option[String] = None, skipResolve: Boolean = false, skipBeautify: Boolean = false): qplan.QNode = {
+    val _queryName = queryName.getOrElse("Unnamed query")
     // compilation
     val stage1 = compileToQPlan(cypher)
 

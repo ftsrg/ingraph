@@ -30,14 +30,21 @@ class TckCompilerTest extends CompilerTest {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L52
-  ignore("TCK test: Use multiple MATCH clauses to do a Cartesian product") {
-    val stages = compile(
+  test("TCK test: Use multiple MATCH clauses to do a Cartesian product") {
+    val createStages = compile(
+      """CREATE ({value: 1}),
+        |  ({value: 2}),
+        |  ({value: 3})
+      """.stripMargin)
+    println(createStages)
+
+    val readStages = compile(
       """MATCH (n), (m)
         |RETURN n.value AS n, m.value AS m
       """.stripMargin
     )
-    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
-    assert(getLeafNodes(stages.fplan)(1).extraAttributes.length == 1)
+    assert(getLeafNodes(readStages.fplan)(0).extraAttributes.length == 1)
+    assert(getLeafNodes(readStages.fplan)(1).extraAttributes.length == 1)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L97
@@ -49,6 +56,7 @@ class TckCompilerTest extends CompilerTest {
       """.stripMargin
     )
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 4)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131

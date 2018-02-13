@@ -2,6 +2,7 @@ package ingraph.compiler.cypher2qplan
 
 import java.io.ByteArrayInputStream
 
+import ingraph.compiler.exceptions.CompilerException
 import org.apache.log4j.{Level, Logger}
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
@@ -56,7 +57,7 @@ object CypherParser {
       println(issue.getMessage)
     }
     if (seenError) {
-      throw new RuntimeException(s"Error during cypher parse, the first error was: ${firstError}")
+      throw new CompilerException(s"Error during cypher parse, the first error was: ${firstError}")
     }
   }
 }

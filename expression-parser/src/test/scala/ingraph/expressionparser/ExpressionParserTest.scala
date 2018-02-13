@@ -3,20 +3,19 @@ package ingraph.expressionparser
 import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.compiler.FPlanParser
 import ingraph.model.fplan._
+import ingraph.parse.ExpressionParser
 import org.scalatest.WordSpec
 
 class ExpressionParserTest extends WordSpec {
 
   def parseFilter(query: String): (Tuple) => Boolean = {
-    val selection = FPlanParser.parse(query)
+    val selection = getPlan(query)
       .asInstanceOf[Production].child
       .asInstanceOf[Projection].child
       .asInstanceOf[Selection]
-    val lookup = getSchema(selection.child)
-    ExpressionParser.parse(selection.jnode.condition, lookup)
+    println(selection.condition)
+    ExpressionParser(selection.condition)
   }
-
-  def getSchema(op: FNode): Map[String, Int] = SchemaToMap.schemaToMapNames(op)
 
   val rocks = "emfrocks"
   "ExpressionParser" should {
@@ -46,9 +45,9 @@ class ExpressionParserTest extends WordSpec {
       assert(!func(Vector(1, 1)))
     }
 
-    "parse complicated routesensor expression" ignore {
+    "parse complicated routesensor expression" in {
       val func = parseFilter("""MATCH (n) WHERE n.a is null and n.e is not null RETURN n.a""")
-      assert(func(Vector(null, 1, 1)))
+      assert(func(Vector(1, null, 1)))
       assert(!func(Vector(1, 1, 1)))
     }
 
@@ -62,25 +61,27 @@ class ExpressionParserTest extends WordSpec {
         """MATCH (n) WHERE substring(toString(1324), 2)=left("244", 2) RETURN n.id""")
       assert(func(Vector(24, 1)))
     }
-//    "parse Case structures" in {
-//      val plan = getPlan(
-//        """MATCH (n)
-//          |RETURN
-//          |CASE n.eye
-//          |WHEN 'blue'
-//          |THEN 1
-//          |WHEN 'brown'
-//          |THEN 2 + 3
-//          |ELSE 3 END AS result""".stripMargin)
-//      val projection = plan.getRootExpression
-//        .asInstanceOf[ProductionOperator].getInput
-//        .asInstanceOf[ProjectionOperator]
-//      val lookup = getSchema(projection.getInput)
-//      val func = ExpressionParser.parseValue(projection.getElements.get(0).getExpression, lookup)
-//      assert(func(Vector(1, "blue")) == 1)
-//      assert(func(Vector(2, "brown")) == 5)
-//      assert(func(Vector(3, "red")) == 3)
-//    }
+
+    "parse Case structures" in {
+      val plan = getPlan(
+        """MATCH (n)
+          |RETURN
+          |CASE n.eye
+          |WHEN 'blue'
+          |THEN 1
+          |WHEN 'brown'
+          |THEN 2 + 3
+          |ELSE 3 END AS result""".stripMargin)
+      val projection = plan
+        .asInstanceOf[Production].child
+        .asInstanceOf[Projection]
+      val func = ExpressionParser[Any](projection.projectionTuple.head)
+      assert(func(Vector(1, "blue")) == 1)
+      assert(func(Vector(2, "brown")) == 5)
+      assert(func(Vector(3, "red")) == 3)
+    }
+
+
 //    "parse exists" in {
 //      val plan = getPlan(
 //        """MATCH (n)
@@ -95,4 +96,6 @@ class ExpressionParserTest extends WordSpec {
 //    }
 
   }
+
+  private def getPlan(query: String) = FPlanParser.parse(query)
 }

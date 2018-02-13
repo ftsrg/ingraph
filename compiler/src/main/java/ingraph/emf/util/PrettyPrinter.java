@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PrettyPrinter {
 
-	private static final String INDENT = "    "; //$NON-NLS-1$
+	private static final String INDENT = "  "; //$NON-NLS-1$
 
 	public static String prettyPrint(final EObject object) {
 		final String string = format(object);

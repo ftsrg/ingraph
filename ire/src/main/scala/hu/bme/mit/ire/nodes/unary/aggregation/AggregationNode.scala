@@ -9,15 +9,15 @@ import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 
 class AggregationNode(override val next: (ReteMessage) => Unit,
-                      mask: Vector[Tuple => Any], functions: () => Vector[StatefulAggregate],
-                     projection: Vector[Tuple => Any]) extends UnaryNode with SingleForwarder {
+                      mask: Vector[Tuple => Any], factories: () => Vector[StatefulAggregate],
+                      projection: Vector[Int]) extends UnaryNode with SingleForwarder {
   private val keyCount = mutable.Map[Tuple, Int]().withDefault(f => 0)
-  private val data = mutable.Map[Tuple, Vector[StatefulAggregate]]().withDefault(f => functions())
+  private val data = mutable.Map[Tuple, Vector[StatefulAggregate]]().withDefault(f => factories())
 
   override def onChangeSet(changeSet: ChangeSet): Unit = {
     val oldValues = mutable.Map[Tuple, (Tuple, Int)]()
     for ((key, tuples) <- changeSet.positive.groupBy(t => mask.map(m => m(t)))) {
-      val aggregators = data.getOrElseUpdate(key, functions())
+      val aggregators = data.getOrElseUpdate(key, factories())
 
       oldValues.getOrElseUpdate(key, (aggregators.map(_.value()), keyCount(key)))
       for (aggregator <- aggregators)
@@ -25,7 +25,7 @@ class AggregationNode(override val next: (ReteMessage) => Unit,
       keyCount(key) += tuples.size
     }
     for ((key, tuples) <- changeSet.negative.groupBy(t => mask.map(m => m(t)))) {
-      val aggregators = data.getOrElseUpdate(key, functions())
+      val aggregators = data.getOrElseUpdate(key, factories())
       oldValues.getOrElseUpdate(key, (aggregators.map(_.value()), keyCount(key)))
       for (aggregator <- aggregators)
         aggregator.maintainNegative(tuples)
@@ -44,8 +44,8 @@ class AggregationNode(override val next: (ReteMessage) => Unit,
           negative += key ++ oldValues
       }
     }
-    val positiveBag: TupleBag = positive.result().map((t: Tuple) => projection.map(_(t)))
-    val negativeBag: TupleBag = negative.result().map((t: Tuple) => projection.map(_(t)))
+    val positiveBag: TupleBag = positive.result().map(t => projection.map(t))
+    val negativeBag: TupleBag = negative.result().map(t => projection.map(t))
     forward(ChangeSet(
       positive = positiveBag,
         negative = negativeBag))

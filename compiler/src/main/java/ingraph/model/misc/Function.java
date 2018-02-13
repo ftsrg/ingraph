@@ -44,6 +44,7 @@ public enum Function {
 
   // predicate functions
   EXISTS        ("exists",         FunctionCategory.PREDICATE,     CypherType.BOOLEAN,     1, l(CypherType.ANY)                      ),
+  NODE_HAS_LABELS("node_has_labels",FunctionCategory.PREDICATE,    CypherType.BOOLEAN,     2, l(CypherType.ANY, CypherType.LIST_TYPE)           ),
   IN_COLLECTION ("in_collection",  FunctionCategory.PREDICATE,     CypherType.BOOLEAN,     2, l(CypherType.ANY, CypherType.LIST_TYPE)           ),
 
   // scalar functions
@@ -136,6 +137,14 @@ public enum Function {
 		// exceptions handled here
 		if (COUNT_ALL.getPrettyName().equalsIgnoreCase(name)) {
 			functor = COUNT_ALL;
+		} else if (STARTS_WITH.getPrettyName().equalsIgnoreCase(name)) {
+			functor = STARTS_WITH;
+		} else if (ENDS_WITH.getPrettyName().equalsIgnoreCase(name)) {
+			functor = ENDS_WITH;
+		} else if (CONTAINS.getPrettyName().equalsIgnoreCase(name)) {
+			functor = CONTAINS;
+		} else if (REGEX_LIKE.getPrettyName().equalsIgnoreCase(name)) {
+			functor = REGEX_LIKE;
 		} else {
 			// fall back to the convention as enum elements are named after functions' openCypher name
 			functor = Function.valueOf(name.toUpperCase());

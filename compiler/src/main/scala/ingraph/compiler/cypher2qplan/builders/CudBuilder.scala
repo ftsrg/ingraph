@@ -1,11 +1,12 @@
 package ingraph.compiler.cypher2qplan.builders
 
 import ingraph.compiler.cypher2qplan.util.BuilderUtil
+import ingraph.compiler.exceptions.CompilerException
 import ingraph.model.expr._
 import ingraph.model.expr.types.VertexLabel
 import ingraph.model.qplan
 import ingraph.model.qplan.QNode
-import org.slizaa.neo4j.opencypher.openCypher.{RemoveItem, SetItem}
+import org.slizaa.neo4j.opencypher.openCypher.{SetItem}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -34,7 +35,7 @@ object CudBuilder {
         val nextVertex: VertexAttribute = AttributeBuilder.buildAttribute(pec.getNodePattern)
         val edgeAttribute: EdgeAttribute = AttributeBuilder.buildAttribute(pec.getRelationshipPattern) match {
           case e: EdgeAttribute => e
-          case _ => throw new RuntimeException(s"Single edge pattern required when CREATE'ing relationships")
+          case _ => throw new CompilerException(s"Single edge pattern required when CREATE'ing relationships")
         }
         val direction: Direction = BuilderUtil.convertToDirection(pec.getRelationshipPattern)
         // put vertex before the edge itself
@@ -154,14 +155,14 @@ object CudBuilder {
       case v: oc.VariableRef => Some(AttributeBuilder.buildAttribute(v))
       case _ => None
     }
-    qplan.Delete(attributes, element.isDetach, child)
+    qplan.UnresolvedDelete(attributes, element.isDetach, child)
   }
 
   /**
     * Build and return a merge operator from the MERGE clause and attach child to its input.
     */
   def buildMergeOperator(element: oc.Merge, child: qplan.QNode): QNode = {
-    qplan.Merge(null, child)
+    qplan.Merge(Seq(), child)
   }
 
   /**
@@ -188,8 +189,8 @@ object CudBuilder {
   def buildRemoveOperator(element: oc.Remove, child: qplan.QNode): QNode = {
     val vertexLabelUpdates = element.getRemoveItems.asScala.map(
       r => r match {
-        //case pe: oc.PropertyExpression => ???
-        case r: RemoveItem => {
+        //case r: oc.RemoveItemProperty => ???
+        case r: oc.RemoveItemLabel => {
           val vertex = AttributeBuilder.buildAttribute(r.getVariable).asInstanceOf[VertexAttribute] // here come the
           // ClassCastException
           val labels: Set[VertexLabel] = r.getNodeLabels.getNodeLabels.asScala.map(_.getLabelName).toSet

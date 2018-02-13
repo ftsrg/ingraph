@@ -32,7 +32,7 @@ ingraph is suited for the following technical challenges:
 
 ingraph is not efficient/expressive enough for the following technical challenges:
 
-* Queries that are evaluated only evaluated once or infrequently (i.e. batch processing, daily analysis) [our main goal for the summer of 2017 is to resolve this issue, so stay tuned]
+* Queries that are evaluated only evaluated once or infrequently (i.e. batch processing, daily analysis)
 * Graph analytics involving PageRank, community detection, etc.
 
 Currently, the ingraph project is not mature enough for production use. Instead, it should be used in prototypes and performance experiments.
@@ -54,6 +54,7 @@ Incremental openCypher queries can also be beneficial for:
 # Related projects
 
 * [Grapflow](http://graphflow.io/) also aims to provide "continuous subgraph queries", based their extension of the openCypher query language, openCypher++.
+* [Strider](https://github.com/renxiangnan/strider) supports incremental queries on distributed RDF data.
 
 # Publications
 

@@ -1,6 +1,5 @@
 plugins {
-  id 'com.github.maiflai.scalatest' version '0.16'
-//  id 'com.github.maiflai.scalatest' version '0.16'
+  id 'com.github.maiflai.scalatest' version '0.19'
 }
 
 dependencies {

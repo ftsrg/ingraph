@@ -19,27 +19,13 @@ object ReturnBuilder {
 
   def buildWithClause(w: oc.With, content: qplan.QNode): qplan.QNode = {
     val rb = buildReturnBody(w.isDistint, w.getReturnBody, content)
-    if (w.getWhere == null) {
-      rb
-    } else {
-      //FIXME: implement proper WHERE sub-clause handling
-      // when doing so, check the current openCypher grammar if it also allows WHERE sub-clause for RETURN
 
-//      // left outer joins extracted from the patterns in the where clause
-//      // should remain empty in WITH WHERE
-//      val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
-//
-//      val selectionOperator = modelFactory.createSelectionOperator => [
-//      input = rb
-//      condition = LogicalExpressionBuilder.buildLogicalExpression(w.where.expression, joinOperationsOfWhereClause, ce)
-//      ]
-//
-//      if (joinOperationsOfWhereClause.length !== 0) {
-//        ce.l.unsupported('''Pattern expression found in WITH ... WHERE, which is unsupported. Consider moving this expression to MATCH...WHERE.''')
-//      }
-
-      qplan.Selection(expr.EStub("WITH WHERE"), rb)
-    }
+    Option(w.getWhere).fold(rb)(
+      (where) => {
+        val condition = ExpressionBuilder.buildExpressionNoJoinAllowed(where.getExpression)
+        qplan.Selection(condition, rb)
+      }
+    )
   }
 
 
@@ -48,81 +34,51 @@ object ReturnBuilder {
     * i.e. the distinct flag and the ReturnBody.
     */
   def buildReturnBody(distinct: Boolean, returnBody: oc.ReturnBody, content: qplan.QNode): qplan.QNode = {
-    // FIXME (in the grammar): returnBody.returnItems.get(0) is the actual return item list
-    // but it should be w/o .get(0)
-    val returnItems = returnBody.getReturnItems.get(0)
+    val returnItems = returnBody.getReturnItems
 
-    // pre-create elements to project to which will be copied to BeamerOperator.elements
-    val _elements = ListBuffer[cExpr.NamedExpression]()
+    // this will hold the project list compiled
+    val elements = ListBuffer[expr.ReturnItem]()
 
     if ("*".equals(returnItems.getAll)) {
       //TODO: when resolving,
       // - add the non-dontCare vertex variables to the return list sorted by variable name
       // - add the non-dontCare edge variables to the return list sorted by variable name
-      _elements += UnresolvedStar(None)
+      elements += expr.ReturnItem(UnresolvedStar(None))
     }
     for (returnItem <- returnItems.getItems.asScala) {
       val e = ExpressionBuilder.buildExpressionNoJoinAllowed(returnItem.getExpression)
-
-      if (returnItem.getAlias == null)
-        _elements += UnresolvedAlias(e)
-      else
-        _elements += cExpr.Alias(e, returnItem.getAlias.getName)()
+      Option(returnItem.getAlias).fold(elements += expr.ReturnItem(e))( (alias) => elements += expr.ReturnItem(e, Some(alias.getName)) )
     }
 
-    //TODO: check after resolving: if (_elements.empty) unrecoverableError('''RETURN items processed and resulted in no columns values to return''')
+    //TODO: check after resolving: if (elements.empty) unrecoverableError('''RETURN items processed and resulted in no column values to return''')
 
     // We create an unresolved projection which is to be resolved to either Projection or Grouping
-    val projection = qplan.UnresolvedProjection(_elements, content)
+    val projection = qplan.UnresolvedProjection(elements, content)
 
     // add duplicate-elimination operator if return DISTINCT was specified
-    val op1 = if (distinct) {
-      qplan.DuplicateElimination(projection)
-    } else {
-      projection
-    }
+    val op1 = if (distinct) qplan.DuplicateElimination(projection) else projection
 
-    val order = returnBody.getOrder
-    val op2 = if (order == null) {
-      op1
-    } else {
-      //FIXME: implement this
-//      // use of lazy map OK as passed to addAll and used only once - jmarton, 2017-01-07
-//      val sortEntries = order.orderBy.map [
-//      val sortDirection = if (sort !== null && sort.startsWith("DESC"))
-//        OrderDirection.DESCENDING
-//      else
-//        OrderDirection.ASCENDING
-//
-//      val sortExpression = switch expression {
-//        // for variable name resolution, ExpressionVariables need to be taken into account and have higher priority
-//        ExpressionNodeLabelsAndPropertyLookup: ce.vb.buildVariableExpression(expression, true)
-//        VariableRef: ce.vb.buildVariableExpression(expression, true)
-//        default: ExpressionBuilder.buildExpression(expression, ce)
-//      }
-//      modelFactory.createSortEntry => [
-//      direction = sortDirection
-//      expression = sortExpression
-//      ]
-//      ]
-//
-//      val sortOperator = modelFactory.createSortOperator => [
-//      entries.addAll(sortEntries)
-//      input = op1
-//      ]
-      qplan.Sort(Seq[cExpr.SortOrder](), op1)
-    }
+    val op2 = Option(returnBody.getOrder).fold(op1)(
+      (order) => {
+        val sortEntries: Seq[cExpr.SortOrder] = order.getOrderBy.asScala.map(oe => {
+          val sortExpression = ExpressionBuilder.buildExpressionNoJoinAllowed(oe.getExpression)
+          val sortDirection: cExpr.SortDirection = Option(oe.getSort)
+            .filter( _.toUpperCase.startsWith("DESC") ) // not null and DESC -> Some("DESC"), else none
+            .fold[cExpr.SortDirection](cExpr.Ascending)( _ => cExpr.Descending)
+          cExpr.SortOrder(sortExpression, sortDirection)
+        })
+        qplan.Sort(sortEntries, op1)
+      }
+    )
 
-    val skip = returnBody.getSkip
-    val limit = returnBody.getLimit
-    val op3 = if (skip == null && limit == null) {
-      op2
-    } else {
-      val s = if (skip == null) null else BuilderUtil.convertToSkipLimitConstant(skip.getSkip)
-      val l = if (limit == null) null else BuilderUtil.convertToSkipLimitConstant(limit.getLimit)
-      qplan.Top(s, l, op2)
+    val op3 = (Option(returnBody.getSkip), Option(returnBody.getLimit)) match {
+      case (None, None) => op2
+      case (skipOpt, limitOpt) => {
+        val s = skipOpt.flatMap( (skip)  => BuilderUtil.convertToSkipLimitConstant(skip.getSkip) )
+        val l = limitOpt.flatMap( (limit) => BuilderUtil.convertToSkipLimitConstant(limit.getLimit) )
+        qplan.Top(s, l, op2)
+      }
     }
-
     op3
   }
 }

@@ -10,41 +10,19 @@ class TckEngineTest extends FunSuite {
   def run(createQuery: String, readQuery: String): Iterable[Tuple] = {
     val indexer = new Indexer()
 
-    val createAdapter = new IngraphSearchAdapter(createQuery, "create", indexer)
-    createAdapter.terminate()
+    if (createQuery != "") {
+      val createAdapter = new IngraphSearchAdapter(createQuery, "create", indexer)
+      createAdapter.terminate()
+    }
 
     val readAdapter = new IngraphIncrementalAdapter(readQuery, "read", indexer)
-    return readAdapter.result()
+    readAdapter.result()
   }
 
-//  test("Hello World") {
-//    val stages = compile(
-//      """MATCH (n)
-//        |RETURN n
-//      """.stripMargin
-//    )
-//  }
-//
-//  test("Filtering for vertices in MATCH") {
-//    val stages = compile(
-//      """MATCH (n {name: 'John'})
-//        |RETURN n
-//      """.stripMargin
-//    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
-//  }
-//
-//  test("Filtering for edges in MATCH") {
-//    val stages = compile(
-//      """MATCH (n)-[:REL {prop: 'value'}]->(m)
-//        |RETURN n, m
-//      """.stripMargin
-//    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
-//  }
+  // MatchAcceptance.feature
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L52
-  ignore("TCK test: Use multiple MATCH clauses to do a Cartesian product") {
+  test("Use multiple MATCH clauses to do a Cartesian product") {
     val results = run(
       """CREATE ({value: 1}),
         |  ({value: 2}),
@@ -54,91 +32,295 @@ class TckEngineTest extends FunSuite {
         |RETURN n.value AS n, m.value AS m
       """.stripMargin
     )
-    println(results)
+    assert(results.size == 9)
   }
 
-//  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L97
-//  test("TCK test: Filter out based on node prop name") {
-//    val stages = compile(
-//      """MATCH ()-[rel:X]-(a)
-//        |WHERE a.name = 'Andres'
-//        |RETURN a
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L97
+  test("Filter out based on node prop name") {
+    val results = run(
+      """CREATE ({name: 'Someone'})<-[:X]-()-[:X]->({name: 'Andres'})""",
+      """MATCH ()-[rel:X]-(a)
+        |WHERE a.name = 'Andres'
+        |RETURN a
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  test("Filter out based on node prop name / fragment #1") {
+    val results = run(
+      """CREATE ()""",
+      """MATCH (a)
+        |WHERE a.name = 'x'
+        |RETURN a""".stripMargin
+    )
+    assert(results.size == 0)
+  }
+
+  test("Filter out based on node prop name / fragment #2") {
+    val results = run(
+      """CREATE ({name: 'Someone'})<-[:X]-()-[:X]->({name: 'Andres'})""",
+      """MATCH (a)
+        |RETURN a""".stripMargin
+    )
+    assert(results.size == 3)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131
+  test("Filter based on rel prop name") {
+    val results = run(
+      """CREATE (:A)<-[:KNOWS {name: 'monkey'}]-()-[:KNOWS {name: 'woot'}]->(:B)""",
+      """MATCH (node)-[r:KNOWS]->(a)
+        |WHERE r.name = 'monkey'
+        |RETURN a
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L148
+  test("Cope with shadowed variables") {
+    val results = run(
+      """
+        |CREATE ({value: 1, name: 'King Kong'}),
+        |  ({value: 2, name: 'Ann Darrow'})
+      """.stripMargin,
+      """MATCH (n)
+        |WITH n.name AS n
+        |RETURN n
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+    // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L167
+  test("Get neighbours") {
+    val results = run(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})""",
+      """MATCH (n1)-[rel:KNOWS]->(n2)
+        |RETURN n1, n2
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L183
+  test("Get two related nodes") {
+    val results = run(
+      """CREATE (a:A {value: 1}),
+        |  (a)-[:KNOWS]->(b:B {value: 2}),
+        |  (a)-[:KNOWS]->(c:C {value: 3})
+      """.stripMargin,
+      """MATCH ()-[rel:KNOWS]->(x)
+        |RETURN x
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L202
+  test("Get related to related to / untyped") {
+    intercept[AssertionError] {
+    run(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3})""",
+      """MATCH (n)-->(a)-->(b)
+        |RETURN b
+      """.stripMargin
+
+    ) }
+  }
+
+  test("Get related to related to / typed") {
+    val results = run(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3})""",
+      """MATCH (n)-[:KNOWS]->(a)-[:FRIEND]->(b)
+        |RETURN b
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L218
+  test("Handle comparison between node properties") {
+    val results = run(
+      """CREATE (a:A {animal: 'monkey'}),
+        |  (b:B {animal: 'cow'}),
+        |  (c:C {animal: 'monkey'}),
+        |  (d:D {animal: 'cow'}),
+        |  (a)-[:KNOWS]->(b),
+        |  (a)-[:KNOWS]->(c),
+        |  (d)-[:KNOWS]->(b),
+        |  (d)-[:KNOWS]->(c)
+      """.stripMargin,
+      """MATCH (n)-[rel:KNOWS]->(x)
+        |WHERE n.animal = x.animal
+        |RETURN n, x
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L243
+  test("Return two subgraphs with bound undirected relationship") {
+    val results = run(
+      """CREATE (a:A {value: 1})-[:REL {name: 'r'}]->(b:B {value: 2})
+      """.stripMargin,
+      """MATCH (a)-[r:REL {name: 'r'}]-(b)
+        |RETURN a, b
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L260
+  test("Return two subgraphs with bound undirected relationship and optional relationship") {
+    val results = run(
+      """CREATE (a:A {value: 1})-[:REL {name: 'r1'}]->(b:B {value: 2})-[:REL {name: 'r2'}]->(c:C {value: 3})
+      """.stripMargin,
+      """MATCH (a)-[r:REL {name: 'r1'}]-(b)
+        |OPTIONAL MATCH (b)-[r2:REL]-(c)
+        |WHERE r <> r2
+        |RETURN a, b, c
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
+  test("Handle OR in the WHERE clause") {
+    val results = run(
+      """CREATE (a:A {p1: 12}),
+        |  (b:B {p2: 13}),
+        |  (c:C)
+      """.stripMargin,
+      """MATCH (n)
+        |WHERE n.p1 = 12 OR n.p2 = 13
+        |RETURN n
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+  // MatchAcceptance2.feature
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L20
+  test("Do not return non-existent nodes") {
+    val results = run(
+      "",
+      """MATCH (n)
+        |RETURN n
+      """.stripMargin
+    )
+    assert(results.size == 0)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L31
+  test("Do not return non-existent relationships") {
+    val results = run(
+      "",
+      """MATCH ()-[r:LOLZ]->()
+        |RETURN r
+      """.stripMargin
+    )
+    assert(results.size == 0)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L107
+  ignore("Zero-length variable length pattern in the middle of the pattern") {
+    val results = run(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (c {name: 'C'}), ({name: 'D'}),
+        |       ({name: 'E'})
+        |CREATE (a)-[:CONTAINS]->(b),
+        |       (b)-[:FRIEND]->(c)
+      """.stripMargin,
+      """MATCH (a {name: 'A'})-[:CONTAINS*0..1]->(b)-[:FRIEND*0..1]->(c)
+        |RETURN a, b, c
+      """.stripMargin
+    )
+    assert(results.size == 3)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L129
+  ignore("Simple variable length pattern") {
+    val results = run(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (c {name: 'C'}), (d {name: 'D'})
+        |CREATE (a)-[:CONTAINS]->(b),
+        |       (b)-[:CONTAINS]->(c),
+        |       (c)-[:CONTAINS]->(d)
+      """.stripMargin,
+      """MATCH (a {name: 'A'})-[*]->(x)
+        |RETURN x
+      """.stripMargin
+    )
+    assert(results.size == 3)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L191
+  test("Returning bound nodes that are not part of the pattern") {
+    val results = run(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (c {name: 'C'})
+        |CREATE (a)-[:KNOWS]->(b)
+      """.stripMargin,
+      """MATCH (a {name: 'A'}), (c {name: 'C'})
+        |MATCH (a)-[:KNOWS]->(b)
+        |RETURN a, b, c
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L210
+  ignore("Two bound nodes pointing to the same node") {
+    val results = run(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (x1 {name: 'x1'}), (x2 {name: 'x2'})
+        |CREATE (a)-[:KNOWS]->(x1),
+        |       (a)-[:KNOWS]->(x2),
+        |       (b)-[:KNOWS]->(x1),
+        |       (b)-[:KNOWS]->(x2)
+      """.stripMargin,
+      """MATCH (a {name: 'A'}), (b {name: 'B'})
+        |MATCH (a)-[:KNOWS]->(x)<-[:KNOWS]->(b)
+        |RETURN x
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L233
+  test("Three bound nodes pointing to the same node") {
+    val results = run(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}), (c {name: 'C'}),
+        |       (x1 {name: 'x1'}), (x2 {name: 'x2'})
+        |CREATE (a)-[:KNOWS]->(x1),
+        |       (a)-[:KNOWS]->(x2),
+        |       (b)-[:KNOWS]->(x1),
+        |       (b)-[:KNOWS]->(x2),
+        |       (c)-[:KNOWS]->(x1),
+        |       (c)-[:KNOWS]->(x2)
+      """.stripMargin,
+      """MATCH (a {name: 'A'}), (b {name: 'B'}), (c {name: 'C'})
+        |MATCH (a)-[:KNOWS]->(x), (b)-[:KNOWS]->(x), (c)-[:KNOWS]->(x)
+        |RETURN x
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+// cont. later from https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L258
+
+//  //
+//  test("") {
+//    val results = run(
+//      """
+//      """.stripMargin,
+//      """
 //      """.stripMargin
 //    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
-//  }
-//
-//  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131
-//  test("TCK test: Filter based on rel prop name") {
-//    val stages = compile(
-//      """MATCH (node)-[r:KNOWS]->(a)
-//        |WHERE r.name = 'monkey'
-//        |RETURN a
-//      """.stripMargin
-//    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
-//  }
-//
-//  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L167
-//  test("TCK test: Get neighbours") {
-//    val stages = compile(
-//      """MATCH (n1)-[rel:KNOWS]->(n2)
-//        |RETURN n1, n2
-//      """.stripMargin
-//    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
-//  }
-//
-//  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L183
-//  test("TCK test: Get two related nodes") {
-//    val stages = compile(
-//      """MATCH ()-[rel:KNOWS]->(x)
-//        |RETURN x
-//      """.stripMargin
-//    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
-//  }
-//
-//  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L202
-//  test("TCK test: Get related to related to") {
-//    val stages = compile(
-//      """MATCH (n)-->(a)-->(b)
-//        |RETURN b
-//      """.stripMargin
-//    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
-//  }
-//
-//  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L218
-//  test("TCK test: Handle comparison between node properties") {
-//    val stages = compile(
-//      """MATCH (n)-[rel]->(x)
-//        |WHERE n.animal = x.animal
-//        |RETURN n, x
-//      """.stripMargin
-//    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 2)
-//  }
-//
-//  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
-//  test("TCK test: Handle OR in the WHERE clause") {
-//    val stages = compile(
-//      """MATCH (n)
-//        |WHERE n.p1 = 12 OR n.p2 = 13
-//        |RETURN n
-//      """.stripMargin
-//    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 2)
-//  }
-//
-//  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L456
-//  test("TCK test: Return relationships by collecting them as a list - undirected") {
-//    val stages = compile(
-//      """MATCH (a:Start)-[r:REL*2..2]-(b)
-//        |RETURN r
-//      """.stripMargin
-//    )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
+//    assert(results.size == )
 //  }
 
 }

@@ -1,5 +1,9 @@
 plugins {
-  id 'com.github.maiflai.scalatest' version '0.16'
+  id 'com.github.maiflai.scalatest' version '0.19'
+}
+
+test {
+  environment('INGRAPH_COMPILER_TEST_SUPPRESS_PRINTLN', '1')
 }
 
 dependencies {

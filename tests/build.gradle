@@ -1,4 +1,5 @@
 dependencies {
+  compile project(':driver')
   compile project(':neo4j-tests')
 
   compile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'

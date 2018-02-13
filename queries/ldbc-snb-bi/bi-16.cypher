@@ -15,7 +15,7 @@
 // If you would like to test the query in the browser, replace the values of
 // $minPathDistance and $maxPathDistance to a constant.
 MATCH
-  (:Person {id: $personId})-[:KNOWS*$minPathDistance..$maxPathDistance]-
+  (:Person {id: $personId})-[:KNOWS*3..5]-
   (person:Person)-[:IS_LOCATED_IN]->(:City)-[:IS_PART_OF]->
   (:Country {name: $country}),
   (person)<-[:HAS_CREATOR]-(message:Message)-[:HAS_TAG]->(:Tag)-[:HAS_TYPE]->

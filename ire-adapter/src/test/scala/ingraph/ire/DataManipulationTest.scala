@@ -22,7 +22,7 @@ class DataManipulationTest extends FunSuite {
     indexer
   }
 
-  test("delete and create edge work") {
+  ignore("delete and create edge work") {
     val indexer = initializeIndexer()
 
     val oneOff = """MATCH (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment)
@@ -40,10 +40,10 @@ class DataManipulationTest extends FunSuite {
     }
   }
 
-  test("delete vertex works") {
+  ignore("delete vertex works") {
     val indexer = initializeIndexer()
 
-    val oneOff = "MATCH (t:Train) DELETE t"
+    val oneOff = "MATCH (t:Train) DETACH DELETE t"
     new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
 
     val whereIsTrain = "MATCH (t:Train) RETURN t"
@@ -63,10 +63,10 @@ class DataManipulationTest extends FunSuite {
     assert(whereIsAdapter.result() == Seq(Vector(-4964420948893066024L, "poweeeer")))
   }
 
-  test("create matched vertex works") {
+  ignore("create matched vertex works") {
     val indexer = initializeIndexer()
 
-    val oneOff = "MATCH (t: Train) WHERE t.power = t.power CREATE (e: Engine {power: t.power})"
+    val oneOff = "MATCH (t: Train) CREATE (e: Engine {power: t.power})"
     new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
     val whereIsTrain = "MATCH (e: Engine) RETURN e, e.power"// WHERE e.power != 1 RETURN e, e.power"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
@@ -75,14 +75,14 @@ class DataManipulationTest extends FunSuite {
   }
 
 
-  ignore("create constant single edges works") {
+  test("create constant single edges works") {
     val indexer = new Indexer()
 
     val oneOff = "CREATE (t:Train)-[r:ON {track: 'bomb'}]->(seg1:Segment)"
     new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
     val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment) RETURN r, r.track"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
-    assert(whereIsAdapter.result() == Seq(Vector(6137546356583794141L, -594798593157429144L)))
+    assert(whereIsAdapter.result() == Seq(Vector(3831662765844904176L, "bomb")))
   }
 
   test("create matched single edges") {
@@ -93,8 +93,8 @@ class DataManipulationTest extends FunSuite {
     val query = "MATCH (seg:Segment)-[m:MonitoredBy]->(s:Sensor) RETURN seg, m, s"
     val whereIsAdapter = new IngraphIncrementalAdapter(query, "", indexer)
     assert(whereIsAdapter.result() == Seq(
-      Vector(2, -594798593157429144L, 112842269129291794L),
-      Vector(3, 7564655870752979346L, 3831662765844904176L)))
+      Vector(3, 3831662765844904176L, -4964420948893066024L),
+      Vector(2, 6137546356583794141L, 7564655870752979346L)))
   }
 
   test("create two edges works") {
@@ -105,6 +105,6 @@ class DataManipulationTest extends FunSuite {
     val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment) RETURN t, seg1, seg2"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
 
-    assert(whereIsAdapter.result() == Seq(Vector(6137546356583794141L, -594798593157429144L, -1109287713991315740L)))
+    assert(whereIsAdapter.result() == Seq(Vector(-4964420948893066024L, 7564655870752979346L, 6137546356583794141L)))
   }
 }
