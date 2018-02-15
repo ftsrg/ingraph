@@ -316,6 +316,15 @@ class RandomCompilationTest extends CompilerTest {
     compile("MATCH (n) RETURN n")
   }
 
+  test("should resolve aliased property lookup two query parts later") {
+    compile(
+      """MATCH (n)
+        |WITH n.foo as nFoo
+        |WITH nFoo
+        |RETURN nFoo
+        |""".stripMargin)
+  }
+
   test("should compile MATCH and UNWIND") {
     compile("MATCH (n) UNWIND n.favColors AS favColor RETURN n, favColor")
   }

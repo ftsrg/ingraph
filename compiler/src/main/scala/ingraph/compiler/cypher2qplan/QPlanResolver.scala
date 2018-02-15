@@ -16,8 +16,29 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 object QPlanResolver {
-  // structure to hold the name resolution cache
-  type TNameResolverScope = mutable.Map[String, (String, cExpr.Expression)]
+  /**
+    * structure to hold the name resolution cache:
+    *   key is the lookup name (String)
+    *   value is a pair of:
+    *      - the result of the name resolution and
+    *      - the expression resulted in this particular resolution
+    */
+  protected class TNameResolverCache {
+    type TKey = String
+    type TValue = (expr.types.TResolvedNameValue, cExpr.Expression)
+
+    private val impl = mutable.Map[TKey, TValue]()
+
+    def get(k: TKey): Option[TValue] = impl.get(k)
+    def put(k: TKey, v: TValue) = impl.put(k, v)
+    /** Put en entry under the key of the original basename stored in the resolved value v */
+    def put(rn: expr.ResolvableName) = rn match {
+      case rne: cExpr.Expression => impl.put(rn.resolvedName.get.baseName, (rn.resolvedName.get, rne))
+    }
+
+    def update(k:TKey, v: TValue) = impl.update(k, v)
+  }
+  type TScopedNameResolver = (String, cExpr.Expression) => expr.types.TResolvedName
 
   def resolveQPlan(unresolvedQueryPlan: qplan.QNode): qplan.QNode = {
     // should there be other rule sets (partial functions), combine them using orElse,
@@ -76,13 +97,13 @@ object QPlanResolver {
 
   protected def reAssembleTreeResolvingNames(qPlanPolishNotation: mutable.Stack[qplan.QNode], operandStack: mutable.Stack[qplan.QNode]) = {
     // this will hold those names that are in scope, so no new resolution should be invented
-    var nameResolverScope = mutable.Map[String, (String, cExpr.Expression)]()
+    var nameResolverCache = new TNameResolverCache
     // HACK: this will hold the previous name resolving scope, which will be used for Sort and Top operators
-    var oldNameResolverScope: Option[ mutable.Map[String, (String, cExpr.Expression)] ] = None
+    var oldNameResolverScope: Option[TNameResolverCache] = None
     // scoped name resolver shorthand
-    def r[T <: Expression](v: T): T = r2(v, nameResolverScope)
-    // scoped name resolver shorthand allowing to pass in the nameResolverScope
-    def r2[T <: Expression](v: T, nrs: mutable.Map[String, (String, cExpr.Expression)]): T = v.transform(expressionNameResolver(snrGen(nrs), nrs)).asInstanceOf[T]
+    def r[T <: Expression](v: T): T = r2(v, nameResolverCache)
+    // scoped name resolver shorthand allowing to pass in the nameResolverCache
+    def r2[T <: Expression](v: T, nrs: TNameResolverCache): T = v.transform(expressionNameResolver(snrGen(nrs), nrs)).asInstanceOf[T]
 
     // re-assemble the tree resolving names
     while (qPlanPolishNotation.nonEmpty) {
@@ -110,20 +131,20 @@ object QPlanResolver {
             case qplan.Production(_) => qplan.Production(child)
             case qplan.UnresolvedProjection(projectList, _) => {
               // initialize new namespace applicable after the projection operator
-              val nextQueryPartNameResolverScope = mutable.Map[String, (String, cExpr.Expression)]()
-              val nextSnr = snrGen(nextQueryPartNameResolverScope)
+              val nextQueryPartNameResolverCache = new TNameResolverCache
+              val nextSnr = snrGen(nextQueryPartNameResolverCache)
               val resolvedProjectListBuf = ListBuffer.empty[expr.ReturnItem]
               for (ri <- projectList) {
                 val resolvedChild = r(ri.child)
-                val resolvedName: Option[String] = ri.alias match {
+                val resolvedName: expr.types.TResolvedName = ri.alias match {
                   case Some(alias) => nextSnr(alias, resolvedChild)
                   case None => resolvedChild match {
                     case rc: expr.ResolvableName => {
                       rc match {
-                        case ea: expr.ElementAttribute => nextQueryPartNameResolverScope.put(ea.name, (rc.resolvedName.get, rc))
-                        case pa: expr.PropertyAttribute => nextQueryPartNameResolverScope.put(s"${pa.elementAttribute.name}$$${pa.name}", (rc.resolvedName.get, rc))
-                        case ua: expr.UnwindAttribute => nextQueryPartNameResolverScope.put(ua.name, (rc.resolvedName.get, rc))
-                        case ea: expr.ExpressionAttribute => nextQueryPartNameResolverScope.put(ea.name, (rc.resolvedName.get, rc))
+                        case ea: expr.ElementAttribute => nextQueryPartNameResolverCache.put(rc)
+                        case pa: expr.PropertyAttribute => nextQueryPartNameResolverCache.put(rc)
+                        case ua: expr.UnwindAttribute => nextQueryPartNameResolverCache.put(rc)
+                        case ea: expr.ExpressionAttribute => nextQueryPartNameResolverCache.put(rc)
                         case x => throw new UnexpectedTypeException(x, "return item position")
                       }
                       rc.resolvedName
@@ -136,8 +157,8 @@ object QPlanResolver {
               val resolvedProjectList: expr.types.TProjectList = resolvedProjectListBuf.toSeq
 
               // retain old name resolver scope
-              oldNameResolverScope = Some(nameResolverScope)
-              nameResolverScope = nextQueryPartNameResolverScope
+              oldNameResolverScope = Some(nameResolverCache)
+              nameResolverCache = nextQueryPartNameResolverCache
               qplan.UnresolvedProjection(resolvedProjectList, child)
             }
             // case {Projection, Grouping} skipped because it is introduced in a later resolution stage
@@ -171,29 +192,29 @@ object QPlanResolver {
     }
   }
 
-  def expressionNameResolver(snr: (String, cExpr.Expression) => Option[String], nameResolverScope: TNameResolverScope): PartialFunction[Expression, Expression] = {
+  def expressionNameResolver(snr: TScopedNameResolver, nameResolverCache: TNameResolverCache): PartialFunction[Expression, Expression] = {
     case rn: expr.ResolvableName =>
       if (rn.resolvedName.isDefined) rn // do not resolve already resolved stuff again
       else rn match {
         case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, snr(name, rn))
         case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, snr(name, rn))
         case expr.RichEdgeAttribute(src, trg, edge, dir) => expr.RichEdgeAttribute(
-          src.transform(expressionNameResolver(snr, nameResolverScope)).asInstanceOf[expr.VertexAttribute],
-          trg.transform(expressionNameResolver(snr, nameResolverScope)).asInstanceOf[expr.VertexAttribute],
-          edge.transform(expressionNameResolver(snr, nameResolverScope)).asInstanceOf[expr.EdgeAttribute],
+          src.transform(expressionNameResolver(snr, nameResolverCache)).asInstanceOf[expr.VertexAttribute],
+          trg.transform(expressionNameResolver(snr, nameResolverCache)).asInstanceOf[expr.VertexAttribute],
+          edge.transform(expressionNameResolver(snr, nameResolverCache)).asInstanceOf[expr.EdgeAttribute],
           dir
         )
         case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, snr(name, rn))
         case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name,
           // see "scoped name resolver shorthand" above
-          elementAttribute.transform(expressionNameResolver(snr, nameResolverScope)).asInstanceOf[expr.ElementAttribute],
+          elementAttribute.transform(expressionNameResolver(snr, nameResolverCache)).asInstanceOf[expr.ElementAttribute],
           snr(s"${elementAttribute.name}$$${name}", rn))
         case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, snr(name, rn))
       }
     case UnresolvedAttribute(nameParts) => nameParts.length match {
       case 1 | 2 => {
         val elementName = nameParts(0) // should be OK as .length >= 1
-        val scopeCacheEntry = nameResolverScope.get(elementName)
+        val scopeCacheEntry = nameResolverCache.get(elementName)
         val elementAttribute = scopeCacheEntry match { //if (scopeCacheEntry.isDefined) {
           case Some((rnString, entry)) => {
             val rn = Some(rnString)
@@ -234,8 +255,8 @@ object QPlanResolver {
   }
 
   // function generator for name resolution shorthand: "scoped name resolution"
-  def snrGen(nameResolverScope: TNameResolverScope): (String, cExpr.Expression) => Option[String] = (baseName, target) => {
-    val resolvedName: String = nameResolverScope.get(baseName) match {
+  def snrGen(nameResolverScope: TNameResolverCache): TScopedNameResolver = (baseName, target) => {
+    val resolvedName: expr.types.TResolvedNameValue = nameResolverScope.get(baseName) match {
       case Some((rn, expr.UnwindAttribute(_, _, _))) => {
         // we don't have the result type info for UNWIND,
         // so our best guess is to use the first type we encounter in the current query type
@@ -248,7 +269,7 @@ object QPlanResolver {
         rn
       }
       case None => {
-        val rn = generateUniqueName(baseName)
+        val rn = expr.types.TResolvedNameValue(baseName, generateUniqueName(baseName))
         nameResolverScope.put(baseName, (rn, target))
         rn
       }
