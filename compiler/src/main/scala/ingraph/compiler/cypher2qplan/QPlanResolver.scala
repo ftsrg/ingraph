@@ -4,7 +4,6 @@ import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.compiler.cypher2qplan.util.TransformUtil
 import ingraph.compiler.exceptions.{CompilerException, IllegalAggregationException, NameResolutionException, UnexpectedTypeException}
-import ingraph.model.expr.{ExpressionAttribute, ProjectionDescriptor, ResolvableName, ReturnItem}
 import ingraph.model.qplan.{QNode, UnaryQNode}
 import ingraph.model.{expr, misc, qplan}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction, UnresolvedStar}
@@ -152,7 +151,7 @@ object QPlanResolver {
                     case rc => nextSnr.resolve("_expr", rc)
                   }
                 }
-                resolvedProjectListBuf.append(ReturnItem(resolvedChild, ri.alias, resolvedName))
+                resolvedProjectListBuf.append(expr.ReturnItem(resolvedChild, ri.alias, resolvedName))
               }
               val resolvedProjectList: expr.types.TProjectList = resolvedProjectListBuf.toSeq
 
@@ -324,7 +323,7 @@ object QPlanResolver {
   }
 
   val expressionResolver: PartialFunction[Expression, Expression] = {
-    case ExpressionAttribute(expr, name, rn) => ExpressionAttribute(expr.transform(expressionResolver), name, rn)
+    case expr.ExpressionAttribute(expression, name, rn) => expr.ExpressionAttribute(expression.transform(expressionResolver), name, rn)
     case UnresolvedFunction(functionIdentifier, children, isDistinct) => expr.FunctionInvocation(misc.Function.fromCypherName(functionIdentifier.identifier, children.length, isDistinct), children, isDistinct)
   }
 
@@ -334,7 +333,7 @@ object QPlanResolver {
     * @param child
     * @return
     */
-  protected def resolveAttributes(attributes: Seq[cExpr.NamedExpression], child: qplan.QNode): Seq[ResolvableName] = {
+  protected def resolveAttributes(attributes: Seq[cExpr.NamedExpression], child: qplan.QNode): Seq[expr.ResolvableName] = {
     val transformedAttributes = attributes.flatMap( a => child.output.find( co => co.name == a.name ) )
 
     if (attributes.length != transformedAttributes.length) {
@@ -351,7 +350,7 @@ object QPlanResolver {
     * @param invert iff true, match is inverted, i.e. only those are returned which were not found
     * @return
     */
-  protected def filterForAttributesOfChildOutput(attributes: Seq[ResolvableName], child: qplan.QNode, invert: Boolean = false): Seq[ResolvableName] = {
+  protected def filterForAttributesOfChildOutput(attributes: Seq[expr.ResolvableName], child: qplan.QNode, invert: Boolean = false): Seq[expr.ResolvableName] = {
     attributes.flatMap( a => if ( invert.^(child.output.exists( co => co.name == a.name )) ) Some(a) else None )
   }
 
@@ -366,7 +365,7 @@ object QPlanResolver {
     * @param projectList
     * @return
     */
-  protected def projectionResolveHelper(projectList: expr.types.TProjectList, child: QNode): UnaryQNode with ProjectionDescriptor = {
+  protected def projectionResolveHelper(projectList: expr.types.TProjectList, child: QNode): UnaryQNode with expr.ProjectionDescriptor = {
     /**
       * Returns true iff e is an expression having a call to an aggregation function at its top-level.
       * @param e
