@@ -328,6 +328,16 @@ class RandomCompilationTest extends CompilerTest {
         |RETURN n, favColor, favMovie
         |""".stripMargin)
   }
+
+  test("should compile vertices COLLECT'ed then UNWIND as a vertex") {
+    compile(
+      """MATCH (n:Person)
+        |WITH collect(n) as persons
+        |UNWIND persons AS p2
+        |MATCH (p2)-[:OWNER]->(c:Car)
+        |RETURN persons, p2, c
+        |""".stripMargin)
+  }
 }
 
 /** Random compiler tests that must stop after QPlan compilation.

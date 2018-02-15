@@ -29,8 +29,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-04")
   }
 
-  // name resolution for unwind attribute
-  ignore("bi-05 from file: Top posters in a country") {
+  test("bi-05 from file: Top posters in a country") {
     val stages=compileFromFile("bi-05")
   }
 
@@ -50,8 +49,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-09")
   }
 
-  // name resolution for unwind attribute
-  ignore("bi-10 from file: Central Person for a Tag") {
+  test("bi-10 from file: Central Person for a Tag") {
     val stages=compileFromFile("bi-10")
   }
 
@@ -97,8 +95,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-20")
   }
 
-  // name resolution for unwind attribute
-  ignore("bi-21 from file: Zombies in a country") {
+  test("bi-21 from file: Zombies in a country") {
     val stages=compileFromFile("bi-21")
   }
 

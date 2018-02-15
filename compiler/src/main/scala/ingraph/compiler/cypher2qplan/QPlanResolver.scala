@@ -236,6 +236,12 @@ object QPlanResolver {
   // function generator for name resolution shorthand: "scoped name resolution"
   def snrGen(nameResolverScope: TNameResolverScope): (String, cExpr.Expression) => Option[String] = (baseName, target) => {
     val resolvedName: String = nameResolverScope.get(baseName) match {
+      case Some((rn, expr.UnwindAttribute(_, _, _))) => {
+        // we don't have the result type info for UNWIND,
+        // so our best guess is to use the first type we encounter in the current query type
+        nameResolverScope.update(baseName, (rn, target))
+        rn
+      }
       case Some((rn, entry)) => if (entry.getClass != target.getClass) {
         throw new CompilerException(s"Name collision across types: ${baseName}. In the cache, it is ${entry.getClass}, but now it was passed as ${target.getClass}")
       } else {
