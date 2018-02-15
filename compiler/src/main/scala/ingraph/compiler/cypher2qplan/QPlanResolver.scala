@@ -103,7 +103,7 @@ object QPlanResolver {
     // scoped name resolver shorthand
     def r[T <: Expression](v: T): T = r2(v, nameResolverCache)
     // scoped name resolver shorthand allowing to pass in the nameResolverCache
-    def r2[T <: Expression](v: T, nrs: TNameResolverCache): T = v.transform(expressionNameResolver(snrGen(nrs), nrs)).asInstanceOf[T]
+    def r2[T <: Expression](v: T, nrs: TNameResolverCache): T = v.transform(expressionNameResolver(new SNR(nrs))).asInstanceOf[T]
 
     // re-assemble the tree resolving names
     while (qPlanPolishNotation.nonEmpty) {
@@ -132,12 +132,12 @@ object QPlanResolver {
             case qplan.UnresolvedProjection(projectList, _) => {
               // initialize new namespace applicable after the projection operator
               val nextQueryPartNameResolverCache = new TNameResolverCache
-              val nextSnr = snrGen(nextQueryPartNameResolverCache)
+              val nextSnr = new SNR(nextQueryPartNameResolverCache)
               val resolvedProjectListBuf = ListBuffer.empty[expr.ReturnItem]
               for (ri <- projectList) {
                 val resolvedChild = r(ri.child)
                 val resolvedName: expr.types.TResolvedName = ri.alias match {
-                  case Some(alias) => nextSnr(alias, resolvedChild)
+                  case Some(alias) => nextSnr.resolve(alias, resolvedChild)
                   case None => resolvedChild match {
                     case rc: expr.ResolvableName => {
                       rc match {
@@ -149,7 +149,7 @@ object QPlanResolver {
                       }
                       rc.resolvedName
                     }
-                    case rc => nextSnr("_expr", rc)
+                    case rc => nextSnr.resolve("_expr", rc)
                   }
                 }
                 resolvedProjectListBuf.append(ReturnItem(resolvedChild, ri.alias, resolvedName))
@@ -192,29 +192,29 @@ object QPlanResolver {
     }
   }
 
-  def expressionNameResolver(snr: TScopedNameResolver, nameResolverCache: TNameResolverCache): PartialFunction[Expression, Expression] = {
+  def expressionNameResolver(snr: SNR): PartialFunction[Expression, Expression] = {
     case rn: expr.ResolvableName =>
       if (rn.resolvedName.isDefined) rn // do not resolve already resolved stuff again
       else rn match {
-        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, snr(name, rn))
-        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, snr(name, rn))
+        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, snr.resolve(name, rn))
+        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, snr.resolve(name, rn))
         case expr.RichEdgeAttribute(src, trg, edge, dir) => expr.RichEdgeAttribute(
-          src.transform(expressionNameResolver(snr, nameResolverCache)).asInstanceOf[expr.VertexAttribute],
-          trg.transform(expressionNameResolver(snr, nameResolverCache)).asInstanceOf[expr.VertexAttribute],
-          edge.transform(expressionNameResolver(snr, nameResolverCache)).asInstanceOf[expr.EdgeAttribute],
+          src.transform(expressionNameResolver(snr)).asInstanceOf[expr.VertexAttribute],
+          trg.transform(expressionNameResolver(snr)).asInstanceOf[expr.VertexAttribute],
+          edge.transform(expressionNameResolver(snr)).asInstanceOf[expr.EdgeAttribute],
           dir
         )
-        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, snr(name, rn))
+        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, snr.resolve(name, rn))
         case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name,
           // see "scoped name resolver shorthand" above
-          elementAttribute.transform(expressionNameResolver(snr, nameResolverCache)).asInstanceOf[expr.ElementAttribute],
-          snr(s"${elementAttribute.name}$$${name}", rn))
-        case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, snr(name, rn))
+          elementAttribute.transform(expressionNameResolver(snr)).asInstanceOf[expr.ElementAttribute],
+          snr.resolve(s"${elementAttribute.name}$$${name}", rn))
+        case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, snr.resolve(name, rn))
       }
     case UnresolvedAttribute(nameParts) => nameParts.length match {
       case 1 | 2 => {
         val elementName = nameParts(0) // should be OK as .length >= 1
-        val scopeCacheEntry = nameResolverCache.get(elementName)
+        val scopeCacheEntry = snr.nameResolverCache.get(elementName)
         val elementAttribute = scopeCacheEntry match { //if (scopeCacheEntry.isDefined) {
           case Some((rnString, entry)) => {
             val rn = Some(rnString)
@@ -241,7 +241,7 @@ object QPlanResolver {
           elementAttribute match {
             // if nameParts.length == 2, base should always be an ElementAttribute
             case ea: expr.ElementAttribute =>
-              expr.PropertyAttribute(propertyName, ea, snr(s"${ea.name}$$${propertyName}",
+              expr.PropertyAttribute(propertyName, ea, snr.resolve(s"${ea.name}$$${propertyName}",
                 expr.PropertyAttribute(propertyName, ea)) // this is a dirty hack to tell the resolver that we are about to resolve a PropertyAttribute instance
               )
             case x => throw new UnexpectedTypeException(x, "basis position of property dereferencing")
@@ -254,35 +254,42 @@ object QPlanResolver {
     case x => x
   }
 
-  // function generator for name resolution shorthand: "scoped name resolution"
-  def snrGen(nameResolverScope: TNameResolverCache): TScopedNameResolver = (baseName, target) => {
-    val resolvedName: expr.types.TResolvedNameValue = nameResolverScope.get(baseName) match {
-      case Some((rn, expr.UnwindAttribute(_, _, _))) => {
-        // we don't have the result type info for UNWIND,
-        // so our best guess is to use the first type we encounter in the current query type
-        nameResolverScope.update(baseName, (rn, target))
-        rn
+  /**
+    * Scoped name resolver that holds its cache it utilizes.
+    * @param pNameResolverCache the name resolution cache to utilize
+    */
+  class SNR(pNameResolverCache: TNameResolverCache) {
+    def nameResolverCache = pNameResolverCache
+    def resolve: TScopedNameResolver = (baseName, target) => {
+      val resolvedName: expr.types.TResolvedNameValue = pNameResolverCache.get(baseName) match {
+        case Some((rn, expr.UnwindAttribute(_, _, _))) => {
+          // we don't have the result type info for UNWIND,
+          // so our best guess is to use the first type we encounter in the current query type
+          pNameResolverCache.update(baseName, (rn, target))
+          rn
+        }
+        case Some((rn, entry)) => if (entry.getClass != target.getClass) {
+          throw new CompilerException(s"Name collision across types: ${baseName}. In the cache, it is ${entry.getClass}, but now it was passed as ${target.getClass}")
+        } else {
+          rn
+        }
+        case None => {
+          val rn = expr.types.TResolvedNameValue(baseName, SNR.generateUniqueName(baseName))
+          pNameResolverCache.put(baseName, (rn, target))
+          rn
+        }
       }
-      case Some((rn, entry)) => if (entry.getClass != target.getClass) {
-        throw new CompilerException(s"Name collision across types: ${baseName}. In the cache, it is ${entry.getClass}, but now it was passed as ${target.getClass}")
-      } else {
-        rn
-      }
-      case None => {
-        val rn = expr.types.TResolvedNameValue(baseName, generateUniqueName(baseName))
-        nameResolverScope.put(baseName, (rn, target))
-        rn
-      }
+      Some(resolvedName)
     }
-    Some(resolvedName)
   }
 
+  object SNR {
+    // always use .getAndIncrement on this object
+    private val generatedNameCounterMap = mutable.Map[String, AtomicLong]()
 
-  // always use .getAndIncrement on this object
-  private val generatedNameCounterMap = mutable.Map[String, AtomicLong]()
-
-  def generateUniqueName(baseName: String): String = {
-    s"${baseName}#${generatedNameCounterMap.getOrElseUpdate(baseName, new AtomicLong).getAndIncrement}"
+    def generateUniqueName(baseName: String): String = {
+      s"${baseName}#${generatedNameCounterMap.getOrElseUpdate(baseName, new AtomicLong).getAndIncrement}"
+    }
   }
 
 
