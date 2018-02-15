@@ -132,7 +132,9 @@ case class Parameter(name: String) extends ExpressionBase {
 }
 
 // just wraps an expression into "? :> Attribute"
-case class ExpressionAttribute(expr: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName
+case class ExpressionAttribute(expr: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName with HasExtraChildren {
+  override def extraChildren: Seq[Expression] = Seq(expr)
+}
 
 // this is the attribute built by unwinding a list
 case class UnwindAttribute(list: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName

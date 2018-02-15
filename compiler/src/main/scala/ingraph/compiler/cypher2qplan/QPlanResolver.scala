@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.compiler.cypher2qplan.util.TransformUtil
 import ingraph.compiler.exceptions.{CompilerException, IllegalAggregationException, NameResolutionException, UnexpectedTypeException}
-import ingraph.model.expr.{ProjectionDescriptor, ResolvableName, ReturnItem}
+import ingraph.model.expr.{ExpressionAttribute, ProjectionDescriptor, ResolvableName, ReturnItem}
 import ingraph.model.qplan.{QNode, UnaryQNode}
 import ingraph.model.{expr, misc, qplan}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction, UnresolvedStar}
@@ -324,6 +324,7 @@ object QPlanResolver {
   }
 
   val expressionResolver: PartialFunction[Expression, Expression] = {
+    case ExpressionAttribute(expr, name, rn) => ExpressionAttribute(expr.transform(expressionResolver), name, rn)
     case UnresolvedFunction(functionIdentifier, children, isDistinct) => expr.FunctionInvocation(misc.Function.fromCypherName(functionIdentifier.identifier, children.length, isDistinct), children, isDistinct)
   }
 
