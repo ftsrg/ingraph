@@ -196,7 +196,7 @@ object SchemaMapper {
   }
 
   def schemaToMapNames(n: FNode): Map[String, Int] = {
-    n.internalSchema.zipWithIndex.map(f => f._1.name -> f._2).toMap
+    n.internalSchema.zipWithIndex.map(f => f._1.resolvedName.get.resolvedName -> f._2).toMap
   }
 
   def transformExpression(expression: Expression, internalSchema: Seq[ResolvableName]): Expression = {
