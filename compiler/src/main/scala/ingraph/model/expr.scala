@@ -10,9 +10,21 @@ import org.apache.spark.sql.types.{DataType, Metadata, StringType}
 package object types {
   type TPropertyMap = Map[String, cExpr.Expression]
   type TProjectList = Seq[ReturnItem]
-  type TResolvedName = Option[String]
+  type TResolvedName = Option[TResolvedNameValue]
   type VertexLabel = String
   type EdgeLabel = String
+
+  /**
+    * TL;DR: Outside String context you probably want to retrieve resolvedName String member.
+    *
+    * Represents a resolved name along with the name it originated from.
+    *
+    * Historically this used to be a string representing only the resolved name.
+    * To retain backward compatibility, toString returns only the resolvedName.
+    */
+  case class TResolvedNameValue(val baseName: String, val resolvedName: String) {
+    override def toString: String = resolvedName
+  }
 }
 trait ProjectionDescriptor {
   def projectList: TProjectList
@@ -120,7 +132,9 @@ case class Parameter(name: String) extends ExpressionBase {
 }
 
 // just wraps an expression into "? :> Attribute"
-case class ExpressionAttribute(expr: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName
+case class ExpressionAttribute(expr: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName with HasExtraChildren {
+  override def extraChildren: Seq[Expression] = Seq(expr)
+}
 
 // this is the attribute built by unwinding a list
 case class UnwindAttribute(list: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName

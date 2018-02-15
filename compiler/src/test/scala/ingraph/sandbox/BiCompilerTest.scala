@@ -16,8 +16,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-01")
   }
 
-  // name resolution: countryName
-  ignore("bi-02 from file: Top tags for country, age, gender, time") {
+  test("bi-02 from file: Top tags for country, age, gender, time") {
     val stages=compileFromFile("bi-02")
   }
 
