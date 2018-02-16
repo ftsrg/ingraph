@@ -35,43 +35,7 @@ class DmlTest extends CompilerTest {
   }
 
   test("should compile CREATE with two edges") {
-    val stages = compile("CREATE (n:Person)-[:LIVES]->(c:City)-[:IS_LOCATED_IN]->(ctr:Country)")
-
-    println(stages.jplan.children(0)                                                .output)
-    println(stages.jplan.children(0).children(0)                                    .output)
-    println(stages.jplan.children(0).children(0).children(0)                        .output)
-    println(stages.jplan.children(0).children(0).children(0).children(0)            .output)
-    println(stages.jplan.children(0).children(0).children(0).children(0).children(0).output)
-
-    println("-------")
-    println("-------")
-
-    println(stages.fplan.children(0)                                                .asInstanceOf[fplan.Create].attribute)
-    println(stages.fplan.children(0).children(0)                                    .asInstanceOf[fplan.Create].attribute)
-    println(stages.fplan.children(0).children(0).children(0)                        .asInstanceOf[fplan.Create].attribute)
-    println(stages.fplan.children(0).children(0).children(0).children(0)            .asInstanceOf[fplan.Create].attribute)
-    println(stages.fplan.children(0).children(0).children(0).children(0).children(0).asInstanceOf[fplan.Create].attribute)
-
-    println("-------")
-    println("------->>>>>>>>>")
-
-    println(stages.fplan.children(0)                                                .asInstanceOf[fplan.Create].attribute)
-    println(stages.fplan.children(0).children(0)                                    .asInstanceOf[fplan.Create].attribute)
-    println(stages.fplan.children(0).children(0).children(0)                        .asInstanceOf[fplan.Create].attribute)
-    println(stages.fplan.children(0).children(0).children(0).children(0)            .asInstanceOf[fplan.Create].attribute)
-    println(stages.fplan.children(0).children(0).children(0).children(0).children(0).asInstanceOf[fplan.Create].attribute)
-
-    println("-------")
-    println("-------")
-
-    println(stages.fplan.children(0)                                                .asInstanceOf[fplan.Create].internalSchema)
-    println(stages.fplan.children(0).children(0)                                    .asInstanceOf[fplan.Create].internalSchema)
-    println(stages.fplan.children(0).children(0).children(0)                        .asInstanceOf[fplan.Create].internalSchema)
-    println(stages.fplan.children(0).children(0).children(0).children(0)            .asInstanceOf[fplan.Create].internalSchema)
-    println(stages.fplan.children(0).children(0).children(0).children(0).children(0).asInstanceOf[fplan.Create].internalSchema)
-
-    println("-------")
-    println("-------")
+    compile("CREATE (n:Person)-[:LIVES]->(c:City)-[:IS_LOCATED_IN]->(ctr:Country)")
   }
 
   test("should compile CREATE with property map, string literals only") {
