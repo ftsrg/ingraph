@@ -192,7 +192,7 @@ case class Remove(extraAttributes: Seq[ResolvableName],
 object SchemaMapper {
   def schemaToIndices(node: JoinLike, side: FNode): Seq[Int] = {
     val sideIndices = schemaToMapNames(side)
-    node.internalCommon.map(attr => sideIndices(attr.name))
+    node.internalCommon.map(attr => sideIndices(attr.resolvedName.get.resolvedName))
   }
 
   def schemaToMapNames(n: FNode): Map[String, Int] = {
