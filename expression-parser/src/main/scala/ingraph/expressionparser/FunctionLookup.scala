@@ -98,6 +98,7 @@ object FunctionLookup {
       case SPLIT => (original, splitPattern) => original.split(splitPattern)
       case SUBSTRING => (original, start) => original.substring(start.toInt)
       case RANGE => (start, end) => start.asInstanceOf[Long] to end
+      case IN_COLLECTION => (element, collection) => collection.asInstanceOf[Iterable[Any]].contains(element)
 
       case POW => (base, exp) =>
 //        implicit def anyToDouble(any: Any) = any.asInstanceOf[Double]
