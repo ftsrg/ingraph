@@ -59,7 +59,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def calculateSecondaryPositive(inputTuple: Tuple): ChangeSet = {
-    val joinedPositiveTuples: Iterable[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
+    val joinedPositiveTuples: Vector[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
 
     var negativeTuples: Vector[Tuple] = Vector()
 
@@ -74,7 +74,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def calculateSecondaryNegative(inputTuple: Tuple): ChangeSet = {
-    val joinedNegativeTuples: Iterable[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
+    val joinedNegativeTuples: Vector[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
     var positiveTuples: Vector[Tuple] = Vector()
 
     val joinAttributesTuple = extract(inputTuple, secondaryMask)
@@ -111,7 +111,7 @@ class ThetaLeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         override val secondaryMask: Mask,
                         val theta: Tuple => Boolean = _ => true)
   extends LeftOuterJoinNode(next, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask) {
-  override def joinTuples(tuples: scala.Iterable[Tuple], otherIndexer: JoinCache,
+  override def joinTuples(tuples: Vector[Tuple], otherIndexer: JoinCache,
                           slotMask: Mask, slot: Slot): TupleBag =
     super.joinTuples(tuples, otherIndexer, slotMask, slot).filter(theta)
 }
