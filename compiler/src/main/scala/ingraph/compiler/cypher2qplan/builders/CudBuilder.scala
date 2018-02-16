@@ -6,7 +6,7 @@ import ingraph.model.expr._
 import ingraph.model.expr.types.VertexLabel
 import ingraph.model.qplan
 import ingraph.model.qplan.QNode
-import org.slizaa.neo4j.opencypher.openCypher.{SetItem}
+import org.slizaa.neo4j.opencypher.openCypher.SetItem
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -42,6 +42,8 @@ object CudBuilder {
         edgesAndVertices.append(nextVertex, RichEdgeAttribute(chainVertex, nextVertex, edgeAttribute, direction))
         chainVertex = nextVertex
       })
+
+      // Note: vertices coming from the graph (i.e. those present in the MATCH clauses) are filtered out upon resolution
 
       edgesAndVertices
     })
@@ -162,7 +164,7 @@ object CudBuilder {
     * Build and return a merge operator from the MERGE clause and attach child to its input.
     */
   def buildMergeOperator(element: oc.Merge, child: qplan.QNode): QNode = {
-    qplan.Merge(null, child)
+    qplan.Merge(Seq(), child)
   }
 
   /**

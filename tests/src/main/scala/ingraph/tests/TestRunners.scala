@@ -54,20 +54,25 @@ object TestRunners {
     }
   }
 
-//  def ingraphTestRunner(tc: TestCase with CSVData) : Result = {
-//    val driver = CypherDriverFactory.createIngraphDriver
-//    try {
-//      val session = driver.session
-//      val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
-//      val queryHandler = session.registerQuery(tc.name, tc.query)
-//      queryHandler.readCsv(
-//        tc.nodeCSVPaths.mapValues(_.toList.asJava).asJava,
-//        tc.relationshipCSVPaths.asJava,
-//        csvPreference
-//      )
-//      queryHandler.adapter
-//    } finally if (driver != null) {
-//      driver.close()
-//    }
-//  }
+  def ingraphTestRunner(tc: TestCase with CSVData) : Result = {
+    val driver = CypherDriverFactory.createIngraphDriver
+    try {
+      val session = driver.session
+      val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
+      val queryHandler = session.registerQuery(tc.name, tc.query)
+      queryHandler.readCsv(
+        tc.nodeCSVPaths.mapValues(_.asJava).asJava,
+        tc.relationshipCSVPaths.asJava,
+        csvPreference
+      )
+
+//      val result = queryHandler.adapter.result()
+//      result.zipWithIndex {
+//        case (e, i) => queryHandler.adapter.indexer.
+//      }
+      List()
+    } finally if (driver != null) {
+      driver.close()
+    }
+  }
 }

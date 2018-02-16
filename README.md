@@ -4,6 +4,8 @@
 
 For a summary on the project, visit the [ingraph web page](http://docs.inf.mit.bme.hu/ingraph/).
 
+ingraph is built with the Gradle system.
+
 ## User's guide
 
 To run the tests, issue the following command:
@@ -14,12 +16,9 @@ To run the tests, issue the following command:
 
 ## Contributor's guide
 
-ingraph is defined as a Gradle project.
-
 ### Prerequisites
 
-* We recommend using IntelliJ for developing ingraph. Make sure you install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala).
-* For SRE and other Clojure projects we recommend Emacs with [CIDER](https://cider.readthedocs.io/en/latest/). If you want to develop Clojure in IntelliJ, check out [Cursive](https://cursive-ide.com/).
+We recommend using IntelliJ for developing ingraph. Make sure you install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala).
 
 ### Importing the projects
 

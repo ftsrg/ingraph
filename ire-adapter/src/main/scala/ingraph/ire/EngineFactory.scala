@@ -5,15 +5,16 @@ import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode, UnionNode}
+import hu.bme.mit.ire.nodes.binary._
 import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulAggregate}
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.model.expr._
 import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
-import ingraph.model.{fplan, jplan, tplan}
-import ingraph.model.tplan._
+import ingraph.model.fplan
+import ingraph.model.fplan._
+import ingraph.model.jplan
 import ingraph.parse.ExpressionParser
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression}
 
@@ -26,10 +27,10 @@ abstract class AnnotatedRelationalEngine extends RelationalEngine {
 
 object EngineFactory {
 
-  case class ForwardConnection(parent: TNode, child: (ReteMessage) => Unit)
+  case class ForwardConnection(parent: FNode, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
 
-  def createQueryEngine(plan: TNode, indexer: Indexer): AnnotatedRelationalEngine =
+  def createQueryEngine(plan: FNode, indexer: Indexer): AnnotatedRelationalEngine =
     new AnnotatedRelationalEngine {
       override val production: ActorRef = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
@@ -43,7 +44,7 @@ object EngineFactory {
       while (remaining.nonEmpty) {
         val expr = remaining.remove(0)
         expr.parent match {
-          case op: LeafTNode =>
+          case op: LeafFNode =>
             op match {
               case op: GetVertices => getVertices(op, expr)
               case op: GetEdges => getEdges(op, expr)
@@ -51,7 +52,7 @@ object EngineFactory {
               expr.child(ChangeSet(positive=Vector(Vector())))
             }
 
-          case op: UnaryTNode =>
+          case op: UnaryFNode =>
             val node: (ReteMessage) => Unit = op match {
               case op: Production => production
               case op: Grouping => grouping(op, expr)
@@ -68,20 +69,26 @@ object EngineFactory {
             }
             remaining += ForwardConnection(op.child, node)
 
-          case op: BinaryTNode =>
+          case op: BinaryFNode =>
             val node: ActorRef = op match {
-              case op: Union => newLocal(Props(new UnionNode(expr.child, op.fnode.jnode.bag)))
+              case op: Union => newLocal(Props(new UnionNode(expr.child, op.jnode.bag)))
               case op: JoinLike =>
                 val child = expr.child
-                val leftTupleWidth  = op.left. fnode.internalSchema.length
-                val rightTupleWidth = op.right.fnode.internalSchema.length
+                val leftTupleWidth  = op.left. internalSchema.length
+                val rightTupleWidth = op.right.internalSchema.length
                 val leftMask:  Seq[Int] = op.leftMask
                 val rightMask: Seq[Int] = op.rightMask
 
                 op match {
                   case op: AntiJoin => newLocal(Props(new AntiJoinNode(child, leftMask, rightMask)))
-                  case op: Join => newLocal(Props(new JoinNode(child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
-                  case op: LeftOuterJoin => newLocal(Props(new LeftOuterJoinNode(child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
+                  case op: Join => newLocal(Props(new JoinNode(
+                    child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
+                  case op: LeftOuterJoin => newLocal(Props(new LeftOuterJoinNode(
+                    child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
+                  case op: ThetaLeftOuterJoin =>
+                    val theta = ExpressionParser[Boolean](op.condition)
+                    newLocal(Props(new ThetaLeftOuterJoinNode(
+                      child, leftTupleWidth, rightTupleWidth, leftMask, rightMask, theta)))
 //              case op: TransitiveClosureJoin =>
 //                val minHops = op.getEdgeListVariable.getMinHops
 //                val maxHops = op.getEdgeListVariable.getMaxHops.getMaxHopsType match {
@@ -100,29 +107,30 @@ object EngineFactory {
 
     // leaf nodes
     private def getVertices(op: GetVertices, expr: ForwardConnection) = {
-      val labels = op.fnode.jnode.v.labels.vertexLabels.toSeq
+      val labels = op.jnode.v.labels.vertexLabels.toSeq
       vertexConverters.addBinding(labels, op)
-      inputs += (op.fnode.jnode.v.name -> expr.child)
+      inputs += (op.jnode.v.name -> expr.child)
     }
 
     private def getEdges(op: GetEdges, expr: ForwardConnection) = {
-      val labels = op.fnode.jnode.edge.labels.edgeLabels.toSeq
+      val labels = op.jnode.edge.labels.edgeLabels.toSeq
+      assert(labels.nonEmpty, s"Querying all edges is prohibitively exepensive, please use edge labels on $op")
       for (label <- labels) {
         edgeConverters.addBinding(label, op)
-        if (!op.fnode.jnode.directed) {
-          val reverse = tplan.GetEdges(
-            fplan.GetEdges(op.fnode.extraAttributes,
+        if (!op.jnode.directed) {
+          val reverse =
+            fplan.GetEdges(op.extraAttributes,
               jplan.GetEdges(
-                op.fnode.jnode.trg,
-                op.fnode.jnode.src,
-                op.fnode.jnode.edge,
-                op.fnode.jnode.directed)
+                op.jnode.trg,
+                op.jnode.src,
+                op.jnode.edge,
+                op.jnode.directed
               )
           )
           edgeConverters.addBinding(label, reverse)
         }
       }
-      inputs += (op.fnode.jnode.edge.name -> expr.child)
+      inputs += (op.jnode.edge.name -> expr.child)
     }
 
     // unary nodes
@@ -161,11 +169,11 @@ object EngineFactory {
         e => ExpressionParser[Any](e.child)).toVector
       newLocal(Props(new SortAndTopNode(
         expr.child,
-        op.fnode.jnode.order.length,
+        op.jnode.order.length,
         sortKeys,
         skip,
         limit,
-        op.fnode.jnode.order.map(_.direction == Ascending).toVector
+        op.jnode.order.map(_.direction == Ascending).toVector
       )))
     }
 
@@ -195,83 +203,49 @@ object EngineFactory {
       (t: Tuple) => parsed.mapValues(_(t))
     }
 
-    private def vertexCreator(v: VertexAttribute): (Tuple) => IngraphVertex = {
-      val props = propsParser(v)
-      (t: Tuple) =>
-        indexer.addVertex(IngraphVertex(indexer.newId(), v.labels.vertexLabels, props(t)))
-    }
-
-    type AlreadyCreated = mutable.HashMap[Attribute, Long]
-    private def createOrLookup(v: VertexAttribute, lookup: Map[String, Int]
-                              ): (Tuple,AlreadyCreated) => Long = {
-      val creator: (Tuple) => IngraphVertex = vertexCreator(v)
-      lookup.get(v.name) match {
-        case Some(index: Int) => (t: Tuple, m) => t(index).asInstanceOf[Long]
-        case None => (t: Tuple, m: AlreadyCreated) => m.get(v) match {
-          case Some(index: Long) => index
-          case None =>
-            val id = creator(t).id
-            m(v) = id
-            id
-        }
-      }
-    }
-
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
-      val creatorDefs: Seq[Attribute] = op.fnode.jnode.attributes
-      val creatorFunctions: Seq[(Tuple, AlreadyCreated) => Any] = for (element <- creatorDefs)
-        yield element match {
-          case n: RichEdgeAttribute =>
+        val func = op.attribute match {
+          case n: TupleEdgeAttribute =>
             // you've got to love the Law of Demeter
             val demeter = n.edge.labels.edgeLabels.head
-            val sourceIndex = createOrLookup(n.src, Map())
-            val targetIndex = createOrLookup(n.trg, Map())
+            val sourceIndex = ExpressionParser[Long](n.src)
+            val targetIndex = ExpressionParser[Long](n.trg)
             val props = propsParser(n)
-            (t: Tuple, m: AlreadyCreated) => {
+            (t: Tuple) => {
               indexer.addEdge(
                 indexer.newId(),
-                sourceIndex(t, m),
-                targetIndex(t, m),
+                sourceIndex(t),
+                targetIndex(t),
                 demeter,
                 props(t)
-              )
+              ).id
             }
           case variable: VertexAttribute =>
-            val create = vertexCreator(variable)
-            (t: Tuple, m: AlreadyCreated) =>
-              if (!m.contains(variable))
-                create(t)
+            val props = propsParser(variable)
+            (t: Tuple) =>
+              indexer.addVertex(IngraphVertex(indexer.newId(), variable.labels.vertexLabels, props(t))).id
         }
 
       (m: ReteMessage) => {
-        m match {
-          case cs: ChangeSet => cs.positive.foreach(
-            tuple => creatorFunctions.foldLeft(new mutable.HashMap[Attribute, Long]()) { case (map, function) =>
-                function(tuple, map)
-                map
-            })
-
-          case _ =>
+        val newMessage = m match {
+          case cs: ChangeSet => ChangeSet(positive=cs.positive.map(
+            tuple => tuple :+ func(tuple)))
+          case _ => m
         }
-        expr.child(m)
+        expr.child(newMessage)
       }
     }
 
     private def delete(op: Delete, indexer: Indexer, expr: ForwardConnection) = {
-      if (op.fnode.jnode.detach) {
-        // detach delete not supported yet
-        // and we should throw an exception in case the user tries to delete a nodes with existing
-        // relationships
-        // "To delete this node, you must first delete its relationships."
-        ???
+      val removals: Seq[(Tuple) => Unit] = op.attributes.map {
+        index =>
+          val expr = ExpressionParser[Long](index)
+          if (index.isVertex) {
+            (t: Tuple) => indexer.removeVertexById(expr(t), op.jnode.detach)
+          } else {
+            (t: Tuple) => indexer.removeEdgeById(expr(t))
+          }
       }
-      val removals: Seq[(Tuple) => Unit] = for (element <- op.fnode.jnode.attributes)
-        yield element match {
-          case e: EdgeAttribute =>
-            (t: Tuple) => indexer.removeEdgeById(t(0).asInstanceOf[Long])
-          case v: VertexAttribute =>
-            (t: Tuple) => indexer.removeVertexById(t(0).asInstanceOf[Long], detach = true)
-        }
       (m: ReteMessage) => {
         m match {
           case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r))

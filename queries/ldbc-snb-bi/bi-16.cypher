@@ -1,7 +1,7 @@
 // Q16. Experts in social circle
 /*
   :param {
-    personId: 6597069777419,
+    personId: 19791209310731,
     country: 'Pakistan',
     tagClass: 'MusicalArtist',
     minPathDistance: 3,
@@ -15,16 +15,18 @@
 // If you would like to test the query in the browser, replace the values of
 // $minPathDistance and $maxPathDistance to a constant.
 MATCH
-  (:Person {id: $personId})-[:KNOWS*$minPathDistance..$maxPathDistance]-
-  (person:Person)-[:IS_LOCATED_IN]->(:City)-[:IS_PART_OF]->
-  (:Country {name: $country}),
+  (:Person {id: $personId})-[:KNOWS*3..5]-(person:Person)
+WITH DISTINCT person
+MATCH
+  (person)-[:IS_LOCATED_IN]->(:City)-[:IS_PART_OF]->(:Country {name: $country}),
   (person)<-[:HAS_CREATOR]-(message:Message)-[:HAS_TAG]->(:Tag)-[:HAS_TYPE]->
   (:TagClass {name: $tagClass})
-MATCH (message)-[:HAS_TAG]->(tag:Tag)
+MATCH
+  (message)-[:HAS_TAG]->(tag:Tag)
 RETURN
   person.id,
   tag.name,
-  count(message) AS messageCount
+  count(DISTINCT message) AS messageCount
 ORDER BY
   messageCount DESC,
   tag.name ASC,

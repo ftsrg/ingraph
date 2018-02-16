@@ -46,11 +46,14 @@ object JPlanToFPlan {
       case o: jplan.Production           => fplan.Production          (ea, o, transform(o.child, ea))
       case o: jplan.SortAndTop           => fplan.SortAndTop          (ea, o, transform(o.child, ea))
       // unary DMLs
-      case o: jplan.Create               => fplan.Create              (ea, o, transform(o.child, ea))
-      case o: jplan.Delete               => fplan.Delete              (ea, o, transform(o.child, ea))
-      case o: jplan.Merge                => fplan.Merge               (ea, o, transform(o.child, ea))
-      case o: jplan.Remove               => fplan.Remove              (ea, o, transform(o.child, ea))
-      case o: jplan.SetNode              => fplan.SetNode             (ea, o, transform(o.child, ea))
+      case o: jplan.Create               =>
+        val newExtra = extractAttributesFromInsertion(o.attribute)
+        fplan.Create(ea, o, transform(o.child, ea ++ newExtra))
+      case o: jplan.Delete               => fplan.Delete(ea, o, transform(o.child, ea))
+      case o: jplan.Merge                =>
+        fplan.Merge(ea, o, transform(o.child, ea))
+      case o: jplan.Remove               => fplan.Remove(ea, o, transform(o.child, ea))
+      case o: jplan.SetNode              => fplan.SetNode(ea, o, transform(o.child, ea))
 
       // binary
       case o: jplan.AntiJoin => fplan.AntiJoin(
@@ -102,6 +105,14 @@ object JPlanToFPlan {
 
   def extractAttributes(projectList: TProjectList): Seq[ResolvableName] = {
     projectList.flatMap(extractAttributes(_))
+  }
+
+  def extractAttributesFromInsertion(attribute: ResolvableName): Seq[ResolvableName] = {
+    attribute match {
+      case a: VertexAttribute => extractAttributes(a)
+      case RichEdgeAttribute(src, trg, edge, _) => Seq(src, trg, edge).flatMap(extractAttributes)
+      case _ => Seq()
+    }
   }
 
 }

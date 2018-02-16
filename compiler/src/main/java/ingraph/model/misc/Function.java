@@ -44,6 +44,7 @@ public enum Function {
 
   // predicate functions
   EXISTS        ("exists",         FunctionCategory.PREDICATE,     CypherType.BOOLEAN,     1, l(CypherType.ANY)                      ),
+  NODE_HAS_LABELS("node_has_labels",FunctionCategory.PREDICATE,    CypherType.BOOLEAN,     2, l(CypherType.ANY, CypherType.LIST_TYPE)           ),
   IN_COLLECTION ("in_collection",  FunctionCategory.PREDICATE,     CypherType.BOOLEAN,     2, l(CypherType.ANY, CypherType.LIST_TYPE)           ),
 
   // scalar functions

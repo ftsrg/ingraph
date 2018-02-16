@@ -81,7 +81,7 @@ object AttributeBuilder {
         case qplan.GetVertices(v) if chainElem == null || v == chainElem => relationshipVariableExpressions.append(v); currOp = null; chainElem = null
         case qplan.Expand(src, trg, edge, _, child) if chainElem == null || trg == chainElem => relationshipVariableExpressions.append(trg, edge); currOp = child; chainElem = src
         case qplan.GetVertices(_) | qplan.Expand(_, _, _, _, _) => throw new ExpandChainException("We should never see this condition: Expand and Getvertices not properly chained")
-        case e => throw new CompilerException("Unexpected node type encountered: ${e.getClass.getName}.")
+        case e => throw new UnexpectedTypeException(e, "expand chain")
       }
     }
 

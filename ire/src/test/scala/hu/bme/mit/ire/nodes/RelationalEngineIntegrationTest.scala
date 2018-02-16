@@ -107,7 +107,7 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
       tran0.close()
       query.getResults()
       query.addListener(new ChangeListener {
-        override def listener(positive: Iterable[Tuple], negative: Iterable[Tuple]): Unit = {
+        override def listener(positive: Vector[Tuple], negative: Vector[Tuple]): Unit = {
           echoActor ! ChangeSet(positive, negative)
         }
       })

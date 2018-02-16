@@ -18,7 +18,7 @@ object QPlanBeautifier {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
     /*
-     * FIXME: douplicated transform call is to allow for antijoin beautification.
+     * FIXME: duplicated transform call is to allow for antijoin beautification.
      * This should be done dynamically
      */
     val beautiful = resolvedQueryPlan.transform(commonBeautifier).transform(commonBeautifier)

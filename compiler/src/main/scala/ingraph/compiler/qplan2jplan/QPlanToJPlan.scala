@@ -30,9 +30,11 @@ object QPlanToJPlan {
       case qplan.AllDifferent(edges, child) => jplan.AllDifferent(edges, transform(child))
       case qplan.Unwind(unwindItem, child) => jplan.Unwind(unwindItem, transform(child))
       // unary CUD
-      case qplan.Create(attributes, child) => jplan.Create(attributes, transform(child))
+      case qplan.Create(attributes, child) =>
+        attributes.foldLeft(transform(child)) { (op, attribute) => jplan.Create(attribute, op) }
       case qplan.Delete(attributes, detach, child) => jplan.Delete(attributes, detach, transform(child))
-      case qplan.Merge(attributes, child) => jplan.Merge(attributes, transform(child))
+      case qplan.Merge(attributes, child) =>
+        attributes.foldLeft(transform(child)) { (op, attribute) => jplan.Merge(attribute, op) }
       case qplan.Remove(vertexLabelUpdates, child) => jplan.Remove(vertexLabelUpdates, transform(child))
       case qplan.SetNode(vertexLabelUpdates, child) => jplan.SetNode(vertexLabelUpdates, transform(child))
 

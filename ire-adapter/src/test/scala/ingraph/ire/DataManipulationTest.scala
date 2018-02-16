@@ -34,17 +34,17 @@ class DataManipulationTest extends FunSuite {
 
     for (i <- 1 to 10 ) {
       assert(whereIsAdapter.result() == List(Vector(2)))
-      new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
+      new IngraphOneTimeAdapter(oneOff, "remove", indexer).terminate()
       assert(whereIsAdapter.result() == List(Vector(3)))
-      new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
+      new IngraphOneTimeAdapter(oneOff, "remove", indexer).terminate()
     }
   }
 
   ignore("delete vertex works") {
     val indexer = initializeIndexer()
 
-    val oneOff = "MATCH (t:Train) DELETE t"
-    new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
+    val oneOff = "MATCH (t:Train) DETACH DELETE t"
+    new IngraphOneTimeAdapter(oneOff, "remove", indexer).terminate()
 
     val whereIsTrain = "MATCH (t:Train) RETURN t"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "something", indexer)
@@ -56,7 +56,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
 
     val oneOff = "CREATE (e: Engine {power: 'poweeeer'})"// CREATE (e:Engine {power: t.power + '^2'})"
-    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    new IngraphOneTimeAdapter(oneOff, "create", indexer).terminate()
     val whereIsTrain = "MATCH (e: Engine) RETURN e, e.power"// WHERE e.power != 1 RETURN e, e.power"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
 
@@ -66,8 +66,8 @@ class DataManipulationTest extends FunSuite {
   ignore("create matched vertex works") {
     val indexer = initializeIndexer()
 
-    val oneOff = "MATCH (t: Train) WHERE t.power = t.power CREATE (e: Engine {power: t.power})"
-    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    val oneOff = "MATCH (t: Train) CREATE (e: Engine {power: t.power})"
+    new IngraphOneTimeAdapter(oneOff, "create", indexer).terminate()
     val whereIsTrain = "MATCH (e: Engine) RETURN e, e.power"// WHERE e.power != 1 RETURN e, e.power"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
 
@@ -75,36 +75,36 @@ class DataManipulationTest extends FunSuite {
   }
 
 
-  ignore("create constant single edges works") {
+  test("create constant single edges works") {
     val indexer = new Indexer()
 
     val oneOff = "CREATE (t:Train)-[r:ON {track: 'bomb'}]->(seg1:Segment)"
-    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    new IngraphOneTimeAdapter(oneOff, "create", indexer).terminate()
     val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment) RETURN r, r.track"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
-    assert(whereIsAdapter.result() == Seq(Vector(6137546356583794141L, -594798593157429144L)))
+    assert(whereIsAdapter.result() == Seq(Vector(3831662765844904176L, "bomb")))
   }
 
-  ignore("create matched single edges") {
+  test("create matched single edges") {
     val indexer = initializeIndexer()
 
     val create = "MATCH (seg:Segment) CREATE (seg)-[m:MonitoredBy]->(s:Sensor)"
-    new IngraphSearchAdapter(create, "create", indexer).terminate()
+    new IngraphOneTimeAdapter(create, "create", indexer).terminate()
     val query = "MATCH (seg:Segment)-[m:MonitoredBy]->(s:Sensor) RETURN seg, m, s"
     val whereIsAdapter = new IngraphIncrementalAdapter(query, "", indexer)
     assert(whereIsAdapter.result() == Seq(
-      Vector(2, -594798593157429144L, 112842269129291794L),
-      Vector(3, 7564655870752979346L, 3831662765844904176L)))
+      Vector(3, 3831662765844904176L, -4964420948893066024L),
+      Vector(2, 6137546356583794141L, 7564655870752979346L)))
   }
 
   test("create two edges works") {
     val indexer = new Indexer()
 
     val oneOff = "CREATE (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment)"
-    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    new IngraphOneTimeAdapter(oneOff, "create", indexer).terminate()
     val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment) RETURN t, seg1, seg2"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
 
-    assert(whereIsAdapter.result() == Seq(Vector(6137546356583794141L, -594798593157429144L, -1109287713991315740L)))
+    assert(whereIsAdapter.result() == Seq(Vector(-4964420948893066024L, 7564655870752979346L, 6137546356583794141L)))
   }
 }
