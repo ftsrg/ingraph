@@ -11,7 +11,7 @@ class UnwindNode(override val next: (ReteMessage) => Unit,
 
   override def onSizeRequest() = 0
 
-  def unwind(tuples: Iterable[Tuple], index: Int): Iterable[Tuple] = {
+  def unwind(tuples: Vector[Tuple], index: Int): Vector[Tuple] = {
     for {
       tuple <- tuples
       listElement <- tuple(index).asInstanceOf[Iterable[Any]]
