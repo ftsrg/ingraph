@@ -12,8 +12,8 @@ class LdbcSnbBiTest extends FunSuite {
         val neo4jResults = TestRunners.neo4jTestRunner(tc)
         val ingraphResults = TestRunners.ingraphTestRunner(tc)
 
-        println(neo4jResults)
-        println(ingraphResults)
+        println("neo4j results:   " + neo4jResults)
+        println("ingraph results: " + ingraphResults)
 
         //val ingraphResult = ingraphRunner.getResults()
 
