@@ -34,9 +34,9 @@ class DataManipulationTest extends FunSuite {
 
     for (i <- 1 to 10 ) {
       assert(whereIsAdapter.result() == List(Vector(2)))
-      new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
+      new IngraphOneTimeAdapter(oneOff, "remove", indexer).terminate()
       assert(whereIsAdapter.result() == List(Vector(3)))
-      new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
+      new IngraphOneTimeAdapter(oneOff, "remove", indexer).terminate()
     }
   }
 
@@ -44,7 +44,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
 
     val oneOff = "MATCH (t:Train) DETACH DELETE t"
-    new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
+    new IngraphOneTimeAdapter(oneOff, "remove", indexer).terminate()
 
     val whereIsTrain = "MATCH (t:Train) RETURN t"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "something", indexer)
@@ -56,7 +56,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
 
     val oneOff = "CREATE (e: Engine {power: 'poweeeer'})"// CREATE (e:Engine {power: t.power + '^2'})"
-    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    new IngraphOneTimeAdapter(oneOff, "create", indexer).terminate()
     val whereIsTrain = "MATCH (e: Engine) RETURN e, e.power"// WHERE e.power != 1 RETURN e, e.power"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
 
@@ -67,7 +67,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
 
     val oneOff = "MATCH (t: Train) CREATE (e: Engine {power: t.power})"
-    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    new IngraphOneTimeAdapter(oneOff, "create", indexer).terminate()
     val whereIsTrain = "MATCH (e: Engine) RETURN e, e.power"// WHERE e.power != 1 RETURN e, e.power"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
 
@@ -79,7 +79,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = new Indexer()
 
     val oneOff = "CREATE (t:Train)-[r:ON {track: 'bomb'}]->(seg1:Segment)"
-    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    new IngraphOneTimeAdapter(oneOff, "create", indexer).terminate()
     val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment) RETURN r, r.track"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
     assert(whereIsAdapter.result() == Seq(Vector(3831662765844904176L, "bomb")))
@@ -89,7 +89,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
 
     val create = "MATCH (seg:Segment) CREATE (seg)-[m:MonitoredBy]->(s:Sensor)"
-    new IngraphSearchAdapter(create, "create", indexer).terminate()
+    new IngraphOneTimeAdapter(create, "create", indexer).terminate()
     val query = "MATCH (seg:Segment)-[m:MonitoredBy]->(s:Sensor) RETURN seg, m, s"
     val whereIsAdapter = new IngraphIncrementalAdapter(query, "", indexer)
     assert(whereIsAdapter.result() == Seq(
@@ -101,7 +101,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = new Indexer()
 
     val oneOff = "CREATE (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment)"
-    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    new IngraphOneTimeAdapter(oneOff, "create", indexer).terminate()
     val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment) RETURN t, seg1, seg2"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
 

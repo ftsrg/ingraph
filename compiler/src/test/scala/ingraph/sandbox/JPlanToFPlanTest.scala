@@ -65,10 +65,6 @@ class JPlanToFPlanTest extends FunSuite {
     val jp = QPlanToJPlan.transform(rqp)
     val fp = JPlanToFPlan.transform(jp)
 
-    println(rqp)
-    println(jp)
-    println(fp)
-    println(fp.children(0).extraAttributes)
     assert(fp.internalSchema.size == 1)
     assert(fp.children(0).internalSchema.size == 2)
   }

@@ -192,11 +192,11 @@ case class Remove(extraAttributes: Seq[ResolvableName],
 object SchemaMapper {
   def schemaToIndices(node: JoinLike, side: FNode): Seq[Int] = {
     val sideIndices = schemaToMapNames(side)
-    node.internalCommon.map(attr => sideIndices(attr.name))
+    node.internalCommon.map(attr => sideIndices(attr.resolvedName.get.resolvedName))
   }
 
   def schemaToMapNames(n: FNode): Map[String, Int] = {
-    n.internalSchema.zipWithIndex.map(f => f._1.name -> f._2).toMap
+    n.internalSchema.zipWithIndex.map(f => f._1.resolvedName.get.resolvedName -> f._2).toMap
   }
 
   def transformExpression(expression: Expression, internalSchema: Seq[ResolvableName]): Expression = {

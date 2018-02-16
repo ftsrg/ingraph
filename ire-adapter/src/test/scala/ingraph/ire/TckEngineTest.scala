@@ -11,7 +11,7 @@ class TckEngineTest extends FunSuite {
     val indexer = new Indexer()
 
     if (createQuery != "") {
-      val createAdapter = new IngraphSearchAdapter(createQuery, "create", indexer)
+      val createAdapter = new IngraphOneTimeAdapter(createQuery, "create", indexer)
       createAdapter.terminate()
     }
 
