@@ -4,7 +4,7 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.{TupleCreator, TransactionFactory}
 import ingraph.compiler.FPlanParser
 
-class IngraphSearchAdapter(
+class IngraphOneTimeAdapter(
     override val querySpecification: String,
     override val queryName: String,
     override val indexer: Indexer = new Indexer()
