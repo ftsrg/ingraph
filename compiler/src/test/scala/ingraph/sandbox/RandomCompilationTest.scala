@@ -325,6 +325,30 @@ class RandomCompilationTest extends CompilerTest {
         |""".stripMargin)
   }
 
+  test("should compile simple index expression") {
+    compile(
+      """MATCH (n)
+        |RETURN n.languages[0] AS firstLanguage
+        |""".stripMargin)
+  }
+
+  test("should compile index range expression") {
+    compile(
+      """MATCH (n)
+        |RETURN n.languages[2..5] AS someLanguages
+        |""".stripMargin)
+  }
+
+  test("should resolve index expressions referenced in patterns") {
+    compile(
+      """MATCH (n:Person)
+        |WITH collect(n) as persons
+        |WITH persons[0] as onePerson
+        |OPTIONAL MATCH (onePerson)-[:KNOWS]->(old:Person {age: 100})
+        |RETURN onePerson, old
+        |""".stripMargin)
+  }
+
   test("should compile MATCH and UNWIND") {
     compile("MATCH (n) UNWIND n.favColors AS favColor RETURN n, favColor")
   }

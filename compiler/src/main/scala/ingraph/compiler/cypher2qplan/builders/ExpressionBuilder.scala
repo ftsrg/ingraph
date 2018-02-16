@@ -3,7 +3,7 @@ package ingraph.compiler.cypher2qplan.builders
 import java.util
 
 import ingraph.compiler.cypher2qplan.util.BuilderUtil
-import ingraph.compiler.exceptions.{CompilerException, PatternNotAllowedException}
+import ingraph.compiler.exceptions.{CompilerException, PatternNotAllowedException, UnexpectedTypeException}
 import ingraph.model.misc.Function
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
@@ -36,6 +36,7 @@ object ExpressionBuilder {
       //FIXME#206: this should pass function name unresolved
       case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
       case _: oc.Count => UnresolvedFunction(Function.COUNT_ALL.getPrettyName, Seq[cExpr.Expression](), false)
+      case e: oc.IndexExpression => buildExpressionIndex(e)
       case e: oc.InCollectionExpression => UnresolvedFunction(Function.IN_COLLECTION.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false)
       // String predicates
       case e: oc.ContainsExpression => UnresolvedFunction(Function.CONTAINS.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false) //cExpr.Contains
@@ -184,6 +185,27 @@ object ExpressionBuilder {
 //      null
 //    }
 //  }
+
+  def buildExpressionIndex(indexExpr: oc.IndexExpression): expr.AbstractIndexExpression = {
+    val collection = buildExpressionNoJoinAllowed(indexExpr.getLeft)
+    val lower = indexExpr.getExpression match {
+      case n: oc.NumberConstant => Option(LiteralBuilder.buildNumber(n))
+      case x => throw new UnexpectedTypeException(x, "only literal indexing is supported for index expressions")
+    }
+    val upper = Option(indexExpr.getUpper) match {
+      case None => lower
+      case Some(upper) => upper match {
+        case n: oc.NumberConstant => Option(LiteralBuilder.buildNumber(n))
+        case x => throw new UnexpectedTypeException(x, "only literal indexing is supported for index expressions")
+      }
+    }
+
+    if (lower.isDefined && upper.isDefined && lower.equals(upper)) {
+      expr.IndexLookupExpression(collection, lower.get)
+    } else {
+      expr.IndexRangeExpression(collection, lower, upper)
+    }
+  }
 
   def buildExpressionCase(caseExpr: oc.CaseExpression): cExpr.Expression = {
     val elseExpr: Option[cExpr.Expression] = caseExpr.getElseExpression match {

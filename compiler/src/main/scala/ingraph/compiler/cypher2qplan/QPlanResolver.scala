@@ -261,9 +261,13 @@ object QPlanResolver {
     def nameResolverCache = pNameResolverCache
     def resolve: TScopedNameResolver = (baseName, target) => {
       val resolvedName: expr.types.TResolvedNameValue = pNameResolverCache.get(baseName) match {
+        // we don't have the result type info for UNWIND and single index lookup expressions
+        // so our best guess is to use the first type we encounter in the current query type
         case Some((rn, expr.UnwindAttribute(_, _, _))) => {
-          // we don't have the result type info for UNWIND,
-          // so our best guess is to use the first type we encounter in the current query type
+          pNameResolverCache.update(baseName, (rn, target))
+          rn
+        }
+        case Some((rn, expr.IndexLookupExpression(_, _))) => {
           pNameResolverCache.update(baseName, (rn, target))
           rn
         }
