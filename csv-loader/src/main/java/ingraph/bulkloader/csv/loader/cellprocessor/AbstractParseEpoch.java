@@ -2,7 +2,6 @@ package ingraph.bulkloader.csv.loader.cellprocessor;
 
 import org.supercsv.cellprocessor.CellProcessorAdaptor;
 import org.supercsv.cellprocessor.ift.StringCellProcessor;
-import org.supercsv.exception.SuperCsvCellProcessorException;
 import org.supercsv.util.CsvContext;
 
 import java.text.DateFormat;
@@ -21,10 +20,6 @@ abstract public class AbstractParseEpoch extends CellProcessorAdaptor implements
 
 	public Object execute(final Object value, final CsvContext context) {
 		validateInputNotNull(value, context);
-
-		if (!(value instanceof String)) {
-			throw new SuperCsvCellProcessorException(String.class, value, context, this);
-		}
 
 		long epoch = Long.parseLong(value.toString());
 		long result = Long.valueOf(formatter.format(new java.util.Date(epoch)));
