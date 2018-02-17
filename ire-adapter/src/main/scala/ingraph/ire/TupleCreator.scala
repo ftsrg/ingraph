@@ -66,7 +66,7 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
       operator.internalSchema.drop(3)
         .map {
           case PropertyAttribute(name, elementAttribute, _) => elementAttribute match {
-            case e: EdgeAttribute => edge.properties.getOrElse(name, null)
+            case _: EdgeAttribute => edge.properties.getOrElse(name, null)
             case e: VertexAttribute if e == operator.jnode.trg => edge.targetVertex.properties.getOrElse(name, null)
             case e: VertexAttribute if e == operator.jnode.src => edge.sourceVertex.properties.getOrElse(name, null)
           }

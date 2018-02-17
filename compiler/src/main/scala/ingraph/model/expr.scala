@@ -213,7 +213,10 @@ case class EdgeLabelSet(edgeLabels: Set[EdgeLabel] = Set(), status: LabelSetStat
 // formerly GraphElementVariable
 abstract class ElementAttribute(name: String, val properties: TPropertyMap, isAnonymous: Boolean, override val resolvedName: TResolvedName) extends GraphAttribute(name) with ResolvableName
 
-abstract class AbstractVertexAttribute(override val name: String, val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map(), val isAnonymous: Boolean, resolvedName: TResolvedName) extends ElementAttribute(name, properties, isAnonymous, resolvedName)
+abstract class AbstractVertexAttribute(
+  override val name: String, val labels: VertexLabelSet = VertexLabelSet(),
+  override val properties: TPropertyMap = Map(), val isAnonymous: Boolean,
+  resolvedName: TResolvedName) extends ElementAttribute(name, properties, isAnonymous, resolvedName)
 abstract class AbstractEdgeAttribute(override val name: String, val labels: EdgeLabelSet, override val properties: TPropertyMap = Map(), val isAnonymous: Boolean, resolvedName: TResolvedName) extends ElementAttribute(name, properties, isAnonymous, resolvedName)
 
 /*
@@ -238,7 +241,10 @@ case class TupleEdgeAttribute(src: Expression,
 // but they can be identified in a type-safe manner
 //case class AnonymousVertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map()) extends VertexAttribute(name, labels, properties)
 //case class AnonymousEdgeAttribute(override val name: String, override val labels: EdgeLabelSet, override val properties: TPropertyMap = Map()) extends EdgeAttribute(name, labels, properties)
-case class VertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map(), override val isAnonymous: Boolean = false, override val resolvedName: TResolvedName = None) extends AbstractVertexAttribute(name, labels, properties, isAnonymous, resolvedName)
+case class VertexAttribute(override val name: String,
+  override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map(),
+  override val isAnonymous: Boolean = false, override val resolvedName: TResolvedName = None
+                          ) extends AbstractVertexAttribute(name, labels, properties, isAnonymous, resolvedName)
 case class EdgeAttribute(override val name: String, override val labels: EdgeLabelSet = EdgeLabelSet(), override val properties: TPropertyMap = Map(), override val isAnonymous: Boolean = false, override val resolvedName: TResolvedName = None) extends AbstractEdgeAttribute(name, labels, properties, isAnonymous, resolvedName)
 case class EdgeListAttribute(override val name: String, override val labels: EdgeLabelSet = EdgeLabelSet(), override val properties: TPropertyMap = Map(), override val isAnonymous: Boolean = false, minHops: Option[Int], maxHops: Option[Int], override val resolvedName: TResolvedName = None) extends AbstractEdgeAttribute(name, labels, properties, isAnonymous, resolvedName)
 
