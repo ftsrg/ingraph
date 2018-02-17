@@ -117,9 +117,9 @@ public class LdbcUpdateStreamCsvLoader {
 	};
 
 	final CellProcessor[] UPDATE_8 = new CellProcessor[]{
-		new ParseLong(),                    // 1 person1.id
-		new ParseLong(),                    // 2 person2.id
-		new ParseEpochToDateTime(),         // 3 knows.creationDate
+		new ParseLong(),                    // 4 person1.id
+		new ParseLong(),                    // 5 person2.id
+		new ParseEpochToDateTime(),         // 6 knows.creationDate
 	};
 
 	final List<CellProcessor[]> UPDATES =
