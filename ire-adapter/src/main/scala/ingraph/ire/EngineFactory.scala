@@ -48,8 +48,9 @@ object EngineFactory {
             op match {
               case op: GetVertices => getVertices(op, expr)
               case op: GetEdges => getEdges(op, expr)
-              case op: Dual => inputs += ("" -> expr.child)
-              expr.child(ChangeSet(positive=Vector(Vector())))
+              case op: Dual =>
+                inputs += ("" -> expr.child)
+                expr.child(ChangeSet(positive=Vector(Vector())))
             }
 
           case op: UnaryFNode =>
