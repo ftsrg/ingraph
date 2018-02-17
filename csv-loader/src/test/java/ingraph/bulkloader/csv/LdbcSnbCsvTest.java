@@ -17,8 +17,10 @@ import java.util.stream.Collectors;
 
 public class LdbcSnbCsvTest {
 
-	private static final String PREFIX = TestConstants.GRAPHS_DIR + "/ldbc-snb-bi/01/";
-	private static final String POSTFIX = "_0_0.csv";
+	public static final String PREFIX = TestConstants.GRAPHS_DIR + "/ldbc-snb-bi/01/";
+	public static final String POSTFIX = "_0_0.csv";
+	public static final CsvPreference LDBC_CSV_PREFERENCE =
+			new CsvPreference.Builder('"', '|', "\n").build();
 
 	final Map<String, Collection<String>> nodeCsvs = ImmutableMap.<String, Collection<String>>builder() //
 			.put("comment", Arrays.asList("Message", "Comment")) //
@@ -72,8 +74,7 @@ public class LdbcSnbCsvTest {
 
 	@Test
 	public void testLoad() throws IOException {
-		final CsvPreference csvPreference = new CsvPreference.Builder('"', '|', "\n").build();
-		final MassCsvLoader mcl = new MassCsvLoader(nodeFilenames, relationshipFilenames, csvPreference);
+		final MassCsvLoader mcl = new MassCsvLoader(nodeFilenames, relationshipFilenames, LDBC_CSV_PREFERENCE);
 		List<Node> nodes = mcl.getNodes();
 		List<Relationship> relationships = mcl.getRelationships();
 
