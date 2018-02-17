@@ -151,7 +151,8 @@ object EngineFactory {
     }
 
     private def selection(op: Selection, expr: ForwardConnection) = {
-      newLocal(Props(new SelectionNode(expr.child, ExpressionParser[Boolean](op.condition))))
+      val condition = ExpressionParser[Boolean](op.condition)
+      newLocal(Props(new SelectionNode(expr.child, condition)))
     }
 
     private def projection(op: Projection, expr: ForwardConnection) = {

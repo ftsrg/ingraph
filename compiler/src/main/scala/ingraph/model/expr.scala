@@ -121,6 +121,7 @@ abstract class AttributeBase extends Attribute {
 }
 
 case class TupleIndexLiteralAttribute(index: Int, side: Option[Side] = None, isVertex: Boolean = false) extends AttributeBase {
+  assert(index >= 0, s"Cannot index an array with $index")
   override def name: String = ???
 }
 abstract class Side
