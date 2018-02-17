@@ -22,3 +22,6 @@ class IncompleteResolutionException(val info: String)
 
 class UnexpectedTypeException(val a: Any, val info: String = "(details not given)")
   extends CompilerException(s"Unexpected type found: ${a.getClass} at ${info}. String value of the object is: ${a}")
+
+class UnsupportedException(val info: String)
+  extends CompilerException(s"Usupported (for now): ${info}.")

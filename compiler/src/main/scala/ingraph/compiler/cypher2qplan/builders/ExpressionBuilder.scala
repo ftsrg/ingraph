@@ -3,7 +3,7 @@ package ingraph.compiler.cypher2qplan.builders
 import java.util
 
 import ingraph.compiler.cypher2qplan.util.BuilderUtil
-import ingraph.compiler.exceptions.{CompilerException, PatternNotAllowedException, UnexpectedTypeException}
+import ingraph.compiler.exceptions.{CompilerException, PatternNotAllowedException, UnexpectedTypeException, UnsupportedException}
 import ingraph.model.misc.Function
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
@@ -186,24 +186,21 @@ object ExpressionBuilder {
 //    }
 //  }
 
+  // FIXME: when resolved https://github.com/slizaa/slizaa-opencypher-xtext/issues/34
   def buildExpressionIndex(indexExpr: oc.IndexExpression): expr.AbstractIndexExpression = {
-    val collection = buildExpressionNoJoinAllowed(indexExpr.getLeft)
-    val lower = indexExpr.getExpression match {
-      case n: oc.NumberConstant => Option(LiteralBuilder.buildNumber(n))
+    def buildBoundary(b: oc.Expression): Option[Int] = b match {
+      case n: oc.NumberConstant => Option(LiteralBuilder.buildNumber(n)) match {
+        case None => throw new UnsupportedException("boundary is missing")
+        case Some(m) if m<0 => throw new UnsupportedException("negative indexing")
+        case x => x
+      }
       case x => throw new UnexpectedTypeException(x, "only literal indexing is supported for index expressions")
     }
-    val upper = Option(indexExpr.getUpper) match {
-      case None => lower
-      case Some(upper) => upper match {
-        case n: oc.NumberConstant => Option(LiteralBuilder.buildNumber(n))
-        case x => throw new UnexpectedTypeException(x, "only literal indexing is supported for index expressions")
-      }
-    }
-
-    if (lower.isDefined && upper.isDefined && lower.equals(upper)) {
-      expr.IndexLookupExpression(collection, lower.get)
-    } else {
-      expr.IndexRangeExpression(collection, lower, upper)
+    val collection = buildExpressionNoJoinAllowed(indexExpr.getLeft)
+    val lower = buildBoundary(indexExpr.getExpression)
+    Option(indexExpr.getUpper) match {
+      case None => expr.IndexLookupExpression(collection, lower.get)
+      case Some(upper) => expr.IndexRangeExpression(collection, lower, buildBoundary(upper))
     }
   }
 

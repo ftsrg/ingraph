@@ -154,20 +154,25 @@ case class ListExpression(list: Seq[Expression]) extends ExpressionBase {
 }
 
 /**
-  * Index lookup on a collection, where lower and upper bound defines a slice inclusive if the bounds, if defined.
+  * Index lookup on a collection, where lower and upper bound defines a slice.
+  *
+  * The slice ranges from (including) the lower bound up to (not including) the upper bound, if defined.
   */
 abstract class AbstractIndexExpression(collection: Expression, lower: Option[Int], upper: Option[Int]) extends ExpressionBase {
   override def children: Seq[Expression] = Seq(collection)
 }
 
+/**
+  * Note: this should return a list.
+  */
 case class IndexRangeExpression(collection: Expression, lower: Option[Int], upper: Option[Int]) extends AbstractIndexExpression(collection, lower, upper)
 
 /**
-  * An index expression, where only a single element is retrieved.
+  * An index expression, where only a single element is retrieved as a scalar.
   *
   * i.e. IndexRangeExpression having lower and upper defined to the value of index.
   */
-case class IndexLookupExpression(collection: Expression, index: Int) extends AbstractIndexExpression(collection, Some(index), Some(index))
+case class IndexLookupExpression(collection: Expression, index: Int) extends AbstractIndexExpression(collection, Some(index), Some(index+1))
 
 // formerly GraphElementVariable
 abstract class GraphAttribute(override val name: String) extends AttributeBase
