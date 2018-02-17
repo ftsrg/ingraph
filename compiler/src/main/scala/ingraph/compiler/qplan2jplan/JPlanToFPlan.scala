@@ -40,11 +40,14 @@ object JPlanToFPlan {
         fplan.Selection(ea, o, transform(o.child, ea ++ newExtra))
       case o: jplan.Unwind =>
         fplan.Unwind(ea, o, transform(o.child, ea ++ extractAttributes(o.unwindAttribute.list)))
+      case o: jplan.SortAndTop =>
+        val newExtra = o.order.flatMap(x => extractAttributes(x.child)).filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))
+        fplan.SortAndTop (ea, o, transform(o.child, ea ++ newExtra))
+
       // the rest is just the same, isn't it?
       case o: jplan.AllDifferent         => fplan.AllDifferent        (ea, o, transform(o.child, ea))
       case o: jplan.DuplicateElimination => fplan.DuplicateElimination(ea, o, transform(o.child, ea))
       case o: jplan.Production           => fplan.Production          (ea, o, transform(o.child, ea))
-      case o: jplan.SortAndTop           => fplan.SortAndTop          (ea, o, transform(o.child, ea))
       // unary DMLs
       case o: jplan.Create               =>
         val newExtra = extractAttributesFromInsertion(o.attribute)
