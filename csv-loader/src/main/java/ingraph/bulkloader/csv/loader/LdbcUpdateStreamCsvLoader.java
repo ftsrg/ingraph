@@ -15,6 +15,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,17 +23,26 @@ import java.util.stream.IntStream;
 
 public class LdbcUpdateStreamCsvLoader {
 
-	public LdbcUpdateStreamCsvLoader(List<String> csvFilenames, CsvPreference csvPreference) throws IOException {
-		loadUpdates(csvFilenames, csvPreference);
+	// make sure to load persons first
+	public static final List<String> CSV_FILENAMES = ImmutableList.of("person", "forum");
+	public static final String PREFIX = "updateStream_0_0_";
+	public static final String POSTFIX = ".csv";
+	public static final CsvPreference LDBC_CSV_PREFERENCE =
+		new CsvPreference.Builder('"', '|', "\n").build();
+
+	final List<List<Object>> updates = new ArrayList<>();
+
+	public LdbcUpdateStreamCsvLoader(String csvDir) throws IOException {
+		loadUpdates(csvDir);
 	}
 
-	final CellProcessor[] UPDATE_COMMON = new CellProcessor[] {
+	final CellProcessor[] UPDATE_COMMON = new CellProcessor[]{
 		new ParseLong(),            // 1 scheduled start time
 		new ParseLong(),            // 2 dependency time
 		new ParseInt(),             // 3 event type (1..8)
 	};
 
-	final CellProcessor[] UPDATE_1 = new CellProcessor[] {
+	final CellProcessor[] UPDATE_1 = new CellProcessor[]{
 		new ParseLong(),            // 4 person.id
 		new NotNull(),              // 5 person.firstName
 		new NotNull(),              // 6 person.lastName
@@ -49,19 +59,19 @@ public class LdbcUpdateStreamCsvLoader {
 		new Optional(),             // 17 {person-workAt->Company.id, Person-workAt.workFrom->Company}
 	};
 
-	final CellProcessor[] UPDATE_2 = new CellProcessor[] {
+	final CellProcessor[] UPDATE_2 = new CellProcessor[]{
 		new ParseLong(),            // 4 person.id
 		new ParseLong(),            // 5 post.id
 		new ParseEpochToDateTime(), // 6 person-likes.creationDate->post
 	};
 
-	final CellProcessor[] UPDATE_3 = new CellProcessor[] {
+	final CellProcessor[] UPDATE_3 = new CellProcessor[]{
 		new ParseLong(),            // 4 person.id
 		new ParseLong(),            // 5 comment.id
 		new ParseEpochToDateTime(), // 6 person-likes.creationDate->comment
 	};
 
-	final CellProcessor[] UPDATE_4 = new CellProcessor[] {
+	final CellProcessor[] UPDATE_4 = new CellProcessor[]{
 		new ParseLong(),            // 4 forum.id
 		new NotNull(),              // 5 forum.title
 		new ParseEpochToDateTime(), // 6 forum.creationDate
@@ -69,13 +79,13 @@ public class LdbcUpdateStreamCsvLoader {
 		new NotNull(),              // 8 forum-hasTag->Tag.id
 	};
 
-	final CellProcessor[] UPDATE_5 = new CellProcessor[] {
+	final CellProcessor[] UPDATE_5 = new CellProcessor[]{
 		new ParseLong(),            // 4 person.id
 		new ParseLong(),            // 5 Forum-hasMember->person.id
 		new ParseEpochToDateTime(), // 6 Forum-hasMember.joinDate->person
 	};
 
-	final CellProcessor[] UPDATE_6 = new CellProcessor[] {
+	final CellProcessor[] UPDATE_6 = new CellProcessor[]{
 		new ParseLong(),            // 4 post.id
 		new Optional(),             // 5 post.imageFile
 		new ParseEpochToDateTime(), // 6 post.creationDate
@@ -90,7 +100,7 @@ public class LdbcUpdateStreamCsvLoader {
 		new Optional(),             // 15 {post-hasTag->Tag.id}
 	};
 
-	final CellProcessor[] UPDATE_7 = new CellProcessor[] {
+	final CellProcessor[] UPDATE_7 = new CellProcessor[]{
 		new ParseLong(),            // 4 comment.id
 		new ParseEpochToDateTime(), // 5 comment.creationDate
 		new NotNull(),              // 6 comment.locationIp
@@ -104,7 +114,7 @@ public class LdbcUpdateStreamCsvLoader {
 		new Optional(),             // 14 {comment-hasTag->Tag.id}
 	};
 
-	final CellProcessor[] UPDATE_8 = new CellProcessor[] {
+	final CellProcessor[] UPDATE_8 = new CellProcessor[]{
 		new ParseLong(),            // 1 person1.id
 		new ParseLong(),            // 2 person2.id
 		new ParseEpochToDateTime(), // 3 knows.creationDate
@@ -122,26 +132,30 @@ public class LdbcUpdateStreamCsvLoader {
 				i -> ObjectArrays.concat(UPDATE_COMMON, UPDATES.get(i), CellProcessor.class)
 			));
 
-	private void loadUpdates(List<String> csvFilenames, CsvPreference csvPreference) throws IOException {
-		for (String csvFilename: csvFilenames) {
-			System.out.println(csvFilename);
+	private void loadUpdates(final String csvDir) throws IOException {
+		for (final String csvFilename : CSV_FILENAMES) {
+			final String csvPath = csvDir + "/" + PREFIX + csvFilename + POSTFIX;
 
 			ICsvListReader listReader = null;
 			try {
-				listReader = new CsvListReader(new FileReader(csvFilename), csvPreference);
+				listReader = new CsvListReader(new FileReader(csvPath), LDBC_CSV_PREFERENCE);
 
-				while( (listReader.read()) != null ) {
+				while ((listReader.read()) != null) {
 					int updateType = Integer.valueOf(listReader.get(3));
 					final CellProcessor[] cellProcessor = UPDATE_PROCESSORS.get(updateType);
 					final List<Object> update = listReader.executeProcessors(cellProcessor);
-					System.out.println(update);
+					updates.add(update);
 				}
 			} finally {
-				if( listReader != null ) {
+				if (listReader != null) {
 					listReader.close();
 				}
 			}
 		}
+	}
+
+	public List<List<Object>> getUpdates() {
+		return updates;
 	}
 
 }
