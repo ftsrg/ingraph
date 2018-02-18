@@ -11,7 +11,7 @@ ext {
   guavaVersion = '22.0'
   junitVersion = '4.12'
   log4jVersion = '1.2.17'
-  neo4jDriverVersion = '1.5.1'
+  neo4jDriverVersion = '1.4.6'
   neo4jVersion = '3.3.2'
   neo4jApocVersion = '3.3.0.1'
   pegdownVersion = '1.6.0'

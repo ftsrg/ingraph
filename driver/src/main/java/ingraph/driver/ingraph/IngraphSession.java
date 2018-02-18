@@ -32,18 +32,8 @@ public class IngraphSession implements Session {
 	}
 
 	@Override
-	public CompletionStage<StatementResultCursor> runAsync(String statementTemplate, Value parameters) {
-		return null;
-	}
-
-	@Override
 	public StatementResult run(String statementTemplate, Map<String, Object> statementParameters) {
 		throw new UnsupportedOperationException("Vanilla queries are not yet supported");
-	}
-
-	@Override
-	public CompletionStage<StatementResultCursor> runAsync(String statementTemplate, Map<String, Object> statementParameters) {
-		return null;
 	}
 
 	@Override
@@ -52,28 +42,13 @@ public class IngraphSession implements Session {
 	}
 
 	@Override
-	public CompletionStage<StatementResultCursor> runAsync(String statementTemplate, Record statementParameters) {
-		return null;
-	}
-
-	@Override
 	public StatementResult run(String statementTemplate) {
 		return run(statementTemplate, Collections.emptyMap());
 	}
 
 	@Override
-	public CompletionStage<StatementResultCursor> runAsync(String statementTemplate) {
-		return null;
-	}
-
-	@Override
 	public StatementResult run(Statement statement) {
 		return run(statement.text(), statement.parameters());
-	}
-
-	@Override
-	public CompletionStage<StatementResultCursor> runAsync(Statement statement) {
-		return null;
 	}
 
 	@Override
@@ -92,28 +67,13 @@ public class IngraphSession implements Session {
 	}
 
 	@Override
-	public CompletionStage<Transaction> beginTransactionAsync() {
-		return null;
-	}
-
-	@Override
 	public <T> T readTransaction(TransactionWork<T> work) {
 		throw new UnsupportedOperationException("Operation not supported.");
 	}
 
 	@Override
-	public <T> CompletionStage<T> readTransactionAsync(TransactionWork<CompletionStage<T>> work) {
-		return null;
-	}
-
-	@Override
 	public <T> T writeTransaction(TransactionWork<T> work) {
 		throw new UnsupportedOperationException("Operation not supported.");
-	}
-
-	@Override
-	public <T> CompletionStage<T> writeTransactionAsync(TransactionWork<CompletionStage<T>> work) {
-		return null;
 	}
 
 	@Override
@@ -128,11 +88,6 @@ public class IngraphSession implements Session {
 
 	@Override
 	public void close() {
-	}
-
-	@Override
-	public CompletionStage<Void> closeAsync() {
-		return null;
 	}
 
 	public IngraphQueryHandler registerQuery(String queryName, String querySpecification, Map<String, Object> statementParameters) {

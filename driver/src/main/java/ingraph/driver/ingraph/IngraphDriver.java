@@ -4,8 +4,6 @@ import ingraph.driver.CypherDriver;
 import org.neo4j.driver.v1.AccessMode;
 import org.neo4j.driver.v1.Session;
 
-import java.util.concurrent.CompletionStage;
-
 /**
  * Current limitations include:
  *
@@ -58,11 +56,6 @@ public class IngraphDriver extends CypherDriver {
 
 	@Override
 	public void close() {
-	}
-
-	@Override
-	public CompletionStage<Void> closeAsync() {
-		throw new UnsupportedOperationException("unimplemented");
 	}
 
 }

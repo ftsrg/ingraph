@@ -10,8 +10,6 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.test.TestGraphDatabaseFactory;
 
-import java.util.concurrent.CompletionStage;
-
 public class Neo4jDriver extends CypherDriver {
 
 	final Driver driver;
@@ -20,13 +18,13 @@ public class Neo4jDriver extends CypherDriver {
 		GraphDatabaseSettings.BoltConnector bolt = GraphDatabaseSettings.boltConnector("0");
 
 		String host = "localhost";
-		int port = 7687; // this is the default Neo4j port - we start one higher than this
+		int port = 7687; // this is the default Neo4j port - we start one higher than this to avoid collisions
 		GraphDatabaseService graphDb = null;
 		String address = null;
 		while (port < 65000) {
 			port++;
 			address = String.format("%s:%d", host, port);
-			System.out.println(address);
+			System.out.println("instantiating database listening on " + address);
 			try {
 				graphDb = new TestGraphDatabaseFactory()
 					.newImpermanentDatabaseBuilder()
@@ -86,11 +84,6 @@ public class Neo4jDriver extends CypherDriver {
 	@Override
 	public void close() {
 		driver.close();
-	}
-
-	@Override
-	public CompletionStage<Void> closeAsync() {
-		throw new UnsupportedOperationException("unimplemented");
 	}
 
 }
