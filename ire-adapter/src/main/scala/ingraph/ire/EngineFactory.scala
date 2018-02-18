@@ -19,6 +19,7 @@ import ingraph.parse.ExpressionParser
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression}
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 
 abstract class AnnotatedRelationalEngine extends RelationalEngine {
   val vertexConverters: BufferMultimap[Seq[String], GetVertices]
@@ -67,6 +68,7 @@ object EngineFactory {
               case op: Merge => merge(op, indexer, expr)
               case op: Remove => remove(op, indexer, expr)
               case op: SetNode => set(op, indexer, expr)
+              case op: Unwind => unwind(op, indexer, expr)
             }
             remaining += ForwardConnection(op.child, node)
 
@@ -267,6 +269,11 @@ object EngineFactory {
 
     private def set(op: SetNode, indexer: Indexer, expr: ForwardConnection) = {
       ???
+    }
+
+    private def unwind(op: Unwind, indexer: Indexer, expr: ForwardConnection) = {
+      val list = ExpressionParser[ArrayBuffer[Any]](op.unwindAttribute.list)
+      newLocal(Props(new UnwindNode(expr.child, list)))
     }
 
     override val inputLookup: Map[String, (ChangeSet) => Unit] = inputs.toMap

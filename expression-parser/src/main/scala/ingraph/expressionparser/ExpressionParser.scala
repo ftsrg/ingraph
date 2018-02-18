@@ -4,7 +4,7 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
 import ingraph.expressionparser.FunctionLookup
-import ingraph.model.expr.{FunctionInvocation, Parameter, TupleIndexLiteralAttribute}
+import ingraph.model.expr._
 import ingraph.model.misc.FunctionCategory
 import org.apache.spark.sql.catalyst.expressions.{Add, And, BinaryArithmetic, BinaryComparison, BinaryOperator, CaseWhen, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Remainder, Subtract}
 import org.apache.spark.unsafe.types.UTF8String
@@ -17,11 +17,18 @@ object ExpressionParser {
   }
 
   private def parse(exp: Expression): Tuple => Any = exp match {
+    case PropertyAttribute(_, attr, _) =>
+      parse(attr)
     case Literal(value, _) =>
       value match {
         case s: UTF8String => _ => s.toString
         case v => _ => v
       }
+    case ExpressionAttribute(child, _, _) =>
+      parse(child)
+    case ListExpression(list) =>
+      val parsed = list.map(parse)
+      (t) => parsed.map(l => l(t))
     case Not(e) =>
       (t: Tuple) =>
         val operand = ExpressionParser[Boolean](e)

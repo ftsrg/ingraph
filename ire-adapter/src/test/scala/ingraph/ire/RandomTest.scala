@@ -55,4 +55,11 @@ class RandomTest extends FunSuite {
     assert(adapter.result().toSet == Set(Vector(5)))
   }
 
+  test("Unwind") {
+    val query = "UNWIND [1, 2, 'ot'] as x RETURN x"
+    val adapter = new IngraphIncrementalAdapter(query, "")
+    adapter.indexer.addVertex(IngraphVertex(5L, Set("ot")))
+    assert(adapter.result() == List(Vector(1), Vector(2), Vector("ot")))
+  }
+
 }
