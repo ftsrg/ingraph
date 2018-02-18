@@ -39,10 +39,6 @@ case class GetEdges(extraAttributes: Seq[ResolvableName], jnode: jplan.GetEdges)
   override def internalSchema: Seq[ResolvableName] = jnode.output ++ extraAttributes
 }
 
-case class GetEdgeLists(extraAttributes: Seq[ResolvableName], jnode: jplan.GetEdgeLists) extends LeafFNode {
-  override def internalSchema: Seq[ResolvableName] = jnode.output ++ extraAttributes
-}
-
 case class Dual(jnode: jplan.Dual) extends LeafFNode {
   override def internalSchema = Seq()
   override def extraAttributes: Seq[ResolvableName] = Seq()
@@ -132,6 +128,13 @@ case class Join(extraAttributes: Seq[ResolvableName],
                 left: FNode,
                 right: FNode
                ) extends BinaryFNode with EquiJoinLike {}
+
+case class TransitiveJoin(extraAttributes: Seq[ResolvableName],
+                          jnode: jplan.TransitiveJoin,
+                          left: FNode,
+                          right: FNode) extends BinaryFNode with EquiJoinLike {
+  lazy val edgeList: EdgeListAttribute = jnode.edgeList
+}
 
 case class LeftOuterJoin(extraAttributes: Seq[ResolvableName],
                          jnode: jplan.LeftOuterJoin,

@@ -12,12 +12,17 @@ object QPlanToJPlan {
 
       // unary read
       case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => edge match {
-        case e: EdgeAttribute => expandToEdges(src, trg, e, dir)
-        case el: EdgeListAttribute => expandToEdgeLists(src, trg, el, dir)
+        case e: EdgeAttribute => getEdgesForDirection(src, trg, e, dir)
+        case el: EdgeListAttribute =>
+          jplan.TransitiveJoin(
+            jplan.GetVertices(src),
+            expandToTransitiveEdges(src, trg, el, dir),
+            el
+          )
       }
       case qplan.Expand(src, trg, edge, dir, child) => edge match {
-        case e: EdgeAttribute => jplan.Join(transform(child), expandToEdges(src, trg, e, dir))
-        case el: EdgeListAttribute => jplan.Join(transform(child), expandToEdgeLists(src, trg, el, dir))
+        case e: EdgeAttribute => jplan.Join(transform(child), getEdgesForDirection(src, trg, e, dir))
+        case el: EdgeListAttribute => jplan.TransitiveJoin(transform(child), expandToTransitiveEdges(src, trg, el, dir), el)
       }
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => jplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
       // if Sort operator found w/o Top, then skip and limit defaults to None
@@ -47,10 +52,10 @@ object QPlanToJPlan {
     }
   }
 
-  def expandToEdges(src: VertexAttribute,
-                    trg: VertexAttribute,
-                    e: EdgeAttribute,
-                    dir: Direction): jplan.GetEdges = {
+  def getEdgesForDirection(src: VertexAttribute,
+                           trg: VertexAttribute,
+                           e: EdgeAttribute,
+                           dir: Direction): jplan.GetEdges = {
     dir match {
       case Out  => jplan.GetEdges(src, trg, e, directed = true)
       case In   => jplan.GetEdges(trg, src, e, directed = true)
@@ -58,14 +63,12 @@ object QPlanToJPlan {
     }
   }
 
-  def expandToEdgeLists(src: VertexAttribute,
-                        trg: VertexAttribute,
-                        el: EdgeListAttribute,
-                        dir: Direction): jplan.GetEdgeLists = {
-    dir match {
-      case Out  => jplan.GetEdgeLists(src, trg, el, directed = true)
-      case In   => jplan.GetEdgeLists(trg, src, el, directed = true)
-      case Both => jplan.GetEdgeLists(src, trg, el, directed = false)
-    }
+  def expandToTransitiveEdges(src: VertexAttribute,
+                              trg: VertexAttribute,
+                              el: EdgeListAttribute,
+                              dir: Direction): jplan.GetEdges = {
+    val e = EdgeAttribute(el.name, el.labels, el.properties)
+    getEdgesForDirection(src, trg, e, dir)
   }
+
 }
