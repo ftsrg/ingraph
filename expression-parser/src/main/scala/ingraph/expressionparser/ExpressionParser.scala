@@ -4,7 +4,7 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
 import ingraph.expressionparser.FunctionLookup
-import ingraph.model.expr.{FunctionInvocation, Parameter, TupleIndexLiteralAttribute}
+import ingraph.model.expr._
 import ingraph.model.misc.FunctionCategory
 import org.apache.spark.sql.catalyst.expressions.{Add, And, BinaryArithmetic, BinaryComparison, BinaryOperator, CaseWhen, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Remainder, Subtract}
 import org.apache.spark.unsafe.types.UTF8String
@@ -17,11 +17,18 @@ object ExpressionParser {
   }
 
   private def parse(exp: Expression): Tuple => Any = exp match {
+    case PropertyAttribute(_, attr, _) =>
+      parse(attr)
     case Literal(value, _) =>
       value match {
         case s: UTF8String => _ => s.toString
         case v => _ => v
       }
+    case ExpressionAttribute(child, _, _) =>
+      parse(child)
+    case ListExpression(list) =>
+      val parsed = list.map(parse)
+      (t) => parsed.map(l => l(t))
     case Not(e) =>
       (t: Tuple) =>
         val operand = ExpressionParser[Boolean](e)
@@ -60,7 +67,7 @@ object ExpressionParser {
         case _: And => (t: Tuple) => left(t) && right(t)
         case _: Or => (t: Tuple) => left(t) || right(t)
       }
-    case TupleIndexLiteralAttribute(index, _) =>
+    case TupleIndexLiteralAttribute(index, _, _) =>
       tuple  => tuple(index)
 
     case invoc: FunctionInvocation =>
@@ -80,7 +87,6 @@ object ExpressionParser {
           tuple => fun(children(0)(tuple), children(1)(tuple), children(2)(tuple))
       }
     case exp: CaseWhen =>
-      println(exp)
       val cases = exp.branches.map(c => (ExpressionParser[Boolean](c._1), parse(c._2)))
       val fallback: Tuple => Any = exp.elseValue.map(parse)
         .getOrElse((t: Tuple) => throw new Exception("Run into non-existent ELSE clause"))
@@ -95,7 +101,7 @@ object ExpressionParser {
   }
 
   def parseAggregate(exp: Expression): Option[(Int, () => StatefulAggregate)] = exp match {
-    case FunctionInvocation(functor, Seq(TupleIndexLiteralAttribute(index, _)), _) =>
+    case FunctionInvocation(functor, Seq(TupleIndexLiteralAttribute(index, _, _)), _) =>
       import ingraph.model.misc.Function._
       val factory = functor match {
         case AVG => () => new StatefulAverage(index)

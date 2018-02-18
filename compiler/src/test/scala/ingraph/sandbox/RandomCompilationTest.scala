@@ -187,8 +187,7 @@ class RandomCompilationTest extends CompilerTest {
       """.stripMargin)
   }
 
-  //FIXME: FPlanToTPlan
-  ignore("Random: 2-part query featuring WITH") {
+  test("Random: 2-part query featuring WITH") {
     compile(
       """MATCH (p:Person)
         |WITH DISTINCT p
@@ -263,10 +262,18 @@ class RandomCompilationTest extends CompilerTest {
     )
   }
 
-  test("Random: multiple property lookup on map and multiple labels in the label predicate") {
+  ignore("Random: multiple property lookup on map") {
     compile(
       """MATCH (p)
-        |WHERE p:Person:Teacher
+        |RETURN p, {foo: {innerFoo: p}}.foo.innerFoo
+      """.stripMargin
+    )
+  }
+
+  ignore("Random: multiple property lookup on map and multiple labels in the label predicate") {
+    compile(
+      """MATCH (p)
+        |WHERE {foo: {innerFoo: p}}.foo.innerFoo:Person:Teacher
         |RETURN p
       """.stripMargin
     )
@@ -295,6 +302,74 @@ class RandomCompilationTest extends CompilerTest {
         |DETACH DELETE b
       """.stripMargin
     )
+  }
+
+  test("Random: MATCH...CREATE based on matched value") {
+    compile(
+      """MATCH (a:Person {name: 'Alice'}), (b:Person)
+        |CREATE (a)-[:KNOWS {foo: a.age}]->(b)
+      """.stripMargin
+    )
+  }
+
+  test("should compile MATCH") {
+    compile("MATCH (n) RETURN n")
+  }
+
+  test("should resolve aliased property lookup two query parts later") {
+    compile(
+      """MATCH (n)
+        |WITH n.foo as nFoo
+        |WITH nFoo
+        |RETURN nFoo
+        |""".stripMargin)
+  }
+
+  test("should compile simple index expression") {
+    compile(
+      """MATCH (n)
+        |RETURN n.languages[0] AS firstLanguage
+        |""".stripMargin)
+  }
+
+  test("should compile index range expression") {
+    compile(
+      """MATCH (n)
+        |RETURN n.languages[2..5] AS someLanguages
+        |""".stripMargin)
+  }
+
+  test("should resolve index expressions referenced in patterns") {
+    compile(
+      """MATCH (n:Person)
+        |WITH collect(n) as persons
+        |WITH persons[0] as onePerson
+        |OPTIONAL MATCH (onePerson)-[:KNOWS]->(old:Person {age: 100})
+        |RETURN onePerson, old
+        |""".stripMargin)
+  }
+
+  test("should compile MATCH and UNWIND") {
+    compile("MATCH (n) UNWIND n.favColors AS favColor RETURN n, favColor")
+  }
+
+  test("should compile MATCH and multiple UNWINDs") {
+    compile(
+      """MATCH (n)
+        |UNWIND n.favColors AS favColor
+        |UNWIND n.favMovies AS favMovie
+        |RETURN n, favColor, favMovie
+        |""".stripMargin)
+  }
+
+  test("should compile vertices COLLECT'ed then UNWIND as a vertex") {
+    compile(
+      """MATCH (n:Person)
+        |WITH collect(n) as persons
+        |UNWIND persons AS p2
+        |MATCH (p2)-[:OWNER]->(c:Car)
+        |RETURN persons, p2, c
+        |""".stripMargin)
   }
 }
 

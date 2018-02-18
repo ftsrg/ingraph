@@ -12,12 +12,17 @@ object QPlanToJPlan {
 
       // unary read
       case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => edge match {
-        case e: EdgeAttribute => expandToEdges(src, trg, e, dir)
-        case el: EdgeListAttribute => expandToEdgeLists(src, trg, el, dir)
+        case e: EdgeAttribute => getEdgesForDirection(src, trg, e, dir)
+        case el: EdgeListAttribute =>
+          jplan.TransitiveJoin(
+            jplan.GetVertices(src),
+            expandToTransitiveEdges(src, trg, el, dir),
+            el
+          )
       }
       case qplan.Expand(src, trg, edge, dir, child) => edge match {
-        case e: EdgeAttribute => jplan.Join(transform(child), expandToEdges(src, trg, e, dir))
-        case el: EdgeListAttribute => jplan.Join(transform(child), expandToEdgeLists(src, trg, el, dir))
+        case e: EdgeAttribute => jplan.Join(transform(child), getEdgesForDirection(src, trg, e, dir))
+        case el: EdgeListAttribute => jplan.TransitiveJoin(transform(child), expandToTransitiveEdges(src, trg, el, dir), el)
       }
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => jplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
       // if Sort operator found w/o Top, then skip and limit defaults to None
@@ -30,9 +35,11 @@ object QPlanToJPlan {
       case qplan.AllDifferent(edges, child) => jplan.AllDifferent(edges, transform(child))
       case qplan.Unwind(unwindItem, child) => jplan.Unwind(unwindItem, transform(child))
       // unary CUD
-      case qplan.Create(attributes, child) => jplan.Create(attributes, transform(child))
+      case qplan.Create(attributes, child) =>
+        attributes.foldLeft(transform(child)) { (op, attribute) => jplan.Create(attribute, op) }
       case qplan.Delete(attributes, detach, child) => jplan.Delete(attributes, detach, transform(child))
-      case qplan.Merge(attributes, child) => jplan.Merge(attributes, transform(child))
+      case qplan.Merge(attributes, child) =>
+        attributes.foldLeft(transform(child)) { (op, attribute) => jplan.Merge(attribute, op) }
       case qplan.Remove(vertexLabelUpdates, child) => jplan.Remove(vertexLabelUpdates, transform(child))
       case qplan.SetNode(vertexLabelUpdates, child) => jplan.SetNode(vertexLabelUpdates, transform(child))
 
@@ -45,10 +52,10 @@ object QPlanToJPlan {
     }
   }
 
-  def expandToEdges(src: VertexAttribute,
-                    trg: VertexAttribute,
-                    e: EdgeAttribute,
-                    dir: Direction): jplan.GetEdges = {
+  def getEdgesForDirection(src: VertexAttribute,
+                           trg: VertexAttribute,
+                           e: EdgeAttribute,
+                           dir: Direction): jplan.GetEdges = {
     dir match {
       case Out  => jplan.GetEdges(src, trg, e, directed = true)
       case In   => jplan.GetEdges(trg, src, e, directed = true)
@@ -56,14 +63,12 @@ object QPlanToJPlan {
     }
   }
 
-  def expandToEdgeLists(src: VertexAttribute,
-                        trg: VertexAttribute,
-                        el: EdgeListAttribute,
-                        dir: Direction): jplan.GetEdgeLists = {
-    dir match {
-      case Out  => jplan.GetEdgeLists(src, trg, el, directed = true)
-      case In   => jplan.GetEdgeLists(trg, src, el, directed = true)
-      case Both => jplan.GetEdgeLists(src, trg, el, directed = false)
-    }
+  def expandToTransitiveEdges(src: VertexAttribute,
+                              trg: VertexAttribute,
+                              el: EdgeListAttribute,
+                              dir: Direction): jplan.GetEdges = {
+    val e = EdgeAttribute(el.name, el.labels, el.properties)
+    getEdgesForDirection(src, trg, e, dir)
   }
+
 }

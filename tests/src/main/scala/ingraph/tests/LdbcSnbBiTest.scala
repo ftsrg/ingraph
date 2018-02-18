@@ -8,23 +8,19 @@ class LdbcSnbBiTest extends FunSuite {
 
   testCases.foreach {
     tc =>
-      test(tc.name) {
-        try {
-          println(tc.query)
+      test(s"${tc.name}") {
+        val neo4jResults = TestRunners.neo4jTestRunner(tc)
+        val ingraphResults = TestRunners.ingraphTestRunner(tc)
 
-          val neo4jResults = TestRunners.neo4jTestRunner(tc)
-          println(neo4jResults.mkString("Neo4j Results: (\n\t", "\n\t", "\n)"))
-          assert(neo4jResults.nonEmpty)
+        println("neo4j results:   " + neo4jResults)
+        println("ingraph results: " + ingraphResults)
 
-          //val ingraphResults = TestRunners.ingraphTestRunner(tc)
-          //println(ingraphResults.mkString("ingraph Results: (\n\t", "\n\t", "\n)"))
+        //val ingraphResult = ingraphRunner.getResults()
 
-          //assert(neo4jResults.equals(ingraphResults))
-        } catch {
-          case e: Exception => {
-            fail(e)
-          }
-        }
+        //println(tc.parameters.mkString("Parameters: (\n\t", "\n\t", "\n)"))
+        //println(neo4jResult.mkString("Results: (\n\t", "\n\t", "\n)"))
+
+        //assert(neo4jResult.equals(ingraphResults))
       }
   }
 

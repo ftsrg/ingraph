@@ -13,7 +13,7 @@ class RandomTest extends FunSuite {
     assert(adapter.engine.getResults() == List(Vector(null)))
   }
 
-  ignore("Constant returns work") {
+  test("Constant returns work") {
     val query = "RETURN 1 + 1"
     val adapter = new IngraphIncrementalAdapter(query)
     assert(adapter.engine.getResults() == List(Vector(2 )))
@@ -53,6 +53,13 @@ class RandomTest extends FunSuite {
     val query = "MATCH (n:P) WHERE true RETURN n"
     val adapter = new IngraphIncrementalAdapter(query, "", indexer)
     assert(adapter.result().toSet == Set(Vector(5)))
+  }
+
+  test("Unwind") {
+    val query = "UNWIND [1, 2, 'ot'] as x RETURN x"
+    val adapter = new IngraphIncrementalAdapter(query, "")
+    adapter.indexer.addVertex(IngraphVertex(5L, Set("ot")))
+    assert(adapter.result() == List(Vector(1), Vector(2), Vector("ot")))
   }
 
 }

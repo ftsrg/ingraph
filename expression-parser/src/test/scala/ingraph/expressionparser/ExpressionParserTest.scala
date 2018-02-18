@@ -1,8 +1,8 @@
 package ingraph.expressionparser
 
 import hu.bme.mit.ire.datatypes.Tuple
-import ingraph.compiler.TPlanParser
-import ingraph.model.tplan._
+import ingraph.compiler.FPlanParser
+import ingraph.model.fplan._
 import ingraph.parse.ExpressionParser
 import org.scalatest.WordSpec
 
@@ -97,5 +97,5 @@ class ExpressionParserTest extends WordSpec {
 
   }
 
-  private def getPlan(query: String) = TPlanParser.parse(query)
+  private def getPlan(query: String) = FPlanParser.parse(query)
 }

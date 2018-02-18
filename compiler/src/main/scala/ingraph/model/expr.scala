@@ -1,7 +1,6 @@
 package ingraph.model.expr
 
 import ingraph.model.expr.types._
-import ingraph.model.treenodes.IngraphTreeNode
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression, NamedExpression, UnaryExpression}
@@ -11,12 +10,28 @@ import org.apache.spark.sql.types.{DataType, Metadata, StringType}
 package object types {
   type TPropertyMap = Map[String, cExpr.Expression]
   type TProjectList = Seq[ReturnItem]
-  type TResolvedName = Option[String]
+  type TResolvedName = Option[TResolvedNameValue]
   type VertexLabel = String
   type EdgeLabel = String
+
+  /**
+    * TL;DR: Outside String context you probably want to retrieve resolvedName String member.
+    *
+    * Represents a resolved name along with the name it originated from.
+    *
+    * Historically this used to be a string representing only the resolved name.
+    * To retain backward compatibility, toString returns only the resolvedName.
+    */
+  case class TResolvedNameValue(val baseName: String, val resolvedName: String) {
+    override def toString: String = resolvedName
+  }
 }
 trait ProjectionDescriptor {
   def projectList: TProjectList
+}
+
+trait HasExtraChildren {
+  def extraChildren: Seq[Expression]
 }
 
 
@@ -105,7 +120,8 @@ abstract class AttributeBase extends Attribute {
   override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
 }
 
-case class TupleIndexLiteralAttribute(index: Int, side: Option[Side] = None) extends AttributeBase {
+case class TupleIndexLiteralAttribute(index: Int, side: Option[Side] = None, isVertex: Boolean = false) extends AttributeBase {
+  assert(index >= 0, s"Cannot index an array with $index")
   override def name: String = ???
 }
 abstract class Side
@@ -117,7 +133,11 @@ case class Parameter(name: String) extends ExpressionBase {
 }
 
 // just wraps an expression into "? :> Attribute"
-case class ExpressionAttribute(expr: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName
+case class ExpressionAttribute(expr: Expression, override val name: String,
+                               override val resolvedName: TResolvedName = None
+                              ) extends AttributeBase with ResolvableName with HasExtraChildren {
+  override def extraChildren: Seq[Expression] = Seq(expr)
+}
 
 // this is the attribute built by unwinding a list
 case class UnwindAttribute(list: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName
@@ -135,6 +155,27 @@ case class UnwindAttribute(list: Expression, override val name: String, override
 case class ListExpression(list: Seq[Expression]) extends ExpressionBase {
   override def children: Seq[Expression] = list
 }
+
+/**
+  * Index lookup on a collection, where lower and upper bound defines a slice.
+  *
+  * The slice ranges from (including) the lower bound up to (not including) the upper bound, if defined.
+  */
+abstract class AbstractIndexExpression(collection: Expression, lower: Option[Int], upper: Option[Int]) extends ExpressionBase {
+  override def children: Seq[Expression] = Seq(collection)
+}
+
+/**
+  * Note: this should return a list.
+  */
+case class IndexRangeExpression(collection: Expression, lower: Option[Int], upper: Option[Int]) extends AbstractIndexExpression(collection, lower, upper)
+
+/**
+  * An index expression, where only a single element is retrieved as a scalar.
+  *
+  * i.e. IndexRangeExpression having lower and upper defined to the value of index.
+  */
+case class IndexLookupExpression(collection: Expression, index: Int) extends AbstractIndexExpression(collection, Some(index), Some(index+1))
 
 // formerly GraphElementVariable
 abstract class GraphAttribute(override val name: String) extends AttributeBase
@@ -174,7 +215,10 @@ case class EdgeLabelSet(edgeLabels: Set[EdgeLabel] = Set(), status: LabelSetStat
 // formerly GraphElementVariable
 abstract class ElementAttribute(name: String, val properties: TPropertyMap, isAnonymous: Boolean, override val resolvedName: TResolvedName) extends GraphAttribute(name) with ResolvableName
 
-abstract class AbstractVertexAttribute(override val name: String, val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map(), val isAnonymous: Boolean, resolvedName: TResolvedName) extends ElementAttribute(name, properties, isAnonymous, resolvedName)
+abstract class AbstractVertexAttribute(
+  override val name: String, val labels: VertexLabelSet = VertexLabelSet(),
+  override val properties: TPropertyMap = Map(), val isAnonymous: Boolean,
+  resolvedName: TResolvedName) extends ElementAttribute(name, properties, isAnonymous, resolvedName)
 abstract class AbstractEdgeAttribute(override val name: String, val labels: EdgeLabelSet, override val properties: TPropertyMap = Map(), val isAnonymous: Boolean, resolvedName: TResolvedName) extends ElementAttribute(name, properties, isAnonymous, resolvedName)
 
 /*
@@ -186,13 +230,23 @@ abstract class AbstractEdgeAttribute(override val name: String, val labels: Edge
 case class RichEdgeAttribute(src: VertexAttribute,
                              trg: VertexAttribute,
                              edge: EdgeAttribute,
-                             dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous, edge.resolvedName) with NavigationDescriptor
+                             dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous, edge.resolvedName) with NavigationDescriptor with HasExtraChildren {
+  override def extraChildren: Seq[Expression] = Seq(src, trg, edge)
+}
+
+case class TupleEdgeAttribute(src: Expression,
+                             trg: Expression,
+                             edge: EdgeAttribute,
+                             dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous, edge.resolvedName)
 
 // also Anonymous*Attribute has names, though generated unique names like _eN to facilitate reading of text representation
 // but they can be identified in a type-safe manner
 //case class AnonymousVertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map()) extends VertexAttribute(name, labels, properties)
 //case class AnonymousEdgeAttribute(override val name: String, override val labels: EdgeLabelSet, override val properties: TPropertyMap = Map()) extends EdgeAttribute(name, labels, properties)
-case class VertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map(), override val isAnonymous: Boolean = false, override val resolvedName: TResolvedName = None) extends AbstractVertexAttribute(name, labels, properties, isAnonymous, resolvedName)
+case class VertexAttribute(override val name: String,
+  override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map(),
+  override val isAnonymous: Boolean = false, override val resolvedName: TResolvedName = None
+                          ) extends AbstractVertexAttribute(name, labels, properties, isAnonymous, resolvedName)
 case class EdgeAttribute(override val name: String, override val labels: EdgeLabelSet = EdgeLabelSet(), override val properties: TPropertyMap = Map(), override val isAnonymous: Boolean = false, override val resolvedName: TResolvedName = None) extends AbstractEdgeAttribute(name, labels, properties, isAnonymous, resolvedName)
 case class EdgeListAttribute(override val name: String, override val labels: EdgeLabelSet = EdgeLabelSet(), override val properties: TPropertyMap = Map(), override val isAnonymous: Boolean = false, minHops: Option[Int], maxHops: Option[Int], override val resolvedName: TResolvedName = None) extends AbstractEdgeAttribute(name, labels, properties, isAnonymous, resolvedName)
 

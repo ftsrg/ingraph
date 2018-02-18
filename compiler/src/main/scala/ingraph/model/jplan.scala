@@ -18,10 +18,10 @@ abstract class UnaryJNode extends GenericUnaryNode[JNode] with JNode {
 abstract class BinaryJNode extends GenericBinaryNode[JNode] with JNode {}
 
 trait JoinLike extends BinaryJNode {
-  def common: Seq[ResolvableName] = left.output.filter(right.output.contains(_))
+  def common: Seq[ResolvableName] = left.output.filter(x => right.output.map(_.resolvedName).contains(x.resolvedName))
 }
 trait EquiJoinLike extends JoinLike {
-  override def output: Seq[ResolvableName] = left.output ++ right.output.filter(left.output.contains(_))
+  override def output: Seq[ResolvableName] = left.output ++ right.output.filter(x => !left.output.map(_.resolvedName).contains(x.resolvedName))
 }
 
 // leaf nodes
@@ -32,14 +32,6 @@ case class GetVertices(v: VertexAttribute) extends LeafJNode {
 case class GetEdges(src: VertexAttribute,
                     trg: VertexAttribute,
                     edge: EdgeAttribute,
-                    directed: Boolean)
-  extends LeafJNode {
-  override def output = Seq(src, edge, trg)
-}
-
-case class GetEdgeLists(src: VertexAttribute,
-                    trg: VertexAttribute,
-                    edge: EdgeListAttribute,
                     directed: Boolean)
   extends LeafJNode {
   override def output = Seq(src, edge, trg)
@@ -72,8 +64,7 @@ case class Selection(condition: Expression,
                      child: JNode) extends UnaryJNode {}
 
 case class Unwind(unwindAttribute: UnwindAttribute, child: JNode) extends UnaryJNode {
-  override def output = child.output ++ Seq(unwindAttribute) // child.output.updated(child.output.indexOf(element), element)
-  // TODO indexOf might be unable to find the attribute
+  override def output = child.output ++ Seq(unwindAttribute)
 }
 
 case class SortAndTop(skipExpr: Option[Expression],
@@ -94,6 +85,8 @@ case class AntiJoin(left: JNode, right: JNode) extends BinaryJNode with JoinLike
 
 case class Join(left: JNode, right: JNode) extends BinaryJNode with EquiJoinLike {}
 
+case class TransitiveJoin(left: JNode, right: JNode, edgeList: EdgeListAttribute) extends BinaryJNode with EquiJoinLike {}
+
 case class LeftOuterJoin(left: JNode, right: JNode) extends BinaryJNode with EquiJoinLike {}
 
 case class ThetaLeftOuterJoin(left: JNode,
@@ -104,11 +97,13 @@ case class ThetaLeftOuterJoin(left: JNode,
 // DML operators
 abstract class CudOperator(child: JNode) extends UnaryJNode {}
 
-case class Create(attributes: Seq[Attribute], child: JNode) extends CudOperator(child) {}
+case class Create(attribute: ResolvableName, child: JNode) extends CudOperator(child) {
+  override def output: Seq[ResolvableName] = child.output ++ Seq(attribute)
+}
 
-case class Delete(attributes: Seq[Attribute], detach: Boolean, child: JNode) extends CudOperator(child) {}
+case class Delete(attributes: Seq[ResolvableName], detach: Boolean, child: JNode) extends CudOperator(child) {}
 
-case class Merge(attributes: Seq[Attribute], child: JNode) extends CudOperator(child) {}
+case class Merge(attributes: ResolvableName, child: JNode) extends CudOperator(child) {}
 
 case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: JNode) extends CudOperator(child) {}
 

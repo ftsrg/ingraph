@@ -118,8 +118,7 @@ case class Top(skipExpr: Option[Expression] = None, limitExpr: Option[Expression
 }
 
 case class Unwind(unwindAttribute: UnwindAttribute, child: QNode) extends UnaryQNode {
-  override def output = child.output ++ Seq(unwindAttribute) // child.output.updated(child.output.indexOf(element), element)
-  // TODO indexOf might be unable to find the attribute
+  override def output = child.output ++ Seq(unwindAttribute)
   override def expressionChildren = Seq(unwindAttribute)
 }
 

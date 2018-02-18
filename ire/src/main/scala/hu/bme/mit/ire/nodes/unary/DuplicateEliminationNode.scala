@@ -36,7 +36,7 @@ class DuplicateEliminationNode(override val next: (ReteMessage) => Unit) extends
       }
     }
 
-    forward(ChangeSet(forwardPositive, forwardNegative))
+    forward(ChangeSet(forwardPositive.toVector, forwardNegative.toVector))
   }
 
 }

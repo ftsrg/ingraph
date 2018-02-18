@@ -1,11 +1,15 @@
+plugins {
+  id 'com.github.maiflai.scalatest' version '0.19'
+}
+
 dependencies {
+  compile project(':csv-loader')
   compile project(':driver')
   compile project(':neo4j-tests')
 
   compile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
   compile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'
   compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
-
 
   // unlike in other projects, these dependencies are required for the whole compile/runtime scope
   // and not just the testCompile/testRuntime scopes

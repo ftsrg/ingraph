@@ -12,16 +12,15 @@ class BiCompilerTest extends CompilerTest {
     , printFPlan = true
   )
 
-  //FIXME: FPlanToTPlan
-  ignore("bi-01 from file: Posting summary") {
+  test("bi-01 from file: Posting summary") {
     val stages=compileFromFile("bi-01")
   }
 
-  ignore("bi-02 from file: Top tags for country, age, gender, time") {
+  test("bi-02 from file: Top tags for country, age, gender, time") {
     val stages=compileFromFile("bi-02")
   }
 
-  ignore("bi-03 from file: Tag evolution") {
+  test("bi-03 from file: Tag evolution") {
     val stages=compileFromFile("bi-03")
   }
 
@@ -29,7 +28,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-04")
   }
 
-  ignore("bi-05 from file: Top posters in a country") {
+  test("bi-05 from file: Top posters in a country") {
     val stages=compileFromFile("bi-05")
   }
 
@@ -45,15 +44,15 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-08")
   }
 
-  //FIXME: FPlanToTPlan
-  ignore("bi-09 from file: Forum with related Tags") {
+  test("bi-09 from file: Forum with related Tags") {
     val stages=compileFromFile("bi-09")
   }
 
-  ignore("bi-10 from file: Central Person for a Tag") {
+  test("bi-10 from file: Central Person for a Tag") {
     val stages=compileFromFile("bi-10")
   }
 
+  // list comprehension
   ignore("bi-11 from file: Unrelated replies") {
     val stages=compileFromFile("bi-11")
   }
@@ -62,6 +61,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-12")
   }
 
+  // list comprehension
   ignore("bi-13 from file: Popular Tags per month in a country") {
     val stages=compileFromFile("bi-13")
   }
@@ -70,12 +70,11 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-14")
   }
 
-  //FIXME: FPlanToTPlan
-  ignore("bi-15 from file: Social normals") {
+  test("bi-15 from file: Social normals") {
     val stages=compileFromFile("bi-15")
   }
 
-  ignore("bi-16 from file: Experts in social circle") {
+  test("bi-16 from file: Experts in social circle") {
     val stages=compileFromFile("bi-16")
   }
 
@@ -87,8 +86,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-18")
   }
 
-  //FIXME: FPlanToTPlan
-  ignore("bi-19 from file: Stranger's interaction") {
+  test("bi-19 from file: Stranger's interaction") {
     val stages=compileFromFile("bi-19")
   }
 
@@ -96,10 +94,11 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-20")
   }
 
-  ignore("bi-21 from file: Zombies in a country") {
+  test("bi-21 from file: Zombies in a country") {
     val stages=compileFromFile("bi-21")
   }
 
+  // map literal
   ignore("bi-22 from file: International dialog") {
     val stages=compileFromFile("bi-22")
   }
@@ -108,13 +107,12 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-23")
   }
 
-  //FIXME: FPlanToTPlan
-  ignore("bi-24 from file: Messages by Topic and Continent") {
+  test("bi-24 from file: Messages by Topic and Continent") {
     val stages=compileFromFile("bi-24")
   }
 
-  ignore("bi-25 from file: Weighted paths") {
+  // list comprehension
+  ignore("bi-25 from file: Weighted interaction paths") {
     val stages=compileFromFile("bi-25")
   }
-
 }

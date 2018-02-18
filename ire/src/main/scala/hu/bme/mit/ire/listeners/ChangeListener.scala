@@ -13,10 +13,10 @@ abstract class ChangeListener {
   def removed(tuple: Tuple) = negative += tuple
 
   def terminated() = {
-    listener(positive.toList, negative.toList)
+    listener(positive.toVector, negative.toVector)
     positive.clear()
     negative.clear()
   }
 
-  def listener(positive: Iterable[Tuple], negative: Iterable[Tuple])
+  def listener(positive: Vector[Tuple], negative: Vector[Tuple])
 }
