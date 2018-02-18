@@ -18,10 +18,10 @@ abstract class UnaryJNode extends GenericUnaryNode[JNode] with JNode {
 abstract class BinaryJNode extends GenericBinaryNode[JNode] with JNode {}
 
 trait JoinLike extends BinaryJNode {
-  def common: Seq[ResolvableName] = left.output.filter(right.output.contains(_))
+  def common: Seq[ResolvableName] = left.output.filter(x => right.output.map(_.resolvedName).contains(x.resolvedName))
 }
 trait EquiJoinLike extends JoinLike {
-  override def output: Seq[ResolvableName] = left.output ++ right.output.filter(left.output.contains(_))
+  override def output: Seq[ResolvableName] = left.output ++ right.output.filter(x => !left.output.map(_.resolvedName).contains(x.resolvedName))
 }
 
 // leaf nodes

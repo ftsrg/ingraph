@@ -94,8 +94,6 @@ object JPlanToFPlan {
         case _ => None
       }
       .filter(a => inputSchema.map(_.resolvedName).contains(a.elementAttribute.resolvedName))
-
-    // !inputSchema.contains(a) // do we need this?
   }
 
   def extractAttributes(expression: Expression): Seq[ResolvableName] = {
