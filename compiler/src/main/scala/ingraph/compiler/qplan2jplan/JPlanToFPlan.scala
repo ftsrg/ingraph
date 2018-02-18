@@ -2,7 +2,6 @@ package ingraph.compiler.qplan2jplan
 
 import ingraph.model.expr._
 import ingraph.model.expr.types.TProjectList
-import ingraph.model.fplan.ThetaLeftOuterJoin
 import ingraph.model.{fplan, jplan}
 import org.apache.spark.sql.catalyst.expressions.Expression
 

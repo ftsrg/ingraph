@@ -72,8 +72,7 @@ case class Selection(condition: Expression,
                      child: JNode) extends UnaryJNode {}
 
 case class Unwind(unwindAttribute: UnwindAttribute, child: JNode) extends UnaryJNode {
-  override def output = child.output ++ Seq(unwindAttribute) // child.output.updated(child.output.indexOf(element), element)
-  // TODO indexOf might be unable to find the attribute
+  override def output = child.output ++ Seq(unwindAttribute)
 }
 
 case class SortAndTop(skipExpr: Option[Expression],

@@ -98,8 +98,7 @@ case class Unwind(extraAttributes: Seq[ResolvableName],
                   jnode: jplan.Unwind,
                   child: FNode
                     ) extends UnaryFNode {
-  // TODO fix this similarly to qplan and jplan
-  override def internalSchema: Seq[ResolvableName] = Seq()
+  override def internalSchema: Seq[ResolvableName] = child.jnode.output ++ extraAttributes ++ Seq(unwindAttribute)
   lazy val unwindAttribute: UnwindAttribute = jnode.unwindAttribute
 }
 
