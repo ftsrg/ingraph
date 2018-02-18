@@ -2,6 +2,7 @@ package ingraph.compiler.qplan2jplan
 
 import ingraph.model.expr._
 import ingraph.model.expr.types.TProjectList
+import ingraph.model.fplan.ThetaLeftOuterJoin
 import ingraph.model.{fplan, jplan}
 import org.apache.spark.sql.catalyst.expressions.Expression
 
@@ -17,6 +18,15 @@ object JPlanToFPlan {
   private def transform(jnode: jplan.JNode, extraAttributes: Seq[ResolvableName]): fplan.FNode = {
     val ea = extraAttributes.distinct
 
+    /**
+      * Return whether an attribute selected for propagation is a duplicate:
+      * (1) it is in the input operator's/operators' output, or
+      * (2) it is already part of the extra extra attributes
+      */
+    def duplicate(attribute: ResolvableName, inputOperatorOutput: Seq[ResolvableName], extraAttributes: Seq[ResolvableName]) = {
+      inputOperatorOutput.map(_.resolvedName).contains(attribute.resolvedName) || extraAttributes.contains(attribute.resolvedName)
+    }
+
     jnode match {
       // leaf
       case o: jplan.GetEdges     => fplan.GetEdges(ea, o)
@@ -30,19 +40,19 @@ object JPlanToFPlan {
 
       // unary
       case o: jplan.Projection =>
-        val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))
-        fplan.Projection(ea, o, transform(o.child, ea ++ newExtra))
+        val opExtra = extractAttributes(o.projectList).filter(!duplicate(_, o.child.output, ea))
+        fplan.Projection(ea, o, transform(o.child, ea ++ opExtra))
       case o: jplan.Grouping =>
-        val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))
-        fplan.Grouping(ea, o, transform(o.child, ea ++ newExtra))
+        val opExtra = extractAttributes(o.projectList).filter(!duplicate(_, o.child.output, ea))
+        fplan.Grouping(ea, o, transform(o.child, ea ++ opExtra))
       case o: jplan.Selection =>
-        val newExtra = extractAttributes(o.condition).filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))
-        fplan.Selection(ea, o, transform(o.child, ea ++ newExtra))
+        val opExtra = extractAttributes(o.condition).filter(!duplicate(_, o.child.output, ea))
+        fplan.Selection(ea, o, transform(o.child, ea ++ opExtra))
       case o: jplan.Unwind =>
         fplan.Unwind(ea, o, transform(o.child, ea ++ extractAttributes(o.unwindAttribute.list)))
       case o: jplan.SortAndTop =>
-        val newExtra = o.order.flatMap(x => extractAttributes(x.child)).filter(a => !o.child.output.map(_.resolvedName).contains(a.resolvedName) && !ea.contains(a.resolvedName))
-        fplan.SortAndTop (ea, o, transform(o.child, ea ++ newExtra))
+        val opExtra = o.order.flatMap(x => extractAttributes(x.child)).filter(!duplicate(_, o.child.output, ea))
+        fplan.SortAndTop (ea, o, transform(o.child, ea ++ opExtra))
 
       // the rest is just the same, isn't it?
       case o: jplan.AllDifferent         => fplan.AllDifferent        (ea, o, transform(o.child, ea))
@@ -50,8 +60,8 @@ object JPlanToFPlan {
       case o: jplan.Production           => fplan.Production          (ea, o, transform(o.child, ea))
       // unary DMLs
       case o: jplan.Create               =>
-        val newExtra = extractAttributesFromInsertion(o.attribute)
-        fplan.Create(ea, o, transform(o.child, ea ++ newExtra))
+        val opExtra = extractAttributesFromInsertion(o.attribute)
+        fplan.Create(ea, o, transform(o.child, ea ++ opExtra))
       case o: jplan.Delete               => fplan.Delete(ea, o, transform(o.child, ea))
       case o: jplan.Merge                =>
         fplan.Merge(ea, o, transform(o.child, ea))
@@ -65,16 +75,26 @@ object JPlanToFPlan {
           transform(o.right, Seq())
         )
       case j: jplan.EquiJoinLike => {
-        val eaLeft = propagate(ea, j.left.output)
-        val eaRight = propagate(ea, j.right.output).filter(x => !eaLeft.map(_.resolvedName).contains(x.resolvedName))
+        // ThetaLeftOuterJoins require special treatment: they are the only join operators that can introduce new extra variables
+        val opExtra = j match {
+          case o: jplan.ThetaLeftOuterJoin => extractAttributes(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, ea))
+          case _ => Seq()
+        }
+
+        val eaTotal = ea ++ opExtra
+
+        val eaLeft = propagate(eaTotal, j.left.output)
+        val eaRight = propagate(eaTotal, j.right.output).filter(x => !eaLeft.map(_.resolvedName).contains(x.resolvedName))
 
         val left = transform(j.left, eaLeft)
         val right = transform(j.right, eaRight)
 
         j match {
-          case o: jplan.Join => fplan.Join(ea, o, left, right)
-          case o: jplan.LeftOuterJoin => fplan.LeftOuterJoin(ea, o, left, right)
-          case o: jplan.ThetaLeftOuterJoin => fplan.ThetaLeftOuterJoin(ea, o, left, right)
+          case o: jplan.Join => fplan.Join(eaTotal, o, left, right)
+          case o: jplan.LeftOuterJoin => fplan.LeftOuterJoin(eaTotal, o, left, right)
+          case o: jplan.ThetaLeftOuterJoin =>
+            val opExtra = extractAttributes(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, eaTotal))
+            fplan.ThetaLeftOuterJoin(eaTotal, o, left, right)
         }
       }
       case o: jplan.Union => fplan.Union(ea, o,
