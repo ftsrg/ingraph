@@ -13,7 +13,7 @@ class RandomTest extends FunSuite {
     assert(adapter.engine.getResults() == List(Vector(null)))
   }
 
-  ignore("Constant returns work") {
+  test("Constant returns work") {
     val query = "RETURN 1 + 1"
     val adapter = new IngraphIncrementalAdapter(query)
     assert(adapter.engine.getResults() == List(Vector(2 )))

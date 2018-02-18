@@ -22,7 +22,15 @@ class DataManipulationTest extends FunSuite {
     indexer
   }
 
-  ignore("delete and create edge work") {
+  test("create unlabeled vertices") {
+    val indexer = new Indexer()
+    val q = "CREATE ({value: 1})"
+    new IngraphOneTimeAdapter(q, "", indexer).terminate()
+    println(new IngraphIncrementalAdapter("MATCH (n) return n","", indexer).result())
+
+  }
+
+  test("delete and create edge work") {
     val indexer = initializeIndexer()
 
     val oneOff = """MATCH (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment)
@@ -40,7 +48,7 @@ class DataManipulationTest extends FunSuite {
     }
   }
 
-  ignore("delete vertex works") {
+  test("delete vertex works") {
     val indexer = initializeIndexer()
 
     val oneOff = "MATCH (t:Train) DETACH DELETE t"
