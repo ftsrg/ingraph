@@ -37,14 +37,6 @@ case class GetEdges(src: VertexAttribute,
   override def output = Seq(src, edge, trg)
 }
 
-case class GetEdgeLists(src: VertexAttribute,
-                    trg: VertexAttribute,
-                    edge: EdgeListAttribute,
-                    directed: Boolean)
-  extends LeafJNode {
-  override def output = Seq(src, edge, trg)
-}
-
 case class Dual() extends LeafJNode {
   override def output = Seq()
 }
@@ -92,6 +84,8 @@ case class AntiJoin(left: JNode, right: JNode) extends BinaryJNode with JoinLike
 }
 
 case class Join(left: JNode, right: JNode) extends BinaryJNode with EquiJoinLike {}
+
+case class TransitiveJoin(left: JNode, right: JNode, edgeList: EdgeListAttribute) extends BinaryJNode with EquiJoinLike {}
 
 case class LeftOuterJoin(left: JNode, right: JNode) extends BinaryJNode with EquiJoinLike {}
 

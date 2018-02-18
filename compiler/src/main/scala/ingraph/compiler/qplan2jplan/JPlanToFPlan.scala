@@ -29,7 +29,6 @@ object JPlanToFPlan {
     jnode match {
       // leaf
       case o: jplan.GetEdges     => fplan.GetEdges(ea, o)
-      case o: jplan.GetEdgeLists => fplan.GetEdgeLists(ea, o)
       case o: jplan.GetVertices  => fplan.GetVertices(ea, o)
       case o: jplan.Dual         =>
         if (ea.nonEmpty) {
@@ -94,6 +93,7 @@ object JPlanToFPlan {
           case o: jplan.ThetaLeftOuterJoin =>
             val opExtra = extractAttributes(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, eaTotal))
             fplan.ThetaLeftOuterJoin(eaTotal, o, left, right)
+          case o: jplan.TransitiveJoin => fplan.TransitiveJoin(ea, o, left, right)
         }
       }
       case o: jplan.Union => fplan.Union(ea, o,
