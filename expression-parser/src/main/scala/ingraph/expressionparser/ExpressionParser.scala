@@ -80,7 +80,6 @@ object ExpressionParser {
           tuple => fun(children(0)(tuple), children(1)(tuple), children(2)(tuple))
       }
     case exp: CaseWhen =>
-      println(exp)
       val cases = exp.branches.map(c => (ExpressionParser[Boolean](c._1), parse(c._2)))
       val fallback: Tuple => Any = exp.elseValue.map(parse)
         .getOrElse((t: Tuple) => throw new Exception("Run into non-existent ELSE clause"))
