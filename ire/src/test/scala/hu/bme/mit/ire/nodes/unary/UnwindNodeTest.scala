@@ -2,6 +2,7 @@ package hu.bme.mit.ire.nodes.unary
 
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
@@ -15,7 +16,9 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
   }
 
   import hu.bme.mit.ire.util.TestUtil._
-
+  private def indexer(index: Int) = {
+    (t: Tuple) => t(index).asInstanceOf[Seq[Any]]
+  }
   "Unwind" must {
     "do simple unwind 0" in {
       val changeSet = ChangeSet(
@@ -29,7 +32,7 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
         )
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val unwind = system.actorOf(Props(new UnwindNode(echoActor ! _, 1)))
+      val unwind = system.actorOf(Props(new UnwindNode(echoActor ! _, indexer(1))))
 
       unwind ! changeSet
       expectMsg(ChangeSet(
@@ -53,7 +56,7 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
         )
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val unwind = system.actorOf(Props(new UnwindNode(echoActor ! _, 1)))
+      val unwind = system.actorOf(Props(new UnwindNode(echoActor ! _, indexer(1))))
 
       unwind ! changeSet
       expectMsg(ChangeSet(
