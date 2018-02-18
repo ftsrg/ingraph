@@ -1,6 +1,7 @@
 dependencies {
   compile group: 'com.google.guava', name: 'guava', version: guavaVersion
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
+  compile group: 'org.neo4j', name: 'neo4j-bolt', version: neo4jVersion
   compile group: 'org.neo4j', name: 'neo4j-kernel', version: neo4jVersion
   compile group: 'org.neo4j', name: 'neo4j-io', version: neo4jVersion
   compile group: 'org.neo4j', name: 'neo4j-kernel', version: neo4jVersion, classifier: 'tests'
