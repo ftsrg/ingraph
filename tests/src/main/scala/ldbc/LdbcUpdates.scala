@@ -21,17 +21,11 @@ case class Update1AddPerson(
                              workAt: List[Organization]
                            ) extends LdbcUpdate
 
-case class Update2AddPostLike(
+case class Like(
                                personId: Long,
                                postId: Long,
                                creationDate: Long
                              ) extends LdbcUpdate
-
-case class Update3AddCommentLike(
-                                  personId: Long,
-                                  postId: Long,
-                                  creationDate: Long
-                                ) extends LdbcUpdate
 
 case class Update4AddForum(
                             forumId: Long,

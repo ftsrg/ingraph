@@ -127,7 +127,7 @@ class Indexer {
     edge
   }
 
-  def addEdge(id: Long, sourceId: Long, targetId: Long, label: String, props: Map[String, Any]): IngraphEdge = {
+  def addEdge(id: Long, sourceId: Long, targetId: Long, label: String, props: Map[String, Any] = Map()): IngraphEdge = {
     addEdge(IngraphEdge(id, vertexLookup(sourceId), vertexLookup(targetId), label, props))
   }
 
