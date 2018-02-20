@@ -60,7 +60,9 @@ case class DuplicateElimination(extraAttributes: Seq[ResolvableName],
 case class Production(extraAttributes: Seq[ResolvableName],
                       jnode: jplan.Production,
                       child: FNode
-                     ) extends UnaryFNode {}
+                     ) extends UnaryFNode {
+  override def output = jnode.output
+}
 
 case class Projection(extraAttributes: Seq[ResolvableName],
                       jnode: jplan.Projection,
