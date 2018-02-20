@@ -12,8 +12,8 @@ class BiValidationTest extends FunSuite {
         val neo4jResults   = TestRunners.neo4jTestRunner(tc)
         val ingraphResults = TestRunners.ingraphTestRunner(tc)
 
-        println("neo4j results:   " + neo4jResults)
-        println("ingraph results: " + ingraphResults)
+        println("neo4j results:   " + neo4jResults  .map(x => x.toSeq.sortBy(_._1)))
+        println("ingraph results: " + ingraphResults.map(x => x.toSeq.sortBy(_._1)))
 
 //        println(tc.parameters.mkString("Parameters: (\n\t", "\n\t", "\n)"))
 //        println(neo4jResult.mkString("Results: (\n\t", "\n\t", "\n)"))
