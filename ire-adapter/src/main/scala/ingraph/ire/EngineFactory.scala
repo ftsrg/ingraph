@@ -146,7 +146,7 @@ object EngineFactory {
       val factories = aggregates.flatten.map(_._2()).toVector
       val nonAggregates = op.projectionTuple.filter(op.aggregationCriteria.contains)
       var normalIndex = 0
-      var aggregateIndex = op.projectionTuple.size - op.aggregationCriteria.size - 1
+      var aggregateIndex = nonAggregates.size
       val projections = aggregates.map {
         case None => normalIndex += 1; normalIndex - 1
         case Some(_) => aggregateIndex += 1; aggregateIndex - 1
