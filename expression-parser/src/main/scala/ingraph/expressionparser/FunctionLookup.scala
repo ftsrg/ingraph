@@ -45,6 +45,7 @@ object FunctionLookup {
 
       case ABS => {
         case i: Int => Math.abs(i)
+        case l: Long => Math.abs(l)
         case d: Double => Math.abs(d)
       }
 
