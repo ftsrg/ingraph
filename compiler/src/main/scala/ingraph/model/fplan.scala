@@ -62,7 +62,7 @@ case class Production(extraAttributes: Seq[ResolvableName],
                       child: FNode
                      ) extends UnaryFNode {
   override def output = jnode.output
-  def outputNames: Iterable[String] = output.map(_.resolvedName.get.resolvedName)
+  def outputNames: Iterable[String] = output.map(_.resolvedName.get.resolvedName.replace("#0", ""))
 }
 
 case class Projection(extraAttributes: Seq[ResolvableName],
