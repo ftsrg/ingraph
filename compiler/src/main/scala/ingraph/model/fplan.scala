@@ -80,7 +80,8 @@ case class Grouping(extraAttributes: Seq[ResolvableName],
   lazy val aggregationCriteria: Seq[Expression] =
     jnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.internalSchema))
   lazy val projectionTuple: Seq[Expression] =
-    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema))
+    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
+      extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
 }
 
 case class Selection(extraAttributes: Seq[ResolvableName],
