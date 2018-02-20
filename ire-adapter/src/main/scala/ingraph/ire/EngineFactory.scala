@@ -139,6 +139,9 @@ object EngineFactory {
     // unary nodes
 
     private def grouping(op: Grouping, expr: ForwardConnection) = {
+      println(op.projectionTuple)
+      println(op.aggregationCriteria)
+
       val aggregates = op.projectionTuple.map(e => ExpressionParser.parseAggregate(e))
       val factories = aggregates.flatten.map(_._2()).toVector
       val nonAggregates = op.projectionTuple.filter(op.aggregationCriteria.contains)
