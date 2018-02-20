@@ -495,14 +495,15 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L251
-  test("A simple pattern with one bound endpoint") {
+  test("A simple pattern with one bound endpoint - edited") {
     val results = run(
-      """CREATE (:A)-[:REL]->(:B)""",
+      """CREATE (:A {x: 'x1'})-[:REL]->(:B {x: 'x2'})""",
       """MATCH (a:A)-[r:REL]->(b:B)
         |WITH a AS b, b AS tmp, r AS r
         |WITH b AS a, r
+        |ORDER BY a.x, b.x
         |LIMIT 1
-        |MATCH (a)-[r]->(b)
+        |MATCH (a)-[r:REL]->(b)
         |RETURN a, r, b
       """.stripMargin
     )
