@@ -246,7 +246,11 @@ object PlanPrettyPrinter {
        .replaceAll("edgeattribute", "e")
        .replaceAll("propertyattribute", "p")
        .replaceAll("vertexlabelset\\((.*?)\\)", "{$1}")
+       .replaceAll("edgelabelset\\((.*?), NonEmpty\\)", "{$1}")
        .replaceAll("\\{Empty\\}", "{}")
+       .replaceAll("functioninvocation", "fun")
+       .replaceAll("returnitem", "ret")
+       .replaceAll("(\\w+) '\\1", "$1")
   }
 
 }
