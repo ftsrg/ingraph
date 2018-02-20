@@ -10,7 +10,7 @@
 MATCH
   (country:Country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(person:Person)
     <-[:HAS_CREATOR]-(message:Message)-[:HAS_TAG]->(tag:Tag)
-  WHERE message.creationDate >= $startDate
+WHERE message.creationDate >= $startDate
   AND message.creationDate <= $endDate
   AND (country.name = $country1 OR country.name = $country2)
 WITH
@@ -22,7 +22,7 @@ WITH
   message
 WITH
   countryName, month, gender, ageGroup, tagName, count(message) AS messageCount
-  WHERE messageCount > 100
+WHERE messageCount > 100
 RETURN
   countryName,
   month,
@@ -30,11 +30,11 @@ RETURN
   ageGroup,
   tagName,
   messageCount
-  ORDER BY
+ORDER BY
   messageCount DESC,
   tagName ASC,
   ageGroup ASC,
   gender ASC,
   month ASC,
   countryName ASC
-  LIMIT 100
+LIMIT 100
