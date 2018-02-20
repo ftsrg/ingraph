@@ -375,14 +375,15 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L101
-  test("Handle dependencies across WITH") {
+  test("Handle dependencies across WITH - CREATE edited") {
     val results = run(
       """CREATE (a:End {prop: 42, id: 0}),
         |       (:End {prop: 3}),
-        |       (:Begin {prop: a.id})
+        |       (:Begin {prop: 0})
       """.stripMargin,
       """MATCH (a:Begin)
         |WITH a.prop AS property
+        |  ORDER BY property
         |  LIMIT 1
         |MATCH (b)
         |WHERE b.id = property
@@ -393,10 +394,10 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L123
-  test("Handle dependencies across WITH with SKIP") {
+  test("Handle dependencies across WITH with SKIP - CREATE edited") {
     val results = run(
       """CREATE (a {prop: 'A', key: 0, id: 0}),
-        |       ({prop: 'B', key: a.id, id: 1}),
+        |       ({prop: 'B', key: 0, id: 1}),
         |       ({prop: 'C', key: 0, id: 2})
       """.stripMargin,
       """MATCH (a)
