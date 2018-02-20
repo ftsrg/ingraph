@@ -235,3 +235,18 @@ object SchemaMapper {
 
 }
 
+object PlanPrettyPrinter {
+
+  def clean(plan: String): String = {
+     plan
+       .replaceAll("Some", "")
+       .replaceAll("#0", "")
+       .replaceAll("\\$", ".")
+       .replaceAll("vertexattribute", "v")
+       .replaceAll("edgeattribute", "e")
+       .replaceAll("propertyattribute", "p")
+       .replaceAll("vertexlabelset\\((.*?)\\)", "{$1}")
+       .replaceAll("\\{Empty\\}", "{}")
+  }
+
+}
