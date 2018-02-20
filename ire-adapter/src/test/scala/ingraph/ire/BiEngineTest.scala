@@ -10,16 +10,15 @@ class BiEngineTest extends EngineTest {
       """.stripMargin)
   }
 
-  // compiles
   ignore("bi-01 from file: Posting summary") {
     runFromFile("bi-01")
   }
 
-  ignore("bi-02 from file: Top tags for country, age, gender, time") {
+  test("bi-02 from file: Top tags for country, age, gender, time") {
     runFromFile("bi-02")
   }
 
-  ignore("bi-03 from file: Tag evolution") {
+  test("bi-03 from file: Tag evolution") {
     runFromFile("bi-03")
   }
 
@@ -43,8 +42,7 @@ class BiEngineTest extends EngineTest {
     runFromFile("bi-08")
   }
 
-  // compiles
-  ignore("bi-09 from file: Forum with related Tags") {
+  test("bi-09 from file: Forum with related Tags") {
     runFromFile("bi-09")
   }
 
@@ -64,13 +62,11 @@ class BiEngineTest extends EngineTest {
     runFromFile("bi-13")
   }
 
-  // compiles
   ignore("bi-14 from file: Top thread initiators") {
     runFromFile("bi-14")
   }
 
-  // compiles
-  ignore("bi-15 from file: Social normals") {
+  test("bi-15 from file: Social normals") {
     runFromFile("bi-15")
   }
 
@@ -82,17 +78,14 @@ class BiEngineTest extends EngineTest {
     runFromFile("bi-17")
   }
 
-  // compiles
   ignore("bi-18 from file: How many persons have a given number of posts") {
     runFromFile("bi-18")
   }
 
-  // compiles
   ignore("bi-19 from file: Stranger's interaction") {
     runFromFile("bi-19")
   }
 
-  // compiles
   ignore("bi-20 from file: High-level topics") {
     runFromFile("bi-20")
   }
@@ -109,8 +102,7 @@ class BiEngineTest extends EngineTest {
     runFromFile("bi-23")
   }
 
-  // compiles
-  ignore("bi-24 from file: Messages by Topic and Continent") {
+  test("bi-24 from file: Messages by Topic and Continent") {
     runFromFile("bi-24")
   }
 
