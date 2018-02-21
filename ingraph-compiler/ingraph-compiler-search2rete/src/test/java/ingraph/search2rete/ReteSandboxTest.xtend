@@ -34,14 +34,14 @@ class ReteSandboxTest extends Cypher2Search2Rete2TexTest {
 	@Test
 	def void q1() {
 		process("q1", '''
-		MATCH (n)
-		RETURN
-		CASE n.eyes
-		WHEN 'blue'
-		THEN 1
-		WHEN 'brown'
-		THEN 2
-		ELSE 3 END AS result''')
+		MATCH (p:Person)-[:INTEREST]->(t:Tag)
+		  -[:SUBCLASS*0..]->(:TagClass {name: 'Music'})
+		OPTIONAL MATCH (p)-[:KNOWS]-(f:Person)
+		  -[:INTEREST]->(:Tag {name: 'Mozart'})
+		WITH p, t, count(f) AS mlf
+		WHERE mlf > 1
+		RETURN p.name, collect(t) AS ts
+		''')
 	}
 
 }

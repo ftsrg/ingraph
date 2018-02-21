@@ -22,9 +22,9 @@ subprojects {
 
   repositories {
     jcenter()
+    mavenLocal()
     maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
     maven { url 'https://repo.eclipse.org/content/groups/viatra2' }
-    maven { url 'https://szdavid92.github.io/ingraph-deps' }
   }
 
   // disable warnings for Scala projects
