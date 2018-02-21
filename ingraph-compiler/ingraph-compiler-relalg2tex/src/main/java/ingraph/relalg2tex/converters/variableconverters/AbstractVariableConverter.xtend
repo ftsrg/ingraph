@@ -24,7 +24,8 @@ abstract class AbstractVariableConverter {
 	}
 	
 	def dispatch convertVariable(EdgeListVariable variable) {
-		'''\var{[«variable.escapedName»]}_{«variable.minHops»}^{«variable.maxHops.hopsToString»}'''
+		//'''\var{[«variable.escapedName»]}_{«variable.minHops»}^{«variable.maxHops.hopsToString»}'''
+		'''\var{«variable.escapedName»}'''
 	}
 
 	def dispatch convertVariable(AttributeVariable variable) {

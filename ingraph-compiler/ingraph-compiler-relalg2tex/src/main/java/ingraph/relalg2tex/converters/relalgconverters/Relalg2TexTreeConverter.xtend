@@ -43,15 +43,15 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 				{«op.operator»
 				«IF !config.omitSchema»
 					«IF op.extractContainer.isExternalSchemaInferred»
-					\\ \footnotesize
+					\\
 					$\color{externalschemacolor} «op.externalSchema.convertSchema» $
 					«ENDIF»
-					«IF op.extractContainer.isExtraVariablesInferred»
-					\\ \footnotesize
+					«IF false && op.extractContainer.isExtraVariablesInferred»
+					\\
 					$\color{extravariablescolor} «op.extraVariables.convertSchema» $
 					«ENDIF»
 					«IF op.extractContainer.isInternalSchemaInferred»
-					\\ \footnotesize
+					\\
 						«IF op instanceof BeamerOperator»
 						$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices(op.tupleIndices)»$
 						«ELSE»
@@ -59,7 +59,7 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 						«ENDIF»
 					«ENDIF»
 				«ENDIF»
-				«IF op instanceof AbstractJoinOperator && op.extractContainer.isInternalSchemaInferred && config.includeCommonVariables»
+				«IF false && op instanceof AbstractJoinOperator && op.extractContainer.isInternalSchemaInferred && config.includeCommonVariables»
 				\\ \footnotesize
 				$\color{orange}
 				\langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :

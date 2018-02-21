@@ -14,7 +14,7 @@ class SchemaConverter {
 	boolean schemaIndices
 
 	new(boolean schemaIndices) {
-		this.schemaIndices = schemaIndices
+		this.schemaIndices = false
 	}
 
 	def convertSchema(List<Variable> schema) {

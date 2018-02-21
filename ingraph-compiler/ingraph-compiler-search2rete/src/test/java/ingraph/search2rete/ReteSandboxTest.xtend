@@ -34,13 +34,13 @@ class ReteSandboxTest extends Cypher2Search2Rete2TexTest {
 	@Test
 	def void q1() {
 		process("q1", '''
-		MATCH (p:Person)-[:INTEREST]->(t:Tag)
-		  -[:SUBCLASS*0..]->(:TagClass {name: 'Music'})
-		OPTIONAL MATCH (p)-[:KNOWS]-(f:Person)
-		  -[:INTEREST]->(:Tag {name: 'Mozart'})
-		WITH p, t, count(f) AS mlf
-		WHERE mlf > 1
-		RETURN p.name, collect(t) AS ts
+MATCH (p:Person)-[pi:INTEREST]->(pt:Tag)-[s:SUBCLASS*]->(c:Class)
+  WHERE c.subject = 'Music'
+OPTIONAL MATCH (p)-[k:KNOWS]-(f:Person)-[fi:INTEREST]->(ft:Tag)
+  WHERE ft.topic = 'Mozart'
+WITH p, count(f) AS mlf
+WHERE mlf > 1
+RETURN p.name
 		''')
 	}
 

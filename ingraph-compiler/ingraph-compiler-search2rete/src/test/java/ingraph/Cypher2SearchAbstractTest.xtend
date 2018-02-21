@@ -6,6 +6,7 @@ import ingraph.relalg.calculators.OneStepSchemaCalculator
 import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
+import ingraph.search2rete.Search2ReteTransformation
 
 abstract class Cypher2SearchAbstractTest {
 
@@ -34,9 +35,13 @@ abstract class Cypher2SearchAbstractTest {
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-simplified''')
 
 		val rete = Cypher2Relalg.processString(querySpecification, query)
-		val simplifyingTransformation2 = new SimplifyingTransformation(rete)
 
+		val simplifyingTransformation2 = new SimplifyingTransformation(rete)
 		simplifyingTransformation2.simplify
+
+		val s2r = new Search2ReteTransformation(rete);
+		s2r.transformToRete		
+		
 		val schemaCalculator = new OneStepSchemaCalculator
 		schemaCalculator.calculateSchema(rete)
 		treeConverter1.convert(rete, '''«directory()»/«query»-rete''')
