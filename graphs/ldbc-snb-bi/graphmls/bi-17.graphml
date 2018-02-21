@@ -10,6 +10,7 @@
 <key id="id" for="node" attr.name="id" attr.type="long"/>
 <key id="creationDate" for="node" attr.name="creationDate" attr.type="long"/>
 <key id="url" for="node" attr.name="url" attr.type="string"/>
+<key id="creationDate" for="edge" attr.name="creationDate" attr.type="long"/>
 <graph id="G" edgedefault="directed">
 <node id="n0" labels=":Person"><data key="labels">:Person</data><data key="id">0</data><data key="firstName">Marcel</data><data key="lastName">X</data><data key="gender">male</data><data key="birthday">19891203</data><data key="creationDate">20100214153210447</data><data key="locationIP">1.2.3.4</data><data key="browserUsed">Firefox</data></node>
 <node id="n1" labels=":Person"><data key="labels">:Person</data><data key="id">1</data><data key="firstName">Hans</data><data key="lastName">Y</data><data key="gender">male</data><data key="birthday">19901203</data><data key="creationDate">20110214153210447</data><data key="locationIP">2.3.4.5</data><data key="browserUsed">Chrome</data></node>
@@ -20,9 +21,9 @@
 <edge id="e0" source="n0" target="n4" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
 <edge id="e1" source="n1" target="n5" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
 <edge id="e2" source="n2" target="n5" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
-<edge id="e3" source="n0" target="n1" label="KNOWS"><data key="label">KNOWS</data></edge>
-<edge id="e4" source="n1" target="n2" label="KNOWS"><data key="label">KNOWS</data></edge>
-<edge id="e5" source="n2" target="n0" label="KNOWS"><data key="label">KNOWS</data></edge>
+<edge id="e3" source="n0" target="n1" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">1000</data></edge>
+<edge id="e4" source="n1" target="n2" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">2000</data></edge>
+<edge id="e5" source="n2" target="n0" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">3000</data></edge>
 <edge id="e6" source="n4" target="n3" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
 <edge id="e7" source="n5" target="n3" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
 </graph>
