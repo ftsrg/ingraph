@@ -67,8 +67,8 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
         .map {
           case PropertyAttribute(name, elementAttribute, _) => elementAttribute match {
             case _: EdgeAttribute => edge.properties.getOrElse(name, null)
-            case e: VertexAttribute if e.resolvedName == operator.jnode.trg.resolvedName => edge.targetVertex.properties.getOrElse(name, null)
-            case e: VertexAttribute if e.resolvedName == operator.jnode.src.resolvedName => edge.sourceVertex.properties.getOrElse(name, null)
+            case v: VertexAttribute if v.name == operator.jnode.trg.name => edge.targetVertex.properties.getOrElse(name, null)
+            case v: VertexAttribute if v.name == operator.jnode.src.name => edge.sourceVertex.properties.getOrElse(name, null)
           }
         }
   }
