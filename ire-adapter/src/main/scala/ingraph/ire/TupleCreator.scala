@@ -41,7 +41,12 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = edgeToTupleType(edge, operator)
-        transaction.remove(operator.jnode.edge.name, tuple)
+        transaction.remove(operator.toString(), tuple)
+        if (!operator.jnode.directed) {
+          val rTuple = edgeToTupleType(
+            edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator)
+          transaction.remove(operator.toString(), rTuple)
+        }
       }
     }
   }
