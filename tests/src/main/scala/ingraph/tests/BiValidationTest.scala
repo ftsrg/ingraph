@@ -4,7 +4,8 @@ import org.scalatest.FunSuite
 
 class BiValidationTest extends FunSuite {
 
-  val testCases: Seq[LdbcSnbTestCase] = Seq(2, 3, 4, 6, 7, 8, 9, 12, 15, 17, 23, 24) map (new LdbcSnbTestCase("bi", _))
+  //val testCases: Seq[LdbcSnbTestCase] = Seq(2, 3, 4, 6, 7, 8, 9, 12, 15, 17, 23, 24) map (new LdbcSnbTestCase("bi", _))
+  val testCases: Seq[LdbcSnbTestCase] = Seq(6) map (new LdbcSnbTestCase("bi", _))
 
   testCases.foreach {
     tc =>
@@ -17,7 +18,7 @@ class BiValidationTest extends FunSuite {
 
 //        println(tc.parameters.mkString("Parameters: (\n\t", "\n\t", "\n)"))
 //        println(neo4jResult.mkString("Results: (\n\t", "\n\t", "\n)"))
-//        assert(neo4jResults.equals(ingraphResults))
+        assert(neo4jResults.equals(ingraphResults))
       }
   }
 
