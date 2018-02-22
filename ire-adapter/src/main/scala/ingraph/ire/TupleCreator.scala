@@ -12,11 +12,6 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
 
   var transaction: Transaction = _
 
-  def elementToNode(element: IngraphVertex, required: Seq[String]): Tuple = {
-    Vector(idParser(element.id)) ++
-      required.tail.map(key => element.properties.getOrElse(key, null))
-  }
-
   def addEdge(edge: IngraphEdge): Unit = {
     for (operators <- edgeConverters.get(edge.`type`); operator <- operators) {
       val sourceLabels = operator.jnode.src.labels.vertexLabels
@@ -55,7 +50,7 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
     vertexConverters.filter(p => p._1.subsetOf(vertex.labels)).foreach {
       f =>
         for (operator <- f._2) {
-          val tuple = elementToNode(vertex, operator.internalSchema.map(_.name))
+          val tuple = elementToNode(vertex, operator)
           transaction.add(operator.jnode.v.name, tuple)
         }
     }
@@ -65,10 +60,15 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
     vertexConverters.filter(p => p._1.subsetOf(vertex.labels)).foreach {
       f =>
         for (operator <- f._2) {
-          val tuple = elementToNode(vertex, operator.internalSchema.map(_.name))
+          val tuple = elementToNode(vertex, operator)
           transaction.remove(operator.jnode.v.name, tuple)
         }
     }
+  }
+
+  private def elementToNode(element: IngraphVertex, operator: GetVertices): Tuple = {
+    Vector(idParser(element.id)) ++
+      operator.internalSchema.map(_.name).drop(1).map(key => element.properties.getOrElse(key, null))
   }
 
   private def edgeToTupleType(edge: IngraphEdge, operator: GetEdges): Tuple = {
@@ -84,4 +84,5 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
           }
         }
   }
+
 }
