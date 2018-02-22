@@ -60,7 +60,10 @@ case class DuplicateElimination(extraAttributes: Seq[ResolvableName],
 case class Production(extraAttributes: Seq[ResolvableName],
                       jnode: jplan.Production,
                       child: FNode
-                     ) extends UnaryFNode {}
+                     ) extends UnaryFNode {
+  override def output = jnode.output
+  def outputNames: Iterable[String] = output.map(_.resolvedName.get.resolvedName.replaceAll("#\\d+$", "").replace('$', '.'))
+}
 
 case class Projection(extraAttributes: Seq[ResolvableName],
                       jnode: jplan.Projection,
@@ -68,7 +71,8 @@ case class Projection(extraAttributes: Seq[ResolvableName],
                      ) extends UnaryFNode {
   override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ extraAttributes
   lazy val projectionTuple: Seq[Expression] =
-    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema))
+    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
+      extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
 }
 
 case class Grouping(extraAttributes: Seq[ResolvableName],
@@ -79,7 +83,8 @@ case class Grouping(extraAttributes: Seq[ResolvableName],
   lazy val aggregationCriteria: Seq[Expression] =
     jnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.internalSchema))
   lazy val projectionTuple: Seq[Expression] =
-    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema))
+    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
+      extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
 }
 
 case class Selection(extraAttributes: Seq[ResolvableName],
@@ -234,3 +239,24 @@ object SchemaMapper {
 
 }
 
+object PlanPrettyPrinter {
+
+  def clean(plan: String): String = {
+     plan
+       .replaceAll("Some", "")
+       .replaceAll("#0", "")
+       .replaceAll("\\$", ".")
+       .replaceAll("vertexattribute", "v")
+       .replaceAll("edgeattribute", "e")
+       .replaceAll("propertyattribute", "p")
+       .replaceAll("expressionattribute", "expr")
+       .replaceAll("vertexlabelset\\((.*?)\\)", "{$1}")
+       .replaceAll("edgelabelset\\((.*?)\\)", "{$1}")
+       .replaceAll(", NonEmpty\\}", "}")
+       .replaceAll("\\{Empty\\}", "{}")
+       .replaceAll("functioninvocation", "fun")
+       .replaceAll("returnitem", "ret")
+       .replaceAll("(\\w+) '\\1", "$1")
+  }
+
+}

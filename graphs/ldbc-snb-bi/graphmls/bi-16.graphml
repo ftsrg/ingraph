@@ -13,6 +13,7 @@
 <key id="name" for="node" attr.name="name" attr.type="string"/>
 <key id="locationIP" for="node" attr.name="locationIP" attr.type="string"/>
 <key id="id" for="node" attr.name="id" attr.type="long"/>
+<key id="creationDate" for="edge" attr.name="creationDate" attr.type="long"/>
 <graph id="G" edgedefault="directed">
 <node id="n0" labels=":Person"><data key="labels">:Person</data><data key="id">0</data><data key="firstName">Mahinda</data><data key="lastName">Perera</data><data key="gender">male</data><data key="birthday">19891203</data><data key="creationDate">20100214153210447</data><data key="locationIP">119.235.7.103</data><data key="browserUsed">Firefox</data></node>
 <node id="n1" labels=":Person"><data key="labels">:Person</data><data key="id">1</data><data key="firstName">Carmen</data><data key="lastName">Lepland</data><data key="gender">female</data><data key="birthday">19840218</data><data key="creationDate">20100128063958781</data><data key="locationIP">195.20.151.175</data><data key="browserUsed">Internet Explorer</data></node>
@@ -25,8 +26,8 @@
 <node id="n8" labels=":Tag"><data key="labels">:Tag</data><data key="id">1</data><data key="name">Rumi</data><data key="url">http://dbpedia.org/resource/Rumi</data></node>
 <edge id="e0" source="n1" target="n4" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
 <edge id="e1" source="n2" target="n4" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
-<edge id="e2" source="n0" target="n1" label="KNOWS"><data key="label">KNOWS</data></edge>
-<edge id="e3" source="n1" target="n2" label="KNOWS"><data key="label">KNOWS</data></edge>
+<edge id="e2" source="n0" target="n1" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">1000</data></edge>
+<edge id="e3" source="n1" target="n2" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">2000</data></edge>
 <edge id="e4" source="n4" target="n3" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
 <edge id="e5" source="n5" target="n2" label="HAS_CREATOR"><data key="label">HAS_CREATOR</data></edge>
 <edge id="e6" source="n5" target="n7" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>

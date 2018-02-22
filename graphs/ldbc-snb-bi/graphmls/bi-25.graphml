@@ -12,6 +12,7 @@
 <key id="creationDate" for="node" attr.name="creationDate" attr.type="long"/>
 <key id="title" for="node" attr.name="title" attr.type="string"/>
 <key id="content" for="node" attr.name="content" attr.type="string"/>
+<key id="creationDate" for="edge" attr.name="creationDate" attr.type="long"/>
 <graph id="G" edgedefault="directed">
 <node id="n0" labels=":Comment:Message"><data key="labels">:Comment:Message</data><data key="id">1</data><data key="creationDate">20110817142659961</data><data key="locationIP">92.39.58.88</data><data key="browserUsed">Chrome</data><data key="content">yes</data><data key="length">3</data></node>
 <node id="n1" labels=":Comment:Message"><data key="labels">:Comment:Message</data><data key="id">2</data><data key="creationDate">20110817111021570</data><data key="locationIP">213.55.127.9</data><data key="browserUsed">Internet Explorer</data><data key="content">thanks</data><data key="length">6</data></node>
@@ -28,8 +29,8 @@
 <edge id="e4" source="n1" target="n6" label="REPLY_OF"><data key="label">REPLY_OF</data></edge>
 <edge id="e5" source="n2" target="n6" label="CONTAINER_OF"><data key="label">CONTAINER_OF</data></edge>
 <edge id="e6" source="n2" target="n7" label="CONTAINER_OF"><data key="label">CONTAINER_OF</data></edge>
-<edge id="e7" source="n3" target="n4" label="KNOWS"><data key="label">KNOWS</data></edge>
-<edge id="e8" source="n4" target="n5" label="KNOWS"><data key="label">KNOWS</data></edge>
+<edge id="e7" source="n3" target="n4" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">1000</data></edge>
+<edge id="e8" source="n4" target="n5" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">2000</data></edge>
 <edge id="e9" source="n6" target="n4" label="HAS_CREATOR"><data key="label">HAS_CREATOR</data></edge>
 <edge id="e10" source="n7" target="n5" label="HAS_CREATOR"><data key="label">HAS_CREATOR</data></edge>
 </graph>

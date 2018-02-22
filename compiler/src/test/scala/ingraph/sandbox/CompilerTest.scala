@@ -7,10 +7,9 @@ import ingraph.compiler.qplan2jplan.{JPlanToFPlan, QPlanToJPlan}
 import ingraph.compiler.util.FormatterUtil
 import ingraph.emf.util.PrettyPrinter
 import ingraph.model.expr.{EStub, ResolvableName}
-import ingraph.model.fplan.{FNode, LeafFNode}
+import ingraph.model.fplan.{FNode, LeafFNode, PlanPrettyPrinter}
 import ingraph.model.jplan.JNode
 import ingraph.model.qplan.{QNode, QStub, UnresolvedDelete, UnresolvedProjection}
-import ingraph.model.fplan.FNode
 import ingraph.model.treenodes.{ExpressionTreeNode, IngraphTreeNode, QPlanTreeNode}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction}
 import org.scalatest.FunSuite
