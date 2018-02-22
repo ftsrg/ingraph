@@ -81,7 +81,8 @@ case class Grouping(extraAttributes: Seq[ResolvableName],
                      ) extends UnaryFNode {
   override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ extraAttributes
   lazy val aggregationCriteria: Seq[Expression] =
-    jnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.internalSchema))
+    jnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
+      extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
   lazy val projectionTuple: Seq[Expression] =
     jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
       extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
