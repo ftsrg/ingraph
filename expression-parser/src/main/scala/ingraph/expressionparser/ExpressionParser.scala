@@ -46,8 +46,8 @@ object ExpressionParser {
         case _: EqualTo => (t: Tuple) => left(t) == right(t)
         case _: LessThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) <= 0
         case _: LessThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) < 0
-        case _: GreaterThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) >= 0
-        case _: GreaterThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) > 0
+        case _: GreaterThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) > 0
+        case _: GreaterThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) >= 0
       }
     case op: BinaryArithmetic =>
       val left = parse(op.left)

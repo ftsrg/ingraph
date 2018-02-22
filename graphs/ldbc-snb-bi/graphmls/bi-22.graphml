@@ -13,6 +13,7 @@
 <key id="name" for="node" attr.name="name" attr.type="string"/>
 <key id="locationIP" for="node" attr.name="locationIP" attr.type="string"/>
 <key id="id" for="node" attr.name="id" attr.type="long"/>
+<key id="creationDate" for="edge" attr.name="creationDate" attr.type="long"/>
 <graph id="G" edgedefault="directed">
 <node id="n0" labels=":Comment:Message"><data key="labels">:Comment:Message</data><data key="id">0</data><data key="creationDate">20110817142659961</data><data key="locationIP">92.39.58.88</data><data key="browserUsed">Chrome</data><data key="content">yes</data><data key="length">3</data></node>
 <node id="n1" labels=":Comment:Message"><data key="labels">:Comment:Message</data><data key="id">1</data><data key="creationDate">20110817111021570</data><data key="locationIP">213.55.127.9</data><data key="browserUsed">Internet Explorer</data><data key="content">thanks</data><data key="length">6</data></node>
@@ -30,8 +31,8 @@
 <edge id="e3" source="n1" target="n8" label="REPLY_OF"><data key="label">REPLY_OF</data></edge>
 <edge id="e4" source="n2" target="n5" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
 <edge id="e5" source="n3" target="n7" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
-<edge id="e6" source="n2" target="n3" label="KNOWS"><data key="label">KNOWS</data></edge>
-<edge id="e7" source="n3" target="n2" label="KNOWS"><data key="label">KNOWS</data></edge>
+<edge id="e6" source="n2" target="n3" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">1000</data></edge>
+<edge id="e7" source="n3" target="n2" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">2000</data></edge>
 <edge id="e8" source="n2" target="n9" label="LIKES"><data key="label">LIKES</data></edge>
 <edge id="e9" source="n3" target="n8" label="LIKES"><data key="label">LIKES</data></edge>
 <edge id="e10" source="n5" target="n4" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>

@@ -3,6 +3,7 @@ package ingraph.compiler.util
 import ingraph.model.fplan.FNode
 import ingraph.model.jplan.JNode
 import ingraph.model.qplan.QNode
+import ingraph.util.PlanPrettyPrinter
 
 object FormatterUtil {
   val separatorLength = 77
@@ -25,7 +26,7 @@ object FormatterUtil {
 
     out(s"${_heading}:")
     out("-" * (_heading.length + 1))
-    out(stuff.toString)
+    out(PlanPrettyPrinter.clean(stuff.toString))
     out("-" * separatorLength)
   }
 
