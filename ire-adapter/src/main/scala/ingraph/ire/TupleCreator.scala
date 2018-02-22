@@ -24,7 +24,7 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = edgeToTupleType(edge, operator)
-        transaction.add(operator.jnode.edge.name, tuple)
+        transaction.add(operator.toString(), tuple)
       }
     }
   }
@@ -67,8 +67,10 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
         .map {
           case PropertyAttribute(name, elementAttribute, _) => elementAttribute match {
             case _: EdgeAttribute => edge.properties.getOrElse(name, null)
-            case v: VertexAttribute if v.name == operator.jnode.trg.name => edge.targetVertex.properties.getOrElse(name, null)
-            case v: VertexAttribute if v.name == operator.jnode.src.name => edge.sourceVertex.properties.getOrElse(name, null)
+            case v: VertexAttribute if v.name == operator.jnode.trg.name =>
+              edge.targetVertex.properties.getOrElse(name, null)
+            case v: VertexAttribute if v.name == operator.jnode.src.name =>
+              edge.sourceVertex.properties.getOrElse(name, null)
           }
         }
   }
