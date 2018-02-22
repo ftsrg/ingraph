@@ -18,7 +18,7 @@ class BiValidationTest extends FunSuite {
 
 //        println(tc.parameters.mkString("Parameters: (\n\t", "\n\t", "\n)"))
 //        println(neo4jResult.mkString("Results: (\n\t", "\n\t", "\n)"))
-        assert(neo4jResults == ingraphResults)
+        assert(ingraphResults == neo4jResults)
       }
   }
 
