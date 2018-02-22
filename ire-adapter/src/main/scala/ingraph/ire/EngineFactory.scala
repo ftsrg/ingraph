@@ -140,7 +140,8 @@ object EngineFactory {
 
     private def grouping(op: Grouping, expr: ForwardConnection) = {
       val aggregates = op.projectionTuple.map(e => ExpressionParser.parseAggregate(e))
-      val factories = aggregates.flatten.map(_._2()).toVector
+      val creators = aggregates.flatten.map(_._2).toVector
+      val factories: () => Vector[StatefulAggregate] = () => creators.map(_())
       val nonAggregates = op.projectionTuple.filter(op.aggregationCriteria.contains)
       var normalIndex = 0
       var aggregateIndex = nonAggregates.size
@@ -150,7 +151,7 @@ object EngineFactory {
       }
       val aggregationMask = op.aggregationCriteria.map(e => ExpressionParser[Any](e)).toVector
 
-      newLocal(Props(new AggregationNode(expr.child, aggregationMask, () => factories, projections.toVector)))
+      newLocal(Props(new AggregationNode(expr.child, aggregationMask, factories, projections.toVector)))
     }
 
     private def selection(op: Selection, expr: ForwardConnection) = {
