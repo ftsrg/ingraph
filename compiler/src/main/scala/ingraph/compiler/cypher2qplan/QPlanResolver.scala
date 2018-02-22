@@ -384,29 +384,29 @@ object QPlanResolver {
 
     // look for aggregation functions in top-level position of return items
     // those having no aggregation function in top-level position will form the aggregation criteria if at least one aggregation is seen
-    val aggregationCriteriaCandidate: ListBuffer[Expression] = ListBuffer.empty
 
-    val seenAggregate = projectList.foldLeft[Boolean](false)((b, a) => b || ({
-      val projectItem = a.child
+    val aggregationCriteriaCandidate: Seq[cExpr.Expression] = projectList.flatMap( returnItem => {
+      val returnItemExpression = returnItem.child
+
       // validate aggregation semantics: no aggregation function is allowed at non top-level
-      projectItem.children.foreach( c => c.find(isAggregatingFunctionInvocation).fold[Unit](Unit)( e => throw new IllegalAggregationException(e.toString) ) )
+      returnItemExpression.children.foreach( c => c.find(isAggregatingFunctionInvocation).fold[Unit](Unit)( e => throw new IllegalAggregationException(e.toString) ) )
 
       // see if this return item is an aggregation
-      projectItem match {
+      returnItemExpression match {
         // FIXME: UnresolvedStar is also allowed until it is resolved
-        case UnresolvedStar(_) => false
+        case UnresolvedStar(_) => Some(returnItemExpression)
         case e: cExpr.Expression => if (isAggregatingFunctionInvocation(e)) {
-          true
+          None
         } else {
-          aggregationCriteriaCandidate += e
-          false
+          Some(e)
         }
         // This should never be reached, as projectList is expr.types.TProjectList
         case x => throw new UnexpectedTypeException(x, "return item position")
       }
-    }))
+    })
 
-    if (seenAggregate) {
+    // FIXME: when resolving UnresolvedStar, this needs revising
+    if (aggregationCriteriaCandidate.length != projectList.length) {
       qplan.Grouping(aggregationCriteriaCandidate, projectList, child)
     } else {
       qplan.Projection(projectList, child)
