@@ -120,18 +120,6 @@ object EngineFactory {
       assert(labels.nonEmpty, s"Querying all edges is prohibitively expensive, please use edge labels on $op")
       for (label <- labels) {
         edgeConverters.addBinding(label, op)
-        if (!op.jnode.directed) {
-          val reverse =
-            fplan.GetEdges(op.extraAttributes,
-              jplan.GetEdges(
-                op.jnode.trg,
-                op.jnode.src,
-                op.jnode.edge,
-                op.jnode.directed
-              )
-          )
-          edgeConverters.addBinding(label, reverse)
-        }
       }
       inputs += (op.toString() -> expr.child)
     }

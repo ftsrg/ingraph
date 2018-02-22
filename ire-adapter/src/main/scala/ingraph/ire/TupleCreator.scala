@@ -25,6 +25,11 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = edgeToTupleType(edge, operator)
         transaction.add(operator.toString(), tuple)
+        if (!operator.jnode.directed) {
+          val rTuple = edgeToTupleType(
+            edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator)
+          transaction.add(operator.toString(), rTuple)
+        }
       }
     }
   }
