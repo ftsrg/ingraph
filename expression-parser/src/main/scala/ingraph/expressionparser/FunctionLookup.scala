@@ -102,7 +102,6 @@ object FunctionLookup {
       case IN_COLLECTION => (element, collection) => collection.asInstanceOf[Iterable[Any]].contains(element)
 
       case POW => (base, exp) =>
-//        implicit def anyToDouble(any: Any) = any.asInstanceOf[Double]
         Math.pow(base.toDouble, exp.toDouble)
       // these are not define as functions in openCypher, but it's reasonable to treat them as such
       case STARTS_WITH => (string, substring) => string.startsWith(substring)
