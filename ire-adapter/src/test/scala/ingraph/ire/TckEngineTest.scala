@@ -584,7 +584,7 @@ class TckEngineTest extends FunSuite {
       """.stripMargin
     )
     assert(results.size == 1)
-    assert(results.toSeq(0)(0) == Vector(1, 2))
+    assert(results.head(0) == Vector(1, 2))
   }
 
   test("Property collect on edge") {
@@ -599,8 +599,8 @@ class TckEngineTest extends FunSuite {
       """.stripMargin
     )
     assert(results.size == 1)
-    assert(results.toSeq(0)(0) == 99)
-    assert(results.toSeq(0)(1).asInstanceOf[Iterable[Any]].toSet == Vector(1, 2).toSet)
+    assert(results.head(0) == 99)
+    assert(results.head(1).asInstanceOf[Iterable[Any]].toSet == Vector(1, 2).toSet)
   }
 
   //
@@ -613,7 +613,7 @@ class TckEngineTest extends FunSuite {
       """.stripMargin
     )
     assert(results.size == 1)
-    assert(results.toSeq(0) == Vector("b"))
+    assert(results.head == Vector("b"))
   }
 
 
