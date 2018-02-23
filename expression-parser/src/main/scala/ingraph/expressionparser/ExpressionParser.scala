@@ -63,7 +63,7 @@ object ExpressionParser {
         case _: Multiply => tuple => GenericMath.multiply(left(tuple), right(tuple))
         case _: Divide => tuple => GenericMath.divide(left(tuple), right(tuple))
         case _: Remainder => tuple => ???
-        case _: Pmod => tuple =>  GenericMath.mod(left(tuple), right(tuple))
+        case _: Pmod => tuple => GenericMath.mod(left(tuple), right(tuple))
       }
     case exp: BinaryOperator =>
       val left: Tuple => Boolean = ExpressionParser[Boolean](exp.left)
