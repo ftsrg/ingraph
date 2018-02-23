@@ -17,6 +17,11 @@ object ExpressionParser {
   }
 
   private def parse(exp: Expression): Tuple => Any = exp match {
+    case IndexLookupExpression(collection, tupleIndex) =>
+      t =>
+        val listIndex = collection.asInstanceOf[TupleIndexLiteralAttribute].index
+        val list = t(listIndex).asInstanceOf[IndexedSeq[Any]]
+        list(tupleIndex)
     case PropertyAttribute(_, attr, _) =>
       parse(attr)
     case Literal(value, _) =>

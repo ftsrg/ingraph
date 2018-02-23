@@ -576,6 +576,20 @@ class TckEngineTest extends FunSuite {
     assert(results.size == 1)
   }
 
+  //
+  test("List selectors") {
+    val results = run(
+      """CREATE (:X { list: ['a', 'b'] })
+      """.stripMargin,
+      """MATCH (x:X)
+        |RETURN x.list[1]
+      """.stripMargin
+    )
+    assert(results.size == 1)
+    assert(results.toSeq(0) == Vector("b"))
+  }
+
+
 //  //
 //  test("") {
 //    val results = run(
