@@ -14,7 +14,7 @@ class BiValidationTest extends FunSuite {
 
   val working = Seq(2, 4, 5, 6, 7, 8, 9, 12, 17, 21, 23, 24)
 
-  val testCases: Seq[LdbcSnbTestCase] = collects map (new LdbcSnbTestCase("bi", _))
+  val testCases: Seq[LdbcSnbTestCase] = Seq(21) map (new LdbcSnbTestCase("bi", _))
 
   testCases.foreach {
     tc =>

@@ -8,8 +8,8 @@
 MATCH (country:Country {name: $country})
 WITH
   country,
-  $endDate.0/10000000000000   AS endDateYear,
-$endDate.0/100000000000%100 AS endDateMonth
+  $endDate/10000000000000   AS endDateYear,
+  $endDate/100000000000%100 AS endDateMonth
 MATCH
   (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(zombie:Person)
 OPTIONAL MATCH
