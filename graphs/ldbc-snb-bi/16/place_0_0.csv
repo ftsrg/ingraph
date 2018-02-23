@@ -1,3 +1,3 @@
 id:ID(Place)|name:STRING|url:STRING|:LABEL
 77|India|http://dbpedia.org/resource/India|Country
-66|New Delphi|http://dbpedia.org/resource/New_Delhi|City
+66|New Delhi|http://dbpedia.org/resource/New_Delhi|City
