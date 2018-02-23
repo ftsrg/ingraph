@@ -1,5 +1,6 @@
 package ingraph.sandbox
 
+import ingraph.model.expr
 import ingraph.model.qplan
 
 class RandomCompilationTest extends CompilerTest {
@@ -391,6 +392,15 @@ class RandomCompilationTest extends CompilerTest {
         |MATCH (p2)-[:OWNER]->(c:Car)
         |RETURN persons, p2, c
         |""".stripMargin)
+  }
+
+  test("should resolve edgelistattribute") {
+    val stages = compile(
+      """MATCH (post:Post)-[:REPLY_OF*]->(message:Message)
+        |RETURN post.id, message.id
+        |""".stripMargin)
+
+    assert(stages.qplan.find( p => p.isInstanceOf[qplan.Expand] ).get.asInstanceOf[qplan.Expand].edge.asInstanceOf[expr.EdgeListAttribute].resolvedName.isDefined)
   }
 }
 
