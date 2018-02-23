@@ -101,7 +101,12 @@ case class Unwind(extraAttributes: Seq[ResolvableName],
                   child: FNode
                     ) extends UnaryFNode {
   override def internalSchema: Seq[ResolvableName] = child.jnode.output ++ extraAttributes ++ Seq(unwindAttribute)
-  lazy val unwindAttribute: UnwindAttribute = jnode.unwindAttribute
+  lazy val unwindAttribute: UnwindAttribute =
+    UnwindAttribute(
+      SchemaMapper.transformExpression(jnode.unwindAttribute.list, child.internalSchema),
+      jnode.unwindAttribute.name,
+      jnode.unwindAttribute.resolvedName
+    )
 }
 
 case class SortAndTop(extraAttributes: Seq[ResolvableName],
