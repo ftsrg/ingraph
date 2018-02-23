@@ -109,9 +109,10 @@ class ThetaLeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         override val secondaryTupleWidth: Int,
                         override val primaryMask: Mask,
                         override val secondaryMask: Mask,
-                        val theta: Tuple => Boolean = _ => true)
+                        val theta: Tuple => Boolean)
   extends LeftOuterJoinNode(next, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask) {
   override def joinTuples(tuples: Vector[Tuple], otherIndexer: JoinCache,
-                          slotMask: Mask, slot: Slot): TupleBag =
-    super.joinTuples(tuples, otherIndexer, slotMask, slot).filter(theta)
+                          slotMask: Mask, slot: Slot): TupleBag = {
+    super.joinTuples(tuples, otherIndexer, slotMask, slot).filter(theta(_))
+  }
 }

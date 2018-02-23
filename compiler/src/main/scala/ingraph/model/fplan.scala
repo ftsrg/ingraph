@@ -153,7 +153,7 @@ case class ThetaLeftOuterJoin(extraAttributes: Seq[ResolvableName],
                               left: FNode,
                               right: FNode) extends BinaryFNode with EquiJoinLike {
   lazy val condition: Expression =
-    SchemaMapper.transformExpression(jnode.condition, left.internalSchema, right.internalSchema)
+    SchemaMapper.transformExpression(jnode.condition, left.internalSchema, right.internalSchema, leftMask.size)
 }
 
 case class Create(extraAttributes: Seq[ResolvableName],
@@ -221,8 +221,10 @@ object SchemaMapper {
     }
   }
 
-  def transformExpression(expression: Expression, internalSchemaLeft: Seq[ResolvableName],
-                          internalSchemaRight: Seq[ResolvableName]): Expression = {
+  def transformExpression(expression: Expression,
+                          internalSchemaLeft: Seq[ResolvableName],
+                          internalSchemaRight: Seq[ResolvableName],
+                          maskWidth: Int): Expression = {
     expression.transform {
       case a: ResolvableName => {
         val left = internalSchemaLeft.map(_.resolvedName)
@@ -231,7 +233,7 @@ object SchemaMapper {
         if (left.contains(resolvedName)) {
           TupleIndexLiteralAttribute(left.indexOf(resolvedName), Option(Left()))
         } else {
-          TupleIndexLiteralAttribute(right.indexOf(resolvedName), Option(Right()))
+          TupleIndexLiteralAttribute(internalSchemaLeft.size - maskWidth + right.indexOf(resolvedName), Option(Right()))
         }
       }
       case e: Expression => e
