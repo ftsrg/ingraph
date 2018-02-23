@@ -564,6 +564,17 @@ class TckEngineTest extends FunSuite {
     assert(results.size == 1)
   }
 
+  // simple collect test
+  ignore("Simple collect") {
+    val results = run(
+      """CREATE (), ()
+      """.stripMargin,
+      """MATCH (n)
+        |RETURN collect(n) AS ns
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
 
 //  //
 //  test("") {

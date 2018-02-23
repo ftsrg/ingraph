@@ -1,4 +1,4 @@
 id:ID(Place)|name:STRING|url:STRING|:LABEL
-0|Austria|http://dbpedia.org/resource/Austria|Country
-1|Vienna|http://dbpedia.org/resource/Vienna|City
-2|Salzburg|http://dbpedia.org/resource/Salzburg|City
+66|Austria|http://dbpedia.org/resource/Austria|Country
+55|Vienna|http://dbpedia.org/resource/Vienna|City
+44|Salzburg|http://dbpedia.org/resource/Salzburg|City
