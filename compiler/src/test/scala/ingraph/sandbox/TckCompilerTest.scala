@@ -1,7 +1,5 @@
 package ingraph.sandbox
 
-import ingraph.model.qplan.Expand
-
 class TckCompilerTest extends CompilerTest {
 
   test("Hello World") {
@@ -134,13 +132,11 @@ class TckCompilerTest extends CompilerTest {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
   }
 
-  test("Transitive closure resolved") {
-    val stages = compile(
-      """MATCH (post:Post)-[:REPLY_OF*]->(message:Message)
-        |RETURN post.id, message.id
-      """.stripMargin
-    )
-    assert(stages.qplan.children(0).children(0).children(0).asInstanceOf[Expand].edge.resolved == true)
-  }
+//  test("TCK test: ") {
+//    val stages = compile(
+//      """
+//      """.stripMargin
+//    )
+//  }
 
 }
