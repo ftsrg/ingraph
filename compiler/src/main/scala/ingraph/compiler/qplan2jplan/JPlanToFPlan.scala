@@ -23,7 +23,7 @@ object JPlanToFPlan {
       * (2) it is already part of the extra extra attributes
       */
     def duplicate(attribute: ResolvableName, inputOperatorOutput: Seq[ResolvableName], extraAttributes: Seq[ResolvableName]) = {
-      inputOperatorOutput.map(_.resolvedName).contains(attribute.resolvedName) || extraAttributes.contains(attribute.resolvedName)
+      inputOperatorOutput.map(_.resolvedName).contains(attribute.resolvedName) || extraAttributes.map(_.resolvedName).contains(attribute.resolvedName)
     }
 
     jnode match {
