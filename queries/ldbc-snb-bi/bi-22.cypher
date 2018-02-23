@@ -25,21 +25,30 @@ WITH DISTINCT person1, person2, city1, score + (CASE m WHEN null THEN 0 ELSE 10 
 OPTIONAL MATCH (person1)<-[:HAS_CREATOR]-(m:Message)<-[:LIKES]-(person2)
 WITH DISTINCT person1, person2, city1, score + (CASE m WHEN null THEN 0 ELSE  1 END) AS score
 // preorder
-ORDER BY
+  ORDER BY
   city1.name ASC,
   score DESC,
   person1.id ASC,
   person2.id ASC
 WITH
   city1,
-  // using a list might be faster, but the browser query editor does not like it
-  collect({score: score, person1: person1, person2: person2})[0] AS top
+  collect([score, person1, person2]) AS tops
+WITH
+  city1,
+  tops[0] AS top
 RETURN
-  top.person1.id,
-  top.person2.id,
+  top[1] AS person1
+/*  top[1] AS person1,
+  top[2] AS person2,
+  city1,
+  top[0] AS score
+RETURN
+  person1.id,
+  person2.id,
   city1.name,
-  top.score
+  score
 ORDER BY
-  top.score DESC,
-  top.person1.id ASC,
-  top.person2.id ASC
+  score DESC,
+  person1 ASC,
+  person2 ASC
+*/
