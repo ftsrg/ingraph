@@ -14,9 +14,7 @@ object JPlanToFPlan {
     transform(jnode, Seq())
   }
 
-  private def transform(jnode: jplan.JNode, extraAttributes: Seq[ResolvableName]): fplan.FNode = {
-    val ea = extraAttributes.distinct
-
+  private def transform(jnode: jplan.JNode, ea: Seq[ResolvableName]): fplan.FNode = {
     /**
       * Return whether an attribute selected for propagation is a duplicate:
       * (1) it is in the input operator's/operators' output, or
