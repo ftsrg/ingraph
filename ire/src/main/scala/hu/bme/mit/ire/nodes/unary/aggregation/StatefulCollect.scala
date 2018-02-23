@@ -9,12 +9,12 @@ class StatefulCollect(collectKey: Vector[Int]) extends StatefulAggregate {
 
   def maintainPositive(values: Iterable[Tuple]): Unit = {
     for (tuple <- values)
-      collection += collectKey.map(tuple)
+      collection += tuple(collectKey.head)
   }
 
   def maintainNegative(values: Iterable[Tuple]): Unit = {
     for (tuple <- values)
-      collection -= collectKey.map(tuple)
+      collection -= tuple(collectKey.head)
   }
 
   override def value(): Any = {

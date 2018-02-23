@@ -564,7 +564,6 @@ class TckEngineTest extends FunSuite {
     assert(results.size == 1)
   }
 
-  // simple collect test
   test("Simple collect") {
     val results = run(
       """CREATE (), ()
@@ -574,6 +573,34 @@ class TckEngineTest extends FunSuite {
       """.stripMargin
     )
     assert(results.size == 1)
+  }
+
+  test("Property collect") {
+    val results = run(
+      """CREATE ({p: 1}), ({p: 2})
+      """.stripMargin,
+      """MATCH (n)
+        |RETURN collect(n.p) AS ns
+      """.stripMargin
+    )
+    assert(results.size == 1)
+    assert(results.toSeq(0)(0) == Vector(1, 2))
+  }
+
+  test("Property collect on edge") {
+    val results = run(
+      """CREATE
+        |  (x:X {id: 99}),
+        |  (x)-[:REL]->({p: 1}),
+        |  (x)-[:REL]->({p: 2})
+      """.stripMargin,
+      """MATCH (x:X)-[:REL]->(n)
+        |RETURN x.id, collect(n.p) AS ns
+      """.stripMargin
+    )
+    assert(results.size == 1)
+    assert(results.toSeq(0)(0) == 99)
+    assert(results.toSeq(0)(1).asInstanceOf[Iterable[Any]].toSet == Vector(1, 2).toSet)
   }
 
   //
