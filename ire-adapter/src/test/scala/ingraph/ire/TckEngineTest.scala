@@ -565,7 +565,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // simple collect test
-  ignore("Simple collect") {
+  test("Simple collect") {
     val results = run(
       """CREATE (), ()
       """.stripMargin,

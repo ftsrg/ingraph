@@ -115,9 +115,9 @@ object ExpressionParser {
         case MAX => () => new StatefulMax(index)
         case MIN => () => new StatefulMin(index)
         case SUM => () => new StatefulSum(index)
+        case COLLECT => () => new StatefulCollect(Vector(index))
       }
       Some((index, factory))
-    //TODO: collect
     case _ => None
   }
 }
