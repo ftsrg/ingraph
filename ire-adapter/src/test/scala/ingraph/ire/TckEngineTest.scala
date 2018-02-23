@@ -590,6 +590,20 @@ class TckEngineTest extends FunSuite {
   }
 
 
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/OptionalMatchAcceptance.feature#L57
+  test("Respect predicates on the OPTIONAL MATCH") {
+    val results = run(
+      """CREATE (s:Single)""",
+      """MATCH (n:Single)
+        |OPTIONAL MATCH (n)-[r:REL]-(m)
+        |WHERE m.prop = 42
+        |RETURN m
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+
 //  //
 //  test("") {
 //    val results = run(
