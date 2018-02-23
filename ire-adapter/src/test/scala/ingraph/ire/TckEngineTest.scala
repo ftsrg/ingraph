@@ -603,6 +603,16 @@ class TckEngineTest extends FunSuite {
     assert(results.size == 1)
   }
 
+  //
+  ignore("Count empty") {
+    val results = run(
+      "",
+      """MATCH (n)
+        |RETURN count(n) AS c
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
 
 //  //
 //  test("") {
