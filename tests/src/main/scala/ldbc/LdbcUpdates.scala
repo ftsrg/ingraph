@@ -21,7 +21,7 @@ case class Update1AddPerson(
                              workAt: List[Organization]
                            ) extends LdbcUpdate
 
-case class Like(
+case class Update2_3AddMessageLike(
                                personId: Long,
                                postId: Long,
                                creationDate: Long
