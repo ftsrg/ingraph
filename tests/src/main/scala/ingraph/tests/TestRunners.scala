@@ -3,8 +3,7 @@ package ingraph.tests
 import apoc.export.graphml.ExportGraphML
 import apoc.graph.Graphs
 import ingraph.driver.CypherDriverFactory
-import ingraph.model.fplan.Production
-import ldbc.LdbcUpdateToIngraphLoader
+import ingraph.ire.IngraphOneTimeAdapter
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.factory.GraphDatabaseSettings
 import org.neo4j.kernel.api.exceptions.KernelException
@@ -70,8 +69,12 @@ object TestRunners {
       val res = queryHandler.result
 
       val indexer = queryHandler.adapter.indexer
-      val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
-      loader.load()
+
+//      val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
+//      loader.load()
+
+      val createAdapter = new IngraphOneTimeAdapter("CREATE (p:Person {id: 99999})", "create", indexer)
+      createAdapter.terminate()
 
       val res2 = queryHandler.result
 
