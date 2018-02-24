@@ -65,12 +65,7 @@ object JPlanToFPlan {
       case o: jplan.SetNode              => fplan.SetNode(ea, o, transform(o.child, ea))
 
       // binary
-      case o: jplan.AntiJoin => fplan.AntiJoin(
-          ea, o,
-          transform(o.left, ea),
-          transform(o.right, Seq())
-        )
-      case j: jplan.EquiJoinLike => {
+      case j: jplan.JoinLike => {
         // ThetaLeftOuterJoins require special treatment: they are the only join operators that can introduce new extra variables
         val opExtra = j match {
           case o: jplan.ThetaLeftOuterJoin => extractAttributes(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, ea))
@@ -86,6 +81,10 @@ object JPlanToFPlan {
         val right = transform(j.right, eaRight)
 
         j match {
+          case o: jplan.AntiJoin => {
+            assert(eaRight.isEmpty)
+            fplan.AntiJoin(eaTotal, o, left, right)
+          }
           case o: jplan.Join => fplan.Join(eaTotal, o, left, right)
           case o: jplan.LeftOuterJoin => fplan.LeftOuterJoin(eaTotal, o, left, right)
           case o: jplan.ThetaLeftOuterJoin =>
