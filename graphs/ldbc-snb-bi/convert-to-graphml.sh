@@ -1,9 +1,10 @@
 #!/bin/bash
 
-rm -rf graphmls
-mkdir graphmls
+#rm -rf graphmls
+#mkdir graphmls
 
-for i in 0{1..9} {10..25} ; do
+#for i in 0{1..9} {10..25} ; do
+for i in 14; do
   echo ================================================================================
   echo Procesing data set for query $i.
   echo ================================================================================

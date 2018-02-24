@@ -18,5 +18,6 @@
 <node id="n3" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">66</data><data key="creationDate">20110817060540595</data><data key="locationIP">49.246.218.237</data><data key="browserUsed">Firefox</data><data key="language">uz</data><data key="content">About Rupert Murdoch, t newer electronic publishing technoAbout George Frideric Handel,  concertos. Handel was born in 1685,About Kurt Vonne</data><data key="length">140</data></node>
 <edge id="e0" source="n0" target="n1" label="REPLY_OF"><data key="label">REPLY_OF</data></edge>
 <edge id="e1" source="n0" target="n3" label="REPLY_OF"><data key="label">REPLY_OF</data></edge>
+<edge id="e2" source="n3" target="n2" label="HAS_CREATOR"><data key="label">HAS_CREATOR</data></edge>
 </graph>
 </graphml>
