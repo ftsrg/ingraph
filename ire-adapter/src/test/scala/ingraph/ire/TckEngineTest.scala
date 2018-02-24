@@ -178,6 +178,21 @@ class TckEngineTest extends FunSuite {
       """CREATE (a:A {value: 1})-[:REL {name: 'r1'}]->(b:B {value: 2})-[:REL {name: 'r2'}]->(c:C {value: 3})
       """.stripMargin,
       """MATCH (a)-[r:REL {name: 'r1'}]-(b)
+        |OPTIONAL MATCH (b)-[r2:REL]->(c)
+        |WHERE r <> r2
+        |RETURN a, b, c
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L260
+  // TODO does not work with undirected edges
+  ignore("Return two subgraphs with bound undirected relationship and optional relationship / undirected") {
+    val results = run(
+      """CREATE (a:A {value: 1})-[:REL {name: 'r1'}]->(b:B {value: 2})-[:REL {name: 'r2'}]->(c:C {value: 3})
+      """.stripMargin,
+      """MATCH (a)-[r:REL {name: 'r1'}]-(b)
         |OPTIONAL MATCH (b)-[r2:REL]-(c)
         |WHERE r <> r2
         |RETURN a, b, c
@@ -185,6 +200,7 @@ class TckEngineTest extends FunSuite {
     )
     assert(results.size == 2)
   }
+
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
   test("Handle OR in the WHERE clause") {
@@ -242,7 +258,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L129
-  ignore("Simple variable length pattern") {
+  test("Simple variable length pattern") {
     val results = run(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (c {name: 'C'}), (d {name: 'D'})
@@ -250,7 +266,7 @@ class TckEngineTest extends FunSuite {
         |       (b)-[:CONTAINS]->(c),
         |       (c)-[:CONTAINS]->(d)
       """.stripMargin,
-      """MATCH (a {name: 'A'})-[*]->(x)
+      """MATCH (a {name: 'A'})-[:CONTAINS*]->(x)
         |RETURN x
       """.stripMargin
     )

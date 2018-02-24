@@ -91,16 +91,19 @@ object EngineFactory {
                   case op: ThetaLeftOuterJoin =>
                     val theta = ExpressionParser[Boolean](op.condition)
                     newLocal(Props(new ThetaLeftOuterJoinNode(
-                      child, leftTupleWidth, rightTupleWidth, leftMask, rightMask, theta)))
-//              case op: TransitiveClosureJoin =>
-//                val minHops = op.getEdgeListVariable.getMinHops
-//                val maxHops = op.getEdgeListVariable.getMaxHops.getMaxHopsType match {
-//                  case MaxHopsType.LIMITED => op.getEdgeListVariable.getMaxHops.getHops
-//                  case MaxHopsType.UNLIMITED => Long.MaxValue
-//                }
-//              newLocal(Props(new TransitiveClosureJoinNode(child, leftTupleWidth, rightTupleWidth, leftMask,
-//                rightMask, op.internalSchema.length, mixHops, maxHops)))
-//                )))
+                      child, leftTupleWidth, rightTupleWidth, leftMask, rightMask, theta))
+                    )
+                  case op: TransitiveJoin =>
+                    val minHops = op.edgeList.minHops.getOrElse(1)
+                    val maxHops = op.edgeList.maxHops.getOrElse(Int.MaxValue)
+                    newLocal(Props(
+                      new TransitiveClosureJoinNode(
+                        child,
+                        leftTupleWidth, rightTupleWidth,
+                        leftMask, rightMask,
+                        op.internalSchema.length,
+                        minHops, maxHops))
+                    )
                 }
               }
               remaining += ForwardConnection(op.left, node.primary)
