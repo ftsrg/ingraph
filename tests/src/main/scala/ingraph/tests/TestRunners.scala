@@ -70,7 +70,7 @@ object TestRunners {
       val res = queryHandler.result
 
       val indexer = queryHandler.adapter.indexer
-      val loader = new LdbcUpdateToIngraphLoader(indexer)
+      val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
       loader.load()
 
       val res2 = queryHandler.result

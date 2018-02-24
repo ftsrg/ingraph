@@ -5,7 +5,7 @@ import ingraph.ire.{Indexer, IngraphVertex}
 
 import scala.collection.JavaConverters._
 
-class LdbcUpdateToIngraphLoader(val indexer: Indexer) {
+class LdbcUpdateToIngraphLoader(val indexer: Indexer, val csvDir: String) {
 
   implicit def longs(x: Any): Long = x.asInstanceOf[Long]
   implicit def string(x: Any): String = x.asInstanceOf[String]
@@ -13,10 +13,8 @@ class LdbcUpdateToIngraphLoader(val indexer: Indexer) {
   implicit def longList(x: Any): List[Long] = x.asInstanceOf[java.util.List[Object]].asScala.map(_.asInstanceOf[Long]).toList
   implicit def stringList(x: Any): List[String] = x.asInstanceOf[java.util.List[Object]].asScala.map(_.asInstanceOf[String]).toList
 
-  val CSV_DIR: String = "../graphs/ldbc-snb-bi/sf-tiny/"
-
   def load() {
-    val loader = new LdbcUpdateStreamCsvLoader(CSV_DIR)
+    val loader = new LdbcUpdateStreamCsvLoader(csvDir)
 
     val updates: Iterable[LdbcUpdate] = for (update <- loader.getUpdates.asScala) yield {
       val u = update.asScala
@@ -34,6 +32,17 @@ class LdbcUpdateToIngraphLoader(val indexer: Indexer) {
       }
     }
 
+    for (up <- updates) {
+      up match {
+        case up: Update1AddPerson          => update(up)
+        case up: Update2_3AddMessageLike   => update(up)
+        case up: Update4AddForum           => update(up)
+        case up: Update5AddForumMembership => update(up)
+        case up: Update6AddPost            => update(up)
+        case up: Update7AddComment         => update(up)
+        case up: Update8AddFriendship      => update(up)
+      }
+    }
   }
 
   def update(person: Update1AddPerson): Unit = {
