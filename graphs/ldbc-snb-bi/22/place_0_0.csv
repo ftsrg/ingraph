@@ -1,5 +1,5 @@
 id:ID(Place)|name:STRING|url:STRING|:LABEL
-0|India|http://dbpedia.org/resource/India|Country
-1|New Delphi|http://dbpedia.org/resource/New_Delhi|City
-2|USA|http://dbpedia.org/resource/USA|Country
-3|New York|http://dbpedia.org/resource/New_York|City
+55|India|http://dbpedia.org/resource/India|Country
+44|New Delhi|http://dbpedia.org/resource/New_Delhi|City
+33|USA|http://dbpedia.org/resource/USA|Country
+22|New York|http://dbpedia.org/resource/New_York|City

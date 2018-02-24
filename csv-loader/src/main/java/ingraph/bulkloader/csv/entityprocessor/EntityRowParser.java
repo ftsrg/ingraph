@@ -20,10 +20,6 @@ public abstract class EntityRowParser<TEntity extends Entity> {
 
 	/**
 	 * If there is an IdSpace for the column, get the id from the IdSpace for the internal id. Else, return the internal id.
-	 *
-	 * @param idSpaceName
-	 * @param internalId
-	 * @return
 	 */
 	protected long getId(final Map<String, Object> row, final Map<String, ColumnDescriptor> columnDescriptors, final String internalIdName) {
 		final Optional<String> idSpaceName = columnDescriptors.get(internalIdName).getIdSpaceName();

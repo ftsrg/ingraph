@@ -8,13 +8,15 @@ MATCH
 WITH forum, count(person) AS numberOfMembers
 ORDER BY numberOfMembers DESC, forum.id ASC
 LIMIT 100
-WITH collect(forum) AS popularForums
-UNWIND popularForums AS forum
+WITH collect(forum.id) AS popularForumIds
+UNWIND popularForumIds AS popularForumId
 MATCH
   (forum)-[:HAS_MEMBER]->(person:Person)
+WHERE
+  forum.id = popularForumId
 OPTIONAL MATCH
   (person)<-[:HAS_CREATOR]-(post:Post)<-[:CONTAINER_OF]-(popularForum:Forum)
-WHERE popularForum IN popularForums
+WHERE popularForum.id IN popularForumIds
 RETURN
   person.id,
   person.firstName,

@@ -14,16 +14,14 @@ object JPlanToFPlan {
     transform(jnode, Seq())
   }
 
-  private def transform(jnode: jplan.JNode, extraAttributes: Seq[ResolvableName]): fplan.FNode = {
-    val ea = extraAttributes.distinct
-
+  private def transform(jnode: jplan.JNode, ea: Seq[ResolvableName]): fplan.FNode = {
     /**
       * Return whether an attribute selected for propagation is a duplicate:
       * (1) it is in the input operator's/operators' output, or
       * (2) it is already part of the extra extra attributes
       */
     def duplicate(attribute: ResolvableName, inputOperatorOutput: Seq[ResolvableName], extraAttributes: Seq[ResolvableName]) = {
-      inputOperatorOutput.map(_.resolvedName).contains(attribute.resolvedName) || extraAttributes.contains(attribute.resolvedName)
+      inputOperatorOutput.map(_.resolvedName).contains(attribute.resolvedName) || extraAttributes.map(_.resolvedName).contains(attribute.resolvedName)
     }
 
     jnode match {

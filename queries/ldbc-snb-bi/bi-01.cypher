@@ -24,14 +24,14 @@ WITH
     ELSE                           3
   END AS lengthCategory,
   count(message) AS messageCount,
-  floor(avg(message.length)) AS averageMessageLength,
+  avg(message.length) AS averageMessageLengthFloat,
   sum(message.length) AS sumMessageLength
 RETURN
   year,
   isComment,
   lengthCategory,
   messageCount,
-  averageMessageLength,
+  floor(averageMessageLengthFloat) AS averageMessageLength,
   sumMessageLength,
   messageCount / totalMessageCount AS percentageOfMessages
 ORDER BY

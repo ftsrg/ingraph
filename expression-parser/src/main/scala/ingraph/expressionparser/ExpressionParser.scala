@@ -17,6 +17,11 @@ object ExpressionParser {
   }
 
   private def parse(exp: Expression): Tuple => Any = exp match {
+    case IndexLookupExpression(collection, tupleIndex) =>
+      t =>
+        val listIndex = collection.asInstanceOf[TupleIndexLiteralAttribute].index
+        val list = t(listIndex).asInstanceOf[IndexedSeq[Any]]
+        list(tupleIndex)
     case PropertyAttribute(_, attr, _) =>
       parse(attr)
     case Literal(value, _) =>
@@ -46,8 +51,8 @@ object ExpressionParser {
         case _: EqualTo => (t: Tuple) => left(t) == right(t)
         case _: LessThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) <= 0
         case _: LessThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) < 0
-        case _: GreaterThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) >= 0
-        case _: GreaterThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) > 0
+        case _: GreaterThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) > 0
+        case _: GreaterThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) >= 0
       }
     case op: BinaryArithmetic =>
       val left = parse(op.left)
@@ -58,7 +63,7 @@ object ExpressionParser {
         case _: Multiply => tuple => GenericMath.multiply(left(tuple), right(tuple))
         case _: Divide => tuple => GenericMath.divide(left(tuple), right(tuple))
         case _: Remainder => tuple => ???
-        case _: Pmod => tuple =>  GenericMath.mod(left(tuple), right(tuple))
+        case _: Pmod => tuple => GenericMath.mod(left(tuple), right(tuple))
       }
     case exp: BinaryOperator =>
       val left: Tuple => Boolean = ExpressionParser[Boolean](exp.left)
@@ -110,9 +115,9 @@ object ExpressionParser {
         case MAX => () => new StatefulMax(index)
         case MIN => () => new StatefulMin(index)
         case SUM => () => new StatefulSum(index)
+        case COLLECT => () => new StatefulCollect(Vector(index))
       }
       Some((index, factory))
-    //TODO: collect
     case _ => None
   }
 }

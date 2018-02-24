@@ -12,7 +12,7 @@ Follow these steps:
 
    ```bash
    export NEO4J_HOME=/your/neo4j/home
-   export DB_DIR=$NEO4J_HOME/data/databases/graph.db
+   export NEO4J_DB_DIR=$NEO4J_HOME/data/databases/graph.db
    export POSTFIX=_0_0.csv
    ```
 

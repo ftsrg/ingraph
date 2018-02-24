@@ -56,21 +56,21 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3, 0),
         () => Vector(new StatefulCollect(Vector(2))), Vector(0, 1, 2)))) // (sex, city): (weapon)
       counter ! ChangeSet(positive = tupleBag(odin))
-      expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", cypherList(Vector("Gungnir"))))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", cypherList("Gungnir")))))
       counter ! ChangeSet(positive = tupleBag(thor))
       expectMsg(ChangeSet(
-        positive = tupleBag(tuple("male", "Asgard", cypherList(Vector("Gungnir"), Vector("Mjölnir")))),
-        negative = tupleBag(tuple("male", "Asgard", cypherList(Vector("Gungnir"))))
+        positive = tupleBag(tuple("male", "Asgard", cypherList("Gungnir", "Mjölnir"))),
+        negative = tupleBag(tuple("male", "Asgard", cypherList("Gungnir")))
       ))
       counter ! ChangeSet(negative = tupleBag(odin))
       expectMsg(ChangeSet(
-        positive = tupleBag(tuple("male", "Asgard", cypherList(Vector("Mjölnir")))),
-        negative = tupleBag(tuple("male", "Asgard", cypherList(Vector("Gungnir"), Vector("Mjölnir"))))
+        positive = tupleBag(tuple("male", "Asgard", cypherList("Mjölnir"))),
+        negative = tupleBag(tuple("male", "Asgard", cypherList("Gungnir", "Mjölnir")))
       ))
       counter ! ChangeSet(positive = tupleBag(freya))
-      expectMsg(ChangeSet(positive = tupleBag(tuple("female", "Asgard", cypherList(Vector("N/A"))))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple("female", "Asgard", cypherList("N/A")))))
       counter ! ChangeSet(negative = tupleBag(freya))
-      expectMsg(ChangeSet(negative = tupleBag(tuple("female", "Asgard", cypherList(Vector("N/A"))))))
+      expectMsg(ChangeSet(negative = tupleBag(tuple("female", "Asgard", cypherList("N/A")))))
     }
   }
 

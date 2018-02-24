@@ -60,7 +60,10 @@ case class DuplicateElimination(extraAttributes: Seq[ResolvableName],
 case class Production(extraAttributes: Seq[ResolvableName],
                       jnode: jplan.Production,
                       child: FNode
-                     ) extends UnaryFNode {}
+                     ) extends UnaryFNode {
+  override def output = jnode.output
+  def outputNames: Iterable[String] = output.map(_.resolvedName.get.resolvedName.replaceAll("#\\d+$", "").replace('$', '.'))
+}
 
 case class Projection(extraAttributes: Seq[ResolvableName],
                       jnode: jplan.Projection,
@@ -68,7 +71,8 @@ case class Projection(extraAttributes: Seq[ResolvableName],
                      ) extends UnaryFNode {
   override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ extraAttributes
   lazy val projectionTuple: Seq[Expression] =
-    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema))
+    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
+      extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
 }
 
 case class Grouping(extraAttributes: Seq[ResolvableName],
@@ -77,9 +81,11 @@ case class Grouping(extraAttributes: Seq[ResolvableName],
                      ) extends UnaryFNode {
   override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ extraAttributes
   lazy val aggregationCriteria: Seq[Expression] =
-    jnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.internalSchema))
+    jnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
+      extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
   lazy val projectionTuple: Seq[Expression] =
-    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema))
+    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
+      extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
 }
 
 case class Selection(extraAttributes: Seq[ResolvableName],
@@ -95,7 +101,12 @@ case class Unwind(extraAttributes: Seq[ResolvableName],
                   child: FNode
                     ) extends UnaryFNode {
   override def internalSchema: Seq[ResolvableName] = child.jnode.output ++ extraAttributes ++ Seq(unwindAttribute)
-  lazy val unwindAttribute: UnwindAttribute = jnode.unwindAttribute
+  lazy val unwindAttribute: UnwindAttribute =
+    UnwindAttribute(
+      SchemaMapper.transformExpression(jnode.unwindAttribute.list, child.internalSchema),
+      jnode.unwindAttribute.name,
+      jnode.unwindAttribute.resolvedName
+    )
 }
 
 case class SortAndTop(extraAttributes: Seq[ResolvableName],
@@ -147,7 +158,7 @@ case class ThetaLeftOuterJoin(extraAttributes: Seq[ResolvableName],
                               left: FNode,
                               right: FNode) extends BinaryFNode with EquiJoinLike {
   lazy val condition: Expression =
-    SchemaMapper.transformExpression(jnode.condition, left.internalSchema, right.internalSchema)
+    SchemaMapper.transformExpression(jnode.condition, left.internalSchema, right.internalSchema, leftMask.size)
 }
 
 case class Create(extraAttributes: Seq[ResolvableName],
@@ -215,8 +226,10 @@ object SchemaMapper {
     }
   }
 
-  def transformExpression(expression: Expression, internalSchemaLeft: Seq[ResolvableName],
-                          internalSchemaRight: Seq[ResolvableName]): Expression = {
+  def transformExpression(expression: Expression,
+                          internalSchemaLeft: Seq[ResolvableName],
+                          internalSchemaRight: Seq[ResolvableName],
+                          maskWidth: Int): Expression = {
     expression.transform {
       case a: ResolvableName => {
         val left = internalSchemaLeft.map(_.resolvedName)
@@ -225,7 +238,7 @@ object SchemaMapper {
         if (left.contains(resolvedName)) {
           TupleIndexLiteralAttribute(left.indexOf(resolvedName), Option(Left()))
         } else {
-          TupleIndexLiteralAttribute(right.indexOf(resolvedName), Option(Right()))
+          TupleIndexLiteralAttribute(internalSchemaLeft.size - maskWidth + right.indexOf(resolvedName), Option(Right()))
         }
       }
       case e: Expression => e
@@ -233,4 +246,3 @@ object SchemaMapper {
   }
 
 }
-

@@ -10,15 +10,15 @@
 <key id="id" for="node" attr.name="id" attr.type="long"/>
 <key id="creationDate" for="node" attr.name="creationDate" attr.type="long"/>
 <key id="url" for="node" attr.name="url" attr.type="string"/>
+<key id="creationDate" for="edge" attr.name="creationDate" attr.type="long"/>
 <graph id="G" edgedefault="directed">
-<node id="n0" labels=":Person"><data key="labels">:Person</data><data key="id">0</data><data key="firstName">Mahinda</data><data key="lastName">Perera</data><data key="gender">male</data><data key="birthday">19891203</data><data key="creationDate">20100214153210447</data><data key="locationIP">119.235.7.103</data><data key="browserUsed">Firefox</data></node>
-<node id="n1" labels=":Person"><data key="labels">:Person</data><data key="id">1</data><data key="firstName">Carmen</data><data key="lastName">Lepland</data><data key="gender">female</data><data key="birthday">19840218</data><data key="creationDate">20100128063958781</data><data key="locationIP">195.20.151.175</data><data key="browserUsed">Internet Explorer</data></node>
-<node id="n2" labels=":Country:Place"><data key="labels">:Country:Place</data><data key="id">0</data><data key="name">India</data><data key="url">http://dbpedia.org/resource/India</data></node>
-<node id="n3" labels=":City:Place"><data key="labels">:City:Place</data><data key="id">1</data><data key="name">New Delphi</data><data key="url">http://dbpedia.org/resource/New_Delhi</data></node>
+<node id="n0" labels=":Person"><data key="labels">:Person</data><data key="id">99</data><data key="firstName">Mahinda</data><data key="lastName">Perera</data><data key="gender">male</data><data key="birthday">19891203</data><data key="creationDate">20100214153210447</data><data key="locationIP">119.235.7.103</data><data key="browserUsed">Firefox</data></node>
+<node id="n1" labels=":Person"><data key="labels">:Person</data><data key="id">88</data><data key="firstName">Carmen</data><data key="lastName">Lepland</data><data key="gender">female</data><data key="birthday">19840218</data><data key="creationDate">20100128063958781</data><data key="locationIP">195.20.151.175</data><data key="browserUsed">Internet Explorer</data></node>
+<node id="n2" labels=":Country:Place"><data key="labels">:Country:Place</data><data key="id">77</data><data key="name">India</data><data key="url">http://dbpedia.org/resource/India</data></node>
+<node id="n3" labels=":City:Place"><data key="labels">:City:Place</data><data key="id">66</data><data key="name">New Delhi</data><data key="url">http://dbpedia.org/resource/New_Delhi</data></node>
 <edge id="e0" source="n0" target="n3" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
 <edge id="e1" source="n1" target="n3" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
-<edge id="e2" source="n0" target="n1" label="KNOWS"><data key="label">KNOWS</data></edge>
-<edge id="e3" source="n1" target="n0" label="KNOWS"><data key="label">KNOWS</data></edge>
-<edge id="e4" source="n3" target="n2" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
+<edge id="e2" source="n0" target="n1" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">1000</data></edge>
+<edge id="e3" source="n3" target="n2" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
 </graph>
 </graphml>

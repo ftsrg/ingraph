@@ -178,6 +178,21 @@ class TckEngineTest extends FunSuite {
       """CREATE (a:A {value: 1})-[:REL {name: 'r1'}]->(b:B {value: 2})-[:REL {name: 'r2'}]->(c:C {value: 3})
       """.stripMargin,
       """MATCH (a)-[r:REL {name: 'r1'}]-(b)
+        |OPTIONAL MATCH (b)-[r2:REL]->(c)
+        |WHERE r <> r2
+        |RETURN a, b, c
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L260
+  // TODO does not work with undirected edges
+  ignore("Return two subgraphs with bound undirected relationship and optional relationship / undirected") {
+    val results = run(
+      """CREATE (a:A {value: 1})-[:REL {name: 'r1'}]->(b:B {value: 2})-[:REL {name: 'r2'}]->(c:C {value: 3})
+      """.stripMargin,
+      """MATCH (a)-[r:REL {name: 'r1'}]-(b)
         |OPTIONAL MATCH (b)-[r2:REL]-(c)
         |WHERE r <> r2
         |RETURN a, b, c
@@ -185,6 +200,7 @@ class TckEngineTest extends FunSuite {
     )
     assert(results.size == 2)
   }
+
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
   test("Handle OR in the WHERE clause") {
@@ -242,7 +258,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L129
-  ignore("Simple variable length pattern") {
+  test("Simple variable length pattern") {
     val results = run(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (c {name: 'C'}), (d {name: 'D'})
@@ -250,7 +266,7 @@ class TckEngineTest extends FunSuite {
         |       (b)-[:CONTAINS]->(c),
         |       (c)-[:CONTAINS]->(d)
       """.stripMargin,
-      """MATCH (a {name: 'A'})-[*]->(x)
+      """MATCH (a {name: 'A'})-[:CONTAINS*]->(x)
         |RETURN x
       """.stripMargin
     )
@@ -273,7 +289,7 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L210
-  ignore("Two bound nodes pointing to the same node") {
+  test("Two bound nodes pointing to the same node") {
     val results = run(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (x1 {name: 'x1'}), (x2 {name: 'x2'})
@@ -310,7 +326,348 @@ class TckEngineTest extends FunSuite {
     assert(results.size == 2)
   }
 
-// cont. later from https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L258
+// add more MATCH tests later
+// from https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L258
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L20
+  ignore("Passing on pattern nodes") {
+    val results = run(
+      """CREATE (:A)-[:REL]->(:B)""",
+      """MATCH (a:A)
+        |WITH a
+        |MATCH (a)-->(b)
+        |RETURN *
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L38
+  test("ORDER BY and LIMIT can be used - edited") {
+    val results = run(
+      """CREATE (a:A {name: 'X'}),
+        |(a)-[:REL]->()
+      """.stripMargin,
+      """MATCH (a:A)
+        |WITH a
+        |ORDER BY a.name
+        |LIMIT 1
+        |MATCH (a)-[:REL]->(b)
+        |RETURN a
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L59
+  test("No dependencies between the query parts") {
+    val results = run(
+      """CREATE (:A), (:B)
+      """.stripMargin,
+      """|MATCH (a)
+         |WITH a
+         |MATCH (b)
+         |RETURN a, b
+      """.stripMargin
+    )
+    assert(results.size == 4)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L80
+  test("Aliasing") {
+    val results = run(
+      """CREATE (:Begin {prop: 42}),
+        |       (:End {prop: 42}),
+        |       (:End {prop: 3})
+      """.stripMargin,
+      """MATCH (a:Begin)
+        |WITH a.prop AS property
+        |MATCH (b:End)
+        |WHERE property = b.prop
+        |RETURN b
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L101
+  test("Handle dependencies across WITH - CREATE edited") {
+    val results = run(
+      """CREATE (a:End {prop: 42, id: 0}),
+        |       (:End {prop: 3}),
+        |       (:Begin {prop: 0})
+      """.stripMargin,
+      """MATCH (a:Begin)
+        |WITH a.prop AS property
+        |  ORDER BY property
+        |  LIMIT 1
+        |MATCH (b)
+        |WHERE b.id = property
+        |RETURN b
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L123
+  test("Handle dependencies across WITH with SKIP - CREATE edited") {
+    val results = run(
+      """CREATE (a {prop: 'A', key: 0, id: 0}),
+        |       ({prop: 'B', key: 0, id: 1}),
+        |       ({prop: 'C', key: 0, id: 2})
+      """.stripMargin,
+      """MATCH (a)
+        |WITH a.prop AS property, a.key AS idToUse
+        |  ORDER BY property
+        |  SKIP 1
+        |MATCH (b)
+        |WHERE b.id = idToUse
+        |RETURN DISTINCT b
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L146
+  test("WHERE after WITH should filter results") {
+    val results = run(
+      """CREATE ({name: 'A'}),
+        |       ({name: 'B'}),
+        |       ({name: 'C'})
+      """.stripMargin,
+      """MATCH (a)
+        |WITH a
+        |WHERE a.name = 'B'
+        |RETURN a
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L166
+  test("WHERE after WITH can filter on top of an aggregation - edited") {
+    val results = run(
+      """CREATE (a {name: 'A'}),
+        |       (b {name: 'B'})
+        |CREATE (a)-[:REL]->(),
+        |       (a)-[:REL]->(),
+        |       (a)-[:REL]->(),
+        |       (b)-[:REL]->()
+      """.stripMargin,
+      """MATCH (a)-[:REL]->(b)
+        |WITH a, count(b) AS relCount
+        |WHERE relCount > 1
+        |RETURN a
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L189
+  ignore("ORDER BY on an aggregating key") {
+    val results = run(
+      """CREATE ({bar: 'A'}),
+        |       ({bar: 'A'}),
+        |       ({bar: 'B'})
+      """.stripMargin,
+      """MATCH (a)
+        |WITH a.bar AS bars, count(*) AS relCount
+        |ORDER BY a.bar
+        |RETURN *
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L210
+  ignore("ORDER BY a DISTINCT column") {
+    val results = run(
+      """CREATE ({bar: 'A'}),
+        |       ({bar: 'A'}),
+        |       ({bar: 'B'})
+      """.stripMargin,
+      """MATCH (a)
+        |WITH DISTINCT a.bar AS bars
+        |ORDER BY a.bar
+        |RETURN *
+      """.stripMargin
+    )
+    assert(results.size == 2)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L231
+  ignore("WHERE on a DISTINCT column") {
+    val results = run(
+      """CREATE ({bar: 'A'}),
+        |       ({bar: 'A'}),
+        |       ({bar: 'B'})
+      """.stripMargin,
+      """MATCH (a)
+        |WITH DISTINCT a.bar AS bars
+        |WHERE a.bar = 'B'
+        |RETURN *
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L251
+  test("A simple pattern with one bound endpoint - edited") {
+    val results = run(
+      """CREATE (:A {x: 'x1'})-[:REL]->(:B {x: 'x2'})""",
+      """MATCH (a:A)-[r:REL]->(b:B)
+        |WITH a AS b, b AS tmp, r AS r
+        |WITH b AS a, r
+        |ORDER BY a.x, b.x
+        |LIMIT 1
+        |MATCH (a)-[r:REL]->(b)
+        |RETURN a, r, b
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L271
+  ignore("Null handling") {
+    val results = run( //
+      "",
+      """OPTIONAL MATCH (a:Start)
+        |WITH a
+        |MATCH (a)-->(b)
+        |RETURN *
+      """.stripMargin
+    )
+    assert(results.size == 0)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L316
+  ignore("Single WITH using a predicate and aggregation") {
+    val results = run(
+      """CREATE ({prop: 43}), ({prop: 42})""",
+      """MATCH (n)
+        |WITH n
+        |WHERE n.prop = 42
+        |RETURN count(*)
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L334
+  ignore("Multiple WITHs using a predicate and aggregation") {
+    val results = run(
+      """CREATE (a {name: 'David'}),
+        |       (b {name: 'Other'}),
+        |       (c {name: 'NotOther'}),
+        |       (d {name: 'NotOther2'}),
+        |       (a)-[:REL]->(b),
+        |       (a)-[:REL]->(c),
+        |       (a)-[:REL]->(d),
+        |       (b)-[:REL]->(),
+        |       (b)-[:REL]->(),
+        |       (c)-[:REL]->(),
+        |       (c)-[:REL]->(),
+        |       (d)-[:REL]->()
+      """.stripMargin,
+      """MATCH (david {name: 'David'})-[:REL]-(otherPerson)-[:REL]->()
+        |WITH otherPerson, count(*) AS foaf
+        |WHERE foaf > 1
+        |WITH otherPerson
+        |WHERE otherPerson.name <> 'NotOther'
+        |RETURN count(*)
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  test("Simple collect") {
+    val results = run(
+      """CREATE (), ()
+      """.stripMargin,
+      """MATCH (n)
+        |RETURN collect(n) AS ns
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  test("Property collect") {
+    val results = run(
+      """CREATE ({p: 1}), ({p: 2})
+      """.stripMargin,
+      """MATCH (n)
+        |RETURN collect(n.p) AS ns
+      """.stripMargin
+    )
+    assert(results.size == 1)
+    assert(results.head(0) == Vector(1, 2))
+  }
+
+  test("Property collect on edge") {
+    val results = run(
+      """CREATE
+        |  (x:X {id: 99}),
+        |  (x)-[:REL]->({p: 1}),
+        |  (x)-[:REL]->({p: 2})
+      """.stripMargin,
+      """MATCH (x:X)-[:REL]->(n)
+        |RETURN x.id, collect(n.p) AS ns
+      """.stripMargin
+    )
+    assert(results.size == 1)
+    assert(results.head(0) == 99)
+    assert(results.head(1).asInstanceOf[Iterable[Any]].toSet == Vector(1, 2).toSet)
+  }
+
+  //
+  test("List selectors") {
+    val results = run(
+      """CREATE (:X { list: ['a', 'b'] })
+      """.stripMargin,
+      """MATCH (x:X)
+        |RETURN x.list[1]
+      """.stripMargin
+    )
+    assert(results.size == 1)
+    assert(results.head == Vector("b"))
+  }
+
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/OptionalMatchAcceptance.feature#L57
+  test("Respect predicates on the OPTIONAL MATCH") {
+    val results = run(
+      """CREATE (s:Single)""",
+      """MATCH (n:Single)
+        |OPTIONAL MATCH (n)-[r:REL]-(m)
+        |WHERE m.prop = 42
+        |RETURN m
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  //
+  ignore("Count empty") {
+    val results = run(
+      "",
+      """MATCH (n:X)
+        |RETURN count(n) AS c
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  //
+  ignore("Count empty on optional") {
+    val results = run(
+      """CREATE (n:X)""",
+      """MATCH (n:X)
+        |OPTIONAL MATCH (n)-[:REL]->(m)
+        |RETURN n, count(m) AS c
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
 
 //  //
 //  test("") {

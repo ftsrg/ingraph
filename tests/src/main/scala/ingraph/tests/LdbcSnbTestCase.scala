@@ -13,6 +13,9 @@ object LdbcSnbTestCase  {
 class LdbcSnbTestCase(workload: String, number: Int) extends TestCase with CSVData with GraphMLData {
   override def name: String = f"$workload-$number%02d"
 
+  override def graphMLPath: String = f"../graphs/ldbc-snb-${workload}/graphmls/${workload}-${number}%02d.graphml"
+  def csvDir(file: String): String = f"../graphs/ldbc-snb-${workload}/${number}%02d/${file}_0_0.csv"
+
   override def query: String = {
     def convert(v: Any): String = {
       v match {
@@ -44,7 +47,7 @@ class LdbcSnbTestCase(workload: String, number: Int) extends TestCase with CSVDa
       "tagclass" -> List("TagClass"),
       "tag" -> List("Tag")
     ) map {
-      case (file, labels) => f"../graphs/ldbc-snb-${workload}/${number}%02d/${file}_0_0.csv" -> labels
+      case (file, labels) => csvDir(file) -> labels
     }
   }
 
@@ -74,9 +77,8 @@ class LdbcSnbTestCase(workload: String, number: Int) extends TestCase with CSVDa
       "person_studyAt_organisation" -> "STUDY_OF",
       "person_workAt_organisation" -> "WORK_AT"
     ) map {
-      case (file, labels) => f"../graphs/ldbc-snb-${workload}/${number}%02d/${file}_0_0.csv" -> labels
+      case (file, labels) => csvDir(file) -> labels
     }
   }
 
-  override def graphMLPath: String = f"../graphs/ldbc-snb-${workload}/graphmls/${workload}-${number}%02d.graphml"
 }

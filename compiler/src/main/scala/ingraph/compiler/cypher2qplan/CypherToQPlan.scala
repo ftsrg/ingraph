@@ -73,9 +73,10 @@ object CypherToQPlan {
   }
 
   /**
-    * Given an unresolved QPlan, resolve its attribute-references.
+    * Given a raw QPlan, expand complex operations to a combination
+    * of more simple operations, like filter criteria given as a map in a vertex pattern
+    * is expanded into a selection node.
     *
-    * FIXME: Currently this is unimplemented, the QPlan is returned unchanged.
     * @param rawQueryPlan
     * @return
     */
@@ -84,9 +85,11 @@ object CypherToQPlan {
   }
 
   /**
-    * Given an unresolved QPlan, resolve its attribute-references.
+    * Given an unresolved QPlan, resolve its attribute-references and
+    * resolve the unresolved elements in the plan like UnresolvedFunction,
+    * UnresolvedProjection to either Grouping with explicit aggregation criteria
+    * or Projection.
     *
-    * FIXME: Currently this is unimplemented, the QPlan is returned unchanged.
     * @param unresolvedQueryPlan
     * @return
     */

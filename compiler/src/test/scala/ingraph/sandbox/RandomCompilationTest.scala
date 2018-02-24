@@ -1,5 +1,8 @@
 package ingraph.sandbox
 
+import ingraph.model.expr
+import ingraph.model.qplan
+
 class RandomCompilationTest extends CompilerTest {
   override val config = CompilerTestConfig(querySuitePath = None
     , compileQPlanOnly = false
@@ -313,7 +316,26 @@ class RandomCompilationTest extends CompilerTest {
   }
 
   test("should compile MATCH") {
-    compile("MATCH (n) RETURN n")
+    val stages = compile("MATCH (n) RETURN n, n.foo")
+    assert(stages.qplan.asInstanceOf[qplan.Production].child.asInstanceOf[qplan.Projection].projectList.length==2)
+  }
+
+  // see note in the QPlanResolver for resolving RETURN *
+  test("should compile MATCH RETURN *") {
+    val stages = compile("MATCH (n)-->(m) RETURN *")
+    assert(stages.qplan.asInstanceOf[qplan.Production].child.asInstanceOf[qplan.Projection].projectList.length==1)
+  }
+
+  test("should identify aggregation criteria after aggregation in RETURN") {
+    val stages = compile(
+      """MATCH
+        |  (message:Message)-[:IS_LOCATED_IN]->(destination:Country)
+        |RETURN
+        |  count(message) AS messageCount,
+        |  destination.name,
+        |  destination.population
+        |""".stripMargin)
+    assert(stages.qplan.asInstanceOf[qplan.Production].child.asInstanceOf[qplan.Grouping].aggregationCriteria.length==2)
   }
 
   test("should resolve aliased property lookup two query parts later") {
@@ -370,6 +392,15 @@ class RandomCompilationTest extends CompilerTest {
         |MATCH (p2)-[:OWNER]->(c:Car)
         |RETURN persons, p2, c
         |""".stripMargin)
+  }
+
+  test("should resolve edgelistattribute") {
+    val stages = compile(
+      """MATCH (post:Post)-[:REPLY_OF*]->(message:Message)
+        |RETURN post.id, message.id
+        |""".stripMargin)
+
+    assert(stages.qplan.find( p => p.isInstanceOf[qplan.Expand] ).get.asInstanceOf[qplan.Expand].edge.asInstanceOf[expr.EdgeListAttribute].resolvedName.isDefined)
   }
 }
 

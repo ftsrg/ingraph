@@ -2,7 +2,9 @@ package ingraph.tests
 
 import apoc.export.graphml.ExportGraphML
 import apoc.graph.Graphs
+import hu.bme.mit.ire.nodes.unary.ProductionNode
 import ingraph.driver.CypherDriverFactory
+import ingraph.model.fplan.Production
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.factory.GraphDatabaseSettings
 import org.neo4j.kernel.api.exceptions.KernelException
@@ -14,7 +16,7 @@ import org.supercsv.prefs.CsvPreference
 import scala.collection.JavaConverters._
 
 object TestRunners {
-  type Result = List[Map[String, AnyRef]]
+  type Result = List[Map[String, Any]]
   type TestRunner = (TestCase) => Result
 
   def neo4jTestRunner(tc: TestCase with GraphMLData): Result = {
@@ -65,12 +67,9 @@ object TestRunners {
         tc.relationshipCSVPaths.asJava,
         csvPreference
       )
-
-//      val result = queryHandler.adapter.result()
-//      result.zipWithIndex {
-//        case (e, i) => queryHandler.adapter.indexer.
-//      }
-      List()
+      val res = queryHandler.adapter.result()
+      val prod = queryHandler.adapter.plan.asInstanceOf[Production]
+      res.map(t => t.zip(prod.outputNames).map(kv => kv._2 -> kv._1).toMap).toList
     } finally if (driver != null) {
       driver.close()
     }

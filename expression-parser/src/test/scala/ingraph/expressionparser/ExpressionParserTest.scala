@@ -45,6 +45,12 @@ class ExpressionParserTest extends WordSpec {
       assert(!func(Vector(1, 1)))
     }
 
+    "handle comparison edge cases" in {
+      val func = parseFilter("""MATCH (n) WHERE n.x > 1 RETURN n.x""")
+      assert(func(Vector(0, 2)))
+      assert(!func(Vector(0, 1)))
+    }
+
     "parse complicated routesensor expression" in {
       val func = parseFilter("""MATCH (n) WHERE n.a is null and n.e is not null RETURN n.a""")
       assert(func(Vector(1, null, 1)))

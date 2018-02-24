@@ -63,11 +63,12 @@ object QPlanToJPlan {
     }
   }
 
+
   def expandToTransitiveEdges(src: VertexAttribute,
                               trg: VertexAttribute,
                               el: EdgeListAttribute,
                               dir: Direction): jplan.GetEdges = {
-    val e = EdgeAttribute(el.name, el.labels, el.properties)
+    val e = EdgeAttribute(el.name, el.labels, el.properties, el.isAnonymous, el.resolvedName)
     getEdgesForDirection(src, trg, e, dir)
   }
 

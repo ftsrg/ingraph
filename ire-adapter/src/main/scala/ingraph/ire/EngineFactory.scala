@@ -91,16 +91,19 @@ object EngineFactory {
                   case op: ThetaLeftOuterJoin =>
                     val theta = ExpressionParser[Boolean](op.condition)
                     newLocal(Props(new ThetaLeftOuterJoinNode(
-                      child, leftTupleWidth, rightTupleWidth, leftMask, rightMask, theta)))
-//              case op: TransitiveClosureJoin =>
-//                val minHops = op.getEdgeListVariable.getMinHops
-//                val maxHops = op.getEdgeListVariable.getMaxHops.getMaxHopsType match {
-//                  case MaxHopsType.LIMITED => op.getEdgeListVariable.getMaxHops.getHops
-//                  case MaxHopsType.UNLIMITED => Long.MaxValue
-//                }
-//              newLocal(Props(new TransitiveClosureJoinNode(child, leftTupleWidth, rightTupleWidth, leftMask,
-//                rightMask, op.internalSchema.length, mixHops, maxHops)))
-//                )))
+                      child, leftTupleWidth, rightTupleWidth, leftMask, rightMask, theta))
+                    )
+                  case op: TransitiveJoin =>
+                    val minHops = op.edgeList.minHops.getOrElse(1)
+                    val maxHops = op.edgeList.maxHops.getOrElse(Int.MaxValue)
+                    newLocal(Props(
+                      new TransitiveClosureJoinNode(
+                        child,
+                        leftTupleWidth, rightTupleWidth,
+                        leftMask, rightMask,
+                        op.internalSchema.length,
+                        minHops, maxHops))
+                    )
                 }
               }
               remaining += ForwardConnection(op.left, node.primary)
@@ -117,40 +120,29 @@ object EngineFactory {
 
     private def getEdges(op: GetEdges, expr: ForwardConnection) = {
       val labels = op.jnode.edge.labels.edgeLabels.toSeq
-      assert(labels.nonEmpty, s"Querying all edges is prohibitively exepensive, please use edge labels on $op")
+      assert(labels.nonEmpty, s"Querying all edges is prohibitively expensive, please use edge labels on $op")
       for (label <- labels) {
         edgeConverters.addBinding(label, op)
-        if (!op.jnode.directed) {
-          val reverse =
-            fplan.GetEdges(op.extraAttributes,
-              jplan.GetEdges(
-                op.jnode.trg,
-                op.jnode.src,
-                op.jnode.edge,
-                op.jnode.directed
-              )
-          )
-          edgeConverters.addBinding(label, reverse)
-        }
       }
-      inputs += (op.jnode.edge.name -> expr.child)
+      inputs += (op.toString() -> expr.child)
     }
 
     // unary nodes
 
     private def grouping(op: Grouping, expr: ForwardConnection) = {
       val aggregates = op.projectionTuple.map(e => ExpressionParser.parseAggregate(e))
-      val factories = aggregates.flatten.map(_._2()).toVector
+      val creators = aggregates.flatten.map(_._2).toVector
+      val factories: () => Vector[StatefulAggregate] = () => creators.map(_())
       val nonAggregates = op.projectionTuple.filter(op.aggregationCriteria.contains)
       var normalIndex = 0
-      var aggregateIndex = op.projectionTuple.size - op.aggregationCriteria.size - 1
+      var aggregateIndex = nonAggregates.size
       val projections = aggregates.map {
         case None => normalIndex += 1; normalIndex - 1
         case Some(_) => aggregateIndex += 1; aggregateIndex - 1
       }
       val aggregationMask = op.aggregationCriteria.map(e => ExpressionParser[Any](e)).toVector
 
-      newLocal(Props(new AggregationNode(expr.child, aggregationMask, () => factories, projections.toVector)))
+      newLocal(Props(new AggregationNode(expr.child, aggregationMask, factories, projections.toVector)))
     }
 
     private def selection(op: Selection, expr: ForwardConnection) = {
