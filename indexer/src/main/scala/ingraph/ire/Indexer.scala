@@ -48,17 +48,7 @@ class Indexer {
   val edgeSrcTgtTypeLookup = new BufferMultimap[((Long, Long), String), IngraphEdge]
 
   var labelsSeen: Long = 0
-
-  def clear(): Unit = {
-    mappers.clear()
-    vertexLookup.clear()
-    vertexLabelLookup.clear()
-    edgeLookup.clear()
-    edgeTypeLookup.clear()
-    edgeSrcTgtLookup.clear()
-    edgeSrcTgtTypeLookup.clear()
-  }
-
+  
   def fill(tupleMapper: EntityToTupleMapper): Unit = {
     for (vertex <- vertexLookup.values) {
       tupleMapper.addVertex(vertex)
