@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class LdbcSnbUpdateStreamCsvTest {
 
-	public static final String CSV_DIR = TestConstants.GRAPHS_DIR + "ldbc-snb-bi/update-streams/";
+	public static final String CSV_DIR = TestConstants.GRAPHS_DIR + "ldbc-snb-bi/sf-tiny/";
 
 	@Test
 	public void testLoad() throws IOException {

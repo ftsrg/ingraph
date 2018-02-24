@@ -1,12 +1,11 @@
 package ldbc
 
 import ingraph.bulkloader.csv.loader.LdbcUpdateStreamCsvLoader
-import ingraph.ire.{Indexer, IngraphEdge, IngraphVertex}
-import org.scalatest.FunSuite
+import ingraph.ire.{Indexer, IngraphVertex}
 
 import scala.collection.JavaConverters._
 
-class LdbcUpdateLoaderTest extends FunSuite {
+class LdbcUpdateToIngraphLoader(val indexer: Indexer) {
 
   implicit def longs(x: Any): Long = x.asInstanceOf[Long]
   implicit def string(x: Any): String = x.asInstanceOf[String]
@@ -14,9 +13,9 @@ class LdbcUpdateLoaderTest extends FunSuite {
   implicit def longList(x: Any): List[Long] = x.asInstanceOf[java.util.List[Object]].asScala.map(_.asInstanceOf[Long]).toList
   implicit def stringList(x: Any): List[String] = x.asInstanceOf[java.util.List[Object]].asScala.map(_.asInstanceOf[String]).toList
 
-  val CSV_DIR: String = "../graphs/ldbc-snb-bi/update-streams/"
-  val indexer = new Indexer()
-  test("parse streams") {
+  val CSV_DIR: String = "../graphs/ldbc-snb-bi/sf-tiny/"
+
+  def load() {
     val loader = new LdbcUpdateStreamCsvLoader(CSV_DIR)
 
     val updates: Iterable[LdbcUpdate] = for (update <- loader.getUpdates.asScala) yield {
@@ -24,8 +23,7 @@ class LdbcUpdateLoaderTest extends FunSuite {
       val updateType = u(2).asInstanceOf[Int]
 
       updateType match {
-        case 1 => Update1AddPerson         (u(3), u(4), u(5), u(6), u(7),
-          u(8), u(9), u(10), u(11), u(12), u(13), u(14), null, null)
+        case 1 => Update1AddPerson         (u(3), u(4), u(5), u(6), u(7), u(8), u(9), u(10), u(11), u(12), u(13), u(14), null, null)
         case 2 => Update2_3AddMessageLike  (u(3), u(4), u(5))
         case 3 => Update2_3AddMessageLike  (u(3), u(4), u(5))
         case 4 => Update4AddForum          (u(3), u(4), u(5), u(6), u(7))
@@ -38,15 +36,13 @@ class LdbcUpdateLoaderTest extends FunSuite {
 
   }
 
-  private val creationDate = "creationDate"
-
   def update(person: Update1AddPerson): Unit = {
     val p = IngraphVertex(person.personId, Set("Person"),
       Map("firstName" -> person.personFirstName,
         "lastName" -> person.personLastName,
         "gender" -> person.gender,
         "birthDay" -> person.birthday,
-        creationDate -> person.creationDate,
+        "creationDate" -> person.creationDate,
         "locationIp" -> person.locationIp,
         "browserUsed" -> person.browserUsed,
         "speaks" -> person.languages,
@@ -65,11 +61,11 @@ class LdbcUpdateLoaderTest extends FunSuite {
   }
 
   def update(like: Update2_3AddMessageLike): Unit = {
-   indexer.addEdge(indexer.newId(), like.personId, like.postId, "LIKES", Map(creationDate -> like.creationDate))
+    indexer.addEdge(indexer.newId(), like.personId, like.postId, "LIKES", Map("creationDate" -> like.creationDate))
   }
 
   def update(forum: Update4AddForum): Unit = {
-    indexer.addVertex(IngraphVertex(forum.forumId, Set("Forum"), Map(creationDate -> forum.creationDate)))
+    indexer.addVertex(IngraphVertex(forum.forumId, Set("Forum"), Map("creationDate" -> forum.creationDate)))
     indexer.addEdge(indexer.newId(), forum.forumId, forum.moderatorPersonId, "HAS_MODERATOR")
     for (tag <- forum.tagIds)
       indexer.addEdge(indexer.newId(), forum.forumId, tag, "HAS_TAG")
@@ -82,12 +78,12 @@ class LdbcUpdateLoaderTest extends FunSuite {
   def update(post: Update6AddPost): Unit = {
     indexer.addVertex(IngraphVertex(post.postId, Set("Post"),
       Map("imageFile" -> post.imageFile,
-      "creationDate" -> post.creationDate,
-      "locationIp" -> post.locationIp,
-      "browserUsed" -> post.browserUsed,
-      "language" -> post.language,
-      "content" -> post.content,
-      "length" -> post.length)))
+        "creationDate" -> post.creationDate,
+        "locationIp" -> post.locationIp,
+        "browserUsed" -> post.browserUsed,
+        "language" -> post.language,
+        "content" -> post.content,
+        "length" -> post.length)))
     indexer.addEdge(indexer.newId(), post.postId, post.authorPersonId, "HAS_CREATOR")
     indexer.addEdge(indexer.newId(), post.forumId, post.postId, "CONTAINER_OF")
     indexer.addEdge(indexer.newId(), post.postId, post.countryId, "IS_LOCATED_IN")
@@ -113,4 +109,5 @@ class LdbcUpdateLoaderTest extends FunSuite {
     indexer.addEdge(indexer.newId(), friend.person1Id, friend.person2Id, "KNOWS",
       Map("creationDate" -> friend.creationDate))
   }
+
 }

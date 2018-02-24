@@ -2,9 +2,9 @@ package ingraph.tests
 
 import apoc.export.graphml.ExportGraphML
 import apoc.graph.Graphs
-import hu.bme.mit.ire.nodes.unary.ProductionNode
 import ingraph.driver.CypherDriverFactory
 import ingraph.model.fplan.Production
+import ldbc.LdbcUpdateToIngraphLoader
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.factory.GraphDatabaseSettings
 import org.neo4j.kernel.api.exceptions.KernelException
@@ -56,7 +56,7 @@ object TestRunners {
     }
   }
 
-  def ingraphTestRunner(tc: TestCase with CSVData) : Result = {
+  def ingraphTestRunner(tc: LdbcSnbTestCase) : Result = {
     val driver = CypherDriverFactory.createIngraphDriver
     try {
       val session = driver.session
@@ -67,9 +67,15 @@ object TestRunners {
         tc.relationshipCSVPaths.asJava,
         csvPreference
       )
-      val res = queryHandler.adapter.result()
-      val prod = queryHandler.adapter.plan.asInstanceOf[Production]
-      res.map(t => t.zip(prod.outputNames).map(kv => kv._2 -> kv._1).toMap).toList
+      val res = queryHandler.result
+
+      val indexer = queryHandler.adapter.indexer
+      val loader = new LdbcUpdateToIngraphLoader(indexer)
+      loader.load()
+
+      val res2 = queryHandler.result
+
+      res
     } finally if (driver != null) {
       driver.close()
     }
