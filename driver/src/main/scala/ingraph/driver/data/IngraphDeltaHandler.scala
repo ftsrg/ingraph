@@ -12,7 +12,6 @@ abstract class IngraphDeltaHandler() extends ChangeListener {
   def onChange(positiveRecords: java.util.List[_ <: Record], negativeRecords: java.util.List[_ <: Record])
 
   final override def listener(positive: Vector[Tuple], negative: Vector[Tuple]): Unit = {
-
     val positiveRecords: java.util.List[_ <: Record] = repackager.repackageResult(positive)
     val negativeRecords: java.util.List[_ <: Record] = repackager.repackageResult(negative)
     onChange(positiveRecords, negativeRecords)
@@ -21,7 +20,7 @@ abstract class IngraphDeltaHandler() extends ChangeListener {
 
 class PrintDeltaHandler(val keys: Iterable  [String]) extends IngraphDeltaHandler {
   override def onChange(positiveRecords: java.util.List[_ <: Record], negativeRecords: java.util.List[_ <: Record]): Unit = {
-    positiveRecords.asScala.foreach(p => println(s"-$p"))
+    positiveRecords.asScala.foreach(p => println(s"+$p"))
     negativeRecords.asScala.foreach(n => println(s"-$n"))
   }
 }
