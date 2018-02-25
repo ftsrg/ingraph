@@ -118,7 +118,7 @@ class DataManipulationTest extends FunSuite {
 
   test("delete vertex by id works") {
     val indexer = initializeIndexer()
-    val oneOff = "MATCH (t:Train {id: 1}) DETACH DELETE t"
+    val oneOff = "MATCH (t:Train {internal_id: 1}) DETACH DELETE t"
     assert(indexer.vertexById(1L).nonEmpty)
     new IngraphOneTimeAdapter(oneOff, "del", indexer).terminate()
     assert(indexer.vertexById(1L).isEmpty)
@@ -127,7 +127,7 @@ class DataManipulationTest extends FunSuite {
 
   test("delete edge by id works") {
     val indexer = initializeIndexer()
-    val oneOff = "match (:Train)-[r:ON {id: 4}]->(:Segment) DELETE r"
+    val oneOff = "MATCH (:Train)-[r:ON {internal_id: 4}]->(:Segment) DELETE r"
     assert(indexer.edgeById(4L).nonEmpty)
     new IngraphOneTimeAdapter(oneOff, "del", indexer).terminate()
     assert(indexer.edgeById(4L).isEmpty)
