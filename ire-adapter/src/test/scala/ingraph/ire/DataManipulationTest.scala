@@ -115,4 +115,21 @@ class DataManipulationTest extends FunSuite {
 
     assert(whereIsAdapter.result() == Seq(Vector(-4964420948893066024L, 7564655870752979346L, 6137546356583794141L)))
   }
+
+  test("delete vertex by id works") {
+    val indexer = initializeIndexer()
+    val oneOff = "MATCH (t:Train {id: 1}) DETACH DELETE t"
+    assert(indexer.vertexById(1L).nonEmpty)
+    new IngraphOneTimeAdapter(oneOff, "del", indexer).terminate()
+    assert(indexer.vertexById(1L).isEmpty)
+  }
+
+
+  test("delete edge by id works") {
+    val indexer = initializeIndexer()
+    val oneOff = "match (:Train)-[r:ON {id: 4}]->(:Segment) DELETE r"
+    assert(indexer.edgeById(4L).nonEmpty)
+    new IngraphOneTimeAdapter(oneOff, "del", indexer).terminate()
+    assert(indexer.edgeById(4L).isEmpty)
+  }
 }
