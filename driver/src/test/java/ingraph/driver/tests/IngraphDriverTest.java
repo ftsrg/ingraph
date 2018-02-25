@@ -1,25 +1,20 @@
 package ingraph.driver.tests;
 
 import ingraph.driver.CypherDriverFactory;
-import org.junit.Ignore;
-import org.neo4j.driver.v1.Driver;
-import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.Session;
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.Transaction;
+import ingraph.driver.data.IngraphDeltaHandler;
+import ingraph.driver.data.IngraphQueryHandler;
+import ingraph.driver.data.PrintDeltaHandler;
+import ingraph.driver.ingraph.IngraphDriver;
+import org.junit.Test;
 
 public class IngraphDriverTest {
 
-	@Ignore
+	@Test
 	public void test() {
-		try (Driver driver = CypherDriverFactory.createIngraphDriver()) {
-			final Session session = driver.session();
-			final Transaction transaction = session.beginTransaction();
-			final StatementResult result = transaction.run("MATCH (n) RETURN n LIMIT 5");
-			while (result.hasNext()) {
-				final Record record = result.next();
-				System.out.println(record);
-			}
+		try (IngraphDriver driver = CypherDriverFactory.createIngraphDriver()) {
+			final IngraphQueryHandler handler = driver.session().registerQuery("q", "MATCH (n) RETURN n");
+			IngraphDeltaHandler listener = new PrintDeltaHandler(handler.keys());
+			handler.registerDeltaHandler(listener);
 		}
 	}
 

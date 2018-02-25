@@ -5,9 +5,9 @@ import org.neo4j.driver.internal.InternalRecord
 import org.neo4j.driver.v1.{Record, Value, Values}
 import scala.collection.JavaConverters._
 
-class Repackager(val keys : Vector[String]) {
+class TupleToRecordRepackager(val keys: Iterable[String]) {
 
-  val keysJava = keys.asJava
+  val keysJava = keys.toList.asJava
 
   def repackageResult(tuples: Iterable[Tuple]) : java.util.List[_ <: Record] = {
     tuples.map { repackageTuple(_) }.toList.asJava
