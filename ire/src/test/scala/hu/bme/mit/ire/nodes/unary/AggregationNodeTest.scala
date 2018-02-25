@@ -54,7 +54,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     "collect with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3, 0),
-        () => Vector(new StatefulCollect(Vector(2))), Vector(0, 1, 2)))) // (sex, city): (weapon)
+        () => Vector(new StatefulCollect(2)), Vector(0, 1, 2)))) // (sex, city): (weapon)
       counter ! ChangeSet(positive = tupleBag(odin))
       expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", cypherList("Gungnir")))))
       counter ! ChangeSet(positive = tupleBag(thor))
@@ -183,4 +183,29 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     }
   }
 
+  def TupleList(arg: Any*): Seq[Tuple] = arg.map(i => tuple(Vector(i)))
+
+  "StatefulDistinctCount" should {
+    "work" in {
+      val c = new StatefulDistinctCount(0)
+      c.maintainPositive(TupleList(1, 3, 2, 3))
+      assert(c.value() == 3)
+      c.maintainNegative(TupleList(3))
+      assert(c.value() == 3)
+      c.maintainNegative(TupleList(1, 2))
+      assert(c.value() == 1)
+    }
+  }
+
+  "StatefulDistinctCollect" should {
+    "work" in {
+      val c = new StatefulDistinctCollect(0)
+      c.maintainPositive(TupleList(1, 3, 2, 3))
+      assert(c.value() == TupleList(1, 3, 2).flatten) // :D
+      c.maintainNegative(TupleList(3))
+      assert(c.value() == TupleList(1, 3, 2).flatten)
+      c.maintainNegative(TupleList(3))
+      assert(c.value() == TupleList(1, 2).flatten)
+    }
+  }
 }

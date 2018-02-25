@@ -106,16 +106,19 @@ object ExpressionParser {
   }
 
   def parseAggregate(exp: Expression): Option[(Int, () => StatefulAggregate)] = exp match {
-    case FunctionInvocation(functor, Seq(TupleIndexLiteralAttribute(index, _, _)), _) =>
+    case FunctionInvocation(functor, Seq(TupleIndexLiteralAttribute(index, _, _)), isDistinct) =>
       import ingraph.model.misc.Function._
-      val factory = functor match {
+      val factory = if (!isDistinct) functor match {
         case AVG => () => new StatefulAverage(index)
         case COUNT => () => new NullAwareStatefulCount(index)
         case COUNT_ALL => () => new StatefulCount()
         case MAX => () => new StatefulMax(index)
         case MIN => () => new StatefulMin(index)
         case SUM => () => new StatefulSum(index)
-        case COLLECT => () => new StatefulCollect(Vector(index))
+        case COLLECT => () => new StatefulCollect(index)
+      } else functor match {
+        case COUNT => () => new StatefulDistinctCount(index)
+        case COLLECT => () => new StatefulDistinctCollect(index)
       }
       Some((index, factory))
     case _ => None

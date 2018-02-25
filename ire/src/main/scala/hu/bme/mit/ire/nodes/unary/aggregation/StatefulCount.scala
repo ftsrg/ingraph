@@ -2,6 +2,8 @@ package hu.bme.mit.ire.nodes.unary.aggregation
 
 import hu.bme.mit.ire.datatypes._
 
+import scala.collection.mutable
+
 class StatefulCount extends StatefulAggregate {
   private var count: Long = 0
 
@@ -22,4 +24,24 @@ class NullAwareStatefulCount(val index: Int) extends StatefulCount {
 
   override def maintainNegative(values: Iterable[Tuple]): Unit =
     super.maintainNegative(values.filter(t => t(index) != null))
+}
+
+class StatefulDistinctCount(index: Int) extends StatefulAggregate {
+  private var elements = mutable.Map[Any, Int]().withDefault(f => 0)
+
+  override def maintainPositive(values: Iterable[Tuple]): Unit = {
+    for (tuple <- values)
+      elements(tuple(index)) += 1
+  }
+
+  override def maintainNegative(values: Iterable[Tuple]): Unit = {
+    for (tuple <- values) {
+      val value = tuple(index)
+      elements(value) -= 1
+      if (elements(value) == 0)
+        elements.remove(value)
+    }
+  }
+
+  override def value(): Any = elements.keySet.size
 }
