@@ -1,11 +1,12 @@
 package ingraph.driver.data
 
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.listeners.ChangeListener
+import hu.bme.mit.ire.listeners.{ChangeListener, ConsistentChangeListener}
 import org.neo4j.driver.v1.Record
+
 import scala.collection.JavaConverters._
 
-abstract class IngraphDeltaHandler() extends ChangeListener {
+abstract class IngraphDeltaHandler() extends ConsistentChangeListener {
   val keys: Iterable[String]
   val repackager = new TupleToRecordRepackager(keys)
 

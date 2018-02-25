@@ -4,19 +4,29 @@ import hu.bme.mit.ire.datatypes.Tuple
 
 import scala.collection.mutable
 
-abstract class ChangeListener {
+trait ChangeListener {
+  def added(tuple: Tuple)
+  def removed(tuple: Tuple)
+  def terminated()
+}
+
+abstract class ConsistentChangeListener extends ChangeListener {
   val positive = new mutable.ListBuffer[Tuple]
   val negative = new mutable.ListBuffer[Tuple]
 
-  def added(tuple: Tuple) = positive += tuple
+  override def added(tuple: Tuple): Unit = positive += tuple
 
-  def removed(tuple: Tuple) = negative += tuple
+  override def removed(tuple: Tuple): Unit = negative += tuple
 
-  def terminated() = {
+  override def terminated(): Unit = {
     listener(positive.toVector, negative.toVector)
     positive.clear()
     negative.clear()
   }
 
   def listener(positive: Vector[Tuple], negative: Vector[Tuple])
+}
+
+abstract class InstantChangeListener extends ChangeListener {
+  override def terminated(): Unit = {}
 }
