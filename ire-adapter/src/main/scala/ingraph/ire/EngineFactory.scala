@@ -16,7 +16,7 @@ import ingraph.model.fplan
 import ingraph.model.fplan._
 import ingraph.model.jplan
 import ingraph.parse.ExpressionParser
-import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression}
+import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression, Literal}
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
@@ -201,12 +201,12 @@ object EngineFactory {
 
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
         val func = op.attribute match {
-          case tea: TupleEdgeAttribute =>
+          case n: TupleEdgeAttribute =>
             // you've got to love the Law of Demeter
-            val demeter = tea.edge.labels.edgeLabels.head
-            val sourceIndex = ExpressionParser[Long](tea.src)
-            val targetIndex = ExpressionParser[Long](tea.trg)
-            val props = propsParser(tea)
+            val demeter = n.edge.labels.edgeLabels.head
+            val sourceIndex = ExpressionParser[Long](n.src)
+            val targetIndex = ExpressionParser[Long](n.trg)
+            val props = propsParser(n)
             (t: Tuple) => {
               indexer.addEdge(
                 indexer.newId(),
@@ -219,7 +219,13 @@ object EngineFactory {
           case variable: VertexAttribute =>
             val props = propsParser(variable)
             (t: Tuple) =>
-              indexer.addVertex(IngraphVertex(indexer.newId(), variable.labels.vertexLabels, props(t))).id
+              indexer.addVertex(IngraphVertex(
+                variable.properties.get(TupleConstants.ID_KEY) match {
+                  case None => indexer.newId()
+                  case Some(Literal(id, _)) => id.asInstanceOf[Long]
+                },
+                variable.labels.vertexLabels, props(t)
+              )).id
         }
 
       (m: ReteMessage) => {

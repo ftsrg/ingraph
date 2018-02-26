@@ -44,9 +44,9 @@ class IndexerTest extends WordSpec {
       assert(maybeVertex.map(_.edgesIn("owns").head.targetVertex.id).contains(2))
     }
 
-    "can query all vertices" in {
-      assert(indexer.verticesJava().asScala.map(_.id).toSet == Set(1, 2, 3))
-    }
+//    "can query all vertices" in {
+//      assert(indexer.verticesJava().asScala.map(_.id).toSet == Set(1, 2, 3))
+//    }
 
   }
 }
