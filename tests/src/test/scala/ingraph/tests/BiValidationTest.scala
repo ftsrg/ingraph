@@ -1,5 +1,6 @@
 package ingraph.tests
 
+import ingraph.testrunners.{IngraphTestRunner, Neo4jTestRunner}
 import org.scalatest.FunSuite
 
 class BiValidationTest extends FunSuite {
@@ -21,10 +22,10 @@ class BiValidationTest extends FunSuite {
   testCases.foreach {
     tc =>
       test(s"${tc.name}") {
-        val ingraphResults = TestRunners.ingraphTestRunner(tc)
+        val ingraphResults = IngraphTestRunner.run(tc)
         println("ingraph results: " + ingraphResults.map(x => x.toSeq.sortBy(_._1)))
 
-        val neo4jResults   = TestRunners.neo4jTestRunner(tc)
+        val neo4jResults   = Neo4jTestRunner.run(tc)
         println("neo4j results:   " + neo4jResults  .map(x => x.toSeq.sortBy(_._1)))
         assert(ingraphResults == neo4jResults)
       }
