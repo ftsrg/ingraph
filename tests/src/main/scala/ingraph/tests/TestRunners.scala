@@ -1,9 +1,14 @@
 package ingraph.tests
 
+import java.util.concurrent.TimeUnit
+
 import apoc.export.graphml.ExportGraphML
 import apoc.graph.Graphs
+import com.google.common.base.Stopwatch
 import ingraph.driver.CypherDriverFactory
+import ingraph.driver.data.PrintDeltaHandler
 import ingraph.ire.IngraphOneTimeAdapter
+import ldbc.LdbcUpdateToIngraphLoader
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.factory.GraphDatabaseSettings
 import org.neo4j.kernel.api.exceptions.KernelException
@@ -61,6 +66,8 @@ object TestRunners {
       val session = driver.session
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
       val queryHandler = session.registerQuery(tc.name, tc.query)
+      queryHandler.registerDeltaHandler(new PrintDeltaHandler(queryHandler.keys))
+
       queryHandler.readCsv(
         tc.nodeCSVPaths.mapValues(_.asJava).asJava,
         tc.relationshipCSVPaths.asJava,
@@ -70,13 +77,27 @@ object TestRunners {
 
       val indexer = queryHandler.adapter.indexer
 
-//      val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
-//      loader.load()
+//      val s = Stopwatch.createStarted()
+//      val onetime = new IngraphOneTimeAdapter(
+//        // sf01: 32985348834423
+//        // sf03: 13194139533500
+//        // sf1: 4398046516185
+//        """
+//          |MATCH (p:Person {id: 32985348834423})
+//          |DETACH DELETE p
+//        """.stripMargin,
+//        "del", indexer)
+//      onetime.terminate()
+//      val res2 = queryHandler.result
+//      println("Update time: " + s.elapsed(TimeUnit.MILLISECONDS))
 
-      val createAdapter = new IngraphOneTimeAdapter("CREATE (p:Person {id: 99999})", "create", indexer)
-      createAdapter.terminate()
+      val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
+      loader.load()
 
       val res2 = queryHandler.result
+
+      println(res)
+      println(res2)
 
       res
     } finally if (driver != null) {

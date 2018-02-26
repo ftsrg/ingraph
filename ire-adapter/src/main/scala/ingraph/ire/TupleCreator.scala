@@ -7,7 +7,7 @@ import ingraph.model.fplan.{GetEdges, GetVertices}
 import org.apache.spark.sql.catalyst.expressions.Literal
 
 object TupleConstants {
-  def INTERNAL_ID_PROPERTY = "internal_id"
+  def INTERNAL_ID_PROPERTY = "id"
 }
 
 object PropertyTransformer {
@@ -109,13 +109,13 @@ class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
     val opLabels = op.jnode.v.labels.vertexLabels
     val vertices = op.jnode.v.properties.get(TupleConstants.INTERNAL_ID_PROPERTY) match {
       case None =>
-
         indexer.verticesByLabel(opLabels.head).filter(v => opLabels.subsetOf(v.labels))
       case Some(Literal(id, _)) =>
         val vertex = indexer.vertexById(id.asInstanceOf[Long]).get
         assert(opLabels.subsetOf(vertex.labels), "Wrong labels on direct delete")
         Seq(vertex)
     }
+    println("picked>" + vertices.toList)
     for (vertex <- vertices) {
       val tuple = VertexTransformer(vertex, op, idParser)
       transaction.add(op.jnode.v.name, tuple)
