@@ -10,20 +10,8 @@ object LdbcSnbTestCase  {
   private val gson = new Gson()
 }
 
-class LdbcSnbTestCase(workload: String, number: Int) extends TestCase with CSVData with GraphMLData {
+class LdbcSnbTestCase(workload: String, number: Int, csvDir: String, csvPostfix: String) extends TestCase with CSVData {
   override def name: String = f"$workload-$number%02d"
-
-  def csvDir(file: String): String = csvDir + f"/${file}_0_0.csv"
-
-//  override def graphMLPath: String = f"../graphs/ldbc-snb-${workload}/graphmls/${workload}-${number}%02d.graphml"
-//  def csvDir: String = f"../graphs/ldbc-snb-${workload}/${number}%02d"
-
-  override def graphMLPath: String = f"../graphs/ldbc-snb-bi/graphmls/sf-tiny.graphml"
-  def csvDir: String = f"../graphs/ldbc-snb-bi/sf-tiny/"
-
-//  val sf = "03"
-//  override def graphMLPath: String = f"/home/szarnyasg/Dropbox/ldbc_test_data/social_network_sf"+sf+"/snb_"+sf+".graphml"
-//  def csvDir: String = f"/home/szarnyasg/Dropbox/ldbc_test_data/social_network_sf" + sf
 
   override def query: String = {
     def convert(v: Any): String = {
@@ -56,7 +44,7 @@ class LdbcSnbTestCase(workload: String, number: Int) extends TestCase with CSVDa
       "tagclass" -> List("TagClass"),
       "tag" -> List("Tag")
     ) map {
-      case (file, labels) => csvDir(file) -> labels
+      case (file, labels) => (csvDir + file + csvPostfix) -> labels
     }
   }
 
@@ -86,7 +74,7 @@ class LdbcSnbTestCase(workload: String, number: Int) extends TestCase with CSVDa
       "person_studyAt_organisation" -> "STUDY_OF",
       "person_workAt_organisation" -> "WORK_AT"
     ) map {
-      case (file, labels) => csvDir(file) -> labels
+      case (file, labels) => (csvDir + file + csvPostfix) -> labels
     }
   }
 
