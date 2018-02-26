@@ -27,6 +27,7 @@
 <edge id="e2" source="n4" target="n1" label="LIKES"><data key="label">LIKES</data><data key="creationDate">20100214153210447</data></edge>
 <edge id="e3" source="n3" target="n5" label="LIKES"><data key="label">LIKES</data><data key="creationDate">20100214153210447</data></edge>
 <edge id="e4" source="n5" target="n2" label="HAS_CREATOR"><data key="label">HAS_CREATOR</data></edge>
+<edge id="e5" source="n0" target="n6" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
 <edge id="e6" source="n5" target="n6" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
 </graph>
 </graphml>
