@@ -20,7 +20,7 @@ class IngraphIncrementalAdapter(
 
   override val tupleMapper = new TupleCreator(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
-    engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap) with LongIdParser
+    engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap, LongIdParser)
 
   tupleMapper.transaction = transactionFactory.newBatchTransaction()
   indexer.subscribe(tupleMapper)

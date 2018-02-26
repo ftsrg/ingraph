@@ -1,31 +1,28 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.{TupleCreator, TransactionFactory}
+import hu.bme.mit.ire.{PullTupleCreator, TransactionFactory, TupleCreator}
 import ingraph.compiler.FPlanParser
 
 class IngraphOneTimeAdapter(
-    override val querySpecification: String,
-    override val queryName: String,
-    override val indexer: Indexer = new Indexer()
-  ) extends AbstractIngraphAdapter {
+    val querySpecification: String,
+    val queryName: String,
+    val indexer: Indexer = new Indexer()
+  ) {
 
-  override val plan = FPlanParser.parse(querySpecification)
-  override val engine = EngineFactory.createQueryEngine(plan, indexer)
+  val plan = FPlanParser.parse(querySpecification)
+  val engine = EngineFactory.createQueryEngine(plan, indexer)
 
   val transactionFactory = new TransactionFactory(16)
   transactionFactory.subscribe(engine.inputLookup)
+  val transaction = transactionFactory.newBatchTransaction()
+  new PullTupleCreator(
+    engine.vertexConverters.values.flatten.toVector.distinct,
+    engine.edgeConverters.values.flatten.toVector.distinct,
+    indexer, transaction, LongIdParser)
 
-  override val tupleMapper = new TupleCreator(
-    engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
-    engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap) with LongIdParser
-
-  tupleMapper.transaction = transactionFactory.newBatchTransaction()
-  indexer.fill(tupleMapper)
-
-  // Do this on initialization? Make this an object?
   def terminate(): Iterable[Tuple] = {
-    tupleMapper.transaction.close()
+    transaction.close()
     engine.getResults()
   }
 }

@@ -11,7 +11,7 @@ import org.junit.Test;
 public class IngraphDriverTest {
 
 	@Test
-	public void test() {
+	public void changeListenerTest() {
 		try (IngraphDriver driver = CypherDriverFactory.createIngraphDriver()) {
 			// a single session uses the same indexer
 			final IngraphSession session = driver.session();

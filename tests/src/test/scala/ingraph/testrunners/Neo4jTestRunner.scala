@@ -1,24 +1,20 @@
-package ingraph.tests
+package ingraph.testrunners
 
 import apoc.export.graphml.ExportGraphML
 import apoc.graph.Graphs
-import ingraph.driver.CypherDriverFactory
-import ingraph.ire.IngraphOneTimeAdapter
+import ingraph.tests.{GraphMLData, TestCase}
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.factory.GraphDatabaseSettings
 import org.neo4j.kernel.api.exceptions.KernelException
 import org.neo4j.kernel.impl.proc.Procedures
 import org.neo4j.kernel.internal.GraphDatabaseAPI
 import org.neo4j.test.TestGraphDatabaseFactory
-import org.supercsv.prefs.CsvPreference
 
 import scala.collection.JavaConverters._
 
-object TestRunners {
-  type Result = List[Map[String, Any]]
-  type TestRunner = (TestCase) => Result
+object Neo4jTestRunner {
 
-  def neo4jTestRunner(tc: TestCase with GraphMLData): Result = {
+  def run(tc: TestCase with GraphMLData): List[Map[String, Any]] = {
     @throws[KernelException]
     def registerProcedure(db: GraphDatabaseService, procedures: Class[_]*): Unit = {
       val proceduresService = db.asInstanceOf[GraphDatabaseAPI].getDependencyResolver.resolveDependency(classOf[Procedures])
@@ -42,8 +38,9 @@ object TestRunners {
     registerProcedure(gds, classOf[ExportGraphML], classOf[Graphs])
 
     val trans = gds.beginTx()
+    val graphml = s"CALL apoc.import.graphml('${tc.graphMLPath}', {batchSize: 10000, readLabels: true})"
     try {
-      gds.execute(s"CALL apoc.import.graphml('${tc.graphMLPath}', {batchSize: 10000, readLabels: true})")
+      gds.execute(graphml)
       gds
         .execute(tc.query)
         .asScala
@@ -55,32 +52,4 @@ object TestRunners {
     }
   }
 
-  def ingraphTestRunner(tc: LdbcSnbTestCase) : Result = {
-    val driver = CypherDriverFactory.createIngraphDriver
-    try {
-      val session = driver.session
-      val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
-      val queryHandler = session.registerQuery(tc.name, tc.query)
-      queryHandler.readCsv(
-        tc.nodeCSVPaths.mapValues(_.asJava).asJava,
-        tc.relationshipCSVPaths.asJava,
-        csvPreference
-      )
-      val res = queryHandler.result
-
-      val indexer = queryHandler.adapter.indexer
-
-//      val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
-//      loader.load()
-
-      val createAdapter = new IngraphOneTimeAdapter("CREATE (p:Person {id: 99999})", "create", indexer)
-      createAdapter.terminate()
-
-      val res2 = queryHandler.result
-
-      res
-    } finally if (driver != null) {
-      driver.close()
-    }
-  }
 }

@@ -57,7 +57,7 @@ class DataManipulationTest extends FunSuite {
     val whereIsTrain = "MATCH (t:Train) RETURN t"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "something", indexer)
 
-    assert(whereIsAdapter.result() == List())
+    assert(whereIsAdapter.result().isEmpty)
   }
 
   test("delete vertex works incrementally") {
@@ -69,7 +69,19 @@ class DataManipulationTest extends FunSuite {
     val oneOff = "MATCH (t:Train) DETACH DELETE t"
     new IngraphOneTimeAdapter(oneOff, "remove", indexer).terminate()
 
-    assert(whereIsAdapter.result() == List())
+    assert(whereIsAdapter.result().isEmpty)
+  }
+
+  test("create vertex works incrementally") {
+    val indexer = initializeIndexer()
+
+    val whereIsTrain = "MATCH (t:Train) RETURN t"
+    val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "something", indexer)
+
+    val oneOff = "CREATE (t:Train)"
+    new IngraphOneTimeAdapter(oneOff, "create", indexer).terminate()
+
+    assert(whereIsAdapter.result().size == 2)
   }
 
   test("create constant vertex works") {
@@ -126,5 +138,22 @@ class DataManipulationTest extends FunSuite {
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
 
     assert(whereIsAdapter.result() == Seq(Vector(-4964420948893066024L, 7564655870752979346L, 6137546356583794141L)))
+  }
+
+  test("delete vertex by id works") {
+    val indexer = initializeIndexer()
+    val oneOff = "MATCH (t:Train {id: 1}) DETACH DELETE t"
+    assert(indexer.verticesById(1L).nonEmpty)
+    new IngraphOneTimeAdapter(oneOff, "del", indexer).terminate()
+    assert(indexer.verticesById(1L).isEmpty)
+  }
+
+
+  test("delete edge by id works") {
+    val indexer = initializeIndexer()
+    val oneOff = "match (:Train)-[r:ON {id: 4}]->(:Segment) DELETE r"
+    assert(indexer.edgeById(4L).nonEmpty)
+    new IngraphOneTimeAdapter(oneOff, "del", indexer).terminate()
+    assert(indexer.edgeById(4L).isEmpty)
   }
 }
