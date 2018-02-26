@@ -143,9 +143,9 @@ class DataManipulationTest extends FunSuite {
   test("delete vertex by id works") {
     val indexer = initializeIndexer()
     val oneOff = "MATCH (t:Train {id: 1}) DETACH DELETE t"
-    assert(indexer.vertexById(1L).nonEmpty)
+    assert(indexer.verticesById(1L).nonEmpty)
     new IngraphOneTimeAdapter(oneOff, "del", indexer).terminate()
-    assert(indexer.vertexById(1L).isEmpty)
+    assert(indexer.verticesById(1L).isEmpty)
   }
 
 

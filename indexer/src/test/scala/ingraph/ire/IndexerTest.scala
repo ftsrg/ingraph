@@ -33,13 +33,13 @@ class IndexerTest extends WordSpec {
     }
 
     "return vertices by id" in {
-      val cat = indexer.vertexById(3).get
+      val cat = indexer.verticesById(3).get
       assert(cat.id == 3)
       assert(cat.edgesOut("hates").map(_.targetVertex.id).toSet == Set(1, 2))
     }
 
     "make create navigable entities" in {
-      val maybeVertex = indexer.vertexById(2)
+      val maybeVertex = indexer.verticesById(2)
       assert(maybeVertex.map(_.edgesOut("owns").head.sourceVertex.id).contains(2))
       assert(maybeVertex.map(_.edgesIn("owns").head.targetVertex.id).contains(2))
     }

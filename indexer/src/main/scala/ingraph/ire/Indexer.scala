@@ -94,8 +94,8 @@ class Indexer {
     val properties: Map[String, Any] = relation.asMap().toMap
     val sourceVertex: IngraphVertex = vertexLookup(relation.startNodeId())
     val targetVertex: IngraphVertex = vertexLookup(relation.endNodeId())
-    val label: String = relation.`type`()
-    val edge = IngraphEdge(id, sourceVertex, targetVertex, label, properties)
+    val `type`: String = relation.`type`()
+    val edge = IngraphEdge(id, sourceVertex, targetVertex, `type`, properties)
     addEdge(edge)
   }
 
@@ -110,8 +110,8 @@ class Indexer {
     edge
   }
 
-  def addEdge(id: Long, sourceId: Long, targetId: Long, label: String, props: Map[String, Any] = Map()): IngraphEdge = {
-    addEdge(IngraphEdge(id, vertexLookup(sourceId), vertexLookup(targetId), label, props))
+  def addEdge(id: Long, sourceId: Long, targetId: Long, `type`: String, props: Map[String, Any] = Map()): IngraphEdge = {
+    addEdge(IngraphEdge(id, vertexLookup(sourceId), vertexLookup(targetId), `type`, props))
   }
 
   def removeEdgeById(id: Long): Unit = {
@@ -125,13 +125,16 @@ class Indexer {
 
   def edgesBySourceAndTargetAndType(source: IngraphVertex, target: IngraphVertex, `type`: String) =
     edgeSrcTgtTypeLookup.getOrElse(((source.id, target.id), `type`), Seq()).iterator
-  def vertexById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
-  def vertexByIdLabel(id: Long, label: String): Option[IngraphVertex] = vertexIdLabelLookup.get((id, label))
-  def edgeById(id: Long): Option[IngraphEdge] = edgeLookup.get(id)
-  def vertices(): Iterator[IngraphVertex] = vertexLookup.valuesIterator
+
+  def verticesById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
+  def verticesByIdLabel(id: Long, label: String): Option[IngraphVertex] = vertexIdLabelLookup.get((id, label))
   def verticesByLabel(label: String): Iterator[IngraphVertex] = vertexLabelLookup.getOrElse(label, Seq()).iterator
+  def vertices(): Iterator[IngraphVertex] = vertexLookup.valuesIterator
+
   def edges(): Iterator[IngraphEdge] = edgeLookup.valuesIterator
+  def edgeById(id: Long): Option[IngraphEdge] = edgeLookup.get(id)
   def edgesByType(label: String): Iterator[IngraphEdge] = edgeTypeLookup.getOrElse(label, Seq()).iterator
+
   def getNumberOfVertices(): Int = vertexLookup.size
   def getNumberOfEdges(): Int = edgeLookup.size
   def getNumberOfLabels(): Int = vertexLabelLookup.keySet.size
