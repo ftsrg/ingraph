@@ -412,7 +412,7 @@ class TckEngineTest extends FunSuite {
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L123
   test("Handle dependencies across WITH with SKIP - CREATE edited") {
     val results = run(
-      """CREATE (a {prop: 'A', key: 0, id: 0}),
+      """CREATE ({prop: 'A', key: 0, id: 0}),
         |       ({prop: 'B', key: 0, id: 1}),
         |       ({prop: 'C', key: 0, id: 2})
       """.stripMargin,

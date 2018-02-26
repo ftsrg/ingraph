@@ -27,7 +27,6 @@ class IndexerTest extends WordSpec {
   }
 
   "Indexer" should {
-
     "return edges by type" in {
       assert(indexer.edgesByType("hates").map(_.id).toSet == Set(6, 7, 9))
       assert(indexer.edgesByType("eats").map(_.id).toSet == Set(8))

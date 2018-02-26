@@ -201,12 +201,12 @@ object EngineFactory {
 
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
         val func = op.attribute match {
-          case n: TupleEdgeAttribute =>
+          case tea: TupleEdgeAttribute =>
             // you've got to love the Law of Demeter
-            val demeter = n.edge.labels.edgeLabels.head
-            val sourceIndex = ExpressionParser[Long](n.src)
-            val targetIndex = ExpressionParser[Long](n.trg)
-            val props = propsParser(n)
+            val demeter = tea.edge.labels.edgeLabels.head
+            val sourceIndex = ExpressionParser[Long](tea.src)
+            val targetIndex = ExpressionParser[Long](tea.trg)
+            val props = propsParser(tea)
             (t: Tuple) => {
               indexer.addEdge(
                 indexer.newId(),
