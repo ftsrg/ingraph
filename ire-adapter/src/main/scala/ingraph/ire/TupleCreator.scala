@@ -6,9 +6,13 @@ import ingraph.model.expr.{EdgeAttribute, PropertyAttribute, VertexAttribute}
 import ingraph.model.fplan.{GetEdges, GetVertices}
 import org.apache.spark.sql.catalyst.expressions.Literal
 
+object TupleConstants {
+  def INTERNAL_ID_PROPERTY = "id"
+}
+
 object PropertyTransformer {
   def apply(properties: Map[String, Any], key: String, id: Long): Any = {
-    if (key == "id")
+    if (key == TupleConstants.INTERNAL_ID_PROPERTY)
       id
     else
       properties.getOrElse(key, null)
@@ -103,15 +107,15 @@ class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
                        indexer: Indexer, transaction: Transaction, idParser: IdParser = PlainIdParser) {
   for (op <- vertexOps) {
     val opLabels = op.jnode.v.labels.vertexLabels
-    val vertices = op.jnode.v.properties.get("id") match {
+    val vertices = op.jnode.v.properties.get(TupleConstants.INTERNAL_ID_PROPERTY) match {
       case None =>
-
         indexer.verticesByLabel(opLabels.head).filter(v => opLabels.subsetOf(v.labels))
       case Some(Literal(id, _)) =>
         val vertex = indexer.vertexById(id.asInstanceOf[Long]).get
         assert(opLabels.subsetOf(vertex.labels), "Wrong labels on direct delete")
         Seq(vertex)
     }
+    println("picked>" + vertices.toList)
     for (vertex <- vertices) {
       val tuple = VertexTransformer(vertex, op, idParser)
       transaction.add(op.jnode.v.name, tuple)
@@ -122,7 +126,7 @@ class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
     val sourceLabels = operator.jnode.src.labels.vertexLabels
     val targetLabels = operator.jnode.trg.labels.vertexLabels
     val labels = operator.jnode.edge.labels.edgeLabels
-    val edges: Iterable[IngraphEdge] = operator.jnode.edge.properties.get("id") match {
+    val edges: Iterable[IngraphEdge] = operator.jnode.edge.properties.get(TupleConstants.INTERNAL_ID_PROPERTY) match {
       case None =>
         (for (label <- labels)
           yield {
