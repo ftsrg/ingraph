@@ -9,16 +9,16 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
   Vector(
     TestCase("PosLength", 1, 95),
     TestCase("RouteSensor", 1, 18),
-//    TestCase("SemaphoreNeighbor", 1, 3),
+    TestCase("SemaphoreNeighbor", 1, 3),
     TestCase("SwitchMonitored", 1, 0),
-//    TestCase("SwitchSet", 1, 5),
+    TestCase("SwitchSet", 1, 5),
     TestCase("ConnectedSegments", 1, 8),
     //
     TestCase("PosLength", 2, 208),
     TestCase("RouteSensor", 2, 33),
-//    TestCase("SemaphoreNeighbor", 2, 6),
+    TestCase("SemaphoreNeighbor", 2, 6),
     TestCase("SwitchMonitored", 2, 2),
-//    TestCase("SwitchSet", 2, 8),
+    TestCase("SwitchSet", 2, 8),
     TestCase("ConnectedSegments", 2, 16),
     null
   ).filter(_ != null).foreach(
