@@ -106,18 +106,20 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
 class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
                        indexer: Indexer, transaction: Transaction, idParser: IdParser = PlainIdParser) {
   for (op <- vertexOps) {
-    val opLabels = op.jnode.v.labels.vertexLabels
-    val vertices = op.jnode.v.properties.get(TupleConstants.ID_KEY) match {
+    val v = op.jnode.v
+    val opLabels = v.labels.vertexLabels
+
+    val vertices = v.properties.get(TupleConstants.ID_KEY) match {
       case None =>
         indexer.verticesByLabel(opLabels.head).filter(v => opLabels.subsetOf(v.labels))
       case Some(Literal(id, _)) =>
-        val vertex = indexer.vertexById(id.asInstanceOf[Long]).get
+        val vertex = indexer.vertexByIdLabel(id.asInstanceOf[Long], v.labels.vertexLabels.head).get
         assert(opLabels.subsetOf(vertex.labels), "Wrong labels on direct delete")
         Seq(vertex)
     }
     for (vertex <- vertices) {
       val tuple = VertexTransformer(vertex, op, idParser)
-      transaction.add(op.jnode.v.name, tuple)
+      transaction.add(v.name, tuple)
     }
   }
 

@@ -9,9 +9,10 @@ public class IdSpaces {
 	private Long currentId = 0L;
 
 	public Long add(String idSpaceName, Object o) {
-		idSpaces.putIfAbsent(idSpaceName, new IdSpace());
-		currentId = idSpaces.get(idSpaceName).add(o, currentId);
-		return currentId;
+//		idSpaces.putIfAbsent(idSpaceName, new IdSpace());
+//		currentId = idSpaces.get(idSpaceName).add(o, currentId);
+//		return currentId;
+		return (Long) o;
 	}
 
 	public Object get(String idSpaceName, Long id) {
