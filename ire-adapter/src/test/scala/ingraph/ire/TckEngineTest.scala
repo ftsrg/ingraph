@@ -632,7 +632,6 @@ class TckEngineTest extends FunSuite {
     assert(results.head == Vector("b"))
   }
 
-
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/OptionalMatchAcceptance.feature#L57
   test("Respect predicates on the OPTIONAL MATCH") {
     val results = run(
@@ -664,6 +663,40 @@ class TckEngineTest extends FunSuite {
       """MATCH (n:X)
         |OPTIONAL MATCH (n)-[:REL]->(m)
         |RETURN n, count(m) AS c
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // custom aggregation test
+  test("Count DISTINCT") {
+    val results = run(
+      """CREATE
+        | (p1:Person),
+        | (p2:Person),
+        | (c:City),
+        | (p1)-[:LIVES_IN]->(c),
+        | (p2)-[:LIVES_IN]->(c)
+      """.stripMargin,
+      """MATCH (p:Person)-[:LIVES_IN]->(c:City)
+        |RETURN count(DISTINCT c) AS cc
+      """.stripMargin
+    )
+    assert(results.size == 1)
+  }
+
+  // custom aggregation test
+  test("Count DISTINCT properties") {
+    val results = run(
+      """CREATE
+        | (p1:Person {name: 'Alan'}),
+        | (p2:Person {name: 'Alan'}),
+        | (c:City),
+        | (p1)-[:LIVES_IN]->(c),
+        | (p2)-[:LIVES_IN]->(c)
+      """.stripMargin,
+      """MATCH (p:Person)-[:LIVES_IN]->(c:City)
+        |RETURN count(DISTINCT p.name) AS ps
       """.stripMargin
     )
     assert(results.size == 1)
