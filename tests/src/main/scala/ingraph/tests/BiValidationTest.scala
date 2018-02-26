@@ -12,20 +12,18 @@ class BiValidationTest extends FunSuite {
   val listComprehensions = Seq(11)
   val madness = Seq(25)
 
-//  val working = Seq(2, 4, 5, 6, 7, 8, 9, 12, 16, 17, 19, 21, 23, 24)
-  val working = Seq(24)
+  val working = Seq(2, 4, 5, 6, 7, 8, 9, 12, 16, 17, 19, 21, 23, 24)
 
   val testCases: Seq[LdbcSnbTestCase] = working map (new LdbcSnbTestCase("bi", _))
 
   testCases.foreach {
     tc =>
       test(s"${tc.name}") {
-        val neo4jResults   = TestRunners.neo4jTestRunner(tc)
         val ingraphResults = TestRunners.ingraphTestRunner(tc)
-
-        println("neo4j results:   " + neo4jResults  .map(x => x.toSeq.sortBy(_._1)))
         println("ingraph results: " + ingraphResults.map(x => x.toSeq.sortBy(_._1)))
 
+        val neo4jResults   = TestRunners.neo4jTestRunner(tc)
+        println("neo4j results:   " + neo4jResults  .map(x => x.toSeq.sortBy(_._1)))
         assert(ingraphResults == neo4jResults)
       }
   }

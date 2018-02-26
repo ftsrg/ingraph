@@ -1,7 +1,10 @@
 package ingraph.tests
 
+import java.util.concurrent.TimeUnit
+
 import apoc.export.graphml.ExportGraphML
 import apoc.graph.Graphs
+import com.google.common.base.Stopwatch
 import ingraph.driver.CypherDriverFactory
 import ingraph.ire.IngraphOneTimeAdapter
 import org.neo4j.graphdb.GraphDatabaseService
@@ -42,8 +45,11 @@ object TestRunners {
     registerProcedure(gds, classOf[ExportGraphML], classOf[Graphs])
 
     val trans = gds.beginTx()
+    val graphml = s"CALL apoc.import.graphml('${tc.graphMLPath}', {batchSize: 10000, readLabels: true})"
+    println(graphml)
+    println(tc.query)
     try {
-      gds.execute(s"CALL apoc.import.graphml('${tc.graphMLPath}', {batchSize: 10000, readLabels: true})")
+      gds.execute(graphml)
       gds
         .execute(tc.query)
         .asScala
@@ -67,16 +73,28 @@ object TestRunners {
         csvPreference
       )
       val res = queryHandler.result
+      println(res.size)
 
       val indexer = queryHandler.adapter.indexer
 
 //      val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
 //      loader.load()
 
-      val createAdapter = new IngraphOneTimeAdapter("CREATE (p:Person {id: 99999})", "create", indexer)
-      createAdapter.terminate()
-
-      val res2 = queryHandler.result
+//      val s = Stopwatch.createStarted()
+//      val onetime = new IngraphOneTimeAdapter(
+//        // sftiny: 8796093022246
+//        // sf01: 32985348834423
+//        // sf03: 13194139533500
+//        // sf1: 4398046516185
+//        """
+//          |MATCH (p:Person {id: 32985348834423})
+//          |DETACH DELETE p
+//        """.stripMargin,
+//        "del", indexer)
+//      onetime.terminate()
+//      val res2 = queryHandler.result
+//      println(res2.size)
+//      println("Update time: " + s.elapsed(TimeUnit.MILLISECONDS))
 
       res
     } finally if (driver != null) {
