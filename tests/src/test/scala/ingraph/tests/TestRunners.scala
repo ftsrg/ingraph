@@ -46,8 +46,6 @@ object TestRunners {
 
     val trans = gds.beginTx()
     val graphml = s"CALL apoc.import.graphml('${tc.graphMLPath}', {batchSize: 10000, readLabels: true})"
-    println(graphml)
-    println(tc.query)
     try {
       gds.execute(graphml)
       gds

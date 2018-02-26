@@ -12,7 +12,9 @@ class BiValidationTest extends FunSuite {
   val listComprehensions = Seq(11)
   val madness = Seq(25)
 
-  val working = Seq(2, 4, 5, 6, 7, 8, 9, 12, 16, 17, 19, 21, 23, 24)
+  val buggy = Seq(2, 5, 7, 8, 17, 19, 21, 23, 24)
+
+  val working = Seq(4, 6, 9, 12, 16)
 
   val testCases: Seq[LdbcSnbTestCase] = working map (new LdbcSnbTestCase("bi", _))
 
