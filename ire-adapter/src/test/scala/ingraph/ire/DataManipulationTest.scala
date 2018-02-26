@@ -57,7 +57,7 @@ class DataManipulationTest extends FunSuite {
     val whereIsTrain = "MATCH (t:Train) RETURN t"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "something", indexer)
 
-    assert(whereIsAdapter.result() == List())
+    assert(whereIsAdapter.result().isEmpty)
   }
 
   test("delete vertex works incrementally") {
@@ -69,7 +69,7 @@ class DataManipulationTest extends FunSuite {
     val oneOff = "MATCH (t:Train) DETACH DELETE t"
     new IngraphOneTimeAdapter(oneOff, "remove", indexer).terminate()
 
-    assert(whereIsAdapter.result().size == 2)
+    assert(whereIsAdapter.result().isEmpty)
   }
 
   test("create vertex works incrementally") {
@@ -81,7 +81,7 @@ class DataManipulationTest extends FunSuite {
     val oneOff = "CREATE (t:Train)"
     new IngraphOneTimeAdapter(oneOff, "create", indexer).terminate()
 
-    assert(whereIsAdapter.result() == List())
+    assert(whereIsAdapter.result().size == 2)
   }
 
   test("create constant vertex works") {
