@@ -13,14 +13,18 @@ object IngraphTestRunner {
 
   def update(querySpecification: String, queryName: String, indexer: Indexer, queryHandler: IngraphQueryHandler): List[Map[String, Any]] = {
     val s = Stopwatch.createStarted()
+    val sTotal = Stopwatch.createStarted()
     val onetime = new IngraphOneTimeAdapter(querySpecification, "del", indexer)
     println("Update time 1: " + s.elapsed(TimeUnit.MILLISECONDS))
     s.reset()
+    s.start()
     onetime.terminate()
     println("Update time 2: " + s.elapsed(TimeUnit.MILLISECONDS))
     s.reset()
+    s.start()
     val res = queryHandler.result
     println("Update time 3: " + s.elapsed(TimeUnit.MILLISECONDS))
+    println("=> Total update time: " + sTotal.elapsed(TimeUnit.MILLISECONDS))
     res
   }
 
