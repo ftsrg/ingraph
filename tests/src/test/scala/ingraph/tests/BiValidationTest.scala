@@ -25,10 +25,11 @@ class BiValidationTest extends FunSuite {
   val listComprehensions = Seq(11)
   val madness = Seq(25)
 
-  val buggy = Seq(2, 5, 7, 8, 17, 19, 21, 23, 24)
-  val working = Seq(4, 6, 9, 12, 16)
+  val buggy = Seq(5, 6, 7, 8, 17, 19, 21)
+  val slow = Seq(16)
+  val working = Seq(2, 4, 8, 9, 12, 23, 24)
 
-  val testCases: Seq[LdbcSnbTestCase] = Seq(23) map (new LdbcSnbTestCase("bi", _, csvDir, csvPostfix))
+  val testCases: Seq[LdbcSnbTestCase] = Seq(24) map (new LdbcSnbTestCase("bi", _, csvDir, csvPostfix))
 
 
   val ntr = new Neo4jTestRunner
