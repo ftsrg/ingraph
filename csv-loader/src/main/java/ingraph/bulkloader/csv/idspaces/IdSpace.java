@@ -1,4 +1,4 @@
-package ingraph.bulkloader.csv.data;
+package ingraph.bulkloader.csv.idspaces;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

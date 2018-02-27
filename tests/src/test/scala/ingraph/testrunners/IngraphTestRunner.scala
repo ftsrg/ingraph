@@ -15,8 +15,8 @@ object IngraphTestRunner {
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
       val queryHandler = session.registerQuery(tc.name, tc.query)
       queryHandler.readCsv(
-        tc.nodeCSVPaths.mapValues(_.asJava).asJava,
-        tc.relationshipCSVPaths.asJava,
+        tc.vertexCsvPaths,
+        tc.edgeCsvPaths,
         csvPreference
       )
       val res = queryHandler.result

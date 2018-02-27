@@ -13,11 +13,11 @@ class IngraphQueryHandler(val adapter: IngraphIncrementalAdapter) {
     adapter.addListener(listener)
   }
 
-  def readCsv(nodeFilenames: java.util.Map[String, java.util.List[String]],
-              relationshipFilenames: java.util.Map[String, String],
+  def readCsv(vertexFilenames: Map[String, List[String]],
+              edgeFilenames: Map[String, (String, String, String)],
               csvPreference: CsvPreference) {
     val transaction: Transaction = adapter.newTransaction
-    adapter.readCsvJava(nodeFilenames, relationshipFilenames, transaction, csvPreference)
+    adapter.readCsv(vertexFilenames, edgeFilenames, transaction, csvPreference)
     transaction.close()
     adapter.engine.getResults()
   }

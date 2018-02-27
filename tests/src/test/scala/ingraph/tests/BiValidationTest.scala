@@ -7,15 +7,15 @@ class BiValidationTest extends FunSuite {
 
   def csvPostfix: String = "_0_0.csv"
 
-  //  override def graphMLPath: String = f"../graphs/ldbc-snb-${workload}/graphmls/${workload}-${number}%02d.graphml"
-  //  def csvDir: String = f"../graphs/ldbc-snb-${workload}/${number}%02d"
+//  def graphMLPath: String = f"../graphs/ldbc-snb-${workload}/graphmls/${workload}-${number}%02d.graphml"
+//  def csvDir: String = f"../graphs/ldbc-snb-${workload}/${number}%02d"
 
   def graphMLPath: String = f"../graphs/ldbc-snb-bi/graphmls/sf-tiny.graphml"
   def csvDir: String = f"../graphs/ldbc-snb-bi/sf-tiny/"
 
-  //  val sf = "03"
-  //  override def graphMLPath: String = f"/home/szarnyasg/Dropbox/ldbc_test_data/social_network_sf"+sf+"/snb_"+sf+".graphml"
-  //  def csvDir: String = f"/home/szarnyasg/Dropbox/ldbc_test_data/social_network_sf" + sf
+//  val sf = "01"
+//  def graphMLPath: String = f"/home/szarnyasg/Dropbox/ldbc_test_data/social_network_sf" + sf + "/snb_" + sf + ".graphml"
+//  def csvDir: String = f"/home/szarnyasg/Dropbox/ldbc_test_data/social_network_sf" + sf + "/"
 
   val collects = Seq(10)
   val collectLists = Seq(13, 22)
@@ -26,10 +26,9 @@ class BiValidationTest extends FunSuite {
   val madness = Seq(25)
 
   val buggy = Seq(2, 5, 7, 8, 17, 19, 21, 23, 24)
-
   val working = Seq(4, 6, 9, 12, 16)
 
-  val testCases: Seq[LdbcSnbTestCase] = working map (new LdbcSnbTestCase("bi", _, csvDir, csvPostfix))
+  val testCases: Seq[LdbcSnbTestCase] = Seq(23) map (new LdbcSnbTestCase("bi", _, csvDir, csvPostfix))
 
 
   val ntr = new Neo4jTestRunner

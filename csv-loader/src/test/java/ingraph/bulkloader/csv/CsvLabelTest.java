@@ -1,10 +1,10 @@
 package ingraph.bulkloader.csv;
 
 import com.google.common.collect.ImmutableMap;
+import ingraph.bulkloader.csv.data.CsvVertex;
 import ingraph.bulkloader.csv.loader.MassCsvLoader;
-import neo4j.driver.util.GraphPrettyPrinter;
+import org.junit.Assert;
 import org.junit.Test;
-import org.neo4j.driver.v1.types.Node;
 import org.supercsv.prefs.CsvPreference;
 
 import java.io.IOException;
@@ -21,8 +21,8 @@ public class CsvLabelTest {
 				.put("src/test/resources/data-with-labels.csv", Arrays.asList()) //
 				.build();
 		final MassCsvLoader mcl = new MassCsvLoader(nodeFilenames, ImmutableMap.of(), CsvPreference.STANDARD_PREFERENCE);
-		List<Node> nodes = mcl.getNodes();
-		System.out.println(GraphPrettyPrinter.toString(nodes));
+		List<CsvVertex> nodes = mcl.getVertices();
+		Assert.assertEquals(1, nodes.size());
 	}
 
 }
