@@ -6,7 +6,7 @@ import ingraph.model.fplan.FNode
 import org.apache.commons.lang3.tuple.ImmutableTriple
 import org.supercsv.prefs.CsvPreference
 
-abstract class AbstractIngraphAdapter {
+abstract class AbstractIngraphAdapter extends AutoCloseable {
 
   val querySpecification: String
   val queryName: String
@@ -35,6 +35,10 @@ abstract class AbstractIngraphAdapter {
     for (relationship <- loader.getEdges.asScala) {
       indexer.addEdge(relationship)
     }
+  }
+
+  override def close(): Unit = {
+    engine.shutdown()
   }
 
 }
