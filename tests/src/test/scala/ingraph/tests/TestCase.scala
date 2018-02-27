@@ -10,8 +10,8 @@ trait GraphMLData {
 // Test case trait, which can be loaded from CSV files
 trait CSVData {
   // CSV related definitions
-  def nodeCSVPaths: Map[String, List[String]]
-  def relationshipCSVPaths: Map[String, String]
+  def vertexCsvPaths: Map[String, List[String]]
+  def edgeCsvPaths: Map[String, (String, String, String)]
 }
 
 abstract class TestCase {

@@ -33,7 +33,7 @@ class LdbcSnbTestCase(workload: String, number: Int, csvDir: String, csvPostfix:
       a.replaceAllLiterally("$" + b._1.toString, b._2.toString))
   }
 
-  override def nodeCSVPaths: Map[String, List[String]] = {
+  override def vertexCsvPaths: Map[String, List[String]] = {
     Map(
       "comment" -> List("Message", "Comment"),
       "forum" -> List("Forum"),
@@ -48,31 +48,31 @@ class LdbcSnbTestCase(workload: String, number: Int, csvDir: String, csvPostfix:
     }
   }
 
-  override def relationshipCSVPaths: Map[String, String] = {
+  override def edgeCsvPaths: Map[String, (String, String, String)] = {
     Map(
-      "comment_hasCreator_person" -> "HAS_CREATOR",
-      "comment_isLocatedIn_place" -> "IS_LOCATED_IN",
-      "comment_replyOf_comment" -> "REPLY_OF",
-      "comment_replyOf_post" -> "REPLY_OF",
-      "forum_containerOf_post" -> "CONTAINER_OF",
-      "forum_hasMember_person" -> "HAS_MEMBER",
-      "forum_hasModerator_person" -> "HAS_MODERATOR",
-      "forum_hasTag_tag" -> "HAS_TAG",
-      "person_hasInterest_tag" -> "HAS_INTEREST",
-      "person_isLocatedIn_place" -> "IS_LOCATED_IN",
-      "person_knows_person" -> "KNOWS",
-      "person_likes_comment" -> "LIKES",
-      "person_likes_post" -> "LIKES",
-      "place_isPartOf_place" -> "IS_PART_OF",
-      "post_hasCreator_person" -> "HAS_CREATOR",
-      "comment_hasTag_tag" -> "HAS_TAG",
-      "post_hasTag_tag" -> "HAS_TAG",
-      "post_isLocatedIn_place" -> "IS_LOCATED_IN",
-      "tagclass_isSubclassOf_tagclass" -> "IS_SUBCLASS_OF",
-      "tag_hasType_tagclass" -> "HAS_TYPE",
-      "organisation_isLocatedIn_place" -> "IS_LOCATED_IN",
-      "person_studyAt_organisation" -> "STUDY_OF",
-      "person_workAt_organisation" -> "WORK_AT"
+      "comment_hasCreator_person"      -> ("Message",      "HAS_CREATOR",    "Person"),
+      "comment_isLocatedIn_place"      -> ("Message",      "IS_LOCATED_IN",  "Place"),
+      "comment_replyOf_comment"        -> ("Message",      "REPLY_OF",       "Message"),
+      "comment_replyOf_post"           -> ("Message",      "REPLY_OF",       "Post"),
+      "forum_containerOf_post"         -> ("Forum",        "CONTAINER_OF",   "Post"),
+      "forum_hasMember_person"         -> ("Forum",        "HAS_MEMBER",     "Person"),
+      "forum_hasModerator_person"      -> ("Forum",        "HAS_MODERATOR",  "Person"),
+      "forum_hasTag_tag"               -> ("Forum",        "HAS_TAG",        "Tag"),
+      "person_hasInterest_tag"         -> ("Person",       "HAS_INTEREST",   "Tag"),
+      "person_isLocatedIn_place"       -> ("Person",       "IS_LOCATED_IN",  "Place"),
+      "person_knows_person"            -> ("Person",       "KNOWS",          "Person"),
+      "person_likes_comment"           -> ("Person",       "LIKES",          "Message"),
+      "person_likes_post"              -> ("Person",       "LIKES",          "Post"),
+      "place_isPartOf_place"           -> ("Place",        "IS_PART_OF",     "Place"),
+      "post_hasCreator_person"         -> ("Post",         "HAS_CREATOR",    "Person"),
+      "comment_hasTag_tag"             -> ("Message",      "HAS_TAG",        "Tag"),
+      "post_hasTag_tag"                -> ("Post",         "HAS_TAG",        "Tag"),
+      "post_isLocatedIn_place"         -> ("Post",         "IS_LOCATED_IN",  "Place"),
+      "tagclass_isSubclassOf_tagclass" -> ("TagClass",     "IS_SUBCLASS_OF", "TagClass"),
+      "tag_hasType_tagclass"           -> ("Tag",          "HAS_TYPE",       "TagClass"),
+      "organisation_isLocatedIn_place" -> ("Organisation", "IS_LOCATED_IN",  "Place"),
+      "person_studyAt_organisation"    -> ("Person",       "STUDY_OF",       "Organisation"),
+      "person_workAt_organisation"     -> ("Person",       "WORK_AT",        "Organisation")
     ) map {
       case (file, labels) => (csvDir + file + csvPostfix) -> labels
     }

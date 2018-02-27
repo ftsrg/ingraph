@@ -39,18 +39,18 @@ public class LdbcUpdateStreamCsvLoader {
 	}
 
 	final CellProcessor[] UPDATE_COMMON = new CellProcessor[]{
-		new ParseLong(),            // 1 scheduled start time
-		new ParseLong(),            // 2 dependency time
-		new ParseInt(),             // 3 event type (1..8)
+		new ParseLong(),                    //  1 scheduled start time
+		new ParseLong(),                    //  2 dependency time
+		new ParseInt(),                     //  3 event type (1..8)
 	};
 
 	final CellProcessor[] UPDATE_1 = new CellProcessor[]{
-		new ParseLong(),                    // 4 person.id
-		new NotNull(),                      // 5 person.firstName
-		new NotNull(),                      // 6 person.lastName
-		new NotNull(),                      // 7 person.gender
-		new ParseEpochToDate(),             // 8 person.birthDay
-		new ParseEpochToDateTime(),         // 9 person.creationDate
+		new ParseLong(),                    //  4 person.id
+		new NotNull(),                      //  5 person.firstName
+		new NotNull(),                      //  6 person.lastName
+		new NotNull(),                      //  7 person.gender
+		new ParseEpochToDate(),             //  8 person.birthDay
+		new ParseEpochToDateTime(),         //  9 person.creationDate
 		new NotNull(),                      // 10 person.locationIp
 		new NotNull(),                      // 11 person.browserUsed
 		new ParseLong(),                    // 12 person-isLocatedIn->City.id
@@ -62,38 +62,38 @@ public class LdbcUpdateStreamCsvLoader {
 	};
 
 	final CellProcessor[] UPDATE_2 = new CellProcessor[]{
-		new ParseLong(),                    // 4 person.id
-		new ParseLong(),                    // 5 post.id
-		new ParseEpochToDateTime(),         // 6 person-likes.creationDate->post
+		new ParseLong(),                    //  4 person.id
+		new ParseLong(),                    //  5 post.id
+		new ParseEpochToDateTime(),         //  6 person-likes.creationDate->post
 	};
 
 	final CellProcessor[] UPDATE_3 = new CellProcessor[]{
-		new ParseLong(),                    // 4 person.id
-		new ParseLong(),                    // 5 comment.id
-		new ParseEpochToDateTime(),         // 6 person-likes.creationDate->comment
+		new ParseLong(),                    //  4 person.id
+		new ParseLong(),                    //  5 comment.id
+		new ParseEpochToDateTime(),         //  6 person-likes.creationDate->comment
 	};
 
 	final CellProcessor[] UPDATE_4 = new CellProcessor[]{
-		new ParseLong(),                    // 4 forum.id
-		new NotNull(),                      // 5 forum.title
-		new ParseEpochToDateTime(),         // 6 forum.creationDate
-		new ParseLong(),                    // 7 forum-hasModerator->Person.id
-		new ParseList(Long::valueOf),       // 8 forum-hasTag->Tag.id
+		new ParseLong(),                    //  4 forum.id
+		new NotNull(),                      //  5 forum.title
+		new ParseEpochToDateTime(),         //  6 forum.creationDate
+		new ParseLong(),                    //  7 forum-hasModerator->Person.id
+		new ParseList(Long::valueOf),       //  8 forum-hasTag->Tag.id
 	};
 
 	final CellProcessor[] UPDATE_5 = new CellProcessor[]{
-		new ParseLong(),                    // 4 person.id
-		new ParseLong(),                    // 5 Forum-hasMember->person.id
-		new ParseEpochToDateTime(),         // 6 Forum-hasMember.joinDate->person
+		new ParseLong(),                    //  4 person.id
+		new ParseLong(),                    //  5 Forum-hasMember->person.id
+		new ParseEpochToDateTime(),         //  6 Forum-hasMember.joinDate->person
 	};
 
 	final CellProcessor[] UPDATE_6 = new CellProcessor[]{
-		new ParseLong(),                    // 4 post.id
-		new Optional(),                     // 5 post.imageFile
-		new ParseEpochToDateTime(),         // 6 post.creationDate
-		new NotNull(),                      // 7 post.locationIp
-		new NotNull(),                      // 8 post.browserUsed
-		new Optional(),                     // 9 post.language
+		new ParseLong(),                    //  4 post.id
+		new Optional(),                     //  5 post.imageFile
+		new ParseEpochToDateTime(),         //  6 post.creationDate
+		new NotNull(),                      //  7 post.locationIp
+		new NotNull(),                      //  8 post.browserUsed
+		new Optional(),                     //  9 post.language
 		new Optional(),                     // 10 post.content
 		new ParseInt(),                     // 11 post.length
 		new ParseLong(),                    // 12 post-hasCreator->Person.id
@@ -103,12 +103,12 @@ public class LdbcUpdateStreamCsvLoader {
 	};
 
 	final CellProcessor[] UPDATE_7 = new CellProcessor[]{
-		new ParseLong(),                    // 4 comment.id
-		new ParseEpochToDateTime(),         // 5 comment.creationDate
-		new NotNull(),                      // 6 comment.locationIp
-		new NotNull(),                      // 7 comment.browserUsed
-		new NotNull(),                      // 8 comment.content
-		new ParseInt(),                     // 9 comment.length
+		new ParseLong(),                    //  4 comment.id
+		new ParseEpochToDateTime(),         //  5 comment.creationDate
+		new NotNull(),                      //  6 comment.locationIp
+		new NotNull(),                      //  7 comment.browserUsed
+		new NotNull(),                      //  8 comment.content
+		new ParseInt(),                     //  9 comment.length
 		new ParseLong(),                    // 10 comment-hasCreator->Person.id
 		new ParseLong(),                    // 11 comment-isLocatedIn->Country.id
 		new ParseLong(),                    // 12 comment-replyOf->Post.id
@@ -117,9 +117,9 @@ public class LdbcUpdateStreamCsvLoader {
 	};
 
 	final CellProcessor[] UPDATE_8 = new CellProcessor[]{
-		new ParseLong(),                    // 4 person1.id
-		new ParseLong(),                    // 5 person2.id
-		new ParseEpochToDateTime(),         // 6 knows.creationDate
+		new ParseLong(),                    //  4 person1.id
+		new ParseLong(),                    //  5 person2.id
+		new ParseEpochToDateTime(),         //  6 knows.creationDate
 	};
 
 	final List<CellProcessor[]> UPDATES =

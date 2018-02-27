@@ -23,7 +23,7 @@ public class ParseList extends CellProcessorAdaptor {
 		final String nonNullValue = Optional.ofNullable(value).orElse("").toString();
 		final Iterable<String> splitted = Splitter.on(SEPARATOR).split(nonNullValue);
 		return StreamSupport.stream(splitted.spliterator(), false)
-			.filter(s -> s != "")
+			.filter(s -> !s.isEmpty())
 			.map(mapper)
 			.collect(Collectors.toList());
 	}

@@ -18,27 +18,29 @@ class IngraphIncrementalAdapter(
   val transactionFactory = new TransactionFactory(16)
   transactionFactory.subscribe(engine.inputLookup)
 
-  override val tupleMapper = new TupleCreator(
+  override val tupleCreator = new TupleCreator(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
     engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap, LongIdParser)
 
-  tupleMapper.transaction = transactionFactory.newBatchTransaction()
-  indexer.subscribe(tupleMapper)
+  tupleCreator.transaction = transactionFactory.newBatchTransaction()
+  indexer.subscribe(tupleCreator)
 
 
   def newTransaction(): Transaction = {
     val tran = transactionFactory.newBatchTransaction()
-    tupleMapper.transaction = tran
+    tupleCreator.transaction = tran
     tran
   }
 
   def result(): Iterable[Tuple] = {
-    tupleMapper.transaction.close()
+    tupleCreator.transaction.close()
     engine.getResults()
   }
 
   def addListener(listener: ChangeListener): Unit = {
     engine.addListener(listener)
   }
+
+
 
 }

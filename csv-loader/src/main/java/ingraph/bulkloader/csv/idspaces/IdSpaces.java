@@ -1,4 +1,4 @@
-package ingraph.bulkloader.csv.data;
+package ingraph.bulkloader.csv.idspaces;
 
 import java.util.HashMap;
 import java.util.Map;

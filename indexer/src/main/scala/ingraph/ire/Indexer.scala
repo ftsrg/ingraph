@@ -1,6 +1,7 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.util.BufferMultimap
+import ingraph.bulkloader.csv.data.{CsvEdge, CsvVertex}
 import org.neo4j.driver.v1.types.{Node, Relationship}
 
 import scala.collection.JavaConversions._
@@ -55,12 +56,11 @@ class Indexer {
     fill(tupleMapper)
   }
 
-  def addVertex(node: Node): IngraphVertex = {
-    val id: Long = node.id()
-    val properties: Map[String, Any]  = node.asMap().toMap
-    val labels = node.labels().toSet
-    val vertex = IngraphVertex(id, labels, properties)
-    addVertex(vertex)
+  def addVertex(vertex: CsvVertex): IngraphVertex = {
+    val id: Long = vertex.getId
+    val properties: Map[String, Any] = vertex.getProperties.toMap
+    val labels = vertex.getLabels.toSet
+    addVertex(IngraphVertex(id, labels, properties))
   }
 
   def addVertex(vertex: IngraphVertex): IngraphVertex = {
@@ -89,14 +89,13 @@ class Indexer {
     mappers.foreach(_.removeVertex(vertex))
   }
 
-  def addEdge(relation: Relationship): IngraphEdge = {
-    val id: Long = relation.id()
-    val properties: Map[String, Any] = relation.asMap().toMap
-    val sourceVertex: IngraphVertex = vertexLookup(relation.startNodeId())
-    val targetVertex: IngraphVertex = vertexLookup(relation.endNodeId())
-    val `type`: String = relation.`type`()
-    val edge = IngraphEdge(id, sourceVertex, targetVertex, `type`, properties)
-    addEdge(edge)
+  def addEdge(edge: CsvEdge): IngraphEdge = {
+    val id: Long = edge.getId
+    val properties: Map[String, Any] = edge.getProperties.toMap
+    val sourceVertex: IngraphVertex = vertexIdLabelLookup((edge.getSourceVertexId, edge.getSourceVertexLabel))
+    val targetVertex: IngraphVertex = vertexIdLabelLookup((edge.getTargetVertexId, edge.getTargetVertexLabel))
+    val `type`: String = edge.getType
+    addEdge(IngraphEdge(id, sourceVertex, targetVertex, `type`, properties))
   }
 
   def addEdge(edge: IngraphEdge): IngraphEdge = {

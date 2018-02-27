@@ -8,6 +8,7 @@ sourceSets.main.java.srcDirs = []
 dependencies {
   compile project(':ire')
   compile project(':ire-adapter')
+  compile project(':neo4j-util')
   compile project(':reactive-driver-interfaces')
 
   testCompile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
