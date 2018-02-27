@@ -46,9 +46,11 @@ object IngraphTestRunner {
       // sf01: 32985348834423
       // sf03: 13194139533500
       // sf1: 4398046516185
-      val results = update("""MATCH (p:Person {id: 8796093022246})
-               |DETACH DELETE p
-             """.stripMargin, "del", indexer, queryHandler)
+//      val results = update(
+//        """MATCH (p:Person {id: 13194139533500})
+//          |DETACH DELETE p
+//        """.stripMargin, "del", indexer, queryHandler)
+      val results = res1
       session.close()
       results
     } finally {

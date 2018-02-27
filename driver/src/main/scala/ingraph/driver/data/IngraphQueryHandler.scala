@@ -5,7 +5,7 @@ import ingraph.ire.IngraphIncrementalAdapter
 import ingraph.model.fplan.Production
 import org.supercsv.prefs.CsvPreference
 
-class IngraphQueryHandler(val adapter: IngraphIncrementalAdapter) {
+class IngraphQueryHandler(val adapter: IngraphIncrementalAdapter) extends AutoCloseable {
 
   val prod = adapter.plan.asInstanceOf[Production]
 
@@ -28,5 +28,9 @@ class IngraphQueryHandler(val adapter: IngraphIncrementalAdapter) {
   }
 
   def keys() = prod.outputNames
+
+  override def close(): Unit = {
+    adapter.close()
+  }
 
 }

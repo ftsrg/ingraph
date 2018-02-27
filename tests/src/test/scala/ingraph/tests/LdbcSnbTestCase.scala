@@ -50,10 +50,10 @@ class LdbcSnbTestCase(workload: String, number: Int, csvDir: String, csvPostfix:
 
   override def edgeCsvPaths: Map[String, (String, String, String)] = {
     Map(
-      "comment_hasCreator_person"      -> ("Comment",      "HAS_CREATOR",    "Person"),
-      "comment_isLocatedIn_place"      -> ("Comment",      "IS_LOCATED_IN",  "Place"),
-      "comment_replyOf_comment"        -> ("Comment",      "REPLY_OF",       "Comment"),
-      "comment_replyOf_post"           -> ("Comment",      "REPLY_OF",       "Post"),
+      "comment_hasCreator_person"      -> ("Message",      "HAS_CREATOR",    "Person"),
+      "comment_isLocatedIn_place"      -> ("Message",      "IS_LOCATED_IN",  "Place"),
+      "comment_replyOf_comment"        -> ("Message",      "REPLY_OF",       "Message"),
+      "comment_replyOf_post"           -> ("Message",      "REPLY_OF",       "Post"),
       "forum_containerOf_post"         -> ("Forum",        "CONTAINER_OF",   "Post"),
       "forum_hasMember_person"         -> ("Forum",        "HAS_MEMBER",     "Person"),
       "forum_hasModerator_person"      -> ("Forum",        "HAS_MODERATOR",  "Person"),
@@ -61,11 +61,11 @@ class LdbcSnbTestCase(workload: String, number: Int, csvDir: String, csvPostfix:
       "person_hasInterest_tag"         -> ("Person",       "HAS_INTEREST",   "Tag"),
       "person_isLocatedIn_place"       -> ("Person",       "IS_LOCATED_IN",  "Place"),
       "person_knows_person"            -> ("Person",       "KNOWS",          "Person"),
-      "person_likes_comment"           -> ("Person",       "LIKES",          "Comment"),
+      "person_likes_comment"           -> ("Person",       "LIKES",          "Message"),
       "person_likes_post"              -> ("Person",       "LIKES",          "Post"),
       "place_isPartOf_place"           -> ("Place",        "IS_PART_OF",     "Place"),
       "post_hasCreator_person"         -> ("Post",         "HAS_CREATOR",    "Person"),
-      "comment_hasTag_tag"             -> ("Comment",      "HAS_TAG",        "Tag"),
+      "comment_hasTag_tag"             -> ("Message",      "HAS_TAG",        "Tag"),
       "post_hasTag_tag"                -> ("Post",         "HAS_TAG",        "Tag"),
       "post_isLocatedIn_place"         -> ("Post",         "IS_LOCATED_IN",  "Place"),
       "tagclass_isSubclassOf_tagclass" -> ("TagClass",     "IS_SUBCLASS_OF", "TagClass"),

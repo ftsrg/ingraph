@@ -1,7 +1,8 @@
 package ldbc
 
+import ingraph.bulkloader.csv.data.{CsvEdge, CsvVertex}
 import ingraph.bulkloader.csv.loader.LdbcUpdateStreamCsvLoader
-import ingraph.ire.{Indexer, IngraphVertex}
+import ingraph.ire.Indexer
 
 import scala.collection.JavaConverters._
 
@@ -46,7 +47,7 @@ class LdbcUpdateToIngraphLoader(val indexer: Indexer, val csvDir: String) {
   }
 
   def update(person: Update1AddPerson): Unit = {
-    val p = IngraphVertex(person.personId, Set("Person"),
+    val v = new CsvVertex(person.personId, Set("Person").asJava,
       Map("firstName" -> person.personFirstName,
         "lastName" -> person.personLastName,
         "gender" -> person.gender,
@@ -56,67 +57,98 @@ class LdbcUpdateToIngraphLoader(val indexer: Indexer, val csvDir: String) {
         "browserUsed" -> person.browserUsed,
         "speaks" -> person.languages,
         "email" -> person.emails
-      )
+      ).asJava
     )
-    indexer.addVertex(p)
-    indexer.addEdge(indexer.newId(), person.personId, person.cityId, "IS_LOCATED_IN")
-    for (tag <- person.tagIds)
-      indexer.addEdge(indexer.newId(), person.personId, tag, "HAS_INTEREST")
+    val ili = new CsvEdge(indexer.newId(), "IS_LOCATED_IN", person.personId, "Person", person.cityId, "Place")
+    indexer.addVertex(v)
+    indexer.addEdge(ili)
+    for (tag <- person.tagIds) {
+      val hi = new CsvEdge(indexer.newId(), "HAS_INTEREST", person.personId, "Person", tag, "Tag")
+      indexer.addEdge(hi)
+    }
     //    These are nulls in the data
     //    for (org <- person.studyAt)
-    //      indexer.addEdge(indexer.newId(), person.personId, org.organizationId, "studyAt")
+    //      indexer.addEdge( TODO indexer.newId(), person.personId, org.organizationId, "studyAt")
     //    for (w <- person.workAt)
-    //      indexer.addEdge(indexer.newId(), person.personId, w.organizationId, "workAt")
+    //      indexer.addEdge( TODO indexer.newId(), person.personId, w.organizationId, "workAt")
   }
 
   def update(like: Update2_3AddMessageLike): Unit = {
-    indexer.addEdge(indexer.newId(), like.personId, like.postId, "LIKES", Map("creationDate" -> like.creationDate))
+    indexer.addEdge(new CsvEdge(
+      indexer.newId(), "LIKES",
+      like.personId, "Person",
+      like.postId, "Message",
+      Map("creationDate" -> like.creationDate).asJava
+    ))
   }
 
   def update(forum: Update4AddForum): Unit = {
-    indexer.addVertex(IngraphVertex(forum.forumId, Set("Forum"), Map("creationDate" -> forum.creationDate)))
-    indexer.addEdge(indexer.newId(), forum.forumId, forum.moderatorPersonId, "HAS_MODERATOR")
-    for (tag <- forum.tagIds)
-      indexer.addEdge(indexer.newId(), forum.forumId, tag, "HAS_TAG")
+    indexer.addVertex(new CsvVertex(forum.forumId, Set("Forum").asJava, Map("creationDate" -> forum.creationDate).asJava))
+    indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_MODERATOR", forum.forumId, "Forum", forum.moderatorPersonId, "Person"))
+    for (tag <- forum.tagIds) {
+      indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_TAG", forum.forumId, "Forum", tag, "Tag"))
+    }
   }
 
   def update(member: Update5AddForumMembership): Unit = {
-    indexer.addEdge(indexer.newId(), member.personId, member.forumId, "HAS_MEMBER", Map("joinDate" -> member.joinDate))
+    indexer.addEdge(new CsvEdge(
+      indexer.newId(), "HAS_MEMBER",
+      member.personId, "Person",
+      member.forumId, "Forum",
+      Map("joinDate" -> member.joinDate).asJava
+    ))
   }
 
   def update(post: Update6AddPost): Unit = {
-    indexer.addVertex(IngraphVertex(post.postId, Set("Post"),
+    indexer.addVertex(new CsvVertex(post.postId, Set("Post").asJava,
       Map("imageFile" -> post.imageFile,
         "creationDate" -> post.creationDate,
         "locationIp" -> post.locationIp,
         "browserUsed" -> post.browserUsed,
         "language" -> post.language,
         "content" -> post.content,
-        "length" -> post.length)))
-    indexer.addEdge(indexer.newId(), post.postId, post.authorPersonId, "HAS_CREATOR")
-    indexer.addEdge(indexer.newId(), post.forumId, post.postId, "CONTAINER_OF")
-    indexer.addEdge(indexer.newId(), post.postId, post.countryId, "IS_LOCATED_IN")
-    for (tag <- post.tagIds)
-      indexer.addEdge(indexer.newId(), post.postId, tag, "HAS_TAG")
+        "length" -> post.length).asJava))
+    indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_CREATOR",   post.postId,  "Message", post.authorPersonId, "Person" ))
+    indexer.addEdge(new CsvEdge(indexer.newId(), "CONTAINER_OF",  post.forumId, "Forum",   post.postId,         "Message"))
+    indexer.addEdge(new CsvEdge(indexer.newId(), "IS_LOCATED_IN", post.postId,  "Message", post.countryId,      "Country"))
+    for (tag <- post.tagIds) {
+      indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_TAG", post.postId, "", tag, "Tag"))
+    }
   }
 
   def update(comment: Update7AddComment): Unit = {
-    indexer.addVertex(IngraphVertex(comment.commentId, Set("Comment"),
+    indexer.addVertex(new CsvVertex(comment.commentId, Set("Comment").asJava,
       Map("creationDate" -> comment.creationDate,
         "locationIp" -> comment.locationIp,
         "browserUsed" -> comment.browserUsed,
         "content" -> comment.content,
-        "length" -> comment.length)))
-    indexer.addEdge(indexer.newId(), comment.commentId, comment.authorPersonId, "HAS_CREATOR")
-    indexer.addEdge(indexer.newId(), comment.commentId,
-      Math.max(comment.replyToCommentId, comment.replyToPostId), "REPLY_OF")
-    for (tag <- comment.tagIds)
-      indexer.addEdge(indexer.newId(), comment.commentId, tag, "HAS_TAG")
+        "length" -> comment.length).asJava))
+    indexer.addEdge(new CsvEdge(
+      indexer.newId(), "HAS_CREATOR",
+      comment.commentId, "Message",
+      comment.authorPersonId, "Person"
+    ))
+    indexer.addEdge(new CsvEdge(
+      indexer.newId(), "REPLY_OF",
+      comment.commentId, "Comment",
+      Math.max(comment.replyToCommentId, comment.replyToPostId), "Message"
+    ))
+    for (tag <- comment.tagIds) {
+      indexer.addEdge(new CsvEdge(
+        indexer.newId(), "HAS_TAG",
+        comment.commentId, "Message",
+        tag, "Tag"
+      ))
+    }
   }
 
   def update(friend: Update8AddFriendship): Unit = {
-    indexer.addEdge(indexer.newId(), friend.person1Id, friend.person2Id, "KNOWS",
-      Map("creationDate" -> friend.creationDate))
+    indexer.addEdge(new CsvEdge(
+      indexer.newId(), "KNOWS",
+      friend.person1Id, "Person",
+      friend.person2Id, "Person",
+      Map("creationDate" -> friend.creationDate).asJava
+    ))
   }
 
 }
