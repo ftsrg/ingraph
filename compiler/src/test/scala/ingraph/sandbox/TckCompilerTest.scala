@@ -132,11 +132,11 @@ class TckCompilerTest extends CompilerTest {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
   }
 
-//  test("TCK test: ") {
-//    val stages = compile(
-//      """
-//      """.stripMargin
-//    )
-//  }
+  ignore("Placeholder for debugging plans") {
+    val stages = compile(
+      """
+      """.stripMargin
+    )
+  }
 
 }
