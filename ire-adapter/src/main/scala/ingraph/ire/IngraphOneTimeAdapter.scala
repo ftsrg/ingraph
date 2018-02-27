@@ -21,6 +21,9 @@ class IngraphOneTimeAdapter(
     engine.edgeConverters.values.flatten.toVector.distinct,
     indexer, transaction, LongIdParser)
 
+  /**
+    * Terminate execution and return results
+    */
   def terminate(): Iterable[Tuple] = {
     transaction.close()
     engine.getResults()
