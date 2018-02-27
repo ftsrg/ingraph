@@ -42,14 +42,16 @@ object IngraphTestRunner {
       // val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
       // loader.load()
 
-      // sftiny: 8796093022246
+      // sf-tiny: 8796093022246
       // sf01: 32985348834423
       // sf03: 13194139533500
       // sf1: 4398046516185
-      update("""MATCH (p:Person {id: 13194139533500})
+      val results = update("""MATCH (p:Person {id: 8796093022246})
                |DETACH DELETE p
              """.stripMargin, "del", indexer, queryHandler)
-    } finally if (driver != null) {
+      session.close()
+      results
+    } finally {
       driver.close()
     }
   }

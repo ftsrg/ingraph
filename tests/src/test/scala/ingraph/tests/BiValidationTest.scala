@@ -29,16 +29,15 @@ class BiValidationTest extends FunSuite {
   val slow = Seq(16)
   val working = Seq(2, 4, 8, 9, 12, 23, 24)
 
-  val testCases: Seq[LdbcSnbTestCase] = Seq(24) map (new LdbcSnbTestCase("bi", _, csvDir, csvPostfix))
-
+  val testCases: Seq[LdbcSnbTestCase] = working map (new LdbcSnbTestCase("bi", _, csvDir, csvPostfix))
 
   val ntr = new Neo4jTestRunner
   ntr.load(graphMLPath)
 
-
   testCases.foreach {
     tc =>
       test(s"${tc.name}") {
+        println(tc.name)
         val ingraphResults = IngraphTestRunner.run(tc)
         println("ingraph results: " + ingraphResults.map(x => x.toSeq.sortBy(_._1)))
 
