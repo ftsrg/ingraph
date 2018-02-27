@@ -1,4 +1,12 @@
-# Convert CSVs to GraphMLs
+## LDBC test data sets
+
+To use LDBC test data set, run the `link.sh` script to generate the required symlinks.
+
+```bash
+./link.sh <dir> <scale factor>
+```
+
+## Convert small CSVs to GraphMLs
 
 :warning: Before you run any commands, make sure you know what you are doing. These are our internal testing tools and might... _interfere_ with your Neo4j database if the setup is not correct. That is, these scripts will likely wipe your existing Neo4j database without asking any questions.
 
