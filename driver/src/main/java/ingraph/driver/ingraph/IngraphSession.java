@@ -13,6 +13,7 @@ import org.neo4j.driver.v1.TransactionWork;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.TypeSystem;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
@@ -91,10 +92,17 @@ public class IngraphSession implements Session {
 
 	@Override
 	public void close() {
+		for (IngraphIncrementalAdapter adapter : adapters) {
+			adapter.engine().shutdown();
+		}
 	}
+
+
+	private ArrayList<IngraphIncrementalAdapter> adapters = new ArrayList<>();
 
 	public IngraphQueryHandler registerQuery(String queryName, String querySpecification, Map<String, Object> statementParameters) {
 		final IngraphIncrementalAdapter adapter = new IngraphIncrementalAdapter(querySpecification, queryName, indexer);
+		adapters.add(adapter);
 		return new IngraphQueryHandler(adapter);
 	}
 

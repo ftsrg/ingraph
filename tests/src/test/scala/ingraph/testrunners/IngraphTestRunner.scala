@@ -25,9 +25,9 @@ object IngraphTestRunner {
   }
 
   def run(tc: LdbcSnbTestCase) : List[Map[String, Any]] = {
-    val driver = CypherDriverFactory.createIngraphDriver
+    val driver = CypherDriverFactory.createIngraphDriver()
     try {
-      val session = driver.session
+      val session = driver.session()
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
       val queryHandler = session.registerQuery(tc.name, tc.query)
       queryHandler.readCsv(
