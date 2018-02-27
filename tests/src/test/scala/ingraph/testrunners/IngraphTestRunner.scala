@@ -4,13 +4,25 @@ import java.util.concurrent.TimeUnit
 
 import com.google.common.base.Stopwatch
 import ingraph.driver.CypherDriverFactory
-import ingraph.ire.IngraphOneTimeAdapter
+import ingraph.driver.data.IngraphQueryHandler
+import ingraph.ire.{Indexer, IngraphOneTimeAdapter}
 import ingraph.tests.LdbcSnbTestCase
 import org.supercsv.prefs.CsvPreference
 
-import scala.collection.JavaConverters._
-
 object IngraphTestRunner {
+
+  def update(querySpecification: String, queryName: String, indexer: Indexer, queryHandler: IngraphQueryHandler): List[Map[String, Any]] = {
+    val s = Stopwatch.createStarted()
+    val onetime = new IngraphOneTimeAdapter(querySpecification, "del", indexer)
+    println("Update time 1: " + s.elapsed(TimeUnit.MILLISECONDS))
+    s.reset()
+    onetime.terminate()
+    println("Update time 2: " + s.elapsed(TimeUnit.MILLISECONDS))
+    s.reset()
+    val res = queryHandler.result
+    println("Update time 3: " + s.elapsed(TimeUnit.MILLISECONDS))
+    res
+  }
 
   def run(tc: LdbcSnbTestCase) : List[Map[String, Any]] = {
     val driver = CypherDriverFactory.createIngraphDriver
@@ -23,30 +35,20 @@ object IngraphTestRunner {
         tc.edgeCsvPaths,
         csvPreference
       )
-      val res1 = queryHandler.result
 
+      val res1 = queryHandler.result
       val indexer = queryHandler.adapter.indexer
 
-      //      val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
-      //      loader.load()
+      // val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
+      // loader.load()
 
-      val s = Stopwatch.createStarted()
-      val onetime = new IngraphOneTimeAdapter(
-        // sftiny: 8796093022246
-        // sf01: 32985348834423
-        // sf03: 13194139533500
-        // sf1: 4398046516185
-        """
-          |MATCH (p:Person {id: 32985348834423})
-          |DETACH DELETE p
-        """.stripMargin,
-        "del", indexer)
-      onetime.terminate()
-      val res2 = queryHandler.result
-
-      println("Update time: " + s.elapsed(TimeUnit.MILLISECONDS))
-
-      res2
+      // sftiny: 8796093022246
+      // sf01: 32985348834423
+      // sf03: 13194139533500
+      // sf1: 4398046516185
+      update("""MATCH (p:Person {id: 13194139533500})
+               |DETACH DELETE p
+             """.stripMargin, "del", indexer, queryHandler)
     } finally if (driver != null) {
       driver.close()
     }

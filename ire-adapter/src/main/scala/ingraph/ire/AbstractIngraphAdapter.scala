@@ -3,11 +3,8 @@ package ingraph.ire
 import hu.bme.mit.ire.{Transaction, TupleCreator}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.model.fplan.FNode
+import org.apache.commons.lang3.tuple.ImmutableTriple
 import org.supercsv.prefs.CsvPreference
-import org.apache.commons.lang3.tuple.{ImmutableTriple, Triple => ATriple}
-
-import scala.collection.JavaConverters._
-
 
 abstract class AbstractIngraphAdapter {
 
@@ -16,7 +13,7 @@ abstract class AbstractIngraphAdapter {
   val indexer: Indexer = new Indexer()
 
   val plan: FNode
-  val tupleMapper: TupleCreator
+  val tupleCreator: TupleCreator
   val engine: AnnotatedRelationalEngine
 
   def readCsv(vertexFileName: Map[String, List[String]],
@@ -25,14 +22,13 @@ abstract class AbstractIngraphAdapter {
               csvPreference: CsvPreference = CsvPreference.STANDARD_PREFERENCE) {
     import scala.collection.JavaConverters._
     // sorry :-)
-    tupleMapper.transaction = transaction
+    tupleCreator.transaction = transaction
+
     val vertexFilenamesJava = vertexFileName.map(kv => kv._1 -> java.util.Arrays.asList(kv._2: _*))
       .asJava.asInstanceOf[java.util.Map[String, java.util.Collection[String]]]
-    val loader = new MassCsvLoader(
-      vertexFilenamesJava,
-      edgeFilenames.map { case (k, v) => (k, ImmutableTriple.of(v._1, v._2, v._3)) }.asJava,
-      csvPreference
-    )
+    val edgeFilenamesJava = edgeFilenames.map { case (k, v) => (k, ImmutableTriple.of(v._1, v._2, v._3)) }.asJava
+
+    val loader = new MassCsvLoader(vertexFilenamesJava, edgeFilenamesJava, csvPreference)
     for (node <- loader.getVertices.asScala) {
       indexer.addVertex(node)
     }
