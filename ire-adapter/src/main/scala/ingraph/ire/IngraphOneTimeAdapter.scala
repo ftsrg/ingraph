@@ -4,11 +4,11 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.{PullTupleCreator, TransactionFactory, TupleCreator}
 import ingraph.compiler.FPlanParser
 
-class IngraphOneTimeAdapter(
+class IngraphOneTimeAdapter (
     val querySpecification: String,
     val queryName: String,
     val indexer: Indexer = new Indexer()
-  ) {
+  ) extends AutoCloseable {
 
   val plan = FPlanParser.parse(querySpecification)
   val engine = EngineFactory.createQueryEngine(plan, indexer)
@@ -28,4 +28,9 @@ class IngraphOneTimeAdapter(
     transaction.close()
     engine.getResults()
   }
+
+  override def close() {
+    engine.shutdown()
+  }
+
 }

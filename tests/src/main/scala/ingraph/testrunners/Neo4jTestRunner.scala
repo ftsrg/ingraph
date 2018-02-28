@@ -1,8 +1,10 @@
 package ingraph.testrunners
 
-import apoc.export.graphml.ExportGraphML
-import apoc.graph.Graphs
-import ingraph.tests.{GraphMLData, TestCase}
+import java.io.File
+import java.util.concurrent.TimeUnit
+
+import com.google.common.base.Stopwatch
+import ingraph.tests.LdbcSnbTestCase
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.factory.GraphDatabaseSettings
 import org.neo4j.kernel.api.exceptions.KernelException
@@ -12,11 +14,16 @@ import org.neo4j.test.TestGraphDatabaseFactory
 
 import scala.collection.JavaConverters._
 
-class Neo4jTestRunner extends AutoCloseable {
+class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends AutoCloseable {
 
   val bolt = GraphDatabaseSettings.boltConnector("0")
-  val gds = new TestGraphDatabaseFactory()
-    .newImpermanentDatabaseBuilder
+  val gdsBuilder = if (neo4jDir.isDefined) {
+    new TestGraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(neo4jDir.get))
+  } else {
+    new TestGraphDatabaseFactory().newImpermanentDatabaseBuilder()
+  }
+
+  val gds = gdsBuilder
     .setConfig("apoc.import.file.enabled", "true")
     .setConfig(bolt.`type`, "BOLT")
     .setConfig(bolt.enabled, "true")
@@ -24,7 +31,7 @@ class Neo4jTestRunner extends AutoCloseable {
     .newGraphDatabase
 
   def load(graphMLPath: String): Unit = {
-    registerProcedure(gds, classOf[ExportGraphML], classOf[Graphs])
+//    registerProcedure(gds, classOf[ExportGraphML], classOf[Graphs])
 
     val trans = gds.beginTx()
     val graphml = s"CALL apoc.import.graphml('${graphMLPath}', {batchSize: 10000, readLabels: true})"
@@ -41,8 +48,20 @@ class Neo4jTestRunner extends AutoCloseable {
     }
   }
 
-  def run(querySpecification: String): List[Map[String, Any]] = {
-    gds.execute(querySpecification).asScala.map(_.asScala.toMap).toList
+  def run(): List[Map[String, Any]] = {
+    val results1 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
+
+    val tx = gds.beginTx()
+
+    val s = Stopwatch.createStarted()
+    tc.updateQuerySpecification.foreach(gds.execute(_))
+    val results2 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
+    println("neo4j   => Total update time: " + s.elapsed(TimeUnit.MILLISECONDS))
+
+//    tx.failure()
+//    tx.close()
+
+    results2
   }
 
   override def close(): Unit = {

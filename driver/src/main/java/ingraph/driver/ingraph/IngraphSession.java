@@ -97,7 +97,6 @@ public class IngraphSession implements Session {
 		}
 	}
 
-
 	private ArrayList<IngraphIncrementalAdapter> adapters = new ArrayList<>();
 
 	public IngraphQueryHandler registerQuery(String queryName, String querySpecification, Map<String, Object> statementParameters) {
