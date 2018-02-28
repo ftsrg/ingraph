@@ -1,19 +1,20 @@
 package ingraph.driver.ingraph;
 
+import ingraph.driver.data.TupleToRecordRepackager;
+import ingraph.model.fplan.Production;
 import ingraph.driver.data.IngraphQueryHandler;
 import ingraph.ire.Indexer;
 import ingraph.ire.IngraphIncrementalAdapter;
 import ingraph.ire.IngraphOneTimeAdapter;
-import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.Session;
-import org.neo4j.driver.v1.Statement;
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.Transaction;
-import org.neo4j.driver.v1.TransactionWork;
-import org.neo4j.driver.v1.Value;
+import org.neo4j.driver.v1.*;
+import org.neo4j.driver.v1.exceptions.NoSuchRecordException;
+import org.neo4j.driver.v1.summary.ResultSummary;
 import org.neo4j.driver.v1.types.TypeSystem;
+import org.neo4j.driver.v1.util.Function;
+import scala.collection.JavaConversions;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class IngraphSession implements Session {
@@ -36,7 +37,56 @@ public class IngraphSession implements Session {
 		final IngraphOneTimeAdapter adapter = new IngraphOneTimeAdapter(statementTemplate, "onetime" + oneTimeQueryIndex, indexer);
 		oneTimeQueryIndex++;
 		adapter.terminate();
-		return null;
+
+		Production prod = (Production) adapter.plan();
+		TupleToRecordRepackager repackager = new TupleToRecordRepackager(prod.outputNames());
+
+		return new StatementResult() {
+			@Override
+			public List<String> keys() {
+				return JavaConversions.seqAsJavaList(prod.outputNames().toSeq());
+			}
+
+			@Override
+			public boolean hasNext() {
+				return false;
+			}
+
+			@Override
+			public Record next() {
+				return null;
+			}
+
+			@Override
+			public Record single() throws NoSuchRecordException {
+				return null;
+			}
+
+			@Override
+			public Record peek() {
+				return null;
+			}
+
+			@Override
+			public List<Record> list() {
+				return (List<Record>)repackager.repackageResult(adapter.engine().getResults());
+			}
+
+			@Override
+			public <T> List<T> list(Function<Record, T> mapFunction) {
+				return null;
+			}
+
+			@Override
+			public ResultSummary consume() {
+				return null;
+			}
+
+			@Override
+			public ResultSummary summary() {
+				return null;
+			}
+		};
 	}
 
 	@Override

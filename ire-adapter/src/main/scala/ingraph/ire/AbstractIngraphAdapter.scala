@@ -1,12 +1,11 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.{TupleCreator, Transaction}
+import hu.bme.mit.ire.{Transaction, TupleCreator}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.model.fplan.FNode
 import org.supercsv.prefs.CsvPreference
 
 import scala.collection.JavaConverters._
-
 
 abstract class AbstractIngraphAdapter {
 
@@ -17,6 +16,7 @@ abstract class AbstractIngraphAdapter {
   val plan: FNode
   val tupleMapper: TupleCreator
   val engine: AnnotatedRelationalEngine
+
   def readCsvJava(nodeFilenames: java.util.Map[String, java.util.List[String]],
                   relationshipFilenames: java.util.Map[String, String],
                   transaction: Transaction,

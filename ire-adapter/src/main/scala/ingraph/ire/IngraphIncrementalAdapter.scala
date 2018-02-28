@@ -2,8 +2,12 @@ package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.ChangeListener
-import hu.bme.mit.ire.{TupleCreator, Transaction, TransactionFactory}
+import hu.bme.mit.ire.{Transaction, TransactionFactory, TupleCreator}
 import ingraph.compiler.FPlanParser
+import ingraph.tests.LdbCsvProvider
+import org.supercsv.prefs.CsvPreference
+
+import scala.collection.JavaConverters._
 
 class IngraphIncrementalAdapter(
     override val querySpecification: String,
@@ -25,6 +29,14 @@ class IngraphIncrementalAdapter(
   tupleMapper.transaction = transactionFactory.newBatchTransaction()
   indexer.subscribe(tupleMapper)
 
+  val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
+  val tc = new LdbCsvProvider("ldbc-snb-bi")
+  readCsvJava(
+    tc.nodeCSVPaths.mapValues(_.asJava).asJava,
+    tc.relationshipCSVPaths.asJava,
+    transactionFactory.newBatchTransaction(),
+    csvPreference
+  )
 
   def newTransaction(): Transaction = {
     val tran = transactionFactory.newBatchTransaction()
