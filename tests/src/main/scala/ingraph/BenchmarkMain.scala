@@ -18,12 +18,14 @@ object BenchmarkMain {
       case   "01" => 481036337184L
       case   "03" => 412316860440L
       case    "1" => 962072674360L
+      case    "3" => 3573412790304L
     }
     val forumId = sf match {
       case "tiny" => 274877906944L
       case   "01" => 893353199216L
       case   "03" => 893353197569L
       case    "1" => 1786706395137L
+      case    "3" => 3573412790338L
     }
     val removePost =
       s"""MATCH (n:Message:Post {id: ${postId}})
