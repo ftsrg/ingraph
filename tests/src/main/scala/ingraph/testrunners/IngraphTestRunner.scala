@@ -17,6 +17,7 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
     val session = driver.session()
     val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
     val queryHandler = session.registerQuery(tc.name, tc.querySpecification)
+    val sLoad = Stopwatch.createStarted()
     queryHandler.readCsv(
       tc.vertexCsvPaths,
       tc.edgeCsvPaths,
@@ -24,18 +25,20 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
     )
 
     val results1 = queryHandler.result
+    println("ingraph => Initial evaluation:       " + sLoad.elapsed(TimeUnit.MILLISECONDS))
+
     val indexer = queryHandler.adapter.indexer
 
-    // val loader = new LdbcUpdateToIngraphLoader(indexer, "../graphs/ldbc-snb-bi/sf-tiny/")
-    // loader.load()
-
-    val s = Stopwatch.createStarted()
-    tc.updateQuerySpecification.foreach(update(_, "upd", indexer, queryHandler))
-    val results2 = queryHandler.result
-    println("ingraph => total update time: " + s.elapsed(TimeUnit.MILLISECONDS))
+    tc.updateQuerySpecifications.foreach { q =>
+      val sUpdate = Stopwatch.createStarted()
+      update(q, "upd", indexer, queryHandler)
+      val results2 = queryHandler.result
+      println("ingraph => Update and re-evaluation: " + sUpdate.elapsed(TimeUnit.MILLISECONDS))
+      null
+    }
 
     session.close()
-    results2
+    results1
   }
 
   def update(querySpecification: String, queryName: String, indexer: Indexer, queryHandler: IngraphQueryHandler): List[Map[String, Any]] = {

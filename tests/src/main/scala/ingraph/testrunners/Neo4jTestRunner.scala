@@ -49,19 +49,23 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
   }
 
   def run(): List[Map[String, Any]] = {
+    val sLoad = Stopwatch.createStarted()
     val results1 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
+    println("neo4j   => Initial evaluation:       " + sLoad.elapsed(TimeUnit.MILLISECONDS))
 
     val tx = gds.beginTx()
 
-    val s = Stopwatch.createStarted()
-    tc.updateQuerySpecification.foreach(gds.execute(_))
-    val results2 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
-    println("neo4j   => Total update time: " + s.elapsed(TimeUnit.MILLISECONDS))
+    tc.updateQuerySpecifications.foreach { q =>
+      val s = Stopwatch.createStarted()
+      gds.execute(q)
+      val results2 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
+      println("neo4j   => Update and re-evaluation: " + s.elapsed(TimeUnit.MILLISECONDS))
+      null
+    }
+    tx.failure()
+    tx.close()
 
-//    tx.failure()
-//    tx.close()
-
-    results2
+    results1
   }
 
   override def close(): Unit = {

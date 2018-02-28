@@ -11,7 +11,7 @@ object LdbcSnbTestCase  {
 }
 
 class LdbcSnbTestCase(val workload: String, val number: Int, val csvDir: String, val csvPostfix: String,
-                      val updateQuerySpecification: Option[String] = Option.empty
+                      val updateQuerySpecifications: Seq[String] = Seq()
                      ) extends TestCase with CSVData {
   override def name: String = f"$workload-$number%02d"
 
