@@ -2,10 +2,12 @@ plugins {
   id 'com.github.maiflai.scalatest' version '0.19'
 }
 
+apply plugin: 'application'
+mainClassName = 'ingraph.BenchmarkMain'
+
 dependencies {
   compile project(':csv-loader')
   compile project(':driver')
-  compile project(':neo4j-tests')
 
   compile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
   compile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'

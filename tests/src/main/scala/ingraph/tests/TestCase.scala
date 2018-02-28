@@ -18,5 +18,5 @@ abstract class TestCase {
   def readToString(path: String): String = Source.fromFile(s"$path").getLines().mkString("\n")
 
   def name: String
-  def query: String
+  def querySpecification: String
 }
