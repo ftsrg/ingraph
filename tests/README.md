@@ -6,7 +6,7 @@ Build the project, and move the files to the root of the repository.
 ```
 cd $(git rev-parse --show-toplevel) && \
   rm -rf lib/ bin/ && \
-  ./gradlew installDist && \
+  ./gradlew clean build installDist && \
   cp -R tests/build/install/tests/. . && \
   cd bin
 ```
