@@ -45,7 +45,7 @@ object EdgeTransformer {
 class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
                    edgeConverters: Map[String, Set[GetEdges]],
                    idParser: IdParser = PlainIdParser) extends GraphElementToTupleMapper {
-
+  val edgeOpString = edgeConverters.values.flatten.map(op => op -> op.toString()).toMap
   var transaction: Transaction = _
 
   def addEdge(edge: IngraphEdge): Unit = {
@@ -55,11 +55,11 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = EdgeTransformer(edge, operator, idParser)
-        transaction.add(operator.toString(), tuple)
+        transaction.add(edgeOpString(operator), tuple)
         if (!operator.jnode.directed) {
           val rTuple = EdgeTransformer(
             edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
-          transaction.add(operator.toString(), rTuple)
+          transaction.add(edgeOpString(operator), rTuple)
         }
       }
     }
