@@ -4,13 +4,11 @@
 Build the project, and move the files to the root of the repository.
 
 ```
-cd $(git rev-parse --show-toplevel) && rm -rf lib/ bin/ && ./gradlew installDist
-```
-
-Then:
-
-```bash
-cp -R tests/build/install/tests/. . && cd bin
+cd $(git rev-parse --show-toplevel) && \
+  rm -rf lib/ bin/ && \
+  ./gradlew installDist && \
+  cp -R tests/build/install/tests/. . && \
+  cd bin
 ```
 
 Ensure that the JVM will have sufficient memory by using:
