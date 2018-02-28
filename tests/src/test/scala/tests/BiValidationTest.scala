@@ -39,7 +39,7 @@ class BiValidationTest extends FunSuite {
   val working = Seq(2, 4, 8, 9, 12, 23, 24)
   val bench = Seq(24)
 
-  val testCases: Seq[LdbcSnbTestCase] = Seq() map (i => new LdbcSnbTestCase("bi", i, f"${csvDir}/", csvPostfix, Some(updateQuerySpecification)))
+  val testCases: Seq[LdbcSnbTestCase] = Seq() map (i => new LdbcSnbTestCase("bi", i, f"${csvDir}/", csvPostfix, Seq(updateQuerySpecification)))
 
 //  val ntr = new Neo4jTestRunner
 //  ntr.load(graphMLPath)
