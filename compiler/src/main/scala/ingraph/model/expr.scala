@@ -90,7 +90,9 @@ abstract class AbstractReturnItem(child: Expression, alias: Option[String] = Non
   override def withName(newName: String): Attribute = ???
   override def withMetadata(newMetadata: Metadata): Attribute = ???
   override def newInstance(): Attribute = ???
-  override def name: String = ???
+  override def name: String = alias.getOrElse(child match {
+    case a: Attribute => a.name
+  })
   override def exprId: ExprId = ???
   override def qualifier: Option[String] = ???
   override def eval(input: InternalRow): Any = ???
