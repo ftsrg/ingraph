@@ -17,7 +17,7 @@ class LdbcSnbTestCase(workload: String, number: Int) extends TestCase with CSVDa
 //  def csvDir(file: String): String = f"../graphs/ldbc-snb-${workload}/${number}%02d/${file}_0_0.csv"
 
   override def graphMLPath: String = f"../graphs/ldbc-snb-bi/graphmls/sf-tiny.graphml"
-  def csvDir: String = f"../graphs/ldbc-snb-bi/sf01/"
+  def csvDir: String = f"../graphs/ldbc-snb-bi/sf03/"
   def csvDir(file: String): String = csvDir + f"${file}_0_0.csv"
 
   override def query: String = {

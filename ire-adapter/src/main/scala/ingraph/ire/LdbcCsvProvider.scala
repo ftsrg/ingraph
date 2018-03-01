@@ -7,7 +7,7 @@ import com.google.gson.Gson
 import scala.collection.JavaConverters._
 
 class LdbCsvProvider(workload: String) {
-  def csvDir: String = f"../graphs/ldbc-snb-bi/sf-tiny/"
+  def csvDir: String = f"../graphs/ldbc-snb-bi/sf03/"
   def csvDir(file: String): String = csvDir + f"${file}_0_0.csv"
 
   def nodeCSVPaths: Map[String, List[String]] = {
