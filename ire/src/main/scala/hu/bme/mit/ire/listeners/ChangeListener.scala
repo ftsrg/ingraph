@@ -11,8 +11,8 @@ trait ChangeListener {
 }
 
 abstract class ConsistentChangeListener extends ChangeListener {
-  val positive = new mutable.ListBuffer[Tuple]
-  val negative = new mutable.ListBuffer[Tuple]
+  val positive = mutable.ListBuffer[Tuple]()
+  val negative = mutable.ListBuffer[Tuple]()
 
   override def added(tuple: Tuple): Unit = positive += tuple
 
