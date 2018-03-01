@@ -402,6 +402,18 @@ class RandomCompilationTest extends CompilerTest {
 
     assert(stages.qplan.find( p => p.isInstanceOf[qplan.Expand] ).get.asInstanceOf[qplan.Expand].edge.asInstanceOf[expr.EdgeListAttribute].resolvedName.isDefined)
   }
+
+  test("should resolve projected vertex fed into DELETE") {
+    val stages = compile(
+      """MATCH (n:Person)
+        |WITH n
+        |ORDER BY n.id
+        |LIMIT 1
+        |DELETE n
+        |""".stripMargin)
+
+    assert(stages.qplan.find( p => p.isInstanceOf[qplan.Delete] ).get.asInstanceOf[qplan.Delete].attributes(0).resolvedName.isDefined)
+  }
 }
 
 /** Random compiler tests that must stop after QPlan compilation.
