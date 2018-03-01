@@ -8,7 +8,11 @@ object BenchmarkMain {
   def main(args: Array[String]): Unit = {
     val sf = args(0)
     val query = args(1).toInt
-    val neo4jDir = args(2)
+    val neo4jDir = if (args.length > 2) {
+      Some(args(2))
+    } else {
+      None
+    }
 
     def csvDir = f"../graphs/ldbc-snb-bi/sf${sf}/"
     def csvPostfix = "_0_0.csv"
@@ -40,12 +44,15 @@ object BenchmarkMain {
 
     println(tc.name)
 
-    val itr = new IngraphTestRunner(tc)
-    val ingraphResults = itr.run()
-
-    val ntr = new Neo4jTestRunner(tc, Some(neo4jDir))
-    val neo4jResults = ntr.run()
-    ntr.close
+    neo4jDir match {
+      case None =>
+        val itr = new IngraphTestRunner(tc)
+        val ingraphResults = itr.run()
+      case Some(_) =>
+        val ntr = new Neo4jTestRunner(tc, neo4jDir)
+        val neo4jResults = ntr.run()
+        ntr.close
+    }
 
 //    assert(ingraphResults == neo4jResults)
 
