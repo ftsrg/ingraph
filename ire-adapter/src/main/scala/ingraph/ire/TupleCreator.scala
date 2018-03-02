@@ -22,14 +22,14 @@ object PropertyTransformer {
 object VertexTransformer {
   def apply(element: IngraphVertex, operator: GetVertices, idParser: IdParser): Tuple = {
     Vector(idParser(element.id)) ++
-      operator.internalSchema.map(_.name).drop(1).map(key => PropertyTransformer(element.properties, key, element.id))
+      operator.flatSchema.map(_.name).drop(1).map(key => PropertyTransformer(element.properties, key, element.id))
   }
 }
 
 object EdgeTransformer {
   def apply(edge: IngraphEdge, operator: GetEdges, idParser: IdParser): Tuple = {
     Vector(idParser(edge.sourceVertex.id), idParser(edge.id), idParser(edge.targetVertex.id)) ++
-      operator.internalSchema.drop(3)
+      operator.flatSchema.drop(3)
         .map {
           case PropertyAttribute(name, elementAttribute, _) => elementAttribute match {
             case _: EdgeAttribute => PropertyTransformer(edge.properties, name, edge.id)

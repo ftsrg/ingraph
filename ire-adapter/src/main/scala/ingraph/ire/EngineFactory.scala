@@ -77,8 +77,8 @@ object EngineFactory {
               case op: Union => newLocal(Props(new UnionNode(expr.child, op.jnode.bag)))
               case op: JoinLike =>
                 val child = expr.child
-                val leftTupleWidth  = op.left. internalSchema.length
-                val rightTupleWidth = op.right.internalSchema.length
+                val leftTupleWidth  = op.left. flatSchema.length
+                val rightTupleWidth = op.right.flatSchema.length
                 val leftMask:  Seq[Int] = op.leftMask
                 val rightMask: Seq[Int] = op.rightMask
 
@@ -101,7 +101,7 @@ object EngineFactory {
                         child,
                         leftTupleWidth, rightTupleWidth,
                         leftMask, rightMask,
-                        op.internalSchema.length,
+                        op.flatSchema.length,
                         minHops, maxHops))
                     )
                 }

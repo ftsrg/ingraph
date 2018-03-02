@@ -20,8 +20,8 @@ class JPlanToFPlanTest extends FunSuite {
     val jp = QPlanToJPlan.transform(qp)
     val fp = JPlanToFPlan.transform(jp)
 
-    assert(fp.internalSchema.size == 1)
-    assert(fp.children(0).internalSchema.size == 1)
+    assert(fp.flatSchema.size == 1)
+    assert(fp.children(0).flatSchema.size == 1)
   }
 
   test("infer schema #2") {
@@ -45,9 +45,9 @@ class JPlanToFPlanTest extends FunSuite {
     val jp = QPlanToJPlan.transform(rqp)
     val fp = JPlanToFPlan.transform(jp)
 
-    assert(fp.internalSchema.size == 1)
-    assert(fp.children(0).internalSchema.size == 3)
-    assert(fp.children(0).children(0).internalSchema.size == 3)
+    assert(fp.flatSchema.size == 1)
+    assert(fp.children(0).flatSchema.size == 3)
+    assert(fp.children(0).children(0).flatSchema.size == 3)
   }
 
   test("infer schema #3") {
@@ -65,8 +65,8 @@ class JPlanToFPlanTest extends FunSuite {
     val jp = QPlanToJPlan.transform(rqp)
     val fp = JPlanToFPlan.transform(jp)
 
-    assert(fp.internalSchema.size == 1)
-    assert(fp.children(0).internalSchema.size == 2)
+    assert(fp.flatSchema.size == 1)
+    assert(fp.children(0).flatSchema.size == 2)
   }
 
   ignore("infer schema for joins") {
@@ -98,8 +98,8 @@ class JPlanToFPlanTest extends FunSuite {
 
     assert(join.leftMask == Seq(0))
     assert(join.rightMask == Seq(0))
-    assert(join.children(0).internalSchema.size == 2)
-    assert(join.children(1).internalSchema.size == 4)
+    assert(join.children(0).flatSchema.size == 2)
+    assert(join.children(1).flatSchema.size == 4)
   }
 
   test("infer schema for Projection") {
@@ -119,8 +119,8 @@ class JPlanToFPlanTest extends FunSuite {
     val jp = QPlanToJPlan.transform(rqp)
     val fp = JPlanToFPlan.transform(jp)
 
-    assert(fp.internalSchema.size == 2)
-    assert(fp.children(0).internalSchema.size == 2)
+    assert(fp.flatSchema.size == 2)
+    assert(fp.children(0).flatSchema.size == 2)
   }
 
   test("infer schema for PosLength from Cypher without filtering") {
@@ -135,7 +135,7 @@ class JPlanToFPlanTest extends FunSuite {
           Projection(_, _,
            AllDifferent(_, v: GetVertices)
           )) =>
-        assert(v.internalSchema.map(_.name) == Seq("segment", "length"))
+        assert(v.flatSchema.map(_.name) == Seq("segment", "length"))
     }
   }
 
@@ -153,7 +153,7 @@ class JPlanToFPlanTest extends FunSuite {
             Selection(_,
               AllDifferent(_, v: GetVertices
             )))) =>
-        assert(v.internalSchema.map(_.name) == Seq("segment", "length"))
+        assert(v.flatSchema.map(_.name) == Seq("segment", "length"))
     }
   }
 
@@ -180,9 +180,9 @@ class JPlanToFPlanTest extends FunSuite {
         |  -[:monitoredBy]->(sensor:Sensor)
         |RETURN route, sensor, swP, sw
         |""".stripMargin)
-    assert(fp.children(0).children(0).children(0).internalSchema.size == 7)
-    assert(fp.children(0).children(0).children(0).children(0).internalSchema.size == 5)
-    assert(fp.children(0).children(0).children(0).children(1).internalSchema.size == 3)
+    assert(fp.children(0).children(0).children(0).flatSchema.size == 7)
+    assert(fp.children(0).children(0).children(0).children(0).flatSchema.size == 5)
+    assert(fp.children(0).children(0).children(0).children(1).flatSchema.size == 3)
   }
 
   test("infer schema for SwitchMonitored from Cypher") {
@@ -229,7 +229,7 @@ class JPlanToFPlanTest extends FunSuite {
         |""".stripMargin)
     // TODO: assert
 //    println(fp)
-//    println(fp.children(0).children(0).children(0).internalSchema)
+//    println(fp.children(0).children(0).children(0).flatSchema)
 //    println(fp.children(0).children(0).children(0).asInstanceOf[Join].leftMask)
 //    println(fp.children(0).children(0).children(0).asInstanceOf[Join].rightMask)
   }
