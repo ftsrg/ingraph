@@ -18,7 +18,7 @@ ext {
   scalaShortVersion = '2.11'
   scalaTestVersion = '3.0.1'
   scalaVersion = '2.11.12'
-  sparkVersion = '2.2.0'
+  sparkVersion = '2.3.0'
   slizaaVersion = '1.0.0-SNAPSHOT'
   xtextVersion = '2.10.0'
 }
