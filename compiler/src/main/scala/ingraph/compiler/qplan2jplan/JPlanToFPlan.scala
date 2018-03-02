@@ -43,26 +43,26 @@ object JPlanToFPlan {
         fplan.Grouping(ea, o, transform(o.child, ea ++ opExtra))
       case o: jplan.Selection =>
         val opExtra = extractAttributes(o.condition).filter(!duplicate(_, o.child.output, ea))
-        fplan.Selection(ea, o, transform(o.child, ea ++ opExtra))
+        fplan.Selection(o, transform(o.child, ea ++ opExtra))
       case o: jplan.Unwind =>
-        fplan.Unwind(ea, o, transform(o.child, ea ++ extractAttributes(o.unwindAttribute.list)))
+        fplan.Unwind(o, transform(o.child, ea ++ extractAttributes(o.unwindAttribute.list)))
       case o: jplan.SortAndTop =>
         val opExtra = o.order.flatMap(x => extractAttributes(x.child)).filter(!duplicate(_, o.child.output, ea))
-        fplan.SortAndTop (ea, o, transform(o.child, ea ++ opExtra))
+        fplan.SortAndTop (o, transform(o.child, ea ++ opExtra))
 
       // the rest is just the same, isn't it?
-      case o: jplan.AllDifferent         => fplan.AllDifferent        (ea, o, transform(o.child, ea))
-      case o: jplan.DuplicateElimination => fplan.DuplicateElimination(ea, o, transform(o.child, ea))
-      case o: jplan.Production           => fplan.Production          (ea, o, transform(o.child, ea))
+      case o: jplan.AllDifferent         => fplan.AllDifferent        (o, transform(o.child, ea))
+      case o: jplan.DuplicateElimination => fplan.DuplicateElimination(o, transform(o.child, ea))
+      case o: jplan.Production           => fplan.Production          (o, transform(o.child, ea))
       // unary DMLs
       case o: jplan.Create               =>
         val opExtra = extractAttributesFromInsertion(o.attribute)
-        fplan.Create(ea, o, transform(o.child, ea ++ opExtra))
-      case o: jplan.Delete               => fplan.Delete(ea, o, transform(o.child, ea))
+        fplan.Create(o, transform(o.child, ea ++ opExtra))
+      case o: jplan.Delete               => fplan.Delete(o, transform(o.child, ea))
       case o: jplan.Merge                =>
-        fplan.Merge(ea, o, transform(o.child, ea))
-      case o: jplan.Remove               => fplan.Remove(ea, o, transform(o.child, ea))
-      case o: jplan.SetNode              => fplan.SetNode(ea, o, transform(o.child, ea))
+        fplan.Merge(o, transform(o.child, ea))
+      case o: jplan.Remove               => fplan.Remove(o, transform(o.child, ea))
+      case o: jplan.SetNode              => fplan.SetNode(o, transform(o.child, ea))
 
       // binary
       case j: jplan.JoinLike => {
@@ -83,17 +83,17 @@ object JPlanToFPlan {
         j match {
           case o: jplan.AntiJoin => {
             assert(eaRight.isEmpty)
-            fplan.AntiJoin(eaTotal, o, left, right)
+            fplan.AntiJoin(o, left, right)
           }
-          case o: jplan.Join => fplan.Join(eaTotal, o, left, right)
-          case o: jplan.LeftOuterJoin => fplan.LeftOuterJoin(eaTotal, o, left, right)
+          case o: jplan.Join => fplan.Join(o, left, right)
+          case o: jplan.LeftOuterJoin => fplan.LeftOuterJoin(o, left, right)
           case o: jplan.ThetaLeftOuterJoin =>
             val opExtra = extractAttributes(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, eaTotal))
-            fplan.ThetaLeftOuterJoin(eaTotal, o, left, right)
-          case o: jplan.TransitiveJoin => fplan.TransitiveJoin(ea, o, left, right)
+            fplan.ThetaLeftOuterJoin(o, left, right)
+          case o: jplan.TransitiveJoin => fplan.TransitiveJoin(o, left, right)
         }
       }
-      case o: jplan.Union => fplan.Union(ea, o,
+      case o: jplan.Union => fplan.Union(o,
         transform(o.left, ea),
         transform(o.right, ea)
       )

@@ -131,9 +131,9 @@ class JPlanToFPlanTest extends FunSuite {
     import fplan._
     fp match {
       case
-        Production(_, _,
+        Production(_,
           Projection(_, _,
-           AllDifferent(_, _, v: GetVertices)
+           AllDifferent(_, v: GetVertices)
           )) =>
         assert(v.internalSchema.map(_.name) == Seq("segment", "length"))
     }
@@ -148,10 +148,10 @@ class JPlanToFPlanTest extends FunSuite {
     import fplan._
     fp match {
       case
-        Production(_, _,
+        Production(_,
           Projection(_, _,
-            Selection(_, _,
-              AllDifferent(_, _, v: GetVertices
+            Selection(_,
+              AllDifferent(_, v: GetVertices
             )))) =>
         assert(v.internalSchema.map(_.name) == Seq("segment", "length"))
     }

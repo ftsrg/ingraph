@@ -7,7 +7,6 @@ import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, SortOrd
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 trait FNode extends LogicalPlan {
-  def extraAttributes: Seq[ResolvableName]
   def jnode: jplan.JNode
   def internalSchema: Seq[ResolvableName]
   override def children: Seq[FNode]
@@ -41,24 +40,20 @@ case class GetEdges(extraAttributes: Seq[ResolvableName], jnode: jplan.GetEdges)
 
 case class Dual(jnode: jplan.Dual) extends LeafFNode {
   override def internalSchema = Seq()
-  override def extraAttributes: Seq[ResolvableName] = Seq()
 }
 
 // unary nodes
-case class AllDifferent(extraAttributes: Seq[ResolvableName],
-                        jnode: jplan.AllDifferent,
+case class AllDifferent(jnode: jplan.AllDifferent,
                         child: FNode
                         ) extends UnaryFNode {
 
 }
 
-case class DuplicateElimination(extraAttributes: Seq[ResolvableName],
-                                jnode: jplan.DuplicateElimination,
+case class DuplicateElimination(jnode: jplan.DuplicateElimination,
                                 child: FNode
                                ) extends UnaryFNode {}
 
-case class Production(extraAttributes: Seq[ResolvableName],
-                      jnode: jplan.Production,
+case class Production(jnode: jplan.Production,
                       child: FNode
                      ) extends UnaryFNode {
   override def output = jnode.output
@@ -88,19 +83,17 @@ case class Grouping(extraAttributes: Seq[ResolvableName],
       extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
 }
 
-case class Selection(extraAttributes: Seq[ResolvableName],
-                     jnode: jplan.Selection,
+case class Selection(jnode: jplan.Selection,
                      child: FNode
                     ) extends UnaryFNode {
   lazy val condition: Expression =
     SchemaMapper.transformExpression(jnode.condition, child.internalSchema)
 }
 
-case class Unwind(extraAttributes: Seq[ResolvableName],
-                  jnode: jplan.Unwind,
+case class Unwind(jnode: jplan.Unwind,
                   child: FNode
-                    ) extends UnaryFNode {
-  override def internalSchema: Seq[ResolvableName] = child.jnode.output ++ extraAttributes ++ Seq(unwindAttribute)
+                 ) extends UnaryFNode {
+  override def internalSchema: Seq[ResolvableName] = child.jnode.output ++ Seq(unwindAttribute)
   lazy val unwindAttribute: UnwindAttribute =
     UnwindAttribute(
       SchemaMapper.transformExpression(jnode.unwindAttribute.list, child.internalSchema),
@@ -109,8 +102,7 @@ case class Unwind(extraAttributes: Seq[ResolvableName],
     )
 }
 
-case class SortAndTop(extraAttributes: Seq[ResolvableName],
-                      jnode: jplan.SortAndTop,
+case class SortAndTop(jnode: jplan.SortAndTop,
                       child: FNode
                      ) extends UnaryFNode {
   lazy val skipExpr:  Option[Expression] = jnode.skipExpr
@@ -119,50 +111,43 @@ case class SortAndTop(extraAttributes: Seq[ResolvableName],
 }
 
 // binary nodes
-case class Union(extraAttributes: Seq[ResolvableName],
-                 jnode: jplan.Union,
+case class Union(jnode: jplan.Union,
                  left: FNode,
                  right: FNode) extends BinaryFNode {
   override def internalSchema: Seq[ResolvableName] = left.internalSchema
 }
 
-case class AntiJoin(extraAttributes: Seq[ResolvableName],
-                    jnode: jplan.AntiJoin,
+case class AntiJoin(jnode: jplan.AntiJoin,
                     left: FNode,
                     right: FNode
                    ) extends BinaryFNode with JoinLike {
   override def internalSchema: Seq[ResolvableName] = left.internalSchema
 }
 
-case class Join(extraAttributes: Seq[ResolvableName],
-                jnode: jplan.Join,
+case class Join(jnode: jplan.Join,
                 left: FNode,
                 right: FNode
                ) extends BinaryFNode with EquiJoinLike {}
 
-case class TransitiveJoin(extraAttributes: Seq[ResolvableName],
-                          jnode: jplan.TransitiveJoin,
+case class TransitiveJoin(jnode: jplan.TransitiveJoin,
                           left: FNode,
                           right: FNode) extends BinaryFNode with EquiJoinLike {
   lazy val edgeList: EdgeListAttribute = jnode.edgeList
 }
 
-case class LeftOuterJoin(extraAttributes: Seq[ResolvableName],
-                         jnode: jplan.LeftOuterJoin,
+case class LeftOuterJoin(jnode: jplan.LeftOuterJoin,
                          left: FNode,
                          right: FNode
                         ) extends BinaryFNode with EquiJoinLike {}
 
-case class ThetaLeftOuterJoin(extraAttributes: Seq[ResolvableName],
-                              jnode: jplan.ThetaLeftOuterJoin,
+case class ThetaLeftOuterJoin(jnode: jplan.ThetaLeftOuterJoin,
                               left: FNode,
                               right: FNode) extends BinaryFNode with EquiJoinLike {
   lazy val condition: Expression =
     SchemaMapper.transformExpression(jnode.condition, left.internalSchema, right.internalSchema, leftMask.size)
 }
 
-case class Create(extraAttributes: Seq[ResolvableName],
-                  jnode: jplan.Create,
+case class Create(jnode: jplan.Create,
                   child: FNode) extends UnaryFNode {
   lazy val attribute: ResolvableName = jnode.attribute match {
     case VertexAttribute(name, labels, properties, isAnonymous, resolvedName) =>
@@ -178,27 +163,23 @@ case class Create(extraAttributes: Seq[ResolvableName],
       )
       TupleEdgeAttribute(tSrc, tTrg, tEdge, dir)
   }
-  override def internalSchema = jnode.output ++ extraAttributes ++ Seq(attribute)
+  override def internalSchema = jnode.output ++ Seq(attribute)
 }
 
-case class Delete(extraAttributes: Seq[ResolvableName],
-                  jnode: jplan.Delete,
+case class Delete(jnode: jplan.Delete,
                   child: FNode) extends UnaryFNode {
   lazy val attributes: Seq[TupleIndexLiteralAttribute] =
     jnode.attributes.map(SchemaMapper.transformExpression(_, child.internalSchema).asInstanceOf[TupleIndexLiteralAttribute])
   lazy val detach: Boolean = jnode.detach
 }
 
-case class Merge(extraAttributes: Seq[ResolvableName],
-                 jnode: jplan.Merge,
+case class Merge(jnode: jplan.Merge,
                  child: FNode) extends UnaryFNode {}
 
-case class SetNode(extraAttributes: Seq[ResolvableName],
-                   jnode: jplan.SetNode,
+case class SetNode(jnode: jplan.SetNode,
                    child: FNode) extends UnaryFNode {}
 
-case class Remove(extraAttributes: Seq[ResolvableName],
-                  jnode: jplan.Remove,
+case class Remove(jnode: jplan.Remove,
                   child: FNode) extends UnaryFNode {}
 
 
