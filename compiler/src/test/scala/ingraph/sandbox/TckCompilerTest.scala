@@ -8,7 +8,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN n
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 1)
   }
 
   test("Filtering for vertices in MATCH") {
@@ -17,7 +17,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN n
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 2)
   }
 
   test("Filtering for edges in MATCH") {
@@ -26,7 +26,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN n, m
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 4)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L52
@@ -43,8 +43,8 @@ class TckCompilerTest extends CompilerTest {
         |RETURN n.value AS n, m.value AS m
       """.stripMargin
     )
-//    assert(getLeafNodes(readStages.fplan)(0).extraAttributes.length == 1)
-//    assert(getLeafNodes(readStages.fplan)(1).extraAttributes.length == 1)
+    assert(getLeafNodes(readStages.fplan)(0).internalSchema.length == 2)
+    assert(getLeafNodes(readStages.fplan)(1).internalSchema.length == 2)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L97
@@ -55,8 +55,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN a
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
-//    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 4)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 4)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131
@@ -67,7 +66,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN a
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 4)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L167
@@ -77,7 +76,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN n1, n2
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 3)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L183
@@ -87,7 +86,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN x
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 3)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L202
@@ -97,7 +96,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN b
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 3)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L218
@@ -108,7 +107,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN n, x
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 2)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 5)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
@@ -119,7 +118,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN n
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 2)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 3)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L456
@@ -129,7 +128,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN r
       """.stripMargin
     )
-//    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
+    assert(getLeafNodes(stages.fplan)(0).internalSchema.length == 1)
   }
 
   ignore("Placeholder for debugging plans") {

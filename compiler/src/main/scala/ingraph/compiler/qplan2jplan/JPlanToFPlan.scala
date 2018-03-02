@@ -14,97 +14,98 @@ object JPlanToFPlan {
     transform(jnode, Seq())
   }
 
-  private def transform(jnode: jplan.JNode, ea: Seq[ResolvableName]): fplan.FNode = {
+  private def transform(jnode: jplan.JNode, req: Seq[ResolvableName]): fplan.FNode = {
+
     /**
-      * Return whether an attribute selected for propagation is a duplicate:
+      * Return whether a property selected for propagation is a duplicate:
       * (1) it is in the input operator's/operators' output, or
-      * (2) it is already part of the extra extra attributes
+      * (2) it is already part of the required properties
       */
-    def duplicate(attribute: ResolvableName, inputOperatorOutput: Seq[ResolvableName], extraAttributes: Seq[ResolvableName]) = {
-      inputOperatorOutput.map(_.resolvedName).contains(attribute.resolvedName) || extraAttributes.map(_.resolvedName).contains(attribute.resolvedName)
+    def duplicate(attribute: ResolvableName, inputOperatorOutput: Seq[ResolvableName], requiredProperties: Seq[ResolvableName]) = {
+      inputOperatorOutput.map(_.resolvedName).contains(attribute.resolvedName) || requiredProperties.map(_.resolvedName).contains(attribute.resolvedName)
     }
 
     jnode match {
       // leaf
-      case o: jplan.GetEdges     => fplan.GetEdges(ea, o)
-      case o: jplan.GetVertices  => fplan.GetVertices(ea, o)
+      case o: jplan.GetEdges     => fplan.GetEdges(req, o)
+      case o: jplan.GetVertices  => fplan.GetVertices(req, o)
       case o: jplan.Dual         =>
-        if (ea.nonEmpty) {
-          throw new IllegalStateException(s"Dual node cannot hold extra attributes: ${ea}")
+        if (req.nonEmpty) {
+          throw new IllegalStateException(s"Dual node cannot provide properties: ${req}")
         }
         fplan.Dual(o)
 
       // unary
       case o: jplan.Projection =>
-        val opExtra = extractAttributes(o.projectList).filter(!duplicate(_, o.child.output, ea))
-        fplan.Projection(ea, o, transform(o.child, ea ++ opExtra))
+        val reqOp = extractProperties(o.projectList).filter(!duplicate(_, o.child.output, req))
+        fplan.Projection(req, o, transform(o.child, req ++ reqOp))
       case o: jplan.Grouping =>
-        val opExtra = extractAttributes(o.projectList).filter(!duplicate(_, o.child.output, ea))
-        fplan.Grouping(ea, o, transform(o.child, ea ++ opExtra))
+        val reqOp = extractProperties(o.projectList).filter(!duplicate(_, o.child.output, req))
+        fplan.Grouping(req, o, transform(o.child, req ++ reqOp))
       case o: jplan.Selection =>
-        val opExtra = extractAttributes(o.condition).filter(!duplicate(_, o.child.output, ea))
-        fplan.Selection(o, transform(o.child, ea ++ opExtra))
+        val reqOp = extractProperties(o.condition).filter(!duplicate(_, o.child.output, req))
+        fplan.Selection(o, transform(o.child, req ++ reqOp))
       case o: jplan.Unwind =>
-        fplan.Unwind(o, transform(o.child, ea ++ extractAttributes(o.unwindAttribute.list)))
+        fplan.Unwind(o, transform(o.child, req ++ extractProperties(o.unwindAttribute.list)))
       case o: jplan.SortAndTop =>
-        val opExtra = o.order.flatMap(x => extractAttributes(x.child)).filter(!duplicate(_, o.child.output, ea))
-        fplan.SortAndTop (o, transform(o.child, ea ++ opExtra))
+        val reqOp = o.order.flatMap(x => extractProperties(x.child)).filter(!duplicate(_, o.child.output, req))
+        fplan.SortAndTop (o, transform(o.child, req ++ reqOp))
 
       // the rest is just the same, isn't it?
-      case o: jplan.AllDifferent         => fplan.AllDifferent        (o, transform(o.child, ea))
-      case o: jplan.DuplicateElimination => fplan.DuplicateElimination(o, transform(o.child, ea))
-      case o: jplan.Production           => fplan.Production          (o, transform(o.child, ea))
+      case o: jplan.AllDifferent         => fplan.AllDifferent        (o, transform(o.child, req))
+      case o: jplan.DuplicateElimination => fplan.DuplicateElimination(o, transform(o.child, req))
+      case o: jplan.Production           => fplan.Production          (o, transform(o.child, req))
       // unary DMLs
       case o: jplan.Create               =>
-        val opExtra = extractAttributesFromInsertion(o.attribute)
-        fplan.Create(o, transform(o.child, ea ++ opExtra))
-      case o: jplan.Delete               => fplan.Delete(o, transform(o.child, ea))
+        val reqOp = extractPropertiesFromInsertion(o.attribute)
+        fplan.Create(o, transform(o.child, req ++ reqOp))
+      case o: jplan.Delete               => fplan.Delete(o, transform(o.child, req))
       case o: jplan.Merge                =>
-        fplan.Merge(o, transform(o.child, ea))
-      case o: jplan.Remove               => fplan.Remove(o, transform(o.child, ea))
-      case o: jplan.SetNode              => fplan.SetNode(o, transform(o.child, ea))
+        fplan.Merge(o, transform(o.child, req))
+      case o: jplan.Remove               => fplan.Remove(o, transform(o.child, req))
+      case o: jplan.SetNode              => fplan.SetNode(o, transform(o.child, req))
 
       // binary
       case j: jplan.JoinLike => {
-        // ThetaLeftOuterJoins require special treatment: they are the only join operators that can introduce new extra variables
-        val opExtra = j match {
-          case o: jplan.ThetaLeftOuterJoin => extractAttributes(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, ea))
+        // ThetaLeftOuterJoins require special treatment: they are the only join operators that can require new properties
+        val reqOp = j match {
+          case o: jplan.ThetaLeftOuterJoin => extractProperties(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, req))
           case _ => Seq()
         }
 
-        val eaTotal = ea ++ opExtra
+        val rpTotal = req ++ reqOp
 
-        val eaLeft = propagate(eaTotal, j.left.output)
-        val eaRight = propagate(eaTotal, j.right.output).filter(x => !eaLeft.map(_.resolvedName).contains(x.resolvedName))
+        val rpLeft = propagate(rpTotal, j.left.output)
+        val rpRight = propagate(rpTotal, j.right.output).filter(x => !rpLeft.map(_.resolvedName).contains(x.resolvedName))
 
-        val left = transform(j.left, eaLeft)
-        val right = transform(j.right, eaRight)
+        val left = transform(j.left, rpLeft)
+        val right = transform(j.right, rpRight)
 
         j match {
           case o: jplan.AntiJoin => {
-            assert(eaRight.isEmpty)
+            assert(rpRight.isEmpty)
             fplan.AntiJoin(o, left, right)
           }
           case o: jplan.Join => fplan.Join(o, left, right)
           case o: jplan.LeftOuterJoin => fplan.LeftOuterJoin(o, left, right)
           case o: jplan.ThetaLeftOuterJoin =>
-            val opExtra = extractAttributes(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, eaTotal))
+            val reqOp = extractProperties(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, rpTotal))
             fplan.ThetaLeftOuterJoin(o, left, right)
           case o: jplan.TransitiveJoin => fplan.TransitiveJoin(o, left, right)
         }
       }
       case o: jplan.Union => fplan.Union(o,
-        transform(o.left, ea),
-        transform(o.right, ea)
+        transform(o.left, req),
+        transform(o.right, req)
       )
     }
   }
 
   /**
-    * propagate property attributes to wherever their element is
+    * propagate required property attributes to wherever their element is
     */
-  def propagate(extraAttributes: Seq[ResolvableName], inputSchema: Seq[ResolvableName]): Seq[ResolvableName] = {
-    extraAttributes
+  def propagate(requiredProperties: Seq[ResolvableName], inputSchema: Seq[ResolvableName]): Seq[ResolvableName] = {
+    requiredProperties
       .flatMap {
         case a: PropertyAttribute => Some(a)
         case _ => None
@@ -112,22 +113,22 @@ object JPlanToFPlan {
       .filter(a => inputSchema.map(_.resolvedName).contains(a.elementAttribute.resolvedName))
   }
 
-  def extractAttributes(expression: Expression): Seq[ResolvableName] = {
+  def extractProperties(expression: Expression): Seq[ResolvableName] = {
     (expression match {
-      case a: ReturnItem => extractAttributes(a.child)
+      case a: ReturnItem => extractProperties(a.child)
       case a: PropertyAttribute => Seq(a)
       case _ => Seq()
-    }) ++ expression.children.flatMap(a => extractAttributes(a))
+    }) ++ expression.children.flatMap(a => extractProperties(a))
   }
 
-  def extractAttributes(projectList: TProjectList): Seq[ResolvableName] = {
-    projectList.flatMap(extractAttributes(_))
+  def extractProperties(projectList: TProjectList): Seq[ResolvableName] = {
+    projectList.flatMap(extractProperties(_))
   }
 
-  def extractAttributesFromInsertion(attribute: ResolvableName): Seq[ResolvableName] = {
+  def extractPropertiesFromInsertion(attribute: ResolvableName): Seq[ResolvableName] = {
     attribute match {
-      case a: VertexAttribute => extractAttributes(a)
-      case RichEdgeAttribute(src, trg, edge, _) => Seq(src, trg, edge).flatMap(extractAttributes)
+      case a: VertexAttribute => extractProperties(a)
+      case RichEdgeAttribute(src, trg, edge, _) => Seq(src, trg, edge).flatMap(extractProperties)
       case _ => Seq()
     }
   }

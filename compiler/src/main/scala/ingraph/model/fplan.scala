@@ -30,12 +30,12 @@ trait EquiJoinLike extends JoinLike {
 }
 
 // leaf nodes
-case class GetVertices(extraAttributes: Seq[ResolvableName], jnode: jplan.GetVertices) extends LeafFNode {
-  override def internalSchema: Seq[ResolvableName] = jnode.output ++ extraAttributes
+case class GetVertices(requiredProperties: Seq[ResolvableName], jnode: jplan.GetVertices) extends LeafFNode {
+  override def internalSchema: Seq[ResolvableName] = jnode.output ++ requiredProperties
 }
 
-case class GetEdges(extraAttributes: Seq[ResolvableName], jnode: jplan.GetEdges) extends LeafFNode {
-  override def internalSchema: Seq[ResolvableName] = jnode.output ++ extraAttributes
+case class GetEdges(requiredProperties: Seq[ResolvableName], jnode: jplan.GetEdges) extends LeafFNode {
+  override def internalSchema: Seq[ResolvableName] = jnode.output ++ requiredProperties
 }
 
 case class Dual(jnode: jplan.Dual) extends LeafFNode {
@@ -60,27 +60,27 @@ case class Production(jnode: jplan.Production,
   def outputNames: Iterable[String] = output.map(_.resolvedName.get.resolvedName.replaceAll("#\\d+$", "").replace('$', '.'))
 }
 
-case class Projection(extraAttributes: Seq[ResolvableName],
+case class Projection(requiredProperties: Seq[ResolvableName],
                       jnode: jplan.Projection,
                       child: FNode
                      ) extends UnaryFNode {
-  override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ extraAttributes
+  override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ requiredProperties
   lazy val projectionTuple: Seq[Expression] =
     jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
-      extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
+      requiredProperties.map(SchemaMapper.transformExpression(_, child.internalSchema))
 }
 
-case class Grouping(extraAttributes: Seq[ResolvableName],
-                      jnode: jplan.Grouping,
-                      child: FNode
+case class Grouping(requiredProperties: Seq[ResolvableName],
+                    jnode: jplan.Grouping,
+                    child: FNode
                      ) extends UnaryFNode {
-  override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ extraAttributes
+  override def internalSchema: Seq[ResolvableName] = jnode.projectList ++ requiredProperties
   lazy val aggregationCriteria: Seq[Expression] =
     jnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
-      extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
+      requiredProperties.map(SchemaMapper.transformExpression(_, child.internalSchema))
   lazy val projectionTuple: Seq[Expression] =
     jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.internalSchema)) ++
-      extraAttributes.map(SchemaMapper.transformExpression(_, child.internalSchema))
+      requiredProperties.map(SchemaMapper.transformExpression(_, child.internalSchema))
 }
 
 case class Selection(jnode: jplan.Selection,
