@@ -52,7 +52,12 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
 
   def run(): List[Map[String, Any]] = {
     val sLoad = Stopwatch.createStarted()
-    val results1 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
+    val results1 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap
+      .map {case (k, v) => (k, v match {
+        case v: java.util.List[AnyRef] => v.asScala
+        case _ => v
+      })}
+    ).toList
     println("neo4j   => Initial evaluation:       " + sLoad.elapsed(TimeUnit.MILLISECONDS))
 
     val tx = gds.beginTx()
