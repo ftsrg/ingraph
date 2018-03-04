@@ -702,6 +702,25 @@ class TckEngineTest extends FunSuite {
     assert(results.size == 1)
   }
 
+  test("count empty on OPTIONAL MATCH") {
+    val results = run("",
+      """OPTIONAL MATCH (n)
+        |RETURN count(n) AS cn
+      """.stripMargin
+    )
+    assert(results.size == 1)
+    assert(results.head == Vector(0L))
+  }
+
+  test("count empty on MATCH") {
+    val results = run("",
+      """MATCH (n)
+        |RETURN count(n) AS cn
+      """.stripMargin
+    )
+    assert(results.isEmpty)
+  }
+
 //  //
 //  test("") {
 //    val results = run(
