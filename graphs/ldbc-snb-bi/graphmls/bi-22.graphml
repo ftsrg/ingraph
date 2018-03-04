@@ -32,6 +32,7 @@
 <edge id="e4" source="n2" target="n5" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
 <edge id="e5" source="n3" target="n7" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
 <edge id="e6" source="n2" target="n3" label="KNOWS"><data key="label">KNOWS</data><data key="creationDate">1000</data></edge>
+<edge id="e7" source="n2" target="n8" label="LIKES"><data key="label">LIKES</data><data key="creationDate">1000</data></edge>
 <edge id="e8" source="n3" target="n9" label="LIKES"><data key="label">LIKES</data><data key="creationDate">2000</data></edge>
 <edge id="e9" source="n5" target="n4" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
 <edge id="e10" source="n7" target="n6" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
