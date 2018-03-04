@@ -37,7 +37,6 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
 
     val trans = gds.beginTx()
     val loadCommand = s"CALL apoc.import.graphml('${graphMLPath}', {batchSize: 10000, readLabels: true})"
-    println(loadCommand)
     gds.execute(loadCommand)
     trans.close()
   }
