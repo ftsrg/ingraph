@@ -11,7 +11,6 @@ object GenericMath extends Ordering[Any] {
         case b: Int    => a + b
         case b: Long   => a + b
       }
-
     case a: Double =>
       b match {
         case b: Float  => a + b
@@ -32,6 +31,14 @@ object GenericMath extends Ordering[Any] {
         case b: Double => a + b
         case b: Int    => a + b
         case b: Long   => a + b
+      }
+    case a: Vector[Any] =>
+      b match {
+        case b: Vector[Any] => a ++ b
+      }
+    case a: String =>
+      b match {
+        case b: String => a + b
       }
   }
 
