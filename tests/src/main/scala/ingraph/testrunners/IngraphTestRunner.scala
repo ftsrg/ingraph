@@ -35,8 +35,7 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
       println("ingraph => Update and re-evaluation: " + sUpdate.elapsed(TimeUnit.MILLISECONDS))
     }
 
-    session.close()
-    null
+    queryHandler.result()
   }
 
   def update(querySpecification: String, queryName: String, indexer: Indexer, queryHandler: IngraphQueryHandler): List[Map[String, Any]] = {
