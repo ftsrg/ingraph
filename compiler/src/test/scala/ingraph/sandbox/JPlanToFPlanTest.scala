@@ -4,12 +4,17 @@ import ingraph.compiler.FPlanParser
 import ingraph.compiler.cypher2qplan.QPlanResolver
 import ingraph.compiler.qplan2jplan.{JPlanToFPlan, QPlanToJPlan}
 import ingraph.model.expr._
-import ingraph.model._
-import ingraph.model.{jplan, fplan, qplan}
+import ingraph.model.fplan.{FNode, LeafFNode}
+import ingraph.model.{fplan, jplan, qplan}
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
 class JPlanToFPlanTest extends FunSuite {
+
+  def getLeafNodes(plan: FNode): Seq[FNode] = {
+    if (plan.isInstanceOf[LeafFNode]) return plan :: Nil
+    return plan.children.flatMap(x => getLeafNodes(x))
+  }
 
   test("infer schema #1") {
     val v = VertexAttribute("v")
@@ -69,37 +74,14 @@ class JPlanToFPlanTest extends FunSuite {
     assert(fp.children(0).flatSchema.size == 2)
   }
 
-  ignore("infer schema for joins") {
-    val vls = VertexLabelSet(Set("Person"), NonEmpty)
-    val el = EdgeLabelSet(Set("KNOWS"), NonEmpty)
+  test("infer schema for simple path") {
+    val fp = FPlanParser.parse(
+      """MATCH (a:A)-[:R1]->(b:B)-[:R2]->(c:C)
+        |RETURN a, b, c
+        |""".stripMargin)
 
-    val p1 = VertexAttribute("p1", vls)
-    val name = ReturnItem(PropertyAttribute("name", p1))
-    val projectList = Seq(name)
-
-    val p2 = VertexAttribute("p2", vls)
-    val age = PropertyAttribute("age", p2)
-    val condition = GreaterThan(age, Literal(27))
-
-    val e = EdgeAttribute("e", el)
-
-    val qp = jplan.Projection(
-      projectList,
-      jplan.Selection(
-        condition,
-        jplan.Join(
-          jplan.GetVertices(p1),
-          jplan.GetEdges(p1, p2, e, false)
-        )
-      )
-    )
-    val fp = JPlanToFPlan.transform(qp)
-    val join = fp.children(0).children(0).asInstanceOf[fplan.Join]
-
-    assert(join.leftMask == Seq(0))
-    assert(join.rightMask == Seq(0))
-    assert(join.children(0).flatSchema.size == 2)
-    assert(join.children(1).flatSchema.size == 4)
+    assert(getLeafNodes(fp)(0).flatSchema.length == 3)
+    assert(getLeafNodes(fp)(1).flatSchema.length == 3)
   }
 
   test("infer schema for Projection") {
@@ -185,30 +167,15 @@ class JPlanToFPlanTest extends FunSuite {
     assert(fp.children(0).children(0).children(0).children(1).flatSchema.size == 3)
   }
 
-  test("infer schema for SwitchMonitored from Cypher") {
-    val fp = FPlanParser.parse(
-      """MATCH (sw:Switch)
-        |WHERE NOT (sw)-[:monitoredBy]->(:Sensor)
-        |RETURN sw
-        |""".stripMargin)
-    // TODO: assert
-  }
-
-  ignore("infer schema for simple path") {
-    val fp = FPlanParser.parse(
-      """MATCH (a:A)-[:R1]->(b:B)-[:R2]->(c:C)
-        |RETURN a, b, c
-        |""".stripMargin)
-    // TODO: assert
-  }
-
   test("infer schema for SwitchMonitored") {
     val fp = FPlanParser.parse(
       """MATCH (sw:Switch)
         |WHERE NOT (sw)-[:monitoredBy]->(:Sensor)
         |RETURN sw
         |""".stripMargin)
-    // TODO: assert
+
+    assert(getLeafNodes(fp)(0).flatSchema.length == 1)
+    assert(getLeafNodes(fp)(1).flatSchema.length == 3)
   }
 
   test("infer schema for ConnectedSegments") {
@@ -227,19 +194,20 @@ class JPlanToFPlanTest extends FunSuite {
         |  (segment6:Segment)-[mb6:monitoredBy]->(sensor:Sensor)
         |RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
         |""".stripMargin)
-    // TODO: assert
-//    println(fp)
-//    println(fp.children(0).children(0).children(0).flatSchema)
-//    println(fp.children(0).children(0).children(0).asInstanceOf[Join].leftMask)
-//    println(fp.children(0).children(0).children(0).asInstanceOf[Join].rightMask)
+
+    for (leafNode <- getLeafNodes(fp)) {
+      assert(leafNode.flatSchema.length == 3)
+    }
   }
 
-  ignore("infer schema for Cartesian product") {
+  test("infer schema for Cartesian product") {
     val fp = FPlanParser.parse(
       """MATCH (n), (m)
         |RETURN n.value, m.value
       """.stripMargin
     )
+    assert(getLeafNodes(fp)(0).flatSchema.length == 2)
+    assert(getLeafNodes(fp)(1).flatSchema.length == 2)
   }
 
 }
