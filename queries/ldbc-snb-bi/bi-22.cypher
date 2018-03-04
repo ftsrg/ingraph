@@ -32,21 +32,24 @@ ORDER BY
   person2.id ASC
 WITH
   city1,
-  collect([score, person1, person2]) AS tops
+  [score, person1.id, person2.id] AS topTuple
+WITH
+  city1,
+  collect(topTuple) AS tops
 WITH
   city1,
   tops[0] AS top
 WITH
-  top[1] AS person1,
-  top[2] AS person2,
+  top[1] AS person1Id,
+  top[2] AS person2Id,
   city1,
   top[0] AS score
 RETURN
-  person1.id,
-  person2.id,
+  person1Id,
+  person2Id,
   city1.name,
   score
 ORDER BY
   score DESC,
-  person1 ASC,
-  person2 ASC
+  person1Id ASC,
+  person2Id ASC
