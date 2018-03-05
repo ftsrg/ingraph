@@ -30,12 +30,12 @@ class StatefulDistinctCount(index: Int) extends StatefulAggregate {
   private var elements = mutable.Map[Any, Int]().withDefault(f => 0)
 
   override def maintainPositive(values: Iterable[Tuple]): Unit = {
-    for (tuple <- values)
+    for (tuple <- values.filter(t => t(index) != null))
       elements(tuple(index)) += 1
   }
 
   override def maintainNegative(values: Iterable[Tuple]): Unit = {
-    for (tuple <- values) {
+    for (tuple <- values.filter(t => t(index) != null)) {
       val value = tuple(index)
       elements(value) -= 1
       if (elements(value) == 0)

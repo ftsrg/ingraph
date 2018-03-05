@@ -9,15 +9,15 @@ import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 
 
-class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
-                                override val primaryTupleWidth: Int,
-                                override val secondaryTupleWidth: Int,
-                                override val primaryMask: Mask,
-                                override val secondaryMask: Mask,
-                                val outputTupleWidth: Int,
-                                val minHops: Long = 1,
-                                var maxHops: Long = Long.MaxValue
-                                ) extends JoinNodeBase with SingleForwarder {
+class TransitiveJoinNode(override val next: (ReteMessage) => Unit,
+                         override val primaryTupleWidth: Int,
+                         override val secondaryTupleWidth: Int,
+                         override val primaryMask: Mask,
+                         override val secondaryMask: Mask,
+                         val outputTupleWidth: Int,
+                         val minHops: Long = 1,
+                         var maxHops: Long = Long.MaxValue
+                        ) extends JoinNodeBase with SingleForwarder {
 
   maxHops = if (maxHops >= 1) maxHops else Long.MaxValue
 
@@ -167,8 +167,9 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     val sourceId = inputTuple(sourceVertexIndex).asInstanceOf[Number].longValue
     var pathsFromSourceVertexBuilder = new VectorBuilder[Tuple]
 
-    if (minHops == 0)
-      pathsFromSourceVertexBuilder += buildResultTuple(inputTuple, Path(), inputTuple)
+    if (minHops == 0) {
+      pathsFromSourceVertexBuilder += buildResultTuple(inputTuple, Path(), Vector(sourceId))
+    }
 
     val reachableFromSource = reachableVertices.getOrElse(sourceId, mutable.HashMap.empty)
     pathsFromSourceVertexBuilder ++= reachableFromSource.keysIterator.flatMap(

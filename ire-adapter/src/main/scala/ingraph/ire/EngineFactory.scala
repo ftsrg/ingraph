@@ -97,7 +97,7 @@ object EngineFactory {
                     val minHops = op.edgeList.minHops.getOrElse(1)
                     val maxHops = op.edgeList.maxHops.getOrElse(Int.MaxValue)
                     newLocal(Props(
-                      new TransitiveClosureJoinNode(
+                      new TransitiveJoinNode(
                         child,
                         leftTupleWidth, rightTupleWidth,
                         leftMask, rightMask,

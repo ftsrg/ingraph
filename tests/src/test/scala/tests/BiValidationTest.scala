@@ -13,7 +13,7 @@ class BiValidationTest extends FunSuite {
 
   val sf = "01"
   def graphMLPath = f"../graphs/ldbc-snb-bi/graphmls/sf${sf}.graphml"
-  def csvDir = f"../graphs/ldbc-snb-bi/sf${sf}/"
+  def csvDir = f"../graphs/ldbc-snb-bi/"
 
   val forumId = sf match {
     case "tiny" => 274877906944L
@@ -21,25 +21,23 @@ class BiValidationTest extends FunSuite {
     case "03" => 893353197569L
     case "1" => 1786706395137L
   }
-  val updateQuerySpecification =
-    s"""MATCH (f:Forum {id: ${forumId}})
-       |DETACH DELETE f
-    """.stripMargin
+//  val updateQuerySpecification =
+//    s"""MATCH (f:Forum {id: ${forumId}})
+//       |DETACH DELETE f
+//    """.stripMargin
 
-  val collects = Seq(10)
-  val collectLists = Seq(13, 22)
-  val transitives = Seq(14, 16, 18, 19, 20)
-  val metaFeatures = Seq(1)
-  val optionals = Seq(3, 15)
-  val listComprehensions = Seq(11)
+  val meta = Seq(1)
+  val listComprehensions = Seq(11, 13) //2
   val madness = Seq(25)
+  val orderby = Seq(10)
+  val hangs = Seq(19)
+  val startWithWith = Seq(20)
 
-  val buggy = Seq(5, 6, 7, 8, 17, 19, 21)
-  val slow = Seq(16)
-  val working = Seq(2, 4, 8, 9, 12, 23, 24)
-  val bench = Seq(24)
+  val transitives = Seq(14, 16, 18) //3
+  val buggy =   Seq(3, 5, 6, 8, 15, 17, 21) //7
+  val working = Seq(2, 4, 7, 9, 12, 22, 23, 24) //8
 
-  val testCases: Seq[LdbcSnbTestCase] = Seq() map (i => new LdbcSnbTestCase("bi", i, f"${csvDir}/", csvPostfix, Seq(updateQuerySpecification)))
+  val testCases: Seq[LdbcSnbTestCase] = (transitives++buggy++working).sorted map (i => new LdbcSnbTestCase("bi", i, f"${csvDir}/$i%02d/", csvPostfix, Seq()))
 
 //  val ntr = new Neo4jTestRunner
 //  ntr.load(graphMLPath)
@@ -53,11 +51,12 @@ class BiValidationTest extends FunSuite {
         val ingraphResults = itr.run()
 
         val ntr = new Neo4jTestRunner(tc, None)
+        ntr.load(graphMLDir + tc.name + graphMLPostfix)
         val neo4jResults = ntr.run()
         ntr.close
 
-//        println("ingraph results: " + ingraphResults.map(x => x.toSeq.sortBy(_._1)))
-//        println("neo4j results: " + neo4jResults.map(x => x.toSeq.sortBy(_._1)))
+        println("ingraph results: " + ingraphResults.map(x => x.toSeq.sortBy(_._1)))
+        println("neo4j results: " + neo4jResults.map(x => x.toSeq.sortBy(_._1)))
         assert(ingraphResults == neo4jResults)
       }
   }

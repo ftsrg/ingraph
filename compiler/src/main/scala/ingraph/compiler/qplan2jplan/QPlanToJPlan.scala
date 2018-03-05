@@ -11,22 +11,30 @@ object QPlanToJPlan {
       case qplan.Dual() => jplan.Dual()
 
       // unary read
-      case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => edge match {
-        case e: EdgeAttribute => getEdgesForDirection(src, trg, e, dir)
-        case el: EdgeListAttribute =>
-          jplan.TransitiveJoin(
-            jplan.GetVertices(src),
-            expandToTransitiveEdges(src, trg, el, dir),
-            el
-          )
-      }
-      case qplan.Expand(src, trg, edge, dir, child) => edge match {
-        case e: EdgeAttribute => jplan.Join(transform(child), getEdgesForDirection(src, trg, e, dir))
-        case el: EdgeListAttribute => jplan.TransitiveJoin(transform(child), expandToTransitiveEdges(src, trg, el, dir), el)
-      }
+      case qplan.Expand(src, trg, e: EdgeAttribute, dir, child) =>
+        val getEdges = getEdgesForDirection(src, trg, e, dir)
+        child match {
+          case gv: qplan.GetVertices => getEdges
+          case _                     => jplan.Join(transform(child), getEdges)
+        }
+      case qplan.Expand(src, trg, el: EdgeListAttribute, dir, child) =>
+        val transitiveLeft = child match {
+          case qplan.GetVertices(v) => jplan.GetVertices(v)
+          case _                    => transform(child)
+        }
+        val transitiveRight = expandToTransitiveEdges(src, trg, el, dir)
+        val sourceJoin = jplan.GetVertices(src)
+        val targetJoin = jplan.GetVertices(trg)
+        // perform an additional join to ensure that the type of the target nodes is correct
+        // note that this join is right-preferring, i.e. its 'requiredProperties' will be propagated to its right input
+        jplan.Join(
+          jplan.TransitiveJoin(transitiveLeft, transitiveRight, el),
+          targetJoin,
+          Right()
+        )
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => jplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
       // if Sort operator found w/o Top, then skip and limit defaults to None
-      case qplan.Top(_, _, _) => throw new UnsupportedOperationException("Vanilla 'SKIP'/'LIMIT' is not supported, add an 'ORDER BY' clause.")
+      case qplan.Top(_, _, _) => throw new UnsupportedOperationException("Vanilla 'SKIP'/'LIMIT' is not supported, add an 'ORDER BY' clause. Please.")
       case qplan.Sort(order, child) => jplan.SortAndTop(None, None, order, transform(child))
       case qplan.Production(child) => jplan.Production(transform(child))
       case qplan.Projection(projectList, child) => jplan.Projection(projectList, transform(child))
@@ -64,13 +72,16 @@ object QPlanToJPlan {
     }
   }
 
-
   def expandToTransitiveEdges(src: VertexAttribute,
                               trg: VertexAttribute,
                               el: EdgeListAttribute,
                               dir: Direction): jplan.GetEdges = {
     val e = EdgeAttribute(el.name, el.labels, el.properties, el.isAnonymous, el.resolvedName)
-    getEdgesForDirection(src, trg, e, dir)
+    val getEdges = getEdgesForDirection(src, trg, e, dir)
+    val src2 = getEdges.src.copy(labels = VertexLabelSet())
+    val trg2 = getEdges.trg.copy(labels = VertexLabelSet())
+    val getEdges2 = getEdges.copy(src = src2, trg = trg2)
+    getEdges2
   }
 
 }

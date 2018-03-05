@@ -21,7 +21,7 @@ class TupleToRecordRepackager(val keys: Iterable[String]) {
 
   def convertToValue(x : Any) : Value = {
     x match {
-      case x: Vector[Any] => Values.value(x.map { convertToValue(_) }.asJava)
+      case x: Iterable[Any] => Values.value(x.map { convertToValue(_) }.asJava)
       case _ => Values.value(x)
     }
   }

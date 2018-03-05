@@ -19,6 +19,12 @@ abstract class BinaryJNode extends GenericBinaryNode[JNode] with JNode {}
 
 trait JoinLike extends BinaryJNode {
   def common: Seq[ResolvableName] = left.output.filter(x => right.output.map(_.resolvedName).contains(x.resolvedName))
+
+  /**
+    * @return input side preference, used to determine which input node (left/right) should be preferred when
+    *         propagating the "required properties" by the schema inferencer of {@see JPlanToFPlan}
+    */
+  def inputPreference: Side = Left()
 }
 trait EquiJoinLike extends JoinLike {
   override def output: Seq[ResolvableName] = left.output ++ right.output.filter(x => !left.output.map(_.resolvedName).contains(x.resolvedName))
@@ -83,7 +89,7 @@ case class AntiJoin(left: JNode, right: JNode) extends BinaryJNode with JoinLike
   override def output: Seq[ResolvableName] = left.output
 }
 
-case class Join(left: JNode, right: JNode) extends BinaryJNode with EquiJoinLike {}
+case class Join(left: JNode, right: JNode, override val inputPreference: Side = Left()) extends BinaryJNode with EquiJoinLike {}
 
 case class TransitiveJoin(left: JNode, right: JNode, edgeList: EdgeListAttribute) extends BinaryJNode with EquiJoinLike {}
 

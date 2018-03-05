@@ -3,6 +3,8 @@ package ingraph.testrunners
 import java.io.File
 import java.util.concurrent.TimeUnit
 
+import apoc.export.graphml.ExportGraphML
+import apoc.graph.Graphs
 import com.google.common.base.Stopwatch
 import ingraph.tests.LdbcSnbTestCase
 import org.neo4j.graphdb.GraphDatabaseService
@@ -31,11 +33,11 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
     .newGraphDatabase
 
   def load(graphMLPath: String): Unit = {
-//    registerProcedure(gds, classOf[ExportGraphML], classOf[Graphs])
+    registerProcedure(gds, classOf[ExportGraphML], classOf[Graphs])
 
     val trans = gds.beginTx()
-    val graphml = s"CALL apoc.import.graphml('${graphMLPath}', {batchSize: 10000, readLabels: true})"
-    gds.execute(graphml)
+    val loadCommand = s"CALL apoc.import.graphml('${graphMLPath}', {batchSize: 10000, readLabels: true})"
+    gds.execute(loadCommand)
     trans.close()
   }
 
@@ -50,7 +52,12 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
 
   def run(): List[Map[String, Any]] = {
     val sLoad = Stopwatch.createStarted()
-    val results1 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
+    val results1 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap
+      .map {case (k, v) => (k, v match {
+        case v: java.util.List[AnyRef] => v.asScala
+        case _ => v
+      })}
+    ).toList
     println("neo4j   => Initial evaluation:       " + sLoad.elapsed(TimeUnit.MILLISECONDS))
 
     val tx = gds.beginTx()
@@ -60,7 +67,6 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
       gds.execute(q)
       val results2 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
       println("neo4j   => Update and re-evaluation: " + s.elapsed(TimeUnit.MILLISECONDS))
-      null
     }
     tx.failure()
     tx.close()

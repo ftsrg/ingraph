@@ -37,7 +37,7 @@ class AggregationNode(override val next: (ReteMessage) => Unit,
 
     for ((key, (oldValues, oldCount)) <- oldValues) {
       val newValues = data(key).map(_.value())
-      if (oldValues != newValues) {
+      if (oldValues != newValues || oldCount == 0) {
         if (keyCount(key) != 0)
           positive += key ++ newValues
         if (oldCount != 0)

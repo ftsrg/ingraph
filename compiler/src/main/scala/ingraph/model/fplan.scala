@@ -15,7 +15,7 @@ trait FNode extends LogicalPlan {
 
 abstract class LeafFNode extends GenericLeafNode[FNode] with FNode {}
 abstract class UnaryFNode extends GenericUnaryNode[FNode] with FNode {
-  override def flatSchema: Seq[ResolvableName] = child.flatSchema
+  override def flatSchema = child.flatSchema
 }
 abstract class BinaryFNode extends GenericBinaryNode[FNode] with FNode {}
 
@@ -25,17 +25,17 @@ trait JoinLike extends BinaryFNode {
   lazy val rightMask: Seq[Int] = SchemaMapper.schemaToIndices(this, right)
 }
 trait EquiJoinLike extends JoinLike {
-  override def flatSchema: Seq[ResolvableName] =
+  override def flatSchema =
     left.flatSchema ++ right.flatSchema.filter(x => !left.flatSchema.map(_.resolvedName).contains(x.resolvedName))
 }
 
 // leaf nodes
 case class GetVertices(requiredProperties: Seq[ResolvableName], jnode: jplan.GetVertices) extends LeafFNode {
-  override def flatSchema: Seq[ResolvableName] = jnode.output ++ requiredProperties
+  override def flatSchema = jnode.output ++ requiredProperties
 }
 
 case class GetEdges(requiredProperties: Seq[ResolvableName], jnode: jplan.GetEdges) extends LeafFNode {
-  override def flatSchema: Seq[ResolvableName] = jnode.output ++ requiredProperties
+  override def flatSchema = jnode.output ++ requiredProperties
 }
 
 case class Dual(jnode: jplan.Dual) extends LeafFNode {
@@ -64,7 +64,7 @@ case class Projection(requiredProperties: Seq[ResolvableName],
                       jnode: jplan.Projection,
                       child: FNode
                      ) extends UnaryFNode {
-  override def flatSchema: Seq[ResolvableName] = jnode.projectList ++ requiredProperties
+  override def flatSchema = jnode.projectList ++ requiredProperties
   lazy val projectionTuple: Seq[Expression] =
     jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.flatSchema)) ++
       requiredProperties.map(SchemaMapper.transformExpression(_, child.flatSchema))
@@ -74,7 +74,7 @@ case class Grouping(requiredProperties: Seq[ResolvableName],
                     jnode: jplan.Grouping,
                     child: FNode
                      ) extends UnaryFNode {
-  override def flatSchema: Seq[ResolvableName] = jnode.projectList ++ requiredProperties
+  override def flatSchema = jnode.projectList ++ requiredProperties
   lazy val aggregationCriteria: Seq[Expression] =
     jnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.flatSchema)) ++
       requiredProperties.map(SchemaMapper.transformExpression(_, child.flatSchema))
@@ -93,7 +93,7 @@ case class Selection(jnode: jplan.Selection,
 case class Unwind(jnode: jplan.Unwind,
                   child: FNode
                  ) extends UnaryFNode {
-  override def flatSchema: Seq[ResolvableName] = child.jnode.output ++ Seq(unwindAttribute)
+  override def flatSchema = child.jnode.output ++ Seq(unwindAttribute)
   lazy val unwindAttribute: UnwindAttribute =
     UnwindAttribute(
       SchemaMapper.transformExpression(jnode.unwindAttribute.list, child.flatSchema),
@@ -114,14 +114,14 @@ case class SortAndTop(jnode: jplan.SortAndTop,
 case class Union(jnode: jplan.Union,
                  left: FNode,
                  right: FNode) extends BinaryFNode {
-  override def flatSchema: Seq[ResolvableName] = left.flatSchema
+  override def flatSchema = left.flatSchema
 }
 
 case class AntiJoin(jnode: jplan.AntiJoin,
                     left: FNode,
                     right: FNode
                    ) extends BinaryFNode with JoinLike {
-  override def flatSchema: Seq[ResolvableName] = left.flatSchema
+  override def flatSchema = left.flatSchema
 }
 
 case class Join(jnode: jplan.Join,
@@ -133,6 +133,11 @@ case class TransitiveJoin(jnode: jplan.TransitiveJoin,
                           left: FNode,
                           right: FNode) extends BinaryFNode with EquiJoinLike {
   lazy val edgeList: EdgeListAttribute = jnode.edgeList
+
+  override def flatSchema =
+    left.flatSchema ++
+    Seq(edgeList) ++
+    right.flatSchema.filter(x => !x.isInstanceOf[EdgeAttribute] && !left.flatSchema.map(_.resolvedName).contains(x.resolvedName))
 }
 
 case class LeftOuterJoin(jnode: jplan.LeftOuterJoin,
