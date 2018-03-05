@@ -12,6 +12,7 @@ import ingraph.model.jplan.JNode
 import ingraph.model.qplan.{QNode, QStub, UnresolvedDelete, UnresolvedProjection}
 import ingraph.model.treenodes.{ExpressionTreeNode, IngraphTreeNode, QPlanTreeNode}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction}
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.scalatest.FunSuite
 
 case class CompilerTestConfig(querySuitePath: Option[String] = None
@@ -123,6 +124,10 @@ abstract class CompilerTest extends FunSuite {
       }
       case _ => false
     }, itn).fold[Unit](Unit)( e => throw new IncompleteResolutionException(e.toString))
+  }
+
+  def findFirstByType[T <: LogicalPlan](findRoot: LogicalPlan, clazz: Class[T]): T = {
+    findRoot.find( p => clazz.isInstance(p) ).get.asInstanceOf[T]
   }
 
   /** Override println hack. Use printlnSuppressIfIngraph() instead") */
