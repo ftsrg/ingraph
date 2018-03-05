@@ -75,8 +75,16 @@ object JPlanToFPlan {
 
         val rpTotal = req ++ reqOp
 
-        val rpLeft = propagate(rpTotal, j.left.output)
-        val rpRight = propagate(rpTotal, j.right.output).filter(x => !rpLeft.map(_.resolvedName).contains(x.resolvedName))
+        val (rpLeft, rpRight) = j.inputPreference match {
+          case Left() =>
+            val rpLeft  = propagate(rpTotal, j.left.output)
+            val rpRight = propagate(rpTotal, j.right.output).filter(x => !rpLeft.map(_.resolvedName).contains(x.resolvedName))
+            (rpLeft, rpRight)
+          case Right() =>
+            val rpRight = propagate(rpTotal, j.right.output)
+            val rpLeft  = propagate(rpTotal, j.left.output).filter(x => !rpRight.map(_.resolvedName).contains(x.resolvedName))
+            (rpLeft, rpRight)
+        }
 
         val left = transform(j.left, rpLeft)
         val right = transform(j.right, rpRight)

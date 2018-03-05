@@ -5,7 +5,7 @@
     endDate: 20120630220000000
   }
 */
-MATCH (person:Person)<-[:HAS_CREATOR]-(post:Post)<-[:REPLY_OF*1..]-(reply:Message)
+MATCH (person:Person)<-[:HAS_CREATOR]-(post:Post)<-[:REPLY_OF*0..]-(reply:Message)
 WHERE  post.creationDate >= $startDate
   AND  post.creationDate <= $endDate
   AND reply.creationDate >= $startDate

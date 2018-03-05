@@ -23,9 +23,15 @@ object QPlanToJPlan {
           case _                    => transform(child)
         }
         val transitiveRight = expandToTransitiveEdges(src, trg, el, dir)
-        val labelJoin = jplan.GetVertices(trg)
-        // perform an additional join to ensure that the type of the target is correct
-        jplan.Join(jplan.TransitiveJoin(transitiveLeft, transitiveRight, el), labelJoin)
+        val sourceJoin = jplan.GetVertices(src)
+        val targetJoin = jplan.GetVertices(trg)
+        // perform an additional join to ensure that the type of the target nodes is correct
+        // note that this join is right-preferring, i.e. its 'requiredProperties' will be propagated to its right input
+        jplan.Join(
+          jplan.TransitiveJoin(transitiveLeft, transitiveRight, el),
+          targetJoin,
+          Right()
+        )
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => jplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
       // if Sort operator found w/o Top, then skip and limit defaults to None
       case qplan.Top(_, _, _) => throw new UnsupportedOperationException("Vanilla 'SKIP'/'LIMIT' is not supported, add an 'ORDER BY' clause. Please.")

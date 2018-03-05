@@ -167,8 +167,9 @@ class TransitiveJoinNode(override val next: (ReteMessage) => Unit,
     val sourceId = inputTuple(sourceVertexIndex).asInstanceOf[Number].longValue
     var pathsFromSourceVertexBuilder = new VectorBuilder[Tuple]
 
-    if (minHops == 0)
-      pathsFromSourceVertexBuilder += buildResultTuple(inputTuple, Path(), inputTuple)
+    if (minHops == 0) {
+      pathsFromSourceVertexBuilder += buildResultTuple(inputTuple, Path(), Vector(sourceId))
+    }
 
     val reachableFromSource = reachableVertices.getOrElse(sourceId, mutable.HashMap.empty)
     pathsFromSourceVertexBuilder ++= reachableFromSource.keysIterator.flatMap(
