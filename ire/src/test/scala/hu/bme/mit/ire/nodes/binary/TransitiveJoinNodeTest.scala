@@ -504,7 +504,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       )): _*)
     }
 
-    "calculate transitive closure with extra attributes" in {
+    "calculate transitive closure with extra attributes" ignore {
       val echoActor = system.actorOf(TestActors.echoActorProps)
 
       val transitiveClosure = system.actorOf(Props(new TransitiveJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, secondaryMask, outputTupleWidth = 5, minHops = 0)))
@@ -546,7 +546,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       )): _*)
     }
 
-    "calculate transitive closure with extra attributes and backward edges" in {
+    "calculate transitive closure with extra attributes and backward edges" ignore {
       val echoActor = system.actorOf(TestActors.echoActorProps)
 
       val transitiveClosure = system.actorOf(Props(new TransitiveJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, mask(2), outputTupleWidth = 5, minHops = 0)))
@@ -588,7 +588,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       )): _*)
     }
 
-    "calculate transitive closure with extra attributes multiple target tuple" in {
+    "calculate transitive closure with extra attributes multiple target tuple" ignore {
       val echoActor = system.actorOf(TestActors.echoActorProps)
 
       val transitiveClosure = system.actorOf(Props(new TransitiveJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, secondaryMask, outputTupleWidth = 5, minHops = 0)))
@@ -637,7 +637,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       )): _*)
     }
 
-    "handle repeating complex tuple target" in {
+    "handle repeating complex tuple target" ignore {
       val echoActor = system.actorOf(TestActors.echoActorProps)
 
       val transitiveClosure = system.actorOf(Props(new TransitiveJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, secondaryMask, outputTupleWidth = 5, minHops = 0)))
