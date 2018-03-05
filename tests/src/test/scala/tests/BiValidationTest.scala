@@ -27,16 +27,16 @@ class BiValidationTest extends FunSuite {
 //    """.stripMargin
 
   val meta = Seq(1) //1
-  val transitives = Seq(14, 16, 18) //3
   val transitivesNotWorking = Seq(20) //1
   val listComprehensions = Seq(11, 13) //2
   val madness = Seq(25) //1
   val orderby = Seq(10) //1
 
+  val transitives = Seq(14, 16, 18) //3
   val buggy =   Seq(3, 5, 6, 8, 15, 17, 21) //7
   val working = Seq(2, 4, 7, 9, 12, 22, 23, 24) //8
 
-  val testCases: Seq[LdbcSnbTestCase] = working++buggy++transitives map (i => new LdbcSnbTestCase("bi", i, f"${csvDir}/$i%02d/", csvPostfix, Seq()))
+  val testCases: Seq[LdbcSnbTestCase] = (working++buggy++transitives).sorted map (i => new LdbcSnbTestCase("bi", i, f"${csvDir}/$i%02d/", csvPostfix, Seq()))
 
 //  val ntr = new Neo4jTestRunner
 //  ntr.load(graphMLPath)
