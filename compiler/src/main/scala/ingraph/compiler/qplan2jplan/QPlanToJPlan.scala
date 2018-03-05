@@ -23,12 +23,7 @@ object QPlanToJPlan {
           case _                    => transform(child)
         }
         val transitiveRight = expandToTransitiveEdges(src, trg, el, dir)
-        val trg2 = dir match {
-          case In => src
-          case Out => trg
-          case Both => trg
-        }
-        val labelJoin = jplan.GetVertices(trg2)
+        val labelJoin = jplan.GetVertices(trg)
         // perform an additional join to ensure that the type of the target is correct
         jplan.Join(jplan.TransitiveJoin(transitiveLeft, transitiveRight, el), labelJoin)
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => jplan.SortAndTop(skipExpr, limitExpr, order, transform(child))

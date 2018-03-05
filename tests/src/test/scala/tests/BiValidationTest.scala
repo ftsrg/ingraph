@@ -27,12 +27,12 @@ class BiValidationTest extends FunSuite {
 //    """.stripMargin
 
   val meta = Seq(1) //1
-  val transitivesNotWorking = Seq(20) //1
   val listComprehensions = Seq(11, 13) //2
-  val madness = Seq(25) //1
-  val orderby = Seq(10) //1
+  val madness = Seq(25)
+  val orderby = Seq(10)
+  val hangs = Seq(19)
 
-  val transitives = Seq(14, 16, 18) //3
+  val transitives = Seq(14, 16, 18, 20)
   val buggy =   Seq(3, 5, 6, 8, 15, 17, 21) //7
   val working = Seq(2, 4, 7, 9, 12, 22, 23, 24) //8
 
