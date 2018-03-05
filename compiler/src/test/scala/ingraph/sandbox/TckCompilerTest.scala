@@ -1,5 +1,7 @@
 package ingraph.sandbox
 
+import ingraph.model.fplan.Selection
+
 class TckCompilerTest extends CompilerTest {
 
   test("Hello World") {
@@ -129,6 +131,16 @@ class TckCompilerTest extends CompilerTest {
       """.stripMargin
     )
     assert(getLeafNodes(stages.fplan)(0).flatSchema.length == 1)
+  }
+
+  ignore("Start with WITH") {
+    val stages = compile(
+      """WITH 1 AS x
+        |MATCH (some:Thing {prop: x})
+        |RETURN some.prop
+      """.stripMargin
+    )
+    findFirstByType(stages.fplan, classOf[Selection]).condition
   }
 
   ignore("Placeholder for debugging plans") {
