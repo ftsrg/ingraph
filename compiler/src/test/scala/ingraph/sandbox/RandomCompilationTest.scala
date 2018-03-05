@@ -400,7 +400,7 @@ class RandomCompilationTest extends CompilerTest {
         |RETURN post.id, message.id
         |""".stripMargin)
 
-    assert(stages.qplan.find( p => p.isInstanceOf[qplan.Expand] ).get.asInstanceOf[qplan.Expand].edge.asInstanceOf[expr.EdgeListAttribute].resolvedName.isDefined)
+    assert(findFirstByType(stages.qplan, classOf[qplan.Expand]).edge.asInstanceOf[expr.EdgeListAttribute].resolvedName.isDefined)
   }
 
   test("should resolve projected vertex fed into DELETE") {
@@ -412,8 +412,9 @@ class RandomCompilationTest extends CompilerTest {
         |DELETE n
         |""".stripMargin)
 
-    assert(stages.qplan.find( p => p.isInstanceOf[qplan.Delete] ).get.asInstanceOf[qplan.Delete].attributes(0).resolvedName.isDefined)
+    assert(findFirstByType(stages.qplan, classOf[qplan.Delete]).attributes(0).resolvedName.isDefined)
   }
+
 }
 
 /** Random compiler tests that must stop after QPlan compilation.
