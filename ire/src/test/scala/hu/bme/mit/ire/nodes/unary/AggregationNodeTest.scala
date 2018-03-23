@@ -30,7 +30,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     "count with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3, 0),
-        () => Vector(new StatefulCount()), functionMask(0, 1, 2)))) // sex and the city
+        () => Vector(new StatefulCount()), Vector(0, 1, 2)))) // sex and the city
       counter ! ChangeSet(positive = tupleBag(odin))
       expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", 1))))
       counter ! ChangeSet(positive = tupleBag(thor))
@@ -54,23 +54,23 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     "collect with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3, 0),
-        () => Vector(new StatefulCollect(Vector(2))), functionMask(0, 1, 2)))) // (sex, city): (weapon)
+        () => Vector(new StatefulCollect(2)), Vector(0, 1, 2)))) // (sex, city): (weapon)
       counter ! ChangeSet(positive = tupleBag(odin))
-      expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", cypherList(Vector("Gungnir"))))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", cypherList("Gungnir")))))
       counter ! ChangeSet(positive = tupleBag(thor))
       expectMsg(ChangeSet(
-        positive = tupleBag(tuple("male", "Asgard", cypherList(Vector("Gungnir"), Vector("Mjölnir")))),
-        negative = tupleBag(tuple("male", "Asgard", cypherList(Vector("Gungnir"))))
+        positive = tupleBag(tuple("male", "Asgard", cypherList("Gungnir", "Mjölnir"))),
+        negative = tupleBag(tuple("male", "Asgard", cypherList("Gungnir")))
       ))
       counter ! ChangeSet(negative = tupleBag(odin))
       expectMsg(ChangeSet(
-        positive = tupleBag(tuple("male", "Asgard", cypherList(Vector("Mjölnir")))),
-        negative = tupleBag(tuple("male", "Asgard", cypherList(Vector("Gungnir"), Vector("Mjölnir"))))
+        positive = tupleBag(tuple("male", "Asgard", cypherList("Mjölnir"))),
+        negative = tupleBag(tuple("male", "Asgard", cypherList("Gungnir", "Mjölnir")))
       ))
       counter ! ChangeSet(positive = tupleBag(freya))
-      expectMsg(ChangeSet(positive = tupleBag(tuple("female", "Asgard", cypherList(Vector("N/A"))))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple("female", "Asgard", cypherList("N/A")))))
       counter ! ChangeSet(negative = tupleBag(freya))
-      expectMsg(ChangeSet(negative = tupleBag(tuple("female", "Asgard", cypherList(Vector("N/A"))))))
+      expectMsg(ChangeSet(negative = tupleBag(tuple("female", "Asgard", cypherList("N/A")))))
     }
   }
 
@@ -99,7 +99,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     "sum with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
-        () => Vector(new StatefulSum(4)), functionMask(0, 1)))) // sex, sum for height
+        () => Vector(new StatefulSum(4)), Vector(0, 1)))) // sex, sum for height
       counter ! ChangeSet(positive = tupleBag(odin))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(1))
       counter ! ChangeSet(positive = tupleBag(thor))
@@ -113,7 +113,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     "average with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
-        () => Vector(new StatefulAverage(4)), functionMask(0, 1)))) // sex, sum for height
+        () => Vector(new StatefulAverage(4)), Vector(0, 1)))) // sex, sum for height
       counter ! ChangeSet(positive = tupleBag(odin))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(1))
       counter ! ChangeSet(positive = tupleBag(thor))
@@ -135,7 +135,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
 
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val stddev = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
-        () => Vector(new StatefulStandardDeviation(4)), functionMask(0, 1)))) // sex, sum for height
+        () => Vector(new StatefulStandardDeviation(4)), Vector(0, 1)))) // sex, sum for height
       stddev ! ChangeSet(positive = tupleBag(t1))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(0))
       stddev ! ChangeSet(positive = tupleBag(t2))
@@ -165,7 +165,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
 
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val stddev = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
-        () => Vector(new StatefulStandardDeviationSample(4)), functionMask(0, 1)))) // sex, sum for height
+        () => Vector(new StatefulStandardDeviationSample(4)), Vector(0, 1)))) // sex, sum for height
       stddev ! ChangeSet(positive = tupleBag(t1))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(0))
       stddev ! ChangeSet(positive = tupleBag(t2))
@@ -183,4 +183,29 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     }
   }
 
+  def TupleList(arg: Any*): Seq[Tuple] = arg.map(i => tuple(Vector(i)))
+
+  "StatefulDistinctCount" should {
+    "work" in {
+      val c = new StatefulDistinctCount(0)
+      c.maintainPositive(TupleList(1, 3, 2, 3))
+      assert(c.value() == 3)
+      c.maintainNegative(TupleList(3))
+      assert(c.value() == 3)
+      c.maintainNegative(TupleList(1, 2))
+      assert(c.value() == 1)
+    }
+  }
+
+  "StatefulDistinctCollect" should {
+    "work" in {
+      val c = new StatefulDistinctCollect(0)
+      c.maintainPositive(TupleList(1, 3, 2, 3))
+      assert(c.value() == TupleList(1, 3, 2).flatten) // :D
+      c.maintainNegative(TupleList(3))
+      assert(c.value() == TupleList(1, 3, 2).flatten)
+      c.maintainNegative(TupleList(3))
+      assert(c.value() == TupleList(1, 2).flatten)
+    }
+  }
 }

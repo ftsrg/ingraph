@@ -1,0 +1,7 @@
+{
+    "personId": 77,
+    "country": "India",
+    "tagClass": "OfficeHolder",
+    "minPathDistance": 1,
+    "maxPathDistance": 2
+}

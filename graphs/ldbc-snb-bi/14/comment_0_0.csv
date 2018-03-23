@@ -1,0 +1,3 @@
+id:ID(Comment)|creationDate:LONG|locationIP:STRING|browserUsed:STRING|content:STRING|length:INT
+99|20110817060540597|92.39.58.88|Chrome|yes|3
+88|20110817060540596|213.55.127.9|Internet Explorer|thanks|6

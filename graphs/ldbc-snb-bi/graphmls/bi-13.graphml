@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<key id="name" for="node" attr.name="name" attr.type="string"/>
+<key id="browserUsed" for="node" attr.name="browserUsed" attr.type="string"/>
+<key id="length" for="node" attr.name="length" attr.type="int"/>
+<key id="locationIP" for="node" attr.name="locationIP" attr.type="string"/>
+<key id="language" for="node" attr.name="language" attr.type="string"/>
+<key id="id" for="node" attr.name="id" attr.type="long"/>
+<key id="creationDate" for="node" attr.name="creationDate" attr.type="long"/>
+<key id="url" for="node" attr.name="url" attr.type="string"/>
+<key id="content" for="node" attr.name="content" attr.type="string"/>
+<graph id="G" edgedefault="directed">
+<node id="n0" labels=":Country:Place"><data key="labels">:Country:Place</data><data key="id">99</data><data key="name">India</data><data key="url">http://dbpedia.org/resource/India</data></node>
+<node id="n1" labels=":City:Place"><data key="labels">:City:Place</data><data key="id">88</data><data key="name">New Delhi</data><data key="url">http://dbpedia.org/resource/New_Delhi</data></node>
+<node id="n2" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">77</data><data key="creationDate">20100214203021450</data><data key="locationIP">49.246.218.237</data><data key="browserUsed">Firefox</data><data key="language">uz</data><data key="content">About Rupert Murdoch, t newer electronic publishing technoAbout George Frideric Handel,  concertos. Handel was born in 1685,About Kurt Vonne</data><data key="length">140</data></node>
+<node id="n3" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">66</data><data key="creationDate">20100214203021451</data><data key="locationIP">119.235.7.103</data><data key="browserUsed">Firefox</data><data key="language">uz</data><data key="content">About Rupert Murdoch, alised US citizen iAbout Napoleon, tinuation of the waAbout Ferdinand II of Aragon, (1</data><data key="length">108</data></node>
+<node id="n4" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">55</data><data key="creationDate">20120720034853147</data><data key="locationIP">119.235.7.103</data><data key="browserUsed">Firefox</data><data key="language">uz</data><data key="content">About Rupert Murdoch, 50s and '60s, he acquAbout George Frideric Handel, man-British Baroque cAbout Jane Austen, estimate o</data><data key="length">123</data></node>
+<node id="n5" labels=":Tag"><data key="labels">:Tag</data><data key="id">44</data><data key="name">Hamid_Karzai</data><data key="url">http://dbpedia.org/resource/Hamid_Karzai</data></node>
+<node id="n6" labels=":Tag"><data key="labels">:Tag</data><data key="id">33</data><data key="name">Rumi</data><data key="url">http://dbpedia.org/resource/Rumi</data></node>
+<edge id="e0" source="n0" target="n1" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
+<edge id="e1" source="n2" target="n5" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e2" source="n3" target="n5" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e3" source="n4" target="n6" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e4" source="n2" target="n0" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
+<edge id="e5" source="n3" target="n0" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
+<edge id="e6" source="n4" target="n0" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
+</graph>
+</graphml>

@@ -5,7 +5,7 @@ import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.{TransactionFactory, _}
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
-import hu.bme.mit.ire.listeners.ChangeListener
+import hu.bme.mit.ire.listeners.{ChangeListener, ConsistentChangeListener}
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
 import hu.bme.mit.ire.util.TestUtil._
@@ -106,8 +106,8 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
       tran0.add("testval", tuple(5, 5))
       tran0.close()
       query.getResults()
-      query.addListener(new ChangeListener {
-        override def listener(positive: Iterable[Tuple], negative: Iterable[Tuple]): Unit = {
+      query.addListener(new ConsistentChangeListener {
+        override def listener(positive: Vector[Tuple], negative: Vector[Tuple]): Unit = {
           echoActor ! ChangeSet(positive, negative)
         }
       })

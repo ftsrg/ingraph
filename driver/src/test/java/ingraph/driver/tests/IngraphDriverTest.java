@@ -1,25 +1,32 @@
 package ingraph.driver.tests;
 
 import ingraph.driver.CypherDriverFactory;
+import ingraph.driver.data.IngraphDeltaHandler;
+import ingraph.driver.data.IngraphQueryHandler;
+import ingraph.driver.data.PrintDeltaHandler;
+import ingraph.driver.ingraph.IngraphDriver;
+import ingraph.driver.ingraph.IngraphSession;
 import org.junit.Test;
-import org.neo4j.driver.v1.Driver;
-import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.Session;
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.Transaction;
 
 public class IngraphDriverTest {
 
 	@Test
-	public void test() throws Exception {
-		try (Driver driver = CypherDriverFactory.createIngraphDriver()) {
-			final Session session = driver.session();
-			final Transaction transaction = session.beginTransaction();
-			final StatementResult result = transaction.run("MATCH (n) RETURN n LIMIT 5");
-			while (result.hasNext()) {
-				final Record record = result.next();
-				System.out.println(record);
-			}
+	public void changeListenerTest() {
+		try (IngraphDriver driver = CypherDriverFactory.createIngraphDriver()) {
+			// a single session uses the same indexer
+			final IngraphSession session = driver.session();
+
+			final IngraphQueryHandler readHandler = session.registerQuery("read", "MATCH (n:Person) RETURN n.name");
+			IngraphDeltaHandler listener = new PrintDeltaHandler(readHandler.keys());
+			readHandler.registerDeltaHandler(listener);
+
+			System.out.println("First create");
+			session.run("CREATE (n:Person {name: 'Jane'})");
+			readHandler.adapter().result();
+
+			System.out.println("Second create");
+			session.run("CREATE (n:Person {name: 'Jake'})");
+			readHandler.adapter().result();
 		}
 	}
 

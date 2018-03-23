@@ -1,6 +1,7 @@
 package ingraph.compiler.cypher2qplan
 
 import ingraph.compiler.cypher2qplan.builders.AttributeBuilder
+import ingraph.compiler.exceptions.ExpandChainException
 import ingraph.model.expr.ElementAttribute
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
@@ -17,7 +18,7 @@ object QPlanBeautifier {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
     /*
-     * FIXME: douplicated transform call is to allow for antijoin beautification.
+     * FIXME: duplicated transform call is to allow for antijoin beautification.
      * This should be done dynamically
      */
     val beautiful = resolvedQueryPlan.transform(commonBeautifier).transform(commonBeautifier)
@@ -44,14 +45,18 @@ object QPlanBeautifier {
       // FIXME: projection should be introduced by the compiler, and also match it here
     case qplan.Selection(cExpr.Not(e), qplan.LeftOuterJoin(base, filter)) if checkForAntijoin(e, filter) => qplan.AntiJoin(base, filter)
     case qplan.Selection(cExpr.Not(e), qplan.LeftOuterJoin(filter, base)) if checkForAntijoin(e, filter) => qplan.AntiJoin(base, filter)
-    case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
+    case qplan.Selection(cExpr.Literal(true, BooleanType), child) => child
+    case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionBeautifier), child)
   }
 
-  val expressionResolver: PartialFunction[Expression, Expression] = {
+  val expressionBeautifier: PartialFunction[Expression, Expression] = {
     case cExpr.And(cExpr.Literal(true, BooleanType), r) => r
     case cExpr.And(l, cExpr.Literal(true, BooleanType)) => l
     case cExpr.Or(cExpr.Literal(false, BooleanType), r) => r
     case cExpr.Or(l, cExpr.Literal(false, BooleanType)) => l
+    case cExpr.Not(cExpr.Not(e)) => e
+    case cExpr.UnaryPositive(e) => e
+    case cExpr.UnaryMinus(cExpr.UnaryMinus(e)) => e
   }
 
   /**
@@ -70,8 +75,8 @@ object QPlanBeautifier {
     while (check1 && exprQueue.nonEmpty) {
       exprQueue.dequeue() match {
         case cExpr.And(c1, c2) => exprQueue.enqueue(c1, c2)
-        case cExpr.IsNotNull(expr.EdgeAttribute(n, l, p, ia)) => attributesOfCondition.append(expr.EdgeAttribute(n, l, p, ia))
-        case cExpr.IsNotNull(expr.VertexAttribute(n, l, p, ia)) => attributesOfCondition.append(expr.VertexAttribute(n, l, p, ia))
+        case cExpr.IsNotNull(expr.EdgeAttribute(n, l, p, ia, rn)) => attributesOfCondition.append(expr.EdgeAttribute(n, l, p, ia, rn))
+        case cExpr.IsNotNull(expr.VertexAttribute(n, l, p, ia, rn)) => attributesOfCondition.append(expr.VertexAttribute(n, l, p, ia, rn))
         case cExpr.IsNotNull(UnresolvedAttribute(nameParts)) => attributesOfCondition.append(UnresolvedAttribute(nameParts))
         case _ => check1 = false
       }
@@ -84,7 +89,7 @@ object QPlanBeautifier {
     val attributesOfFilter = try {
       AttributeBuilder.extractAttributesFromExpandChain(filter)
     } catch {
-      case _: RuntimeException => {
+      case _: ExpandChainException => {
         check2 = false
         ListBuffer.empty[cExpr.Expression]
       }

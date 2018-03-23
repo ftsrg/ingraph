@@ -1,55 +1,60 @@
-// Q25. Weighted paths
+// Q25. Weighted interaction paths
 /*
   :param {
-    person1Id: 2199023264119,
-    person2Id: 8796093028894,
-    startDate: 20100601040000000,
-    endDate: 20100701040000000
+    person1Id: 19791209303405,
+    person2Id: 19791209308983,
+    startDate: 20101031230000000,
+    endDate: 20101130230000000
   }
 */
 MATCH
-  path=shortestPath(
-    (p1:Person {id: $person1Id})-[:knows*]-(p2:Person {id: $person2Id})
-  )
+  path=allShortestPaths((p1:Person {id: $person1Id})-[:KNOWS*]-(p2:Person {id: $person2Id}))
 UNWIND relationships(path) AS k
 WITH
   path,
   startNode(k) AS pA,
   endNode(k) AS pB,
-  0 AS weight
-// A to B
+  0 AS relationshipWeights
+
+// case 1, A to B
 // every reply (by one of the Persons) to a Post (by the other Person): 1.0
 OPTIONAL MATCH
-  (pA)<-[:hasCreator]-(c:Comment)-[:replyOf]->(m:Post)-[:hasCreator]->(pB),
-  (m)<-[:containerOf]-(forum:Forum)
+  (pA)<-[:HAS_CREATOR]-(c:Comment)-[:REPLY_OF]->(post:Post)-[:HAS_CREATOR]->(pB),
+  (post)<-[:CONTAINER_OF]-(forum:Forum)
 WHERE forum.creationDate >= $startDate AND forum.creationDate <= $endDate
-WITH path, pA, pB, weight + count(c)*1.0 AS weight
+WITH path, pA, pB, relationshipWeights + count(c)*1.0 AS relationshipWeights
 
-// A to B
+// case 2, A to B
 // every reply (by ones of the Persons) to a Comment (by the other Person): 0.5
 OPTIONAL MATCH
-  (pA)<-[:hasCreator]-(c:Comment)-[:replyOf]->(m:Comment)-[:hasCreator]->(pB),
-  (m)<-[:containerOf]-(forum:Forum)
+  (pA)<-[:HAS_CREATOR]-(c1:Comment)-[:REPLY_OF]->(c2:Comment)-[:HAS_CREATOR]->(pB),
+  (c2)-[:REPLY_OF*]->(:Post)<-[:CONTAINER_OF]-(forum:Forum)
 WHERE forum.creationDate >= $startDate AND forum.creationDate <= $endDate
-WITH path, pA, pB, weight + count(c)*0.5 AS weight
+WITH path, pA, pB, relationshipWeights + count(c1)*0.5 AS relationshipWeights
 
-// B to A
+// case 1, B to A
 // every reply (by one of the Persons) to a Post (by the other Person): 1.0
 OPTIONAL MATCH
-  (pB)<-[:hasCreator]-(c:Comment)-[:replyOf]->(m:Post)-[:hasCreator]->(pA),
-  (m)<-[:containerOf]-(forum:Forum)
+  (pB)<-[:HAS_CREATOR]-(c:Comment)-[:REPLY_OF]->(post:Post)-[:HAS_CREATOR]->(pA),
+  (post)<-[:CONTAINER_OF]-(forum:Forum)
 WHERE forum.creationDate >= $startDate AND forum.creationDate <= $endDate
-WITH path, pA, pB, weight + count(c)*1.0 AS weight
+WITH path, pA, pB, relationshipWeights + count(c)*1.0 AS relationshipWeights
 
-// B to A
+// case 2, B to A
 // every reply (by ones of the Persons) to a Comment (by the other Person): 0.5
 OPTIONAL MATCH
-  (pB)<-[:hasCreator]-(c:Comment)-[:replyOf]->(m:Comment)-[:hasCreator]->(pA),
-  (m)<-[:containerOf]-(forum:Forum)
+  (pB)<-[:HAS_CREATOR]-(c1:Comment)-[:REPLY_OF]->(c2:Comment)-[:HAS_CREATOR]->(pA),
+  (c2)-[:REPLY_OF*]->(:Post)<-[:CONTAINER_OF]-(forum:Forum)
 WHERE forum.creationDate >= $startDate AND forum.creationDate <= $endDate
-WITH path, pA, pB, weight + count(c)*0.5 AS weight
+WITH path, pA, pB, relationshipWeights + count(c1)*0.5 AS relationshipWeights
+
+WITH
+  [person IN nodes(path) | person.id] AS personIds,
+  sum(relationshipWeights) AS weight
 
 RETURN
-  [person IN nodes(path) | person.id]
+  personIds,
+  weight
 ORDER BY
-  weight DESC
+  weight DESC,
+  personIds ASC

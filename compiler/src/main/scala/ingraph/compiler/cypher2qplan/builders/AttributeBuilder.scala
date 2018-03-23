@@ -3,6 +3,7 @@ package ingraph.compiler.cypher2qplan.builders
 import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.compiler.cypher2qplan.util.{BuilderUtil, StringUtil}
+import ingraph.compiler.exceptions._
 import ingraph.model.expr.{EdgeLabelSet, ElementAttribute}
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
@@ -14,38 +15,39 @@ import scala.collection.mutable.ListBuffer
 
 object AttributeBuilder {
   def buildAttribute(n: oc.NodePattern): expr.VertexAttribute = {
-    val nv = n.getVariable
     val nls = BuilderUtil.parseToVertexLabelSet(n.getNodeLabels)
     val props = LiteralBuilder.buildProperties(n.getProperties)
 
-    if (nv == null) {
-      expr.VertexAttribute(generateUniqueName, nls, props, isAnonymous = true)
-    } else {
-      expr.VertexAttribute(nv.getName, nls, props, isAnonymous = false)
+    Option(n.getVariable) match {
+      case Some(nv) => expr.VertexAttribute(nv.getName, nls, props, isAnonymous = false)
+      case None => expr.VertexAttribute(generateUniqueName, nls, props, isAnonymous = true)
     }
   }
 
   def buildAttribute(el: oc.RelationshipPattern): expr.AbstractEdgeAttribute = {
-    if (el.getDetail != null) {
-      val ev = el.getDetail.getVariable
-      val (name, isAnon) = if (ev == null) (generateUniqueName, true) else (ev.getName, false)
-      val els = BuilderUtil.parseToEdgeLabelSet(el.getDetail.getTypes)
-      val props = LiteralBuilder.buildProperties(el.getDetail.getProperties)
+    Option(el.getDetail) match {
+      case Some(elDetail) => {
+        val (name, isAnon) = Option(elDetail.getVariable) match {
+          case Some(ev) => (ev.getName, false)
+          case None => (generateUniqueName, true)
+        }
+        val els = BuilderUtil.parseToEdgeLabelSet(elDetail.getTypes)
+        val props = LiteralBuilder.buildProperties(elDetail.getProperties)
 
-      el.getDetail.getRange match {
-        case r: oc.RangeLiteral => expr.EdgeListAttribute(name, els, props, isAnonymous = isAnon, StringUtil.toOptionInt(r.getLower), StringUtil.toOptionInt(r.getUpper))
-        case _ => expr.EdgeAttribute(name, els, props, isAnonymous = isAnon)
+        Option(elDetail.getRange) match {
+          case Some(r) => expr.EdgeListAttribute(name, els, props, isAnonymous = isAnon, StringUtil.toOptionInt(r.getLower), StringUtil.toOptionInt(r.getUpper))
+          case None => expr.EdgeAttribute(name, els, props, isAnonymous = isAnon)
+        }
       }
-    } else {
-      expr.EdgeAttribute(generateUniqueName, EdgeLabelSet(), isAnonymous = true)
+      case None => expr.EdgeAttribute(generateUniqueName, isAnonymous = true)
     }
   }
 
-  def buildAttribute(e: oc.ExpressionNodeLabelsAndPropertyLookup): UnresolvedAttribute = {
+  def buildAttribute(e: oc.ExpressionPropertyLookup): UnresolvedAttribute = {
     UnresolvedAttribute(Seq(e.getLeft.asInstanceOf[oc.VariableRef].getVariableRef.getName, e.getPropertyLookups.get(0).getPropertyKeyName))
   }
 
-  def buildAttribute(v: oc.Variable): UnresolvedAttribute = {
+  def buildAttribute(v: oc.VariableDeclaration): UnresolvedAttribute = {
     UnresolvedAttribute(v.getName)
   }
 
@@ -64,9 +66,10 @@ object AttributeBuilder {
     * Extract vertex and edge attributes from the pattern.
     *
     * Check if filter is a chain of Expand operators on top of a single GetVertices, and attributes are properly chained
-    * and if not, RuntimeException is thrown.
+    * and if not, ExpandChainException is thrown.
     *
     * @param pattern
+    * @throws ExpandChainException
     * @return
     */
   def extractAttributesFromExpandChain(pattern: qplan.QNode): ListBuffer[Expression] = {
@@ -77,7 +80,8 @@ object AttributeBuilder {
       currOp match {
         case qplan.GetVertices(v) if chainElem == null || v == chainElem => relationshipVariableExpressions.append(v); currOp = null; chainElem = null
         case qplan.Expand(src, trg, edge, _, child) if chainElem == null || trg == chainElem => relationshipVariableExpressions.append(trg, edge); currOp = child; chainElem = src
-        case _ => throw new RuntimeException("We should never see this condition: Expand and Getvertices not properly chained or other node type encountered.")
+        case qplan.GetVertices(_) | qplan.Expand(_, _, _, _, _) => throw new ExpandChainException("We should never see this condition: Expand and Getvertices not properly chained")
+        case e => throw new UnexpectedTypeException(e, "expand chain")
       }
     }
 

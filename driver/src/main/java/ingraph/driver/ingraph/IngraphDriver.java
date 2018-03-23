@@ -45,8 +45,17 @@ public class IngraphDriver extends CypherDriver {
 	}
 
 	@Override
-	public void close() {
+	public Session session(Iterable<String> bookmarks) {
+		throw new UnsupportedOperationException("unimplemented");
+	}
 
+	@Override
+	public Session session(AccessMode mode, Iterable<String> bookmarks) {
+		throw new UnsupportedOperationException("unimplemented");
+	}
+
+	@Override
+	public void close() {
 	}
 
 }

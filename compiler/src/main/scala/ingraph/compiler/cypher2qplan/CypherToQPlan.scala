@@ -18,7 +18,7 @@ object CypherToQPlan {
     * @param queryName A name to identify the processed query.
     * @return The QPlan representation of the query.
     */
-  def build(cypher: Cypher, queryName: String = "Unnamed query"): qplan.QNode = {
+  def build(cypher: Cypher, queryName: Option[String] = None): qplan.QNode = {
     build_IKnowWhatImDoing(cypher, queryName, skipResolve = false, skipBeautify = false)
   }
 
@@ -37,7 +37,8 @@ object CypherToQPlan {
     * @param skipBeautify Whether to skip beautifying the query plan or not. For debugging and expreimenting only! Change value at your own risk!
     * @return The QPlan representation of the query.
     */
-  def build_IKnowWhatImDoing(cypher: Cypher, queryName: String, skipResolve: Boolean = false, skipBeautify: Boolean = false): qplan.QNode = {
+  def build_IKnowWhatImDoing(cypher: Cypher, queryName: Option[String] = None, skipResolve: Boolean = false, skipBeautify: Boolean = false): qplan.QNode = {
+    val _queryName = queryName.getOrElse("Unnamed query")
     // compilation
     val stage1 = compileToQPlan(cypher)
 
@@ -72,9 +73,10 @@ object CypherToQPlan {
   }
 
   /**
-    * Given an unresolved QPlan, resolve its attribute-references.
+    * Given a raw QPlan, expand complex operations to a combination
+    * of more simple operations, like filter criteria given as a map in a vertex pattern
+    * is expanded into a selection node.
     *
-    * FIXME: Currently this is unimplemented, the QPlan is returned unchanged.
     * @param rawQueryPlan
     * @return
     */
@@ -83,9 +85,11 @@ object CypherToQPlan {
   }
 
   /**
-    * Given an unresolved QPlan, resolve its attribute-references.
+    * Given an unresolved QPlan, resolve its attribute-references and
+    * resolve the unresolved elements in the plan like UnresolvedFunction,
+    * UnresolvedProjection to either Grouping with explicit aggregation criteria
+    * or Projection.
     *
-    * FIXME: Currently this is unimplemented, the QPlan is returned unchanged.
     * @param unresolvedQueryPlan
     * @return
     */

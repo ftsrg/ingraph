@@ -1,6 +1,0 @@
-dependencies {
-  compile project(':neo4j-util')
-
-  testCompile group: 'junit', name: 'junit', version: junitVersion
-  compile group: 'org.neo4j', name: 'neo4j-bolt', version: neo4jVersion
-}

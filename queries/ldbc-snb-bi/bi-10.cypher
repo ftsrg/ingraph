@@ -1,32 +1,67 @@
 // Q10. Central Person for a Tag
 /*
   :param {
-    tag: 'Franz_Liszt',
-    date: 20100822040000000
+    tag: 'John_Rhys-Davies',
+    date: 20120122000000000
   }
 */
-MATCH (tag:Tag {name: $tag}), (person:Person)
+MATCH (tag:Tag {name: $tag})
 // score
-OPTIONAL MATCH (person)-[i:hasInterest]->(tag)
-OPTIONAL MATCH (person)<-[:hasCreator]-(m:Message)-[:hasTag]->(tag)
-WHERE m.creationDate > $date
+OPTIONAL MATCH (tag)<-[interest:HAS_INTEREST]-(person:Person)
+WITH tag, collect(person) AS interestedPersons
+OPTIONAL MATCH (tag)<-[:HAS_TAG]-(message:Message)-[:HAS_CREATOR]->(person:Person)
+         WHERE message.creationDate > $date
+WITH tag, interestedPersons, collect(person) AS persons
+WITH tag, interestedPersons + persons AS persons
+UNWIND persons AS person
+// poor man's disjunct union (should be changed to UNION + post-union processing in the future)
+WITH DISTINCT tag, person
+OPTIONAL MATCH (tag)<-[interest:HAS_INTEREST]-(person:Person)
 WITH
   tag,
   person,
-  count(i)*100 + count(m) AS score
-// friendsScore
-OPTIONAL MATCH (person)-[:knows]-(friend:Person)
-OPTIONAL MATCH (friend)-[i:hasInterest]->(tag)
-OPTIONAL MATCH (friend)<-[:hasCreator]-(m:Message)-[:hasTag]->(tag)
-WHERE m.creationDate > $date
+  count(interest) AS score // multiple by 100 deferred to next query part
+OPTIONAL MATCH (tag)<-[:HAS_TAG]-(message:Message)-[:HAS_CREATOR]->(person)
+         WHERE message.creationDate > $date
+WITH
+  tag,
+  person,
+  100 * score AS score,
+  count(message) AS messageCount
+WITH
+  tag,
+  person,
+  score + messageCount AS score
+MATCH (person)-[:KNOWS]-(friend)
+WITH
+  tag,
+  person,
+  score,
+  friend
+OPTIONAL MATCH (tag)<-[interest:HAS_INTEREST]-(friend:Person)
+WITH
+  tag,
+  person,
+  score,
+  friend,
+  count(interest) AS friendScore // multiple by 100 deferred to next query part
+OPTIONAL MATCH (tag)<-[:HAS_TAG]-(message:Message)-[:HAS_CREATOR]->(friend)
+         WHERE message.creationDate > $date
 WITH
   person,
   score,
-  count(i)*100 + count(m) AS individualFriendsScore
+  friend,
+  100 * friendScore AS friendScore,
+  count(message) AS messageCount
+WITH
+  person,
+  score,
+  friend,
+  friendScore + messageCount AS friendScore
 RETURN
   person.id,
   score,
-  sum(individualFriendsScore) AS friendsScore
+  sum(friendScore) AS friendsScore
 ORDER BY
   score + friendsScore DESC,
   person.id ASC

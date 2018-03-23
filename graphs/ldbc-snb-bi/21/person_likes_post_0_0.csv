@@ -1,0 +1,3 @@
+:START_ID(Person)|:END_ID(Post)|creationDate:LONG
+99|22|1000
+88|22|2000

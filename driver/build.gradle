@@ -1,14 +1,15 @@
 plugins {
-  id 'com.github.maiflai.scalatest' version '0.16'
+  id 'com.github.maiflai.scalatest' version '0.19'
 }
 
 sourceSets.main.scala.srcDir "src/main/java"
 sourceSets.main.java.srcDirs = []
 
 dependencies {
+  compile project(':ire')
   compile project(':ire-adapter')
+  compile project(':neo4j-util')
   compile project(':reactive-driver-interfaces')
-  testCompile project(':tests')
 
   testCompile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
   testCompile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'

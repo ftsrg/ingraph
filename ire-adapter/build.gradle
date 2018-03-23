@@ -1,5 +1,5 @@
 plugins {
-  id 'com.github.maiflai.scalatest' version '0.16'
+  id 'com.github.maiflai.scalatest' version '0.19'
 }
 
 dependencies {
@@ -8,8 +8,6 @@ dependencies {
   compile project(':csv-loader')
   compile project(':compiler')
   compile project(':expression-parser')
-  compile project(':tests')
-
 
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
 

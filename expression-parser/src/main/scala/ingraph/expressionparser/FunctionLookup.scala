@@ -4,6 +4,7 @@ import hu.bme.mit.ire.util.GenericMath
 import ingraph.model.misc.Function
 import ingraph.model.misc.Function._
 
+import scala.collection.SeqLike
 import scala.util.Random
 
 // if a function has optional arguments, we implement it for each possible number of arguments,
@@ -39,19 +40,20 @@ object FunctionLookup {
       case SIZE => (list) => list.asInstanceOf[List[Any]].size
       case COALESCE => (list) => list.asInstanceOf[Iterable[Any]] find { _ != null } // TODO this might return null or None :-/
 
-      case LOG => (x) => Math.log(x)
-      case LOG10 => (x) => Math.log10(x)
-      case SQRT => (x) => Math.sqrt(x)
+      case LOG => (x) => Math.log(x.asInstanceOf[Number].doubleValue())
+      case LOG10 => (x) => Math.log10(x.asInstanceOf[Number].doubleValue())
+      case SQRT => (x) => Math.sqrt(x.asInstanceOf[Number].doubleValue())
 
       case ABS => {
         case i: Int => Math.abs(i)
+        case l: Long => Math.abs(l)
         case d: Double => Math.abs(d)
       }
 
-      case CEIL => (x) => Math.ceil(x)
-      case FLOOR => (x) => Math.floor(x)
-      case ROUND => (x) => Math.round(x)
-      case SIGN => (x) => Math.signum(x)
+      case CEIL => (x) => Math.ceil(x.asInstanceOf[Number].doubleValue())
+      case FLOOR => (x) => Math.floor(x.asInstanceOf[Number].doubleValue())
+      case ROUND => (x) => Math.round(x.asInstanceOf[Number].doubleValue())
+      case SIGN => (x) => Math.signum(x.asInstanceOf[Number].doubleValue())
 
       case LTRIM => (original) => original.replaceAll("^\\s+", "")
       case RTRIM => (original) => original.replaceAll("\\s+$", "")
@@ -61,13 +63,13 @@ object FunctionLookup {
       case TOLOWER => (original) => original.toLowerCase
       case TOUPPER => (original) => original.toUpperCase
 
-      case ACOS => (x) => Math.acos(x)
-      case ASIN => (x) => Math.asin(x)
-      case ATAN => (x) => Math.atan(x)
-      case COS => (x) => Math.cos(x)
-      case COT => (x) => Math.tanh(x)
-      case SIN => (x) => Math.sin(x)
-      case TAN => (x) => Math.tan(x)
+      case ACOS => (x) => Math.acos(x.asInstanceOf[Number].doubleValue())
+      case ASIN => (x) => Math.asin(x.asInstanceOf[Number].doubleValue())
+      case ATAN => (x) => Math.atan(x.asInstanceOf[Number].doubleValue())
+      case COS => (x) => Math.cos(x.asInstanceOf[Number].doubleValue())
+      case COT => (x) => Math.tanh(x.asInstanceOf[Number].doubleValue())
+      case SIN => (x) => Math.sin(x.asInstanceOf[Number].doubleValue())
+      case TAN => (x) => Math.tan(x.asInstanceOf[Number].doubleValue())
 
       case DEGREES => (x) => x.asInstanceOf[Double] / 180.0 * Math.PI
       case RADIANS => (x) => x.asInstanceOf[Double] * Math.PI / 180.0
@@ -98,9 +100,9 @@ object FunctionLookup {
       case SPLIT => (original, splitPattern) => original.split(splitPattern)
       case SUBSTRING => (original, start) => original.substring(start.toInt)
       case RANGE => (start, end) => start.asInstanceOf[Long] to end
-
+      case IN_COLLECTION => (element, collection) =>
+        collection.asInstanceOf[SeqLike[Any, Vector[Any]]].contains(element)
       case POW => (base, exp) =>
-//        implicit def anyToDouble(any: Any) = any.asInstanceOf[Double]
         Math.pow(base.toDouble, exp.toDouble)
       // these are not define as functions in openCypher, but it's reasonable to treat them as such
       case STARTS_WITH => (string, substring) => string.startsWith(substring)

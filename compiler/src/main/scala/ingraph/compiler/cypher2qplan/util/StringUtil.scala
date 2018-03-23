@@ -101,12 +101,9 @@ object StringUtil {
   /**
     * Converts a string to Option[Int].
     * @param s
-    * @return None iff s was null or s.isEmpty, eése returns an Option[Int] encapsulating the numerical value of s
+    * @return None iff s was null or s.isEmpty, else returns an Option[Int] encapsulating the numerical value of s
     */
   def toOptionInt(s: String): Option[Int] = {
-    if (s==null || s.isEmpty)
-      None
-    else
-      Option(s.toInt)
+    Option(s).filterNot( _.isEmpty ).map( _.toInt )
   }
 }

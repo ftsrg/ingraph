@@ -41,6 +41,7 @@ gen/
 xtend-gen
 generated/
 
+*.class
 out/
 .tmpBin/
 hs_err_pid*.log
@@ -48,3 +49,4 @@ hs_err_pid*.log
 *.*~
 *.xtendbin
 *.swp
+lib/

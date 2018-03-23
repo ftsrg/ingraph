@@ -8,7 +8,7 @@ class DuplicateEliminationNode(override val next: (ReteMessage) => Unit) extends
   override def onSizeRequest(): Long = 0
 
   def onChangeSet(changeSet: ChangeSet): Unit = {
-    forward(ChangeSet(changeSet.positive.toSeq.distinct))
+    forward(ChangeSet(changeSet.positive.distinct))
   }
 
 }

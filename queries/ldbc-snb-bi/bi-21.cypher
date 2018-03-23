@@ -1,8 +1,8 @@
 // Q21. Zombies in a country
 /*
   :param {
-    country: 'Spain',
-    endDate: 201301010500
+    country: 'Ethiopia',
+    endDate: 20130101000000000
   }
 */
 MATCH (country:Country {name: $country})
@@ -11,46 +11,58 @@ WITH
   $endDate/10000000000000   AS endDateYear,
   $endDate/100000000000%100 AS endDateMonth
 MATCH
-  (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-
-  (person:Person)<-[:hasCreator]-(message:Message)
-WHERE person.creationDate < $endDate
+  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(zombie:Person)
+OPTIONAL MATCH
+  (zombie)<-[:HAS_CREATOR]-(message:Message)
+  WHERE zombie.creationDate  < $endDate
   AND message.creationDate < $endDate
 WITH
   country,
-  person,
+  zombie,
   endDateYear,
   endDateMonth,
-  message.creationDate/10000000000000   AS personCreationYear,
-  message.creationDate/100000000000%100 AS personCreationMonth,
+  zombie.creationDate/10000000000000   AS zombieCreationYear,
+  zombie.creationDate/100000000000%100 AS zombieCreationMonth,
   count(message) AS messageCount
 WITH
   country,
-  person,
-  (endDateYear  - personCreationYear ) * 12 +
-  (endDateMonth - personCreationMonth) AS months,
-  messageCount
+  zombie,
+  12 * (endDateYear  - zombieCreationYear )
++ (endDateMonth - zombieCreationMonth)
++ 1 AS months,
+messageCount
 WHERE messageCount / months < 1
 WITH
   country,
-  collect(person) AS zombies
+  collect(zombie.id) AS zombieIds
+UNWIND zombieIds AS zombieId
+OPTIONAL MATCH
+  (zombie)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(likerZombie:Person)
+  WHERE zombie.id = zombieId
+  AND likerZombie.id IN zombieIds
+WITH
+  zombieId,
+  count(likerZombie) AS zombieLikeCount
 MATCH
-  (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-
-  (person:Person)<-[:hasCreator]-(message:Message)<-[:likes]-(fan:Person)
-WHERE fan.creationDate < $endDate
+  (zombie:Person)
+  WHERE zombie.id = zombieId
+//OPTIONAL
+MATCH
+  (zombie)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(likerPerson:Person)
+  WHERE likerPerson.creationDate < $endDate
 WITH
-  zombies,
-  person,
-  collect(fan) AS fans
-WITH
-  person,
-  size([f IN fans WHERE f in zombies]) AS zombieLikeCount,
-  toFloat(size(fans)) AS totalLikeCount
+  zombie,
+  zombieLikeCount,
+  count(likerPerson) AS totalLikeCount
 RETURN
-  person.id,
+  zombie.id,
   zombieLikeCount,
   totalLikeCount,
-  zombieLikeCount / totalLikeCount AS zombieScore
-ORDER BY
+  CASE totalLikeCount
+    WHEN 0 THEN 0
+    ELSE zombieLikeCount / toFloat(totalLikeCount)
+    END AS zombieScore
+  ORDER BY
   zombieScore DESC,
-  person.ID ASC
-LIMIT 100
+  zombie.id ASC
+  LIMIT 100

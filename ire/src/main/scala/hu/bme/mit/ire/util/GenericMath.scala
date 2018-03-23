@@ -11,7 +11,6 @@ object GenericMath extends Ordering[Any] {
         case b: Int    => a + b
         case b: Long   => a + b
       }
-
     case a: Double =>
       b match {
         case b: Float  => a + b
@@ -32,6 +31,14 @@ object GenericMath extends Ordering[Any] {
         case b: Double => a + b
         case b: Int    => a + b
         case b: Long   => a + b
+      }
+    case a: Vector[Any] =>
+      b match {
+        case b: Vector[Any] => a ++ b
+      }
+    case a: String =>
+      b match {
+        case b: String => a + b
       }
   }
 
@@ -202,40 +209,49 @@ object GenericMath extends Ordering[Any] {
       }
   }
 
-  override def compare(a: Any, b: Any): Int = a match {
-    case a: Float =>
-      b match {
-        case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
-      }
+  override def compare(a: Any, b: Any): Int = {
+    if (a == null && b == null) {
+      return 0
+    } else if (a == null) {
+      return 1
+    } else if (b == null) {
+      return -1
+    }
+    a match {
+      case a: Float =>
+        b match {
+          case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
+        }
 
-    case a: Double =>
-      b match {
-        case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
-      }
-    case a: Int =>
-      b match {
-        case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
-      }
-    case a: Long =>
-      b match {
-        case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
-      }
-    case a: String =>
-      b match {
-        case b: String => a.compareTo(b)
-      }
+      case a: Double =>
+        b match {
+          case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
+        }
+      case a: Int =>
+        b match {
+          case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
+        }
+      case a: Long =>
+        b match {
+          case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
+          case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
+        }
+      case a: String =>
+        b match {
+          case b: String => a.compareTo(b)
+        }
+    }
   }
 
   def toLong(a: Any): Long = a match {

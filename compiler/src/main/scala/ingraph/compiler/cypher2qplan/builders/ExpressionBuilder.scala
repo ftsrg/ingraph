@@ -2,6 +2,8 @@ package ingraph.compiler.cypher2qplan.builders
 
 import java.util
 
+import ingraph.compiler.cypher2qplan.util.BuilderUtil
+import ingraph.compiler.exceptions.{CompilerException, PatternNotAllowedException, UnexpectedTypeException, UnsupportedException}
 import ingraph.model.misc.Function
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
@@ -16,37 +18,43 @@ object ExpressionBuilder {
 
   def buildExpression(expression: oc.Expression, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
     expression match {
-      //FIXME: case e: oc.ContainsExpression => cExpr.Contains(buildExpression(e.getLeft), buildExpression(e.getRight))
-      //FIXME: case e: oc.EndsWithExpression => cExpr.EndsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
       case e: oc.ExpressionComparison => buildExpressionComparision(e, joins)
       case e: oc.ExpressionAnd => cExpr.And(buildExpression(e.getLeft, joins), buildExpression(e.getRight, joins))
       case e: oc.ExpressionOr => cExpr.Or(buildExpression(e.getLeft, joins), buildExpression(e.getRight, joins))
       case e: oc.ExpressionXor => buildExpressionXor(e, joins)
-      case e if "not".equalsIgnoreCase(e.getOperator) => cExpr.Not(buildExpression(e.getLeft, joins))
-      //TODO: case e: oc.InCollectionExpression => buildExpressionAux(e, joins)
-      case e: oc.IsNotNullExpression => cExpr.IsNotNull(expr.EStub()) //FIXME: ce.vb.buildRelalgVariable(e.left)
-      case e: oc.IsNullExpression => cExpr.IsNull(expr.EStub()) //FIXME: ce.vb.buildRelalgVariable(e.left)
+      case e: oc.ExpressionNot => cExpr.Not(buildExpression(e.getLeft, joins))
+      case e: oc.IsNotNullExpression => cExpr.IsNotNull(buildExpressionNoJoinAllowed(e.getLeft))
+      case e: oc.IsNullExpression => cExpr.IsNull(buildExpressionNoJoinAllowed(e.getLeft))
       case e: oc.ParenthesizedExpression => buildExpression(e.getExpression, joins)
-      //TODO: case e: oc.RegExpMatchingExpression => buildExpressionAux(e, joins)
       case e: oc.RelationshipsPattern => buildExpressionPattern(e, joins)
-      //FIXME: case e: oc.StartsWithExpression => cExpr.StartsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
-      case e: oc.ExpressionNodeLabelsAndPropertyLookup => AttributeBuilder.buildAttribute(e)
+      case e: oc.ExpressionPropertyLookup => AttributeBuilder.buildAttribute(e)
+      case e: oc.ExpressionNodeLabels => UnresolvedFunction(Function.NODE_HAS_LABELS.getPrettyName, Seq[cExpr.Expression](buildExpressionNoJoinAllowed(e.getLeft), BuilderUtil.parseToVertexLabelSet(e.getNodeLabels)), false)
       case e: oc.ExpressionPlusMinus => buildExpressionArithmetic(e, joins)
+      case e: oc.ExpressionUnaryPlusMinus => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionMulDiv => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionPower => buildExpressionArithmetic(e, joins)
       //FIXME#206: this should pass function name unresolved
-      case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName.getName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
+      case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
       case _: oc.Count => UnresolvedFunction(Function.COUNT_ALL.getPrettyName, Seq[cExpr.Expression](), false)
+      case e: oc.IndexExpression => buildExpressionIndex(e)
+      case e: oc.InCollectionExpression => UnresolvedFunction(Function.IN_COLLECTION.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false)
+      // String predicates
+      case e: oc.ContainsExpression => UnresolvedFunction(Function.CONTAINS.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false) //cExpr.Contains
+      case e: oc.StartsWithExpression => UnresolvedFunction(Function.STARTS_WITH.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false) //cExpr.StartsWith
+      case e: oc.EndsWithExpression => UnresolvedFunction(Function.ENDS_WITH.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false) //cExpr.EndsWith
+      case e: oc.RegExpMatchingExpression => UnresolvedFunction(Function.REGEX_LIKE.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false)
+      // End string predicates
       case e: oc.NumberConstant => LiteralBuilder.buildNumberLiteral(e)
-      //TODO: case e: oc.Parameter => buildExpressionAux(e, joins)
+      case e: oc.Parameter => buildParameter(e)
       case e: oc.StringConstant => LiteralBuilder.buildStringLiteral(e)
       case e: oc.VariableRef => AttributeBuilder.buildAttribute(e)
-      //TODO: case e: oc.CaseExpression => buildExpressionAux(e, joins)
-      //TODO: case e: oc.ExpressionList => buildExpressionAux(e, joins)
+      case e: oc.CaseExpression => buildExpressionCase(e)
+      case e: oc.ExpressionList => expr.ListExpression( e.getExpressions.asScala.map( buildExpressionNoJoinAllowed(_) ) )
       //TODO: case e: oc.IndexExpression => buildExpressionAux(e, joins)
       case e: oc.NullConstant => cExpr.Literal(null)
+      case e: oc.BoolConstant => LiteralBuilder.buildBoolLiteral(e)
 
-      case e => throw new RuntimeException("TODO: " + s"Unhandled parameter types: ${util.Arrays.asList[Object](e)}")
+      case e => throw new CompilerException("TODO: " + s"Unhandled parameter types: ${util.Arrays.asList[Object](e)}")
     }
   }
 
@@ -55,6 +63,8 @@ object ExpressionBuilder {
     * in contexts where no join clauses should be generated.
     *
     * We use this outside of WHERE clauses.
+    *
+    * @throws PatternNotAllowedException if pattern expression (join) was found despite not allowed
     */
   def buildExpressionNoJoinAllowed(e: oc.Expression): cExpr.Expression = {
     // there should be no join clauses added when we build
@@ -63,7 +73,7 @@ object ExpressionBuilder {
     val logicalExp = buildExpression(e, dummyJoins)
     if (!dummyJoins.isEmpty) {
       //FIXME: proper error handling
-      throw new RuntimeException("Joins found when building a logical expression in generic expression position.")
+      throw new PatternNotAllowedException("Pattern expression (joins) found when building a logical expression in generic expression position.")
     }
 
     logicalExp
@@ -76,19 +86,6 @@ object ExpressionBuilder {
 
     cExpr.Or(cExpr.And(l, cExpr.Not(r)), cExpr.And(cExpr.Not(l), r))
   }
-
-//  def buildExpressionAux(e: oc.RegExpMatchingExpression, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
-//    val fe = modelFactory.createFunctionLogicalExpression => [
-//    expressionContainer = ce.tlc
-//    ]
-//
-//    fe.functor = Function.REGEX_LIKE
-//
-//    fe.arguments.add(buildExpression(e.left))
-//    fe.arguments.add(buildExpression(e.right))
-//
-//    fe
-//  }
 
   def buildExpressionPattern(e: oc.RelationshipsPattern, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
     val currentPattern = PatternBuilder.buildPattern(e)
@@ -115,18 +112,6 @@ object ExpressionBuilder {
     }
   }
 
-//  /**
-//    * Processes IN by creating a function invocation: IN_COLLECTION(ANY, LIST expression)
-//    */
-//  def buildExpressionAux(e: oc.InCollectionExpression, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
-//    modelFactory.createFunctionLogicalExpression => [
-//    functor = Function.IN_COLLECTION
-//    arguments.add(buildExpression(e.left))
-//    arguments.add(buildExpression(e.right))
-//    expressionContainer = ce.tlc
-//    ]
-//  }
-
 //  def buildExpressionAux(e: oc.Parameter): cExpr.Expression = {
 //    modelFactory.createParameterComparableExpression => [
 //    parameter = modelFactory.createParameter => [
@@ -152,6 +137,16 @@ object ExpressionBuilder {
     e.getOperator match {
       case "+" => cExpr.Add(l, r)
       case "-" => cExpr.Subtract(l, r)
+    }
+  }
+
+  def buildExpressionArithmetic(e: oc.ExpressionUnaryPlusMinus, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+    // process them only once because of the possible joins there
+    val l = buildExpression(e.getLeft, joins)
+
+    e.getOperator match {
+      case "-" => cExpr.UnaryMinus(l)
+      case "+" => cExpr.UnaryPositive(l)
     }
   }
 
@@ -190,74 +185,49 @@ object ExpressionBuilder {
 //      null
 //    }
 //  }
-//
-//  def buildExpressionAux(e: oc.CaseExpression): cExpr.Expression = {
-//    if (!(e.expression instanceof CaseExpression)) {
-//      ce.l.unrecoverableError("Outer CaseExpressions should contain a CaseExpression")
-//    }
-//    val caseExpr = e.expression as CaseExpression
-//
-//    // do we process a simple case expression,
-//    // i.e. when there is a single value we search for
-//    var boolean isSimple = false
-//
-//    val retVal = if (caseExpr.caseExpression === null) {
-//      modelFactory.createGenericCaseExpression => [
-//      expressionContainer = ce.tlc
-//      ]
-//    } else {
-//      isSimple = true
-//      modelFactory.createSimpleCaseExpression => [
-//      expressionContainer = ce.tlc
-//      test = ComparableElementBuilder.buildComparableElement(caseExpr.caseExpression, ce)
-//      ]
-//    }
-//
-//    // WHEN when THEN then
-//    for (ca: caseExpr.caseAlternatives) {
-//      val case_ = modelFactory.createCase => [
-//      then = buildExpression(ca.then, ce)
-//      ]
-//      if (isSimple) {
-//        case_.when = ComparableElementBuilder.buildComparableElement(ca.when, ce)
-//      } else {
-//        case_.when = LogicalExpressionBuilder.buildLogicalExpressionNoJoinAllowed(ca.when, ce)
-//      }
-//      retVal.cases.add(case_)
-//    }
-//
-//    // ELSE elseExpression
-//    if (caseExpr.elseExpression !== null) {
-//      retVal.fallback = buildExpression(caseExpr.elseExpression, ce)
-//    }
-//
-//    retVal
-//  }
-//
-//  def buildExpressionAux(el: oc.ExpressionList): cExpr.Expression = {
-//    val emptyList = modelFactory.createEmptyListExpression => [
-//    head = null
-//    tail = null
-//    expressionContainer = ce.tlc
-//    ]
-//    // the tail of the first expression will be the list that was built
-//    val first = modelFactory.createListExpression => [
-//    tail = emptyList
-//    ]
-//    var recent = first
-//
-//    for (e : el.expressions) {
-//      recent.tail = modelFactory.createListExpression => [
-//      head = buildExpression(e, ce)
-//      tail = emptyList
-//      expressionContainer = ce.tlc
-//      ]
-//      recent = recent.tail
-//    }
-//
-//    first.tail
-//  }
-//
+
+  // FIXME: when resolved https://github.com/slizaa/slizaa-opencypher-xtext/issues/34
+  def buildExpressionIndex(indexExpr: oc.IndexExpression): expr.AbstractIndexExpression = {
+    def buildBoundary(b: oc.Expression): Option[Int] = b match {
+      case n: oc.NumberConstant => Option(LiteralBuilder.buildNumber(n)) match {
+        case None => throw new UnsupportedException("boundary is missing")
+        case Some(m) if m<0 => throw new UnsupportedException("negative indexing")
+        case x => x
+      }
+      case x => throw new UnexpectedTypeException(x, "only literal indexing is supported for index expressions")
+    }
+    val collection = buildExpressionNoJoinAllowed(indexExpr.getLeft)
+    val lower = buildBoundary(indexExpr.getExpression)
+    Option(indexExpr.getUpper) match {
+      case None => expr.IndexLookupExpression(collection, lower.get)
+      case Some(upper) => expr.IndexRangeExpression(collection, lower, buildBoundary(upper))
+    }
+  }
+
+  def buildExpressionCase(caseExpr: oc.CaseExpression): cExpr.Expression = {
+    val elseExpr: Option[cExpr.Expression] = caseExpr.getElseExpression match {
+      case e: Any => Some(buildExpressionNoJoinAllowed(e))
+      case _ => None
+    }
+
+    val branches: Seq[(cExpr.Expression, cExpr.Expression)] = caseExpr.getCaseAlternatives.asScala.map( ca => { //(condExpr, valueExpr)
+      (buildExpressionNoJoinAllowed(ca.getWhen), buildExpressionNoJoinAllowed(ca.getThen))
+    })
+
+    caseExpr.getCaseExpression match {
+      case e: Any => {
+        val simpleCaseExpression: cExpr.Expression = buildExpressionNoJoinAllowed(e)
+        val emulatedBranches: Seq[(cExpr.Expression, cExpr.Expression)] = branches.map({
+          case (condExpr, valueExpr) => {
+            (cExpr.EqualTo(simpleCaseExpression, condExpr), valueExpr)
+          }
+        })
+        cExpr.CaseWhen(emulatedBranches, elseExpr)
+      }
+      case _ => cExpr.CaseWhen(branches, elseExpr)
+    }
+  }
+
 //  def buildExpressionAux(ie: oc.IndexExpression): cExpr.Expression = {
 //    var IndexAccessExpression retVal
 //    if (ie.expression === null) {
@@ -287,10 +257,9 @@ object ExpressionBuilder {
 //    ]
 //  }
 //
-//  protected def buildRelalgParameter(expression: oc.Parameter): cExpr.Expression = {
-//    modelFactory.createParameter => [
-//    name = expression.parameter
-//    expressionContainer = ce.tlc
-//    ]
-//  }
+  def buildParameter(e: oc.Parameter): expr.Parameter = {
+    e.getParameter match {
+      case name: String => expr.Parameter(name)
+    }
+  }
 }

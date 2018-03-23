@@ -1,0 +1,2 @@
+id:ID(Person)|firstName:STRING|lastName:STRING|gender:STRING|birthday:STRING|creationDate:LONG|locationIP:STRING|browserUsed:STRING
+99|Mahinda|Perera|male|19891203|20100214153210447|119.235.7.103|Firefox

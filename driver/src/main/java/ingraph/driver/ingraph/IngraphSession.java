@@ -3,15 +3,24 @@ package ingraph.driver.ingraph;
 import ingraph.driver.data.IngraphQueryHandler;
 import ingraph.ire.Indexer;
 import ingraph.ire.IngraphIncrementalAdapter;
-import neo4j.driver.reactive.data.RecordChangeSet;
+import ingraph.ire.IngraphOneTimeAdapter;
+import org.neo4j.driver.v1.Record;
+import org.neo4j.driver.v1.Session;
+import org.neo4j.driver.v1.Statement;
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Transaction;
+import org.neo4j.driver.v1.TransactionWork;
+import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.TypeSystem;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
 public class IngraphSession implements Session {
 
-	Indexer indexer = new Indexer();
+	final Indexer indexer = new Indexer();
+	int oneTimeQueryIndex = 0;
 
 	@Override
 	public boolean isOpen() {
@@ -25,7 +34,10 @@ public class IngraphSession implements Session {
 
 	@Override
 	public StatementResult run(String statementTemplate, Map<String, Object> statementParameters) {
-		throw new UnsupportedOperationException("Vanilla queries are not yet supported");
+		final IngraphOneTimeAdapter adapter = new IngraphOneTimeAdapter(statementTemplate, "onetime" + oneTimeQueryIndex, indexer);
+		oneTimeQueryIndex++;
+		adapter.terminate();
+		return null;
 	}
 
 	@Override
@@ -80,19 +92,21 @@ public class IngraphSession implements Session {
 
 	@Override
 	public void close() {
+		for (IngraphIncrementalAdapter adapter : adapters) {
+			adapter.engine().shutdown();
+		}
 	}
+
+	private ArrayList<IngraphIncrementalAdapter> adapters = new ArrayList<>();
 
 	public IngraphQueryHandler registerQuery(String queryName, String querySpecification, Map<String, Object> statementParameters) {
 		final IngraphIncrementalAdapter adapter = new IngraphIncrementalAdapter(querySpecification, queryName, indexer);
+		adapters.add(adapter);
 		return new IngraphQueryHandler(adapter);
 	}
 
 	public IngraphQueryHandler registerQuery(String queryName, String querySpecification) {
 		return registerQuery(queryName, querySpecification, Collections.emptyMap());
-	}
-
-	public RecordChangeSet getDeltas(String queryName) {
-		return null;
 	}
 
 }

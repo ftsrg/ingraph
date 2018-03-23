@@ -1,13 +1,14 @@
 package ingraph.bulkloader.csv.loader;
 
 import com.google.common.collect.Sets;
-import ingraph.bulkloader.csv.data.IdSpaces;
+import ingraph.bulkloader.csv.data.CsvEdge;
+import ingraph.bulkloader.csv.data.CsvVertex;
+import ingraph.bulkloader.csv.entityprocessor.EdgeRowParser;
 import ingraph.bulkloader.csv.entityprocessor.IdGenerator;
-import ingraph.bulkloader.csv.entityprocessor.NodeRowParser;
-import ingraph.bulkloader.csv.entityprocessor.RelationshipRowParser;
+import ingraph.bulkloader.csv.entityprocessor.VertexRowParser;
+import ingraph.bulkloader.csv.idspaces.IdSpaces;
 import ingraph.bulkloader.csv.parser.CsvParser;
-import org.neo4j.driver.v1.types.Node;
-import org.neo4j.driver.v1.types.Relationship;
+import org.apache.commons.lang3.tuple.Triple;
 import org.supercsv.prefs.CsvPreference;
 
 import java.io.IOException;
@@ -19,51 +20,50 @@ import java.util.Set;
 
 public class MassCsvLoader {
 
-	private final List<Node> nodes = new ArrayList<>();
-	private final List<Relationship> relationships = new ArrayList<>();
+	private final List<CsvVertex> vertices = new ArrayList<>();
+	private final List<CsvEdge> edges = new ArrayList<>();
 	private final IdSpaces idSpaces = new IdSpaces();
 
-	public MassCsvLoader(Map<String, Collection<String>> nodeFilenames, Map<String, String> relationshipFilenames)
+	public MassCsvLoader(Map<String, Collection<String>> vertexFilenames, Map<String, ? extends Triple<String, String, String>> edgeFilenames)
 			throws IOException {
-		this(nodeFilenames, relationshipFilenames, CsvPreference.STANDARD_PREFERENCE);
+		this(vertexFilenames, edgeFilenames, CsvPreference.STANDARD_PREFERENCE);
 	}
 
-	public MassCsvLoader(Map<String, Collection<String>> nodeFilenames, Map<String, String> relationshipFilenames,
+	public MassCsvLoader(Map<String, Collection<String>> vertexFilenames, Map<String, ? extends Triple<String, String, String>> edgeFilenames,
 			CsvPreference csvPreference) throws IOException {
-		loadNodes(nodeFilenames, csvPreference);
-		loadRelationships(relationshipFilenames, csvPreference);
+		loadVertices(vertexFilenames, csvPreference);
+		loadEdges(edgeFilenames, csvPreference);
 	}
 
-	private void loadNodes(Map<String, Collection<String>> nodeFilenames, CsvPreference csvPreference)
+	private void loadVertices(Map<String, Collection<String>> vertexFilenames, CsvPreference csvPreference)
 			throws IOException {
-		for (final Map.Entry<String, Collection<String>> nodeFileEntry : nodeFilenames.entrySet()) {
-			final String filename = nodeFileEntry.getKey();
-			final Set<String> labels = Sets.newHashSet(nodeFileEntry.getValue());
+		for (final Map.Entry<String, Collection<String>> vertexFileEntry : vertexFilenames.entrySet()) {
+			final String filename = vertexFileEntry.getKey();
+			final Set<String> labels = Sets.newHashSet(vertexFileEntry.getValue());
 
-			final NodeRowParser nodeProcessor = new NodeRowParser(idSpaces, labels);
-			nodes.addAll(CsvParser.parse(filename, csvPreference, nodeProcessor));
+			final VertexRowParser vertexProcessor = new VertexRowParser(idSpaces, labels);
+			vertices.addAll(CsvParser.parse(filename, csvPreference, vertexProcessor));
 		}
 	}
 
-	private void loadRelationships(Map<String, String> relationshipFilenames, CsvPreference csvPreference)
-			throws IOException {
+	private void loadEdges(Map<String, ? extends Triple<String, String, String>> edgeFilenames, CsvPreference csvPreference) throws IOException {
 		final IdGenerator idGenerator = new IdGenerator();
 
-		for (final Map.Entry<String, String> relationshipFileEntry : relationshipFilenames.entrySet()) {
-			final String filename = relationshipFileEntry.getKey();
-			final String type = relationshipFileEntry.getValue();
+		for (final Map.Entry<String, ? extends Triple<String, String, String>> edgeFileEntry : edgeFilenames.entrySet()) {
+			final String filename = edgeFileEntry.getKey();
+			final Triple<String, String, String> type = edgeFileEntry.getValue();
 
-			final RelationshipRowParser relationshipProcessor = new RelationshipRowParser(idSpaces, type, idGenerator);
-			relationships.addAll(CsvParser.parse(filename, csvPreference, relationshipProcessor));
+			final EdgeRowParser edgeProcessor = new EdgeRowParser(idSpaces, type, idGenerator);
+			edges.addAll(CsvParser.parse(filename, csvPreference, edgeProcessor));
 		}
 	}
 
-	public List<Node> getNodes() {
-		return nodes;
+	public List<CsvVertex> getVertices() {
+		return vertices;
 	}
 
-	public List<Relationship> getRelationships() {
-		return relationships;
+	public List<CsvEdge> getEdges() {
+		return edges;
 	}
 
 }

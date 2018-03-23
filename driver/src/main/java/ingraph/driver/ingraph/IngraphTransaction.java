@@ -42,6 +42,7 @@ public class IngraphTransaction implements Transaction {
 		return session.run(statementTemplate);
 	}
 
+
 	@Override
 	public StatementResult run(Statement statement) {
 		return session.run(statement);

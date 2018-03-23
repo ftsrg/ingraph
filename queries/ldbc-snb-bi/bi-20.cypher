@@ -2,14 +2,14 @@
 /*
   :param { tagClasses: ['Writer', 'Single', 'Country'] }
 */
-UNWIND $tagClasses AS tagClassName
 MATCH
-  (tagClass:TagClass {name: tagClassName})<-[:isSubclassOf*0..]-
-  (:TagClass)<-[:hasType]-(tag:Tag)<-[:hasTag]-(message:Message)
+  (tagClass:TagClass)<-[:IS_SUBCLASS_OF*1..]-
+  (:TagClass)<-[:HAS_TYPE]-(tag:Tag)<-[:HAS_TAG]-(message:Message)
+WHERE tagClass.name IN $tagClasses
 RETURN
   tagClass.name,
-  count(message) AS postCount
+  count(DISTINCT message) AS messageCount
 ORDER BY
-  postCount DESC,
+  messageCount DESC,
   tagClass.name ASC
 LIMIT 100

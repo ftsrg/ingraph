@@ -56,7 +56,7 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
       receivedTerminatorCount(messageID) = 0
       terminatorPromises(messageID) = promise
     case AddListener(listener) =>
-      listener.positive ++= results
+      results.foreach(listener.added)
       listener.terminated()
       listeners += listener
   }

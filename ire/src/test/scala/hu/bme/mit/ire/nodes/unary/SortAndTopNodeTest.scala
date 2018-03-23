@@ -23,8 +23,8 @@ class SortAndTopNodeTest(_system: ActorSystem) extends TestKit(_system) with Imp
           new SortAndTopNode(echoActor ! _,
               tupleLength = 3,
               selectionMask = selectionMask,
-              skip = 0,
-              limit = 2,
+              skip = Some(0),
+              limit = Some(2),
               ascendingOrder = Vector(true, false))
       ))
 
@@ -41,8 +41,8 @@ class SortAndTopNodeTest(_system: ActorSystem) extends TestKit(_system) with Imp
       val counter = system.actorOf(Props(new SortAndTopNode(echoActor ! _,
           tupleLength = 3,
           selectionMask = selectionMask,
-          skip = 0,
-          limit = 2,
+          skip = Some(0),
+          limit = Some(2),
           ascendingOrder = Vector(true, true))))
 
       counter ! ChangeSet(positive = tupleBag(tuple(0, 1, 2), tuple(0, 1, 2), tuple(0, 1, 3)))

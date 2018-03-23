@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<key id="birthday" for="node" attr.name="birthday" attr.type="long"/>
+<key id="lastName" for="node" attr.name="lastName" attr.type="string"/>
+<key id="gender" for="node" attr.name="gender" attr.type="string"/>
+<key id="browserUsed" for="node" attr.name="browserUsed" attr.type="string"/>
+<key id="length" for="node" attr.name="length" attr.type="int"/>
+<key id="language" for="node" attr.name="language" attr.type="string"/>
+<key id="creationDate" for="node" attr.name="creationDate" attr.type="long"/>
+<key id="content" for="node" attr.name="content" attr.type="string"/>
+<key id="url" for="node" attr.name="url" attr.type="string"/>
+<key id="firstName" for="node" attr.name="firstName" attr.type="string"/>
+<key id="name" for="node" attr.name="name" attr.type="string"/>
+<key id="locationIP" for="node" attr.name="locationIP" attr.type="string"/>
+<key id="id" for="node" attr.name="id" attr.type="long"/>
+<key id="creationDate" for="edge" attr.name="creationDate" attr.type="long"/>
+<graph id="G" edgedefault="directed">
+<node id="n0" labels=":Comment:Message"><data key="labels">:Comment:Message</data><data key="id">99</data><data key="creationDate">20100214153210447</data><data key="locationIP">1.2.3.4</data><data key="browserUsed">Chrome</data><data key="content">I also love Mozart</data><data key="length">18</data></node>
+<node id="n1" labels=":Comment:Message"><data key="labels">:Comment:Message</data><data key="id">88</data><data key="creationDate">20100215153210447</data><data key="locationIP">2.3.4.5</data><data key="browserUsed">Firefox</data><data key="content">Beethoven is the absolute best</data><data key="length">30</data></node>
+<node id="n2" labels=":Person"><data key="labels">:Person</data><data key="id">77</data><data key="firstName">Marcel</data><data key="lastName">X</data><data key="gender">male</data><data key="birthday">19891203</data><data key="creationDate">20100214153210447</data><data key="locationIP">1.2.3.4</data><data key="browserUsed">Firefox</data></node>
+<node id="n3" labels=":Person"><data key="labels">:Person</data><data key="id">66</data><data key="firstName">Hans</data><data key="lastName">Y</data><data key="gender">male</data><data key="birthday">19901203</data><data key="creationDate">20110214153210447</data><data key="locationIP">2.3.4.5</data><data key="browserUsed">Chrome</data></node>
+<node id="n4" labels=":Person"><data key="labels">:Person</data><data key="id">55</data><data key="firstName">Jens</data><data key="lastName">Z</data><data key="gender">male</data><data key="birthday">19911203</data><data key="creationDate">20120214153210447</data><data key="locationIP">3.4.5.6</data><data key="browserUsed">Edge</data></node>
+<node id="n5" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">44</data><data key="creationDate">20110817060540595</data><data key="locationIP">1.2.3.4</data><data key="browserUsed">Firefox</data><data key="language">en</data><data key="content">My favourite is Eine Kleine Nachtmusik</data><data key="length">38</data></node>
+<node id="n6" labels=":Tag"><data key="labels">:Tag</data><data key="id">33</data><data key="name">Wolfgang_Amadeus_Mozart</data><data key="url">http://dbpedia.org/resource/Wolfgang_Amadeus_Mozart</data></node>
+<edge id="e0" source="n0" target="n2" label="HAS_CREATOR"><data key="label">HAS_CREATOR</data></edge>
+<edge id="e1" source="n1" target="n3" label="HAS_CREATOR"><data key="label">HAS_CREATOR</data></edge>
+<edge id="e2" source="n4" target="n1" label="LIKES"><data key="label">LIKES</data><data key="creationDate">20100214153210447</data></edge>
+<edge id="e3" source="n3" target="n5" label="LIKES"><data key="label">LIKES</data><data key="creationDate">20100214153210447</data></edge>
+<edge id="e4" source="n5" target="n2" label="HAS_CREATOR"><data key="label">HAS_CREATOR</data></edge>
+<edge id="e5" source="n0" target="n6" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e6" source="n5" target="n6" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+</graph>
+</graphml>

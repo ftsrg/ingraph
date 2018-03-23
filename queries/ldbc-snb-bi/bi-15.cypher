@@ -1,28 +1,29 @@
 // Q15. Social normals
 /*
-  :param { country: 'Spain' }
+  :param { country: 'Burma' }
 */
 MATCH
   (country:Country {name: $country})
 MATCH
-  (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(person:Person)
-MATCH
+  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(person1:Person)
+OPTIONAL MATCH
   // start a new MATCH as friend might live in the same City
-  // and thus can reuse the isPartOf edge
-  (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(friend:Person),
-  (person)-[:knows]-(friend)
-WITH country, person, count(friend) AS friendCount
-WITH country, floor(avg(friendCount)) as socialNormal
+  // and thus can reuse the IS_PART_OF edge
+  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(friend1:Person),
+  (person1)-[:KNOWS]-(friend1)
+WITH country, person1, count(friend1) AS friend1Count
+WITH country, avg(friend1Count) AS socialNormalFloat
+WITH country, floor(socialNormalFloat) AS socialNormal
 MATCH
-  (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(person:Person)
+  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(person2:Person)
 MATCH
-  (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(friend:Person),
-  (person)-[:knows]-(friend)
-WITH country, person, count(friend) AS friendCount, socialNormal
-WHERE friendCount = socialNormal
+  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(friend2:Person),
+  (person2)-[:KNOWS]-(friend2)
+WITH country, person2, count(friend2) AS friend2Count, socialNormal
+WHERE friend2Count = socialNormal
 RETURN
-  person.id,
-  friendCount AS count
+  person2.id,
+  friend2Count AS count
 ORDER BY
-  person.id ASC
+  person2.id ASC
 LIMIT 100

@@ -1,8 +1,10 @@
 package ingraph.compiler.cypher2qplan.builders
 
 import ingraph.compiler.cypher2qplan.util.StringUtil
+import ingraph.compiler.exceptions.CompilerException
 import ingraph.model.expr.{types => eTypes}
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
+import org.slizaa.neo4j.opencypher.openCypher.BoolConstant
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -17,7 +19,6 @@ object LiteralBuilder {
       case _: NumberFormatException => {
         //FIXME: WARNING
         println("WARNING: " + s"Unable to parse ${e.getValue} as integer.")
-        null
       }
     }
 
@@ -45,18 +46,18 @@ object LiteralBuilder {
     cExpr.Literal(StringUtil.unescapeCypherString(e.getValue))
   }
 
+  def buildBoolLiteral(e: BoolConstant): cExpr.Literal = cExpr.Literal(e.getValue.toLowerCase.toBoolean)
+
   def buildProperties(p: oc.Properties): eTypes.TPropertyMap = {
     p match {
       case e: oc.MapLiteral => buildPropertyMap(e)
       case null => Map()
-      case _ => throw new RuntimeException("Can't handle vertex/edge properties other than MapLiteral.")
+      case _ => throw new CompilerException("Can't handle vertex/edge properties other than MapLiteral.")
     }
   }
   def buildPropertyMap(pm: oc.MapLiteral): eTypes.TPropertyMap = {
-    if (pm == null) {
-      Map()
-    } else {
-      pm.getEntries.asScala.map( (e) => Tuple2[String, cExpr.Expression](e.getKey, ExpressionBuilder.buildExpressionNoJoinAllowed(e.getValue)) ).toMap
-    }
+    Option(pm).fold[ eTypes.TPropertyMap ]( Map() )(
+      _.getEntries.asScala.map( (e) => Tuple2[String, cExpr.Expression](e.getKey, ExpressionBuilder.buildExpressionNoJoinAllowed(e.getValue)) ).toMap
+    )
   }
 }

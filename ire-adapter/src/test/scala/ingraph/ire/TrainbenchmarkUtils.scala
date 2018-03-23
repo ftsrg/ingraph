@@ -25,14 +25,14 @@ object TrainbenchmarkUtils {
     modelPath(size, "SwitchPosition") -> List("SwitchPosition")
   )
 
-  def relationshipFilenames(size: Int): Map[String, String] = Map(
-    modelPath(size, "connectsTo") -> "connectsTo",
-    modelPath(size, "entry") -> "entry",
-    modelPath(size, "exit") -> "exit",
-    modelPath(size, "follows") -> "follows",
-    modelPath(size, "monitoredBy") -> "monitoredBy",
-    modelPath(size, "requires") -> "requires",
-    modelPath(size, "target") -> "target"
+  def relationshipFilenames(size: Int): Map[String, (String, String, String)] = Map(
+    modelPath(size, "connectsTo") -> ("TrackElement", "connectsTo", "TrackElement"),
+    modelPath(size, "entry") -> ("Route", "entry", "Semaphore"),
+    modelPath(size, "exit") -> ("Route", "exit", "Semaphore"),
+    modelPath(size, "follows") -> ("Route", "follows", "SwitchPosition"),
+    modelPath(size, "monitoredBy") -> ("TrackElement", "monitoredBy", "Sensor"),
+    modelPath(size, "requires") -> ("Route", "requires", "Sensor"),
+    modelPath(size, "target") -> ("SwitchPosition", "target", "Switch")
   )
 
   def readModelAndGetResults(querySpec: String, size: Int): Iterable[Tuple] = {

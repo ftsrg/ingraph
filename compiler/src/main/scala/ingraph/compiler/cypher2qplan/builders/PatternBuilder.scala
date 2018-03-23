@@ -58,20 +58,21 @@ object PatternBuilder {
    * This was factored out to handle PatternElement and RelationshipsPattern in the same code
    */
   def buildPatternHelper(n: oc.NodePattern, chain: Seq[oc.PatternElementChain]): qplan.QNode = {
+    val firstAttr = AttributeBuilder.buildAttribute(n)
+    val firstNode: qplan.QNode = qplan.GetVertices(firstAttr)
 
-    var lastAttr = AttributeBuilder.buildAttribute(n)
-    var lastNode: qplan.QNode = qplan.GetVertices(lastAttr)
-
-    for(el <- chain) {
+    chain.foldLeft[qplan.QNode](firstNode)( (lastNode, el) => {
       val v = AttributeBuilder.buildAttribute(el.getNodePattern)
       val e = AttributeBuilder.buildAttribute(el.getRelationshipPattern)
-      lastNode = qplan.Expand(src = lastAttr,
+      val srcAttr = lastNode match {
+        case e: qplan.Expand => e.trg
+        case gv: qplan.GetVertices => gv.v
+      }
+      qplan.Expand(src = srcAttr,
         trg = v,
         edge = e,
         dir = BuilderUtil.convertToDirection(el.getRelationshipPattern),
         child = lastNode)
-      lastAttr = v
-    }
-    lastNode
+    })
   }
 }
