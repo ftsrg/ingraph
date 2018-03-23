@@ -4,5 +4,6 @@ plugins {
 
 dependencies {
   compile project(':compiler')
-  compile group: 'org.cytosm', name: 'common', version: '1.0-SNAPSHOT'
+  //compile group: 'org.cytosm', name: 'common', version: '1.0-SNAPSHOT'
+  compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.21.0.1'
 }
