@@ -72,7 +72,7 @@ object QPlanToSqlPlan {
       // leaf
       // GetVertices are transformed to a table
       case qplan.GetVertices(v) => analysis.UnresolvedRelation(TableIdentifier(v.name))
-      case qplan.Dual() => logical.OneRowRelation
+      case qplan.Dual() => logical.OneRowRelation()
 
       // unary read
       // Expands are transformed to inner joins on the table of the edge and the target vertex
@@ -88,7 +88,7 @@ object QPlanToSqlPlan {
           plans.Inner,
           None
         )
-      case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => logical.GlobalLimit(skipExpr, transform(child))
+      case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => logical.GlobalLimit(skipExpr.get, transform(child))
 
       case qplan.Production(child) => transform(child) // throw away production nodes for now
       case qplan.Projection(projectList, child) => logical.Project(projectList, transform(child))
