@@ -1,5 +1,7 @@
 package ingraph.sandbox
 
+import ingraph.compiler.test.{CompilerTest, CompilerTestConfig}
+
 class JsaTest extends CompilerTest {
 
   override val config = CompilerTestConfig(querySuitePath = Some("jsa")

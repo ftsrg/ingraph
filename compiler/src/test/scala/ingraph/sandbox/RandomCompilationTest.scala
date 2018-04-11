@@ -1,5 +1,6 @@
 package ingraph.sandbox
 
+import ingraph.compiler.test.{CompilerTest, CompilerTestConfig}
 import ingraph.model.expr
 import ingraph.model.qplan
 

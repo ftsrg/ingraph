@@ -1,4 +1,4 @@
-package ingraph.sandbox
+package ingraph.compiler.test
 
 import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.CypherParser

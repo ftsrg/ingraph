@@ -1,5 +1,6 @@
 package ingraph.sandbox
 
+import ingraph.compiler.test.CompilerTest
 import ingraph.model.fplan.Selection
 
 class TckCompilerTest extends CompilerTest {

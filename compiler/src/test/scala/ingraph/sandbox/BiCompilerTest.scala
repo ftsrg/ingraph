@@ -1,5 +1,7 @@
 package ingraph.sandbox
 
+import ingraph.compiler.test.{CompilerTest, CompilerTestConfig}
+
 class BiCompilerTest extends CompilerTest {
   override val config = CompilerTestConfig(querySuitePath = Some("ldbc-snb-bi")
     , compileQPlanOnly = false
