@@ -13,20 +13,21 @@ import org.neo4j.test.TestGraphDatabaseFactory;
 public class Neo4jDriver extends CypherDriver {
 
 	final Driver driver;
+	final GraphDatabaseService graphDb;
 
 	public Neo4jDriver(final String uri, final AuthToken authToken) {
 		GraphDatabaseSettings.BoltConnector bolt = GraphDatabaseSettings.boltConnector("0");
 
 		String host = "localhost";
 		int port = 7687; // this is the default Neo4j port - we start one higher than this to avoid collisions
-		GraphDatabaseService graphDb = null;
+		GraphDatabaseService graphDbTemp = null;
 		String address = null;
 		while (port < 65000) {
 			port++;
 			address = String.format("%s:%d", host, port);
 			System.out.println("instantiating database listening on " + address);
 			try {
-				graphDb = new TestGraphDatabaseFactory()
+				graphDbTemp = new TestGraphDatabaseFactory()
 					.newImpermanentDatabaseBuilder()
 					.setConfig(bolt.type, "BOLT")
 					.setConfig(bolt.enabled, "true")
@@ -37,11 +38,15 @@ public class Neo4jDriver extends CypherDriver {
 				// caused by org.neo4j.helpers.PortBindException
 				e.printStackTrace();
 				System.out.println("Cannot connect on port " + port + ", retrying on a higher port.");
+				if (graphDbTemp != null)
+					graphDbTemp.shutdown();
+
 				continue;
 			}
 			break;
 		}
-		System.out.println(graphDb);
+		System.out.println(graphDbTemp);
+		graphDb = graphDbTemp;
 
 		driver = GraphDatabase.driver("bolt://" + address);
 	}
@@ -84,6 +89,7 @@ public class Neo4jDriver extends CypherDriver {
 	@Override
 	public void close() {
 		driver.close();
+		graphDb.shutdown();
 	}
 
 }
