@@ -1,0 +1,14 @@
+plugins {
+  id 'com.github.maiflai.scalatest' version '0.19'
+}
+
+apply plugin: 'application'
+mainClassName = 'ingraph.compiler.sql.Main'
+
+dependencies {
+  compile project(':driver')
+  compile project(':compiler')
+  compile 'org.xerial:sqlite-jdbc:3.21.0.1'
+
+  testCompile group: 'junit', name: 'junit', version: junitVersion
+}
