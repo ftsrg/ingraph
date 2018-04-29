@@ -7,22 +7,35 @@ import org.neo4j.driver.v1.{AuthTokens, Driver, Session, Transaction}
 import org.scalatest.FunSuite
 import org.sqlite.SQLiteConfig
 import ingraph.compiler.sql.Util.withResources
+import scala.collection.JavaConverters._
 
 class CompileSqlTest extends FunSuite {
 
   private def compileAndRunQuery(createCypherQuery: String, selectCypherQuery: String) = {
     val selectSqlQuery = new CompileSql(selectCypherQuery).run
 
-    runGraphQuery(createCypherQuery, selectSqlQuery)
+    runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery)
   }
 
-  private def runGraphQuery(createCypherQuery: String, selectSqlQuery: String): Unit = {
+  private def runGraphQuery(createCypherQuery: String, selectCypherQuery: String, selectSqlQuery: String): Unit = {
     withResources(CypherDriverFactory.createNeo4jDriver("bolt://localhost:7687",
       AuthTokens.basic("neo4j", "admin")))(driver => {
       withResources(driver.session())(cypherSession => {
         withResources(cypherSession.beginTransaction)(tx => {
           tx.run(createCypherQuery)
           tx.success()
+
+          println("vvvvvvvv REFERENCE RESULT vvvvvvvv")
+
+          val result = tx.run(selectCypherQuery)
+          for (record <- result.asScala) {
+            for ((key, value) <- record.asMap().asScala) {
+              println(s"""$key = $value""")
+            }
+            println("---")
+          }
+
+          println("----------------------------------")
         })
 
         val config = new SQLiteConfig
@@ -46,10 +59,10 @@ class CompileSqlTest extends FunSuite {
   }
 
   private def dump(sqlStatement: Statement, query: String): Unit = {
-    println(query + ": ")
     withResources(sqlStatement.executeQuery(query))(rs => {
-      val columnIndices = 1 to rs.getMetaData.getColumnCount
+      println("vvvvvvvvvvv SQL RESULT vvvvvvvvvvv")
 
+      val columnIndices = 1 to rs.getMetaData.getColumnCount
       columnIndices.foreach(i => println(rs.getMetaData.getColumnName(i) + ": " + rs.getMetaData.getColumnTypeName(i)))
 
       while (rs.next()) {
