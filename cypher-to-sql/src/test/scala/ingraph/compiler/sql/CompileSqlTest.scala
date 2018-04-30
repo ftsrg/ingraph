@@ -1,14 +1,16 @@
 package ingraph.compiler.sql
 
-import java.sql.{DriverManager, Statement}
+import java.sql.{Connection, DriverManager, Statement}
 
 import ingraph.compiler.sql.Util.withResources
 import ingraph.driver.CypherDriverFactory
-import org.neo4j.driver.v1.AuthTokens
+import org.neo4j.driver.internal.value.{IntegerValue, NodeValue, StringValue}
+import org.neo4j.driver.v1.{AuthTokens, Session}
 import org.scalatest.FunSuite
 import org.sqlite.SQLiteConfig
 
 import scala.collection.JavaConverters._
+import scala.collection.mutable.ListBuffer
 
 class CompileSqlTest extends FunSuite {
 
@@ -16,6 +18,53 @@ class CompileSqlTest extends FunSuite {
     val selectSqlQuery = new CompileSql(selectCypherQuery).run
 
     runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery)
+  }
+
+  def convertCypherCell(value: Any): Any = {
+    value match {
+      case value: IntegerValue => value.asLong()
+      case value: NodeValue => value.asNode().id()
+      case value: StringValue => value.asString()
+      case value => value
+    }
+  }
+
+  def convertSqlCell(value: Any): Any = {
+    value match {
+      case value => value
+    }
+  }
+
+  def compareQueryResults(cypherSession: Session, selectCypherQuery: String, sqlConnection: Connection, selectSqlQuery: String): Unit = {
+    withResources(cypherSession.beginTransaction)(cypherTransaction =>
+      withResources(sqlConnection.createStatement())(sqlStatement =>
+        withResources(sqlStatement.executeQuery(selectSqlQuery))(sqlResultSet => {
+          val cypherResult = cypherTransaction.run(selectCypherQuery)
+          assertResult(cypherResult.keys.size)(sqlResultSet.getMetaData.getColumnCount)
+
+          val cypherResultList = cypherResult.asScala.map(record => record.values().asScala.toArray).toArray
+
+          val sqlResultBuffer = new ListBuffer[Array[Any]]()
+          while (sqlResultSet.next()) {
+            sqlResultBuffer += (1 to sqlResultSet.getMetaData.getColumnCount).map(i => sqlResultSet.getObject(i)).toArray
+          }
+          val sqlResultList = sqlResultBuffer.toArray
+
+          assertResult(cypherResultList.length)(sqlResultList.length)
+
+          for (rowIndex <- cypherResultList.indices) {
+            val cypherRow = cypherResultList(rowIndex)
+            val sqlRow = sqlResultList(rowIndex)
+
+            assertResult(cypherRow.length)(sqlRow.length)
+            for (columnIndex <- cypherRow.indices) {
+              val cypherCell = convertCypherCell(cypherRow(columnIndex))
+              val sqlCell = convertSqlCell(sqlRow(columnIndex))
+
+              assertResult(cypherCell)(sqlCell)
+            }
+          }
+        })))
   }
 
   private def runGraphQuery(createCypherQuery: String, selectCypherQuery: String, selectSqlQuery: String): Unit = {
@@ -49,6 +98,8 @@ class CompileSqlTest extends FunSuite {
             ExportSteps.execute(cypherSession, sqlConnection)
 
             dump(sqlStatement, selectSqlQuery)
+
+            compareQueryResults(cypherSession, selectCypherQuery, sqlConnection, selectSqlQuery)
           })
         )
       })
