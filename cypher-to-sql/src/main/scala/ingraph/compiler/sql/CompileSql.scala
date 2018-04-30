@@ -78,17 +78,28 @@ class CompileSql(query: String) extends CompilerTest {
           node.requiredProperties.map(getSqlForProperty)
           ).mkString(", ")
 
-        val unidirectedSelectPart = if (node.jnode.directed)
+        val fromColumnName = escapeQuotes(node.jnode.src.resolvedName.get.resolvedName)
+        val edgeColumnName = escapeQuotes(node.jnode.edge.resolvedName.get.resolvedName)
+        val toColumnName = escapeQuotes(node.jnode.trg.resolvedName.get.resolvedName)
+
+        val edgeLabelsEscaped = node.jnode.edge.labels.edgeLabels.map(name =>s"""'${escapeSingleQuotes(name)}'""")
+        val typeConstraintPart = if (edgeLabelsEscaped.isEmpty)
           ""
         else
-          """  UNION ALL
-            |  SELECT "to", edge_id, "from" FROM edge
-            |""".stripMargin
+          s"""  WHERE type IN (${edgeLabelsEscaped.mkString(", ")})
+             |""".stripMargin
+
+        val undirectedSelectPart = if (node.jnode.directed)
+          ""
+        else
+          s"""  UNION ALL
+             |  SELECT "to", edge_id, "from" FROM edge
+             |$typeConstraintPart""".stripMargin
 
         s"""SELECT $columns FROM
            |  (
-           |    SELECT "from" AS "${escapeQuotes(node.jnode.src.resolvedName.get.resolvedName)}", edge_id AS "${escapeQuotes(node.jnode.edge.resolvedName.get.resolvedName)}", "to" AS "${escapeQuotes(node.jnode.trg.resolvedName.get.resolvedName)}" FROM edge
-           |  $unidirectedSelectPart)""".stripMargin
+           |    SELECT "from" AS "$fromColumnName", edge_id AS "$edgeColumnName", "to" AS "$toColumnName" FROM edge
+           |  $typeConstraintPart$undirectedSelectPart)""".stripMargin
       case node: FNode => node.children.map(getSql).mkString("\n")
       case node: VertexAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
       case node: PropertyAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'

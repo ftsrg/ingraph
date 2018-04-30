@@ -184,10 +184,37 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L167
-  ignore("Get neighbours") {
+  test("Get neighbours") {
     compileAndRunQuery(
       """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})""",
       """MATCH (n1)-[rel:KNOWS]->(n2)
+        |RETURN n1, n2
+      """.stripMargin
+    )
+  }
+
+  test("Get neighbours / plus edges with different type, multiple possible types in query") {
+    compileAndRunQuery(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND_OF]->(c:C {value: 3}), (:V)-[:OTHER]->(:V)""",
+      """MATCH (n1)-[rel:KNOWS|FRIEND_OF]->(n2)
+        |RETURN n1, n2
+      """.stripMargin
+    )
+  }
+
+  test("Get neighbours / undirected edge with type constraint") {
+    compileAndRunQuery(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND_OF]->(c:C {value: 3}), (:V)-[:OTHER]->(:V)""",
+      """MATCH (n1)-[rel:KNOWS]-(n2)
+        |RETURN n1, n2
+      """.stripMargin
+    )
+  }
+
+  test("Get neighbours / without edge type constraint") {
+    compileAndRunQuery(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND_OF]->(c:C {value: 3}), (:V)-[:OTHER]->(:V)""",
+      """MATCH (n1)-[rel]->(n2)
         |RETURN n1, n2
       """.stripMargin
     )
