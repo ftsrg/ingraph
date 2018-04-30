@@ -141,7 +141,7 @@ class CompileSqlTest extends FunSuite {
         |RETURN a""".stripMargin)
   }
 
-  ignore("Filter out based on node prop name / fragment #1") {
+  test("Filter out based on node prop name / fragment #1") {
     compileAndRunQuery(
       """CREATE ()""",
       """MATCH (a)
@@ -150,7 +150,7 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
-  ignore("Filter out based on node prop name / fragment #2") {
+  test("Filter out based on node prop name / fragment #2") {
     compileAndRunQuery(
       """CREATE ({name: 'Someone'})<-[:X]-()-[:X]->({name: 'Andres'})""",
       """MATCH (a)
@@ -159,7 +159,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131
-  ignore("Filter based on rel prop name") {
+  test("Filter based on rel prop name") {
     compileAndRunQuery(
       """CREATE (:A)<-[:KNOWS {name: 'monkey'}]-()-[:KNOWS {name: 'woot'}]->(:B)""",
       """MATCH (node)-[r:KNOWS]->(a)
@@ -170,7 +170,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L148
-  ignore("Cope with shadowed variables") {
+  test("Cope with shadowed variables") {
     compileAndRunQuery(
       """
         |CREATE ({value: 1, name: 'King Kong'}),

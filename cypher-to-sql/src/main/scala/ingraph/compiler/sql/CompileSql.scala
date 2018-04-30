@@ -1,7 +1,7 @@
 package ingraph.compiler.sql
 
 import ingraph.compiler.test.CompilerTest
-import ingraph.model.expr.{PropertyAttribute, ResolvableName, VertexAttribute}
+import ingraph.model.expr.{EdgeAttribute, PropertyAttribute, ResolvableName, VertexAttribute}
 import ingraph.model.fplan._
 import org.apache.spark.sql.catalyst.expressions.{EqualTo, Literal}
 import org.apache.spark.sql.types.StringType
@@ -27,7 +27,18 @@ class CompileSql(query: String) extends CompilerTest {
 
   private def getSqlForProperty(requiredPropety: Any): String = {
     requiredPropety match {
-      case prop: PropertyAttribute => s"""(SELECT value FROM vertex_property WHERE parent = "${escapeQuotes(prop.elementAttribute.resolvedName.get.resolvedName)}" AND key = '${escapeSingleQuotes(prop.name)}') AS "${escapeQuotes(prop.resolvedName.get.resolvedName)}""""
+      case prop: PropertyAttribute => {
+        val propertyTableName =
+          prop.elementAttribute match {
+            case _: VertexAttribute => "vertex_property"
+            case _: EdgeAttribute => "edge_property"
+          }
+        val parentColumnName = escapeQuotes(prop.elementAttribute.resolvedName.get.resolvedName)
+        val propertyName = escapeSingleQuotes(prop.name)
+        val newPropertyColumnName = escapeQuotes(prop.resolvedName.get.resolvedName)
+
+        s"""(SELECT value FROM $propertyTableName WHERE parent = "$parentColumnName" AND key = '$propertyName') AS "$newPropertyColumnName""""
+      }
       case _ => ""
     }
   }
@@ -66,12 +77,18 @@ class CompileSql(query: String) extends CompilerTest {
         val columns = ("*" +:
           node.requiredProperties.map(getSqlForProperty)
           ).mkString(", ")
+
+        val unidirectedSelectPart = if (node.jnode.directed)
+          ""
+        else
+          """  UNION ALL
+            |  SELECT "to", edge_id, "from" FROM edge
+            |""".stripMargin
+
         s"""SELECT $columns FROM
            |  (
            |    SELECT "from" AS "${escapeQuotes(node.jnode.src.resolvedName.get.resolvedName)}", edge_id AS "${escapeQuotes(node.jnode.edge.resolvedName.get.resolvedName)}", "to" AS "${escapeQuotes(node.jnode.trg.resolvedName.get.resolvedName)}" FROM edge
-           |    UNION ALL
-           |    SELECT "to", edge_id, "from" FROM edge
-           |  )""".stripMargin
+           |  $unidirectedSelectPart)""".stripMargin
       case node: FNode => node.children.map(getSql).mkString("\n")
       case node: VertexAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
       case node: PropertyAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
