@@ -2,7 +2,7 @@ package ingraph.compiler.sql
 
 import java.sql.Connection
 
-import org.neo4j.driver.v1.Session
+import org.neo4j.driver.v1.Transaction
 
 object ExportSteps {
   private val exportVertex = new ExportStep(
@@ -35,8 +35,8 @@ object ExportSteps {
 
   private val steps = Array(exportVertex, exportEdge, exportLabel, exportVertex_property, exportEdge_property)
 
-  def execute(cypherSession: Session, sqlConnection: Connection): Unit = {
+  def execute(cypherTransaction: Transaction, sqlConnection: Connection): Unit = {
     for (step <- steps)
-      step.exportToTable(cypherSession, sqlConnection)
+      step.exportToTable(cypherTransaction, sqlConnection)
   }
 }

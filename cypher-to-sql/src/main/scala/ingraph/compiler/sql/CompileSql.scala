@@ -1,7 +1,7 @@
 package ingraph.compiler.sql
 
 import ingraph.compiler.test.CompilerTest
-import ingraph.model.expr.{EdgeAttribute, PropertyAttribute, ResolvableName, VertexAttribute}
+import ingraph.model.expr.{EdgeAttribute, PropertyAttribute, VertexAttribute}
 import ingraph.model.fplan._
 import org.apache.spark.sql.catalyst.expressions.{EqualTo, Literal}
 import org.apache.spark.sql.types.StringType

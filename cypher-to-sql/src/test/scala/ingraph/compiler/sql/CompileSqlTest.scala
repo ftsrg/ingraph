@@ -5,7 +5,7 @@ import java.sql.{Connection, DriverManager, Statement}
 import ingraph.compiler.sql.Util.withResources
 import ingraph.driver.CypherDriverFactory
 import org.neo4j.driver.internal.value.{IntegerValue, NodeValue, StringValue}
-import org.neo4j.driver.v1.{AuthTokens, Session}
+import org.neo4j.driver.v1.{AuthTokens, Transaction}
 import org.scalatest.FunSuite
 import org.sqlite.SQLiteConfig
 
@@ -14,7 +14,7 @@ import scala.collection.mutable.ListBuffer
 
 class CompileSqlTest extends FunSuite {
 
-  private def compileAndRunQuery(createCypherQuery: String, selectCypherQuery: String) = {
+  private def compileAndRunQuery(createCypherQuery: String, selectCypherQuery: String): Unit = {
     val selectSqlQuery = new CompileSql(selectCypherQuery).run
 
     runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery)
@@ -25,85 +25,80 @@ class CompileSqlTest extends FunSuite {
       case value: IntegerValue => value.asLong()
       case value: NodeValue => value.asNode().id()
       case value: StringValue => value.asString()
-      case value => value
+      case _ => value
     }
   }
 
   def convertSqlCell(value: Any): Any = {
     value match {
-      case value => value
+      case _ => value
     }
   }
 
-  def compareQueryResults(cypherSession: Session, selectCypherQuery: String, sqlConnection: Connection, selectSqlQuery: String): Unit = {
-    withResources(cypherSession.beginTransaction)(cypherTransaction =>
-      withResources(sqlConnection.createStatement())(sqlStatement =>
-        withResources(sqlStatement.executeQuery(selectSqlQuery))(sqlResultSet => {
-          val cypherResult = cypherTransaction.run(selectCypherQuery)
-          assertResult(cypherResult.keys.size)(sqlResultSet.getMetaData.getColumnCount)
+  def compareQueryResults(cypherTransaction: Transaction, selectCypherQuery: String, sqlConnection: Connection, selectSqlQuery: String): Unit = {
+    withResources(sqlConnection.createStatement())(sqlStatement =>
+      withResources(sqlStatement.executeQuery(selectSqlQuery))(sqlResultSet => {
+        val cypherResult = cypherTransaction.run(selectCypherQuery)
+        assertResult(cypherResult.keys.size)(sqlResultSet.getMetaData.getColumnCount)
 
-          val cypherResultList = cypherResult.asScala.map(record => record.values().asScala.toArray).toArray
+        val cypherResultList = cypherResult.asScala.map(record => record.values().asScala.toArray).toArray
 
-          val sqlResultBuffer = new ListBuffer[Array[Any]]()
-          while (sqlResultSet.next()) {
-            sqlResultBuffer += (1 to sqlResultSet.getMetaData.getColumnCount).map(i => sqlResultSet.getObject(i)).toArray
+        val sqlResultBuffer = new ListBuffer[Array[Any]]()
+        while (sqlResultSet.next()) {
+          sqlResultBuffer += (1 to sqlResultSet.getMetaData.getColumnCount).map(i => sqlResultSet.getObject(i)).toArray
+        }
+        val sqlResultList = sqlResultBuffer.toArray
+
+        assertResult(cypherResultList.length)(sqlResultList.length)
+
+        for (rowIndex <- cypherResultList.indices) {
+          val cypherRow = cypherResultList(rowIndex)
+          val sqlRow = sqlResultList(rowIndex)
+
+          assertResult(cypherRow.length)(sqlRow.length)
+          for (columnIndex <- cypherRow.indices) {
+            val cypherCell = convertCypherCell(cypherRow(columnIndex))
+            val sqlCell = convertSqlCell(sqlRow(columnIndex))
+
+            assertResult(cypherCell)(sqlCell)
           }
-          val sqlResultList = sqlResultBuffer.toArray
-
-          assertResult(cypherResultList.length)(sqlResultList.length)
-
-          for (rowIndex <- cypherResultList.indices) {
-            val cypherRow = cypherResultList(rowIndex)
-            val sqlRow = sqlResultList(rowIndex)
-
-            assertResult(cypherRow.length)(sqlRow.length)
-            for (columnIndex <- cypherRow.indices) {
-              val cypherCell = convertCypherCell(cypherRow(columnIndex))
-              val sqlCell = convertSqlCell(sqlRow(columnIndex))
-
-              assertResult(cypherCell)(sqlCell)
-            }
-          }
-        })))
+        }
+      }))
   }
 
   private def runGraphQuery(createCypherQuery: String, selectCypherQuery: String, selectSqlQuery: String): Unit = {
     withResources(CypherDriverFactory.createNeo4jDriver("bolt://localhost:7687",
-      AuthTokens.basic("neo4j", "admin")))(driver => {
-      withResources(driver.session())(cypherSession => {
-        withResources(cypherSession.beginTransaction)(tx => {
-          tx.run(createCypherQuery)
-          tx.success()
+      AuthTokens.basic("neo4j", "admin")))(driver =>
+      withResources(driver.session())(cypherSession =>
+        withResources(cypherSession.beginTransaction)(cypherTransaction => {
+          cypherTransaction.run(createCypherQuery)
+          cypherTransaction.success()
 
           println("vvvvvvvv REFERENCE RESULT vvvvvvvv")
-
-          val result = tx.run(selectCypherQuery)
+          val result = cypherTransaction.run(selectCypherQuery)
           for (record <- result.asScala) {
             for ((key, value) <- record.asMap().asScala) {
               println(s"""$key = $value""")
             }
             println("---")
           }
-
           println("----------------------------------")
-        })
 
-        val config = new SQLiteConfig
-        config.enforceForeignKeys(true)
+          val config = new SQLiteConfig
+          config.enforceForeignKeys(true)
 
-        withResources(DriverManager.getConnection("jdbc:sqlite:", config.toProperties))(sqlConnection =>
-          withResources(sqlConnection.createStatement)(sqlStatement => {
-            sqlStatement.executeUpdate(SqlQueries.createTables)
+          withResources(DriverManager.getConnection("jdbc:sqlite:", config.toProperties))(sqlConnection =>
+            withResources(sqlConnection.createStatement)(sqlStatement => {
+              sqlStatement.executeUpdate(SqlQueries.createTables)
 
-            ExportSteps.execute(cypherSession, sqlConnection)
+              ExportSteps.execute(cypherTransaction, sqlConnection)
 
-            dump(sqlStatement, selectSqlQuery)
+              dump(sqlStatement, selectSqlQuery)
 
-            compareQueryResults(cypherSession, selectCypherQuery, sqlConnection, selectSqlQuery)
-          })
-        )
-      })
-    })
+              compareQueryResults(cypherTransaction, selectCypherQuery, sqlConnection, selectSqlQuery)
+            })
+          )
+        })))
   }
 
   private def dumpTable(sqlStatement: Statement, tablename: String): Unit = {
@@ -221,7 +216,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L183
-  ignore("Get two related nodes") {
+  test("Get two related nodes") {
     compileAndRunQuery(
       """CREATE (a:A {value: 1}),
         |  (a)-[:KNOWS]->(b:B {value: 2}),
