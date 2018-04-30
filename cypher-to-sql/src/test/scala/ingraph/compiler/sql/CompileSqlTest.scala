@@ -1,12 +1,13 @@
 package ingraph.compiler.sql
 
-import java.sql.{Connection, DriverManager, ResultSet, SQLException, Statement}
+import java.sql.{DriverManager, Statement}
 
-import ingraph.driver.{CypherDriver, CypherDriverFactory}
-import org.neo4j.driver.v1.{AuthTokens, Driver, Session, Transaction}
+import ingraph.compiler.sql.Util.withResources
+import ingraph.driver.CypherDriverFactory
+import org.neo4j.driver.v1.AuthTokens
 import org.scalatest.FunSuite
 import org.sqlite.SQLiteConfig
-import ingraph.compiler.sql.Util.withResources
+
 import scala.collection.JavaConverters._
 
 class CompileSqlTest extends FunSuite {
@@ -87,5 +88,455 @@ class CompileSqlTest extends FunSuite {
       """MATCH ()-[rel:X]-(a)
         |WHERE a.name = 'Andres'
         |RETURN a""".stripMargin)
+  }
+
+  ignore("Filter out based on node prop name / fragment #1") {
+    compileAndRunQuery(
+      """CREATE ()""",
+      """MATCH (a)
+        |WHERE a.name = 'x'
+        |RETURN a""".stripMargin
+    )
+  }
+
+  ignore("Filter out based on node prop name / fragment #2") {
+    compileAndRunQuery(
+      """CREATE ({name: 'Someone'})<-[:X]-()-[:X]->({name: 'Andres'})""",
+      """MATCH (a)
+        |RETURN a""".stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131
+  ignore("Filter based on rel prop name") {
+    compileAndRunQuery(
+      """CREATE (:A)<-[:KNOWS {name: 'monkey'}]-()-[:KNOWS {name: 'woot'}]->(:B)""",
+      """MATCH (node)-[r:KNOWS]->(a)
+        |WHERE r.name = 'monkey'
+        |RETURN a
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L148
+  ignore("Cope with shadowed variables") {
+    compileAndRunQuery(
+      """
+        |CREATE ({value: 1, name: 'King Kong'}),
+        |  ({value: 2, name: 'Ann Darrow'})
+      """.stripMargin,
+      """MATCH (n)
+        |WITH n.name AS n
+        |RETURN n
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L167
+  ignore("Get neighbours") {
+    compileAndRunQuery(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})""",
+      """MATCH (n1)-[rel:KNOWS]->(n2)
+        |RETURN n1, n2
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L183
+  ignore("Get two related nodes") {
+    compileAndRunQuery(
+      """CREATE (a:A {value: 1}),
+        |  (a)-[:KNOWS]->(b:B {value: 2}),
+        |  (a)-[:KNOWS]->(c:C {value: 3})
+      """.stripMargin,
+      """MATCH ()-[rel:KNOWS]->(x)
+        |RETURN x
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L202
+  ignore("Get related to related to / untyped") {
+    compileAndRunQuery(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3})""",
+      """MATCH (n)-->(a)-->(b)
+        |RETURN b
+      """.stripMargin
+    )
+  }
+
+  ignore("Get related to related to / typed") {
+    compileAndRunQuery(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3})""",
+      """MATCH (n)-[:KNOWS]->(a)-[:FRIEND]->(b)
+        |RETURN b
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L218
+  ignore("Handle comparison between node properties") {
+    compileAndRunQuery(
+      """CREATE (a:A {animal: 'monkey'}),
+        |  (b:B {animal: 'cow'}),
+        |  (c:C {animal: 'monkey'}),
+        |  (d:D {animal: 'cow'}),
+        |  (a)-[:KNOWS]->(b),
+        |  (a)-[:KNOWS]->(c),
+        |  (d)-[:KNOWS]->(b),
+        |  (d)-[:KNOWS]->(c)
+      """.stripMargin,
+      """MATCH (n)-[rel:KNOWS]->(x)
+        |WHERE n.animal = x.animal
+        |RETURN n, x
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L243
+  ignore("Return two subgraphs with bound undirected relationship") {
+    compileAndRunQuery(
+      """CREATE (a:A {value: 1})-[:REL {name: 'r'}]->(b:B {value: 2})
+      """.stripMargin,
+      """MATCH (a)-[r:REL {name: 'r'}]-(b)
+        |RETURN a, b
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
+  ignore("Handle OR in the WHERE clause") {
+    compileAndRunQuery(
+      """CREATE (a:A {p1: 12}),
+        |  (b:B {p2: 13}),
+        |  (c:C)
+      """.stripMargin,
+      """MATCH (n)
+        |WHERE n.p1 = 12 OR n.p2 = 13
+        |RETURN n
+      """.stripMargin
+    )
+  }
+
+  // MatchAcceptance2.feature
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L20
+  ignore("Do not return non-existent nodes") {
+    compileAndRunQuery(
+      "",
+      """MATCH (n)
+        |RETURN n
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L31
+  ignore("Do not return non-existent relationships") {
+    compileAndRunQuery(
+      "",
+      """MATCH ()-[r:LOLZ]->()
+        |RETURN r
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L129
+  ignore("Simple variable length pattern") {
+    compileAndRunQuery(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (c {name: 'C'}), (d {name: 'D'})
+        |CREATE (a)-[:CONTAINS]->(b),
+        |       (b)-[:CONTAINS]->(c),
+        |       (c)-[:CONTAINS]->(d)
+      """.stripMargin,
+      """MATCH (a {name: 'A'})-[:CONTAINS*]->(x)
+        |RETURN x
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L191
+  ignore("Returning bound nodes that are not part of the pattern") {
+    compileAndRunQuery(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (c {name: 'C'})
+        |CREATE (a)-[:KNOWS]->(b)
+      """.stripMargin,
+      """MATCH (a {name: 'A'}), (c {name: 'C'})
+        |MATCH (a)-[:KNOWS]->(b)
+        |RETURN a, b, c
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L210
+  ignore("Two bound nodes pointing to the same node") {
+    compileAndRunQuery(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (x1 {name: 'x1'}), (x2 {name: 'x2'})
+        |CREATE (a)-[:KNOWS]->(x1),
+        |       (a)-[:KNOWS]->(x2),
+        |       (b)-[:KNOWS]->(x1),
+        |       (b)-[:KNOWS]->(x2)
+      """.stripMargin,
+      """MATCH (a {name: 'A'}), (b {name: 'B'})
+        |MATCH (a)-[:KNOWS]->(x)<-[:KNOWS]->(b)
+        |RETURN x
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L233
+  ignore("Three bound nodes pointing to the same node") {
+    compileAndRunQuery(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}), (c {name: 'C'}),
+        |       (x1 {name: 'x1'}), (x2 {name: 'x2'})
+        |CREATE (a)-[:KNOWS]->(x1),
+        |       (a)-[:KNOWS]->(x2),
+        |       (b)-[:KNOWS]->(x1),
+        |       (b)-[:KNOWS]->(x2),
+        |       (c)-[:KNOWS]->(x1),
+        |       (c)-[:KNOWS]->(x2)
+      """.stripMargin,
+      """MATCH (a {name: 'A'}), (b {name: 'B'}), (c {name: 'C'})
+        |MATCH (a)-[:KNOWS]->(x), (b)-[:KNOWS]->(x), (c)-[:KNOWS]->(x)
+        |RETURN x
+      """.stripMargin
+    )
+  }
+
+  // add more MATCH tests later
+  // from https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L258
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L38
+  ignore("ORDER BY and LIMIT can be used - edited") {
+    compileAndRunQuery(
+      """CREATE (a:A {name: 'X'}),
+        |(a)-[:REL]->()
+      """.stripMargin,
+      """MATCH (a:A)
+        |WITH a
+        |ORDER BY a.name
+        |LIMIT 1
+        |MATCH (a)-[:REL]->(b)
+        |RETURN a
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L59
+  ignore("No dependencies between the query parts") {
+    compileAndRunQuery(
+      """CREATE (:A), (:B)
+      """.stripMargin,
+      """|MATCH (a)
+         |WITH a
+         |MATCH (b)
+         |RETURN a, b
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L80
+  ignore("Aliasing") {
+    compileAndRunQuery(
+      """CREATE (:Begin {prop: 42}),
+        |       (:End {prop: 42}),
+        |       (:End {prop: 3})
+      """.stripMargin,
+      """MATCH (a:Begin)
+        |WITH a.prop AS property
+        |MATCH (b:End)
+        |WHERE property = b.prop
+        |RETURN b
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L101
+  ignore("Handle dependencies across WITH - CREATE edited") {
+    compileAndRunQuery(
+      """CREATE (a:End {prop: 42, id: 0}),
+        |       (:End {prop: 3}),
+        |       (:Begin {prop: 0})
+      """.stripMargin,
+      """MATCH (a:Begin)
+        |WITH a.prop AS property
+        |  ORDER BY property
+        |  LIMIT 1
+        |MATCH (b)
+        |WHERE b.id = property
+        |RETURN b
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L123
+  ignore("Handle dependencies across WITH with SKIP - CREATE edited") {
+    compileAndRunQuery(
+      """CREATE ({prop: 'A', key: 0, id: 0}),
+        |       ({prop: 'B', key: 0, id: 1}),
+        |       ({prop: 'C', key: 0, id: 2})
+      """.stripMargin,
+      """MATCH (a)
+        |WITH a.prop AS property, a.key AS idToUse
+        |  ORDER BY property
+        |  SKIP 1
+        |MATCH (b)
+        |WHERE b.id = idToUse
+        |RETURN DISTINCT b
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L146
+  ignore("WHERE after WITH should filter results") {
+    compileAndRunQuery(
+      """CREATE ({name: 'A'}),
+        |       ({name: 'B'}),
+        |       ({name: 'C'})
+      """.stripMargin,
+      """MATCH (a)
+        |WITH a
+        |WHERE a.name = 'B'
+        |RETURN a
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L166
+  ignore("WHERE after WITH can filter on top of an aggregation - edited") {
+    compileAndRunQuery(
+      """CREATE (a {name: 'A'}),
+        |       (b {name: 'B'})
+        |CREATE (a)-[:REL]->(),
+        |       (a)-[:REL]->(),
+        |       (a)-[:REL]->(),
+        |       (b)-[:REL]->()
+      """.stripMargin,
+      """MATCH (a)-[:REL]->(b)
+        |WITH a, count(b) AS relCount
+        |WHERE relCount > 1
+        |RETURN a
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L251
+  ignore("A simple pattern with one bound endpoint - edited") {
+    compileAndRunQuery(
+      """CREATE (:A {x: 'x1'})-[:REL]->(:B {x: 'x2'})""",
+      """MATCH (a:A)-[r:REL]->(b:B)
+        |WITH a AS b, b AS tmp, r AS r
+        |WITH b AS a, r
+        |ORDER BY a.x, b.x
+        |LIMIT 1
+        |MATCH (a)-[r:REL]->(b)
+        |RETURN a, r, b
+      """.stripMargin
+    )
+  }
+
+  ignore("Simple collect") {
+    compileAndRunQuery(
+      """CREATE (), ()
+      """.stripMargin,
+      """MATCH (n)
+        |RETURN collect(n) AS ns
+      """.stripMargin
+    )
+  }
+
+  ignore("Property collect") {
+    compileAndRunQuery(
+      """CREATE ({p: 1}), ({p: 2})
+      """.stripMargin,
+      """MATCH (n)
+        |RETURN collect(n.p) AS ns
+      """.stripMargin
+    )
+  }
+
+  ignore("Property collect on edge") {
+    compileAndRunQuery(
+      """CREATE
+        |  (x:X {id: 99}),
+        |  (x)-[:REL]->({p: 1}),
+        |  (x)-[:REL]->({p: 2})
+      """.stripMargin,
+      """MATCH (x:X)-[:REL]->(n)
+        |RETURN x.id, collect(n.p) AS ns
+      """.stripMargin
+    )
+  }
+
+  ignore("List selectors") {
+    compileAndRunQuery(
+      """CREATE (:X { list: ['a', 'b'] })
+      """.stripMargin,
+      """MATCH (x:X)
+        |RETURN x.list[1]
+      """.stripMargin
+    )
+  }
+
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/OptionalMatchAcceptance.feature#L57
+  ignore("Respect predicates on the OPTIONAL MATCH") {
+    compileAndRunQuery(
+      """CREATE (s:Single)""",
+      """MATCH (n:Single)
+        |OPTIONAL MATCH (n)-[r:REL]-(m)
+        |WHERE m.prop = 42
+        |RETURN m
+      """.stripMargin
+    )
+  }
+
+  // custom aggregation test
+  ignore("Count DISTINCT") {
+    compileAndRunQuery(
+      """CREATE
+        | (p1:Person),
+        | (p2:Person),
+        | (c:City),
+        | (p1)-[:LIVES_IN]->(c),
+        | (p2)-[:LIVES_IN]->(c)
+      """.stripMargin,
+      """MATCH (p:Person)-[:LIVES_IN]->(c:City)
+        |RETURN count(DISTINCT c) AS cc
+      """.stripMargin
+    )
+  }
+
+  // custom aggregation test
+  ignore("Count DISTINCT properties") {
+    compileAndRunQuery(
+      """CREATE
+        | (p1:Person {name: 'Alan'}),
+        | (p2:Person {name: 'Alan'}),
+        | (c:City),
+        | (p1)-[:LIVES_IN]->(c),
+        | (p2)-[:LIVES_IN]->(c)
+      """.stripMargin,
+      """MATCH (p:Person)-[:LIVES_IN]->(c:City)
+        |RETURN count(DISTINCT p.name) AS ps
+      """.stripMargin
+    )
+  }
+
+  ignore("count empty on OPTIONAL MATCH") {
+    compileAndRunQuery("",
+      """OPTIONAL MATCH (n)
+        |RETURN count(n) AS cn
+      """.stripMargin
+    )
+  }
+
+  ignore("count empty on MATCH") {
+    compileAndRunQuery("",
+      """MATCH (n)
+        |RETURN count(n) AS cn
+      """.stripMargin
+    )
   }
 }
