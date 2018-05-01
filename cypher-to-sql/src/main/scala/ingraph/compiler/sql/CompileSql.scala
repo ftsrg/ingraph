@@ -1,7 +1,7 @@
 package ingraph.compiler.sql
 
 import ingraph.compiler.test.CompilerTest
-import ingraph.model.expr.{EdgeAttribute, ElementAttribute, PropertyAttribute, VertexAttribute}
+import ingraph.model.expr._
 import ingraph.model.fplan._
 import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal}
 import org.apache.spark.sql.types.LongType
@@ -43,6 +43,14 @@ class CompileSql(query: String) extends CompilerTest {
     }
   }
 
+  private def getProjectionSql(node: UnaryFNode, renamePairs: Traversable[(String, String)]): String = {
+    val columns = renamePairs.map(pair => s"""${pair._1} AS ${pair._2}""").mkString(", ")
+    s"""SELECT $columns FROM
+       |  (
+       |    ${getSql(node.child)}
+       |  )""".stripMargin
+  }
+
   private def getSql(node: Any): String = {
     node match {
       case node: GetVertices => {
@@ -69,12 +77,13 @@ class CompileSql(query: String) extends CompilerTest {
            |  ,
            |  (${getSql(node.right)}) right_query$wherePart""".stripMargin
       }
+      case node: Production => {
+        val renamePairs = node.output.zip(node.outputNames).map(pair => (getSql(pair._1), '"' + escapeQuotes(pair._2) + '"'))
+        getProjectionSql(node, renamePairs)
+      }
       case node: Projection => {
-        val columns = node.jnode.projectList.map(proj => s"""${getSql(proj.child)} AS "${escapeQuotes(proj.resolvedName.get.resolvedName)}"""").mkString(", ")
-        s"""SELECT $columns FROM
-           |  (
-           |    ${getSql(node.child)}
-           |  )""".stripMargin
+        val renamePairs = node.jnode.projectList.map(proj => (getSql(proj.child), getSql(proj)))
+        getProjectionSql(node, renamePairs)
       }
       case node: Selection =>
         val condition = getSql(node.jnode.condition)
@@ -132,9 +141,7 @@ class CompileSql(query: String) extends CompilerTest {
       }
       case node: FNode => node.children.map(getSql).mkString("\n")
       case node: BinaryOperator => s"""(${getSql(node.left)} ${node.sqlOperator} ${getSql(node.right)})"""
-      case node: VertexAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
-      case node: EdgeAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
-      case node: PropertyAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
+      case node: ResolvableName => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
       // SQLite cannot parse literal suffix (e.g. 42L)
       case node: Literal if node.dataType.isInstanceOf[LongType] => node.value.toString
       case node: Literal => node.sql

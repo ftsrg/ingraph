@@ -40,7 +40,10 @@ class CompileSqlTest extends FunSuite {
     withResources(sqlConnection.createStatement())(sqlStatement =>
       withResources(sqlStatement.executeQuery(selectSqlQuery))(sqlResultSet => {
         val cypherResult = cypherTransaction.run(selectCypherQuery)
-        assertResult(cypherResult.keys.size)(sqlResultSet.getMetaData.getColumnCount)
+
+        val cypherColumnNames = cypherResult.keys.asScala.toSeq
+        val sqlColumnNames = (1 to sqlResultSet.getMetaData.getColumnCount).map(sqlResultSet.getMetaData.getColumnName(_)).toSeq
+        assertResult(cypherColumnNames)(sqlColumnNames)
 
         val cypherResultList = cypherResult.asScala.map(record => record.values().asScala.toArray).toArray
 
@@ -136,18 +139,23 @@ class CompileSqlTest extends FunSuite {
       """MATCH (n)
         |RETURN n.value AS val ORDER BY val""".stripMargin
 
-    val selectSqlQuery =
+    val columnNamePrefix =
+      """SELECT NULL AS val
+        |  WHERE 0
+        |UNION ALL
+        |""".stripMargin
+    val selectSqlQuery = columnNamePrefix +
       """VALUES (1),
         |  (2),
         |  (3)""".stripMargin
-    val selectSqlQueryFaulty =
+    val selectSqlQueryFaulty = columnNamePrefix +
       """VALUES (1),
         |  (2),
         |  (0)""".stripMargin
-    val selectSqlQueryShorter =
+    val selectSqlQueryShorter = columnNamePrefix +
       """VALUES (1),
         |  (2)""".stripMargin
-    val selectSqlQueryReversed =
+    val selectSqlQueryReversed = columnNamePrefix +
       """VALUES (3),
         |  (2),
         |  (1)""".stripMargin
