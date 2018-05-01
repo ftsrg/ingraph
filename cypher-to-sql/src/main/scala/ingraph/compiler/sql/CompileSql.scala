@@ -133,6 +133,7 @@ class CompileSql(query: String) extends CompilerTest {
       case node: FNode => node.children.map(getSql).mkString("\n")
       case node: BinaryOperator => s"""(${getSql(node.left)} ${node.sqlOperator} ${getSql(node.right)})"""
       case node: VertexAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
+      case node: EdgeAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
       case node: PropertyAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
       // SQLite cannot parse literal suffix (e.g. 42L)
       case node: Literal if node.dataType.isInstanceOf[LongType] => node.value.toString

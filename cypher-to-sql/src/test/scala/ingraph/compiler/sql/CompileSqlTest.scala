@@ -79,7 +79,8 @@ class CompileSqlTest extends FunSuite {
       AuthTokens.basic("neo4j", "admin")))(driver =>
       withResources(driver.session())(cypherSession =>
         withResources(cypherSession.beginTransaction)(cypherTransaction => {
-          cypherTransaction.run(createCypherQuery)
+          if (createCypherQuery.nonEmpty)
+            cypherTransaction.run(createCypherQuery)
           cypherTransaction.success()
 
           println("vvvvvvvv REFERENCE RESULT vvvvvvvv")
@@ -365,7 +366,7 @@ class CompileSqlTest extends FunSuite {
   // MatchAcceptance2.feature
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L20
-  ignore("Do not return non-existent nodes") {
+  test("Do not return non-existent nodes") {
     compileAndRunQuery(
       "",
       """MATCH (n)
@@ -375,7 +376,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L31
-  ignore("Do not return non-existent relationships") {
+  test("Do not return non-existent relationships") {
     compileAndRunQuery(
       "",
       """MATCH ()-[r:LOLZ]->()
