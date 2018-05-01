@@ -7,6 +7,7 @@ import ingraph.driver.CypherDriverFactory
 import org.neo4j.driver.internal.value.{IntegerValue, NodeValue, StringValue}
 import org.neo4j.driver.v1.{AuthTokens, Transaction}
 import org.scalatest.FunSuite
+import org.scalatest.exceptions.TestFailedException
 import org.sqlite.SQLiteConfig
 
 import scala.collection.JavaConverters._
@@ -14,10 +15,10 @@ import scala.collection.mutable.ListBuffer
 
 class CompileSqlTest extends FunSuite {
 
-  private def compileAndRunQuery(createCypherQuery: String, selectCypherQuery: String): Unit = {
+  private def compileAndRunQuery(createCypherQuery: String, selectCypherQuery: String, orderedResults: Boolean = false): Unit = {
     val selectSqlQuery = new CompileSql(selectCypherQuery).run
 
-    runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery)
+    runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery, orderedResults)
   }
 
   def convertCypherCell(value: Any): Any = {
@@ -35,7 +36,7 @@ class CompileSqlTest extends FunSuite {
     }
   }
 
-  def compareQueryResults(cypherTransaction: Transaction, selectCypherQuery: String, sqlConnection: Connection, selectSqlQuery: String): Unit = {
+  def compareQueryResults(cypherTransaction: Transaction, selectCypherQuery: String, sqlConnection: Connection, selectSqlQuery: String, orderedResults: Boolean): Unit = {
     withResources(sqlConnection.createStatement())(sqlStatement =>
       withResources(sqlStatement.executeQuery(selectSqlQuery))(sqlResultSet => {
         val cypherResult = cypherTransaction.run(selectCypherQuery)
@@ -51,22 +52,29 @@ class CompileSqlTest extends FunSuite {
 
         assertResult(cypherResultList.length)(sqlResultList.length)
 
-        for (rowIndex <- cypherResultList.indices) {
-          val cypherRow = cypherResultList(rowIndex)
-          val sqlRow = sqlResultList(rowIndex)
+        if (orderedResults) {
+          for (rowIndex <- cypherResultList.indices) {
+            val cypherRow = cypherResultList(rowIndex)
+            val sqlRow = sqlResultList(rowIndex)
 
-          assertResult(cypherRow.length)(sqlRow.length)
-          for (columnIndex <- cypherRow.indices) {
-            val cypherCell = convertCypherCell(cypherRow(columnIndex))
-            val sqlCell = convertSqlCell(sqlRow(columnIndex))
+            assertResult(cypherRow.length)(sqlRow.length)
+            for (columnIndex <- cypherRow.indices) {
+              val cypherCell = convertCypherCell(cypherRow(columnIndex))
+              val sqlCell = convertSqlCell(sqlRow(columnIndex))
 
-            assertResult(cypherCell)(sqlCell)
+              assertResult(cypherCell)(sqlCell)
+            }
           }
+        }
+        else {
+          val cypherResultSet = cypherResultList.map(row => row.map(convertCypherCell).toSeq).toSet
+          val sqlResultSet = sqlResultList.map(row => row.map(convertSqlCell).toSeq).toSet
+          assert(cypherResultSet == sqlResultSet)
         }
       }))
   }
 
-  private def runGraphQuery(createCypherQuery: String, selectCypherQuery: String, selectSqlQuery: String): Unit = {
+  private def runGraphQuery(createCypherQuery: String, selectCypherQuery: String, selectSqlQuery: String, orderedResults: Boolean): Unit = {
     withResources(CypherDriverFactory.createNeo4jDriver("bolt://localhost:7687",
       AuthTokens.basic("neo4j", "admin")))(driver =>
       withResources(driver.session())(cypherSession =>
@@ -95,7 +103,7 @@ class CompileSqlTest extends FunSuite {
 
               dump(sqlStatement, selectSqlQuery)
 
-              compareQueryResults(cypherTransaction, selectCypherQuery, sqlConnection, selectSqlQuery)
+              compareQueryResults(cypherTransaction, selectCypherQuery, sqlConnection, selectSqlQuery, orderedResults)
             })
           )
         })))
@@ -119,6 +127,51 @@ class CompileSqlTest extends FunSuite {
 
       println("----------------------------------")
     })
+  }
+
+  test("Comparison") {
+    val createCypherQuery = "CREATE ({value: 1}), ({value: 2}), ({value: 3})"
+    val selectCypherQuery =
+      """MATCH (n)
+        |RETURN n.value AS val ORDER BY val""".stripMargin
+
+    val selectSqlQuery =
+      """VALUES (1),
+        |  (2),
+        |  (3)""".stripMargin
+    val selectSqlQueryFaulty =
+      """VALUES (1),
+        |  (2),
+        |  (0)""".stripMargin
+    val selectSqlQueryShorter =
+      """VALUES (1),
+        |  (2)""".stripMargin
+    val selectSqlQueryReversed =
+      """VALUES (3),
+        |  (2),
+        |  (1)""".stripMargin
+
+    // Ordered
+    runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery, true)
+
+    assertThrows[TestFailedException] {
+      runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryReversed, true)
+    }
+
+    assertThrows[TestFailedException] {
+      runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryShorter, true)
+    }
+
+    // Unordered
+    runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryReversed, false)
+
+    assertThrows[TestFailedException] {
+      runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryFaulty, false)
+    }
+
+    assertThrows[TestFailedException] {
+      runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryShorter, false)
+    }
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L52
@@ -247,7 +300,7 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
-  ignore("Get related to related to / more edges") {
+  test("Get related to related to / more edges") {
     compileAndRunQuery(
       """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3}), (b)-[:FRIEND]->(d:D {value: 4})""",
       """MATCH (n)-->(a)-->(b), (a)-->(d)
