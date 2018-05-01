@@ -110,6 +110,26 @@ class CompileSql(query: String) extends CompilerTest {
            |  (
            |    SELECT "from" AS "$fromColumnName", edge_id AS "$edgeColumnName", "to" AS "$toColumnName" FROM edge
            |  $typeConstraintPart$undirectedSelectPart)""".stripMargin
+      case node: AllDifferent => {
+        val childSql = getSql(node.child)
+
+        val edges = node.jnode.outputSet.collect { case attr: EdgeAttribute => attr }.toList
+        if (edges.length <= 1)
+          childSql
+        else {
+          val edgeNames = edges.map(_.resolvedName.get.resolvedName)
+            .map(name => s""""${escapeQuotes(name)}"""")
+          val edgeConditions = edgeNames.flatMap(column1 => edgeNames.map((column1, _)))
+            .filter(pair => pair._1 < pair._2)
+            .map(pair => s"""${pair._1} <> ${pair._2}""")
+
+          s"""SELECT * FROM
+             |  (
+             |    $childSql
+             |  )
+             |  WHERE ${edgeConditions.mkString("\n  AND ")}""".stripMargin
+        }
+      }
       case node: FNode => node.children.map(getSql).mkString("\n")
       case node: VertexAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
       case node: PropertyAttribute => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'

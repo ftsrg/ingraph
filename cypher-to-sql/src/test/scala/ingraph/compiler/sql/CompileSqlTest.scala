@@ -238,7 +238,7 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
-  ignore("Get related to related to / undirected") {
+  test("Get related to related to / undirected") {
     compileAndRunQuery(
       """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3})""",
       """MATCH (n)--(a)--(b)
