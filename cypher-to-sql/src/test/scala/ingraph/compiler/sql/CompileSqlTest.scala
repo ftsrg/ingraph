@@ -229,7 +229,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L202
-  ignore("Get related to related to / untyped") {
+  test("Get related to related to / untyped") {
     compileAndRunQuery(
       """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3})""",
       """MATCH (n)-->(a)-->(b)
@@ -238,7 +238,25 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
-  ignore("Get related to related to / typed") {
+  ignore("Get related to related to / undirected") {
+    compileAndRunQuery(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3})""",
+      """MATCH (n)--(a)--(b)
+        |RETURN b
+      """.stripMargin
+    )
+  }
+
+  ignore("Get related to related to / more edges") {
+    compileAndRunQuery(
+      """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3}), (b)-[:FRIEND]->(d:D {value: 4})""",
+      """MATCH (n)-->(a)-->(b), (a)-->(d)
+        |RETURN b
+      """.stripMargin
+    )
+  }
+
+  test("Get related to related to / typed") {
     compileAndRunQuery(
       """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3})""",
       """MATCH (n)-[:KNOWS]->(a)-[:FRIEND]->(b)

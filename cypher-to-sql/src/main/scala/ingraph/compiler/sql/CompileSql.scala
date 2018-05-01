@@ -1,7 +1,7 @@
 package ingraph.compiler.sql
 
 import ingraph.compiler.test.CompilerTest
-import ingraph.model.expr.{EdgeAttribute, PropertyAttribute, VertexAttribute}
+import ingraph.model.expr.{EdgeAttribute, ElementAttribute, PropertyAttribute, VertexAttribute}
 import ingraph.model.fplan._
 import org.apache.spark.sql.catalyst.expressions.{EqualTo, Literal}
 import org.apache.spark.sql.types.StringType
@@ -54,11 +54,21 @@ class CompileSql(query: String) extends CompilerTest {
 
         s"""SELECT $columns FROM vertex"""
       }
-      case node: Join =>
+      case node: Join => {
+        val joinAttributesConditions = node.left.jnode.outputSet.intersect(node.right.jnode.outputSet)
+          .map(attr => attr.asInstanceOf[ElementAttribute].resolvedName.get.resolvedName)
+          .map(name => s""""${escapeQuotes(name)}"""")
+          .map(escapedName => s"left_query.$escapedName = right_query.$escapedName")
+        val wherePart = if (joinAttributesConditions.isEmpty)
+          ""
+        else
+          "\nWHERE " + joinAttributesConditions.mkString(" AND ")
+
         s"""SELECT * FROM
-           |  (${getSql(node.left)})
+           |  (${getSql(node.left)}) left_query
            |  ,
-           |  (${getSql(node.right)})""".stripMargin
+           |  (${getSql(node.right)}) right_query$wherePart""".stripMargin
+      }
       case node: Projection => {
         val columns = node.jnode.projectList.map(proj => s"""${getSql(proj.child)} AS "${escapeQuotes(proj.resolvedName.get.resolvedName)}"""").mkString(", ")
         s"""SELECT $columns FROM
