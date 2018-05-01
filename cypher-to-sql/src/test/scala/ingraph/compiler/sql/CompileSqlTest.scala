@@ -319,7 +319,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L218
-  ignore("Handle comparison between node properties") {
+  test("Handle comparison between node properties") {
     compileAndRunQuery(
       """CREATE (a:A {animal: 'monkey'}),
         |  (b:B {animal: 'cow'}),
@@ -338,7 +338,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L243
-  ignore("Return two subgraphs with bound undirected relationship") {
+  test("Return two subgraphs with bound undirected relationship") {
     compileAndRunQuery(
       """CREATE (a:A {value: 1})-[:REL {name: 'r'}]->(b:B {value: 2})
       """.stripMargin,
@@ -349,7 +349,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
-  ignore("Handle OR in the WHERE clause") {
+  test("Handle OR in the WHERE clause") {
     compileAndRunQuery(
       """CREATE (a:A {p1: 12}),
         |  (b:B {p2: 13}),
