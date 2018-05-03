@@ -48,7 +48,7 @@ case class Dual() extends LeafJNode {
 }
 
 // unary nodes
-case class AllDifferent(edges: Seq[EdgeAttribute],
+case class AllDifferent(edges: Seq[AbstractEdgeAttribute],
                         child: JNode) extends UnaryJNode {}
 
 case class DuplicateElimination(child: JNode) extends UnaryJNode {}

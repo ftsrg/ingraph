@@ -156,13 +156,16 @@ object StatementBuilder {
   def buildMatchDescriptor(m: oc.Match): MatchDescriptor = {
     val optionalMatch = m.isOptional
 
-    val edgeAttributesOfMatchClause = mutable.HashSet.empty[expr.EdgeAttribute]
+    val edgeAttributesOfMatchClause = mutable.HashSet.empty[expr.AbstractEdgeAttribute]
     // handle comma-separated patternParts in the MATCH clause
     val pattern_PatternPartList = ListBuffer.empty[qplan.QNode]
     for (pattern <- m.getPattern.getPatterns.asScala) {
       val op = PatternBuilder.buildPattern(pattern)
 
-      //FIXME: edgeVariablesOfMatchClause += Cypher2RelalgUtil.extractEdgeVariables(op)
+      edgeAttributesOfMatchClause ++= op.flatMap[expr.AbstractEdgeAttribute]( _ match {
+        case e: qplan.Expand => Seq(e.edge)
+        case _ => Seq.empty
+      })
 
       pattern_PatternPartList += op
     }

@@ -57,7 +57,7 @@ case class Dual() extends LeafQNode {
 }
 
 // unary nodes
-case class AllDifferent(edges: Seq[EdgeAttribute], child: QNode) extends UnaryQNode {
+case class AllDifferent(edges: Seq[AbstractEdgeAttribute], child: QNode) extends UnaryQNode {
   override def expressionChildren = edges
 }
 
