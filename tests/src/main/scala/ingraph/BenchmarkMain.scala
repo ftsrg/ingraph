@@ -42,7 +42,7 @@ object BenchmarkMain {
 
     val tc = new LdbcSnbTestCase("bi", query, f"${csvDir}/", csvPostfix, Seq(removePost, removeForum))
 
-    print(sf + "," + query + ",")
+    print(sf + "," + query)
     neo4jDir match {
       case None =>
         print(",ingraph")
