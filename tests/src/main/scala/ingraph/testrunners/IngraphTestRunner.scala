@@ -25,14 +25,14 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
       tc.edgeCsvPaths,
       csvPreference
     )
-    println("ingraph => Initial evaluation:       " + sLoad.elapsed(TimeUnit.MILLISECONDS))
+    print("," + sLoad.elapsed(TimeUnit.MILLISECONDS))
 
     val indexer = queryHandler.adapter.indexer
     tc.updateQuerySpecifications.foreach { q =>
       val sUpdate = Stopwatch.createStarted()
       update(q, "upd", indexer, queryHandler)
       listener.terminated()
-      println("ingraph => Update and re-evaluation: " + sUpdate.elapsed(TimeUnit.MILLISECONDS))
+      print("," + sUpdate.elapsed(TimeUnit.MILLISECONDS))
     }
 
     queryHandler.result()
