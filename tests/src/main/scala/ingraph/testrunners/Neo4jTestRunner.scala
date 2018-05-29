@@ -9,6 +9,7 @@ import com.google.common.base.Stopwatch
 import ingraph.tests.LdbcSnbTestCase
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.factory.GraphDatabaseSettings
+import org.neo4j.kernel.api.exceptions.KernelException
 import org.neo4j.kernel.impl.proc.Procedures
 import org.neo4j.kernel.internal.GraphDatabaseAPI
 import org.neo4j.test.TestGraphDatabaseFactory
@@ -40,6 +41,7 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
     trans.close()
   }
 
+  @throws[KernelException]
   private def registerProcedure(db: GraphDatabaseService, procedures: Class[_]*): Unit = {
     val proceduresService = db.asInstanceOf[GraphDatabaseAPI].getDependencyResolver.resolveDependency(classOf[Procedures])
     for (procedure <- procedures) {
