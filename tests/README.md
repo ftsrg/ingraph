@@ -22,3 +22,5 @@ To use the SF1 data set and benchmark query 4, run something like the following 
 ```bash
 ./tests 1 4 ~/neo4j/data/databases/graph.db
 ```
+
+To run ingraph, simply omit the Neo4j directory.
