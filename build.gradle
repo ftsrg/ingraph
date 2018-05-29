@@ -16,7 +16,7 @@ ext {
   neo4jApocVersion = '3.4.0.1'
   pegdownVersion = '1.6.0'
   scalaShortVersion = '2.11'
-  scalaTestVersion = '3.0.1'
+  scalaTestVersion = '3.0.5'
   scalaVersion = '2.11.12'
   sparkVersion = '2.3.0'
   slizaaVersion = '1.0.0-SNAPSHOT'
