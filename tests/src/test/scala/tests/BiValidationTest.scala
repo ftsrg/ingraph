@@ -11,8 +11,7 @@ class BiValidationTest extends FunSuite {
 //  def csvDir: String = f"../graphs/ldbc-snb-bi/"
   def csvPostfix = "_0_0.csv"
 
-  val sf = "01"
-  def graphMLPath = f"../graphs/ldbc-snb-bi/graphmls/sf${sf}.graphml"
+  val sf = "1"
   def csvDir = f"../graphs/ldbc-snb-bi/"
 
   val forumId = sf match {
@@ -34,7 +33,7 @@ class BiValidationTest extends FunSuite {
   val startWithWith = Seq(20)
 
   val transitives = Seq(14, 16, 18) //3
-  val buggy =   Seq(3, 5, 6, 8, 15, 17, 21) //7
+  val buggy = Seq(3, 5, 6, 8, 15, 17, 21) //7
   val working = Seq(2, 4, 7, 9, 12, 22, 23, 24) //8
 
   val testCases: Seq[LdbcSnbTestCase] = (transitives++buggy++working).sorted map (i => new LdbcSnbTestCase("bi", i, f"${csvDir}/$i%02d/", csvPostfix, Seq()))
