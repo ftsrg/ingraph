@@ -19,7 +19,7 @@ object BenchmarkMain {
 
     val postId = sf match {
       case "tiny" => 137438953796L
-      case   "01" => 481036337184L
+      case   "01" => 412317167461L
       case   "03" => 412316860440L
       case    "1" => 962072674360L
       case    "3" => 3573412790304L
