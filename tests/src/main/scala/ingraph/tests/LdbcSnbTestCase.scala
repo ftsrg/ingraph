@@ -10,10 +10,10 @@ object LdbcSnbTestCase  {
   private val gson = new Gson()
 }
 
-class LdbcSnbTestCase(val workload: String, val number: Int, val csvDir: String, val csvPostfix: String,
+class LdbcSnbTestCase(val workload: String, val sf: String, val query: Int, val csvDir: String, val csvPostfix: String,
                       val updateQuerySpecifications: Seq[String] = Seq()
                      ) extends TestCase with CSVData {
-  override def name: String = f"$workload-$number%02d"
+  override def name: String = f"$workload-$query%02d"
 
   override def querySpecification: String = {
     def convert(v: Any): String = {
@@ -27,7 +27,7 @@ class LdbcSnbTestCase(val workload: String, val number: Int, val csvDir: String,
 
     val baseQuerySpecification: String = readToString(s"../queries/ldbc-snb-${workload}/${name}.cypher")
     val parameters: Map[String, String] = LdbcSnbTestCase.gson
-      .fromJson(readToString(f"../graphs/ldbc-snb-bi/$number%02d/parameters"), classOf[java.util.Map[String, Object]])
+      .fromJson(readToString(f"../graphs/ldbc-snb-bi/$query%02d/parameters"), classOf[java.util.Map[String, Object]])
       .asScala
       .toMap
       .map { case (k, v) => (k, convert(v)) }

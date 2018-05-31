@@ -25,33 +25,25 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
       tc.edgeCsvPaths,
       csvPreference
     )
-    print("," + sLoad.elapsed(TimeUnit.NANOSECONDS))
+    val queryTime = sLoad.elapsed(TimeUnit.NANOSECONDS)
 
     val indexer = queryHandler.adapter.indexer
-    tc.updateQuerySpecifications.foreach { q =>
+    val updateTimes = tc.updateQuerySpecifications.map { q =>
       val sUpdate = Stopwatch.createStarted()
       update(q, "upd", indexer, queryHandler)
       listener.terminated()
-      print("," + sUpdate.elapsed(TimeUnit.NANOSECONDS))
-    }
+      sUpdate.elapsed(TimeUnit.NANOSECONDS)
+    }.toList
 
+    println(tc.sf + "," + tc.query + ",ingraph," + queryTime + "," + updateTimes(0) + "," + updateTimes(1))
     queryHandler.result()
   }
 
   def update(querySpecification: String, queryName: String, indexer: Indexer, queryHandler: IngraphQueryHandler): List[Map[String, Any]] = {
-    val s = Stopwatch.createStarted()
     val onetime = new IngraphOneTimeAdapter(querySpecification, "del", indexer)
-//    println("Update time 1: " + s.elapsed(TimeUnit.MILLISECONDS))
-    s.reset()
-    s.start()
     onetime.terminate()
     onetime.close()
-//    println("Update time 2: " + s.elapsed(TimeUnit.MILLISECONDS))
-    s.reset()
-    s.start()
-    val res = queryHandler.result
-//    println("Update time 3: " + s.elapsed(TimeUnit.MILLISECONDS))
-    res
+    queryHandler.result
   }
 
 }

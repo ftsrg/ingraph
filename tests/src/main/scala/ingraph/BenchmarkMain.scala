@@ -40,21 +40,17 @@ object BenchmarkMain {
          |DETACH DELETE n
     """.stripMargin
 
-    val tc = new LdbcSnbTestCase("bi", query, f"${csvDir}/", csvPostfix, Seq(removePost, removeForum))
+    val tc = new LdbcSnbTestCase("bi", sf, query, f"${csvDir}/", csvPostfix, Seq(removePost, removeForum))
 
-    print(sf + "," + query)
     neo4jDir match {
       case None =>
-        print(",ingraph")
         val itr = new IngraphTestRunner(tc)
         val ingraphResults = itr.run()
       case Some(_) =>
-        print(",Neo4j")
         val ntr = new Neo4jTestRunner(tc, neo4jDir)
         val neo4jResults = ntr.run()
         ntr.close
     }
-    println
 
 //    assert(ingraphResults == neo4jResults)
 
