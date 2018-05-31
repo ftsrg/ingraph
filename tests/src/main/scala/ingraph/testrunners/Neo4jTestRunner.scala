@@ -58,7 +58,7 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
         case _ => v
       })}
     ).toList
-    println("neo4j   => Initial evaluation:       " + sLoad.elapsed(TimeUnit.MILLISECONDS))
+    println("neo4j   => Initial evaluation:       " + sLoad.elapsed(TimeUnit.NANOSECONDS))
 
     val tx = gds.beginTx()
 
@@ -66,7 +66,7 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
       val s = Stopwatch.createStarted()
       gds.execute(q)
       val results2 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
-      println("neo4j   => Update and re-evaluation: " + s.elapsed(TimeUnit.MILLISECONDS))
+      println("neo4j   => Update and re-evaluation: " + s.elapsed(TimeUnit.NANOSECONDS))
     }
     tx.failure()
     tx.close()
