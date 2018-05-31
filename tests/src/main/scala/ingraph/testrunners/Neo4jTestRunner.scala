@@ -66,6 +66,7 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
       val s = Stopwatch.createStarted()
       gds.execute(q)
       val results2 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
+      s.elapsed(TimeUnit.NANOSECONDS)
     }.toList
     tx.failure()
     tx.close()
