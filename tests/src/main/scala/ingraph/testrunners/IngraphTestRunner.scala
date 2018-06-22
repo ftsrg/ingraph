@@ -35,7 +35,7 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
       sUpdate.elapsed(TimeUnit.NANOSECONDS)
     }.toList
 
-    println(tc.sf + "," + tc.query + ",ingraph," + queryTime + "," + updateTimes(0) + "," + updateTimes(1))
+    println(tc.sf + "," + tc.query + ",ingraph," + queryTime + "," + updateTimes.mkString(","))
     queryHandler.result()
   }
 
