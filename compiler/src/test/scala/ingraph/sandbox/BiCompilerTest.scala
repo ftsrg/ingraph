@@ -10,7 +10,7 @@ class BiCompilerTest extends CompilerTest {
     , printQuery = true
     , printCypher = false
     , printQPlan = true
-    , printJPlan = true
+    , printNPlan = true
     , printFPlan = true
   )
 

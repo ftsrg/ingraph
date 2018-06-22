@@ -11,7 +11,7 @@ class TrainBenchmarkCompilationTest extends CompilerTest {
     , printQuery = false
     , printCypher = true
     , printQPlan = true
-    , printJPlan = false
+    , printNPlan = false
     , printFPlan = false
   )
 

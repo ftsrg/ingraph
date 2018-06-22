@@ -33,9 +33,9 @@ object EdgeTransformer {
         .map {
           case PropertyAttribute(name, elementAttribute, _) => elementAttribute match {
             case _: EdgeAttribute => PropertyTransformer(edge.properties, name, edge.id)
-            case v: VertexAttribute if v.name == operator.jnode.trg.name =>
+            case v: VertexAttribute if v.name == operator.nnode.trg.name =>
               PropertyTransformer(edge.targetVertex.properties, name, edge.targetVertex.id)
-            case v: VertexAttribute if v.name == operator.jnode.src.name =>
+            case v: VertexAttribute if v.name == operator.nnode.src.name =>
               PropertyTransformer(edge.sourceVertex.properties, name, edge.sourceVertex.id)
           }
         }
@@ -50,13 +50,13 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
 
   def addEdge(edge: IngraphEdge): Unit = {
     for (operators <- edgeConverters.get(edge.`type`); operator <- operators) {
-      val sourceLabels = operator.jnode.src.labels.vertexLabels
-      val targetLabels = operator.jnode.trg.labels.vertexLabels
+      val sourceLabels = operator.nnode.src.labels.vertexLabels
+      val targetLabels = operator.nnode.trg.labels.vertexLabels
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = EdgeTransformer(edge, operator, idParser)
         transaction.add(edgeOpString(operator), tuple)
-        if (!operator.jnode.directed) {
+        if (!operator.nnode.directed) {
           val rTuple = EdgeTransformer(
             edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
           transaction.add(edgeOpString(operator), rTuple)
@@ -67,13 +67,13 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
 
   def removeEdge(edge: IngraphEdge): Unit = {
     for (operators <- edgeConverters.get(edge.`type`); operator <- operators) {
-      val sourceLabels = operator.jnode.src.labels.vertexLabels
-      val targetLabels = operator.jnode.trg.labels.vertexLabels
+      val sourceLabels = operator.nnode.src.labels.vertexLabels
+      val targetLabels = operator.nnode.trg.labels.vertexLabels
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = EdgeTransformer(edge, operator, idParser)
         transaction.remove(edgeOpString(operator), tuple)
-        if (!operator.jnode.directed) {
+        if (!operator.nnode.directed) {
           val rTuple = EdgeTransformer(
             edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
           transaction.remove(edgeOpString(operator), rTuple)
@@ -87,7 +87,7 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
       f =>
         for (operator <- f._2) {
           val tuple = VertexTransformer(vertex, operator, idParser)
-          transaction.add(operator.jnode.v.name, tuple)
+          transaction.add(operator.nnode.v.name, tuple)
         }
     }
   }
@@ -97,7 +97,7 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
       f =>
         for (operator <- f._2) {
           val tuple = VertexTransformer(vertex, operator, idParser)
-          transaction.remove(operator.jnode.v.name, tuple)
+          transaction.remove(operator.nnode.v.name, tuple)
         }
     }
   }
@@ -106,7 +106,7 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
 class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
                        indexer: Indexer, transaction: Transaction, idParser: IdParser = PlainIdParser) {
   for (op <- vertexOps) {
-    val v = op.jnode.v
+    val v = op.nnode.v
     val opLabels = v.labels.vertexLabels
 
     val vertices = v.properties.get(TupleConstants.ID_KEY) match {
@@ -128,10 +128,10 @@ class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
   }
 
   for (operator <- edgeOps) {
-    val sourceLabels = operator.jnode.src.labels.vertexLabels
-    val targetLabels = operator.jnode.trg.labels.vertexLabels
-    val labels = operator.jnode.edge.labels.edgeLabels
-    val edges: Iterable[IngraphEdge] = operator.jnode.edge.properties.get(TupleConstants.ID_KEY) match {
+    val sourceLabels = operator.nnode.src.labels.vertexLabels
+    val targetLabels = operator.nnode.trg.labels.vertexLabels
+    val labels = operator.nnode.edge.labels.edgeLabels
+    val edges: Iterable[IngraphEdge] = operator.nnode.edge.properties.get(TupleConstants.ID_KEY) match {
       case None =>
         (for (label <- labels)
           yield {
@@ -149,7 +149,7 @@ class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
     for (edge <- edges) {
       val tuple = EdgeTransformer(edge, operator, idParser)
       transaction.add(operator.toString(), tuple)
-      if (!operator.jnode.directed) {
+      if (!operator.nnode.directed) {
         val rTuple = EdgeTransformer(
           edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
         transaction.add(operator.toString(), rTuple)

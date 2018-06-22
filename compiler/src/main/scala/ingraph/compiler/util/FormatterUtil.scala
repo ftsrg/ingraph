@@ -1,7 +1,7 @@
 package ingraph.compiler.util
 
 import ingraph.model.fplan.FNode
-import ingraph.model.jplan.JNode
+import ingraph.model.nplan.NNode
 import ingraph.model.qplan.QNode
 import ingraph.util.PlanPrettyPrinter
 
@@ -18,7 +18,7 @@ object FormatterUtil {
     val _heading: String = heading.getOrElse(
       stuff match {
         case _: QNode => "QPlan"
-        case _: JNode => "JPlan"
+        case _: NNode => "NPlan"
         case _: FNode => "FPlan"
         case null => return
       }

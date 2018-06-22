@@ -2,14 +2,14 @@ package ingraph.sandbox
 
 import ingraph.compiler.FPlanParser
 import ingraph.compiler.cypher2qplan.QPlanResolver
-import ingraph.compiler.qplan2jplan.{JPlanToFPlan, QPlanToJPlan}
+import ingraph.compiler.qplan2nplan.{NPlanToFPlan, QPlanToNPlan}
 import ingraph.model.expr._
 import ingraph.model.fplan.{FNode, LeafFNode}
-import ingraph.model.{fplan, jplan, qplan}
+import ingraph.model.{fplan, nplan, qplan}
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
-class JPlanToFPlanTest extends FunSuite {
+class NPlanToFPlanTest extends FunSuite {
 
   def getLeafNodes(plan: FNode): Seq[FNode] = {
     if (plan.isInstanceOf[LeafFNode]) return plan :: Nil
@@ -22,8 +22,8 @@ class JPlanToFPlanTest extends FunSuite {
     val de = qplan.DuplicateElimination(gv)
 
     val qp = de
-    val jp = QPlanToJPlan.transform(qp)
-    val fp = JPlanToFPlan.transform(jp)
+    val jp = QPlanToNPlan.transform(qp)
+    val fp = NPlanToFPlan.transform(jp)
 
     assert(fp.flatSchema.size == 1)
     assert(fp.children(0).flatSchema.size == 1)
@@ -47,8 +47,8 @@ class JPlanToFPlanTest extends FunSuite {
       )
     )
     val rqp = QPlanResolver.resolveQPlan(qp)
-    val jp = QPlanToJPlan.transform(rqp)
-    val fp = JPlanToFPlan.transform(jp)
+    val jp = QPlanToNPlan.transform(rqp)
+    val fp = NPlanToFPlan.transform(jp)
 
     assert(fp.flatSchema.size == 1)
     assert(fp.children(0).flatSchema.size == 3)
@@ -67,8 +67,8 @@ class JPlanToFPlanTest extends FunSuite {
       qplan.GetVertices(n)
     )
     val rqp = QPlanResolver.resolveQPlan(qp)
-    val jp = QPlanToJPlan.transform(rqp)
-    val fp = JPlanToFPlan.transform(jp)
+    val jp = QPlanToNPlan.transform(rqp)
+    val fp = NPlanToFPlan.transform(jp)
 
     assert(fp.flatSchema.size == 1)
     assert(fp.children(0).flatSchema.size == 2)
@@ -98,8 +98,8 @@ class JPlanToFPlanTest extends FunSuite {
     )
 
     val rqp = QPlanResolver.resolveQPlan(qp)
-    val jp = QPlanToJPlan.transform(rqp)
-    val fp = JPlanToFPlan.transform(jp)
+    val jp = QPlanToNPlan.transform(rqp)
+    val fp = NPlanToFPlan.transform(jp)
 
     assert(fp.flatSchema.size == 2)
     assert(fp.children(0).flatSchema.size == 2)

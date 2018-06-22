@@ -3,7 +3,7 @@ package ingraph.model.treenodes
 import ingraph.compiler.exceptions.UnexpectedTypeException
 import ingraph.model.expr.{HasExtraChildren, RichEdgeAttribute}
 import ingraph.model.fplan.FNode
-import ingraph.model.jplan.JNode
+import ingraph.model.nplan.NNode
 import ingraph.model.qplan.QNode
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
@@ -32,7 +32,7 @@ abstract class GenericBinaryNode[TPlan <: LogicalPlan] extends LogicalPlan {
 sealed trait IngraphTreeNodeType
 case class ExpressionTreeNode(n: cExpr.Expression) extends IngraphTreeNodeType
 //case class FPlanTreeNode(n: FNode) extends IngraphTreeNode
-//case class JPlanTreeNode(n: JNode) extends IngraphTreeNode
+//case class NPlanTreeNode(n: NNode) extends IngraphTreeNode
 case class QPlanTreeNode(n: LogicalPlan) extends IngraphTreeNodeType
 //case class TPlanTreeNode(n: TNode) extends IngraphTreeNode
 

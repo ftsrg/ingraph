@@ -12,7 +12,7 @@ class RandomCompilationTest extends CompilerTest {
     , printQuery = false
     , printCypher = true
     , printQPlan = true
-    , printJPlan = true
+    , printNPlan = true
     , printFPlan = true
   )
 
@@ -433,18 +433,18 @@ class RandomQPlanCompilationTest extends CompilerTest {
     , printQuery = false
     , printCypher = true
     , printQPlan = true
-    , printJPlan = true
+    , printNPlan = true
     , printFPlan = true
   )
 
   /* FPlan error:
 'Unwind unwindattribute(listexpression(1, 2, 3), li, Some(li#0))
 +- Dual
- (of class ingraph.model.jplan.Unwind)
+ (of class ingraph.model.nplan.Unwind)
 scala.MatchError: 'Unwind unwindattribute(listexpression(1, 2, 3), li, Some(li#0))
 +- Dual
- (of class ingraph.model.jplan.Unwind)
-	at ingraph.compiler.qplan2jplan.SchemaInferencer$.transform(SchemaInferencer.scala:18)
+ (of class ingraph.model.nplan.Unwind)
+	at ingraph.compiler.qplan2nplan.SchemaInferencer$.transform(SchemaInferencer.scala:18)
    */
   test("Random: compile UNWIND w/ list literal") {
     compile(

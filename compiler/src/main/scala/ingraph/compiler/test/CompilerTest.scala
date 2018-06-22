@@ -3,12 +3,12 @@ package ingraph.compiler.test
 import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.compiler.exceptions.{CompilerConfigurationException, IncompleteCompilationException, IncompleteResolutionException}
-import ingraph.compiler.qplan2jplan.{JPlanToFPlan, QPlanToJPlan}
+import ingraph.compiler.qplan2nplan.{NPlanToFPlan, QPlanToNPlan}
 import ingraph.compiler.util.FormatterUtil
 import ingraph.emf.util.PrettyPrinter
 import ingraph.model.expr.{EStub, ResolvableName}
 import ingraph.model.fplan.{FNode, LeafFNode}
-import ingraph.model.jplan.JNode
+import ingraph.model.nplan.NNode
 import ingraph.model.qplan.{QNode, QStub, UnresolvedDelete, UnresolvedProjection}
 import ingraph.model.treenodes.{ExpressionTreeNode, IngraphTreeNode, QPlanTreeNode}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction}
@@ -22,14 +22,14 @@ case class CompilerTestConfig(querySuitePath: Option[String] = None
                              , printQuery: Boolean = true
                              , printCypher: Boolean = false
                              , printQPlan: Boolean = true
-                             , printJPlan: Boolean = true
+                             , printNPlan: Boolean = true
                              , printFPlan: Boolean = true
                              , printTPlan: Boolean = true
                              ) {
   /**
     * Did we request anything to be printed?
     */
-  def printAny: Boolean = printQuery || printCypher || printQPlan || printJPlan || printFPlan || printTPlan
+  def printAny: Boolean = printQuery || printCypher || printQPlan || printNPlan || printFPlan || printTPlan
 }
 
 abstract class CompilerTest extends FunSuite {
@@ -47,7 +47,7 @@ abstract class CompilerTest extends FunSuite {
   }
 
   case class CompilationStages(qplan: QNode,
-                               jplan: JNode,
+                               nplan: NNode,
                                fplan: FNode)
 
   /**
@@ -88,13 +88,13 @@ abstract class CompilerTest extends FunSuite {
     assertNoStub(qplan)
     if (!config.skipQPlanResolve) assertResolved(qplan)
 
-    val jplan = if (config.compileQPlanOnly) null else QPlanToJPlan.transform(qplan)
-    if (config.printJPlan ) formatPlan(jplan)
+    val nplan = if (config.compileQPlanOnly) null else QPlanToNPlan.transform(qplan)
+    if (config.printNPlan ) formatPlan(nplan)
 
-    val fplan = if (config.compileQPlanOnly) null else JPlanToFPlan.transform(jplan)
+    val fplan = if (config.compileQPlanOnly) null else NPlanToFPlan.transform(nplan)
     if (config.printFPlan ) formatPlan(fplan)
 
-    return CompilationStages(qplan, jplan, fplan)
+    return CompilationStages(qplan, nplan, fplan)
   }
 
   def getLeafNodes(plan: FNode): Seq[FNode] = {

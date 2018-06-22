@@ -16,8 +16,8 @@
 ## Engine-specific query compilation and execution
 
 * relational engines:
-  * :hourglass_flowing_sand: `qplan to jplan transformer`: transforms the query plan to a join-based plan that can be evaluated with relational techniques.
-  * :page_facing_up: `jplan`: a query plan in join-based algebra.
+  * :hourglass_flowing_sand: `qplan to nplan transformer`: transforms the query plan to a join-based plan that can be evaluated with relational techniques.
+  * :page_facing_up: `nplan`: a query plan in join-based algebra.
   * :hourglass_flowing_sand: `schema inferencer`: transformations a join-based plan to a flat plan that contains properties required for computations.
   * :page_facing_up: `fplan`: a query plan in (join-based) flat relational algebra.
     * :hourglass_flowing_sand: `ire`: incremental relational engine.

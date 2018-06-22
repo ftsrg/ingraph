@@ -1,13 +1,13 @@
 package ingraph.model.fplan
 
 import ingraph.model.expr._
-import ingraph.model.jplan
+import ingraph.model.nplan
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 trait FNode extends LogicalPlan {
-  def jnode: jplan.JNode
+  def nnode: nplan.NNode
   def flatSchema: Seq[ResolvableName]
   override def children: Seq[FNode]
   override def output: Seq[Attribute] = Seq()
@@ -30,109 +30,109 @@ trait EquiJoinLike extends JoinLike {
 }
 
 // leaf nodes
-case class GetVertices(requiredProperties: Seq[ResolvableName], jnode: jplan.GetVertices) extends LeafFNode {
-  override def flatSchema = jnode.output ++ requiredProperties
+case class GetVertices(requiredProperties: Seq[ResolvableName], nnode: nplan.GetVertices) extends LeafFNode {
+  override def flatSchema = nnode.output ++ requiredProperties
 }
 
-case class GetEdges(requiredProperties: Seq[ResolvableName], jnode: jplan.GetEdges) extends LeafFNode {
-  override def flatSchema = jnode.output ++ requiredProperties
+case class GetEdges(requiredProperties: Seq[ResolvableName], nnode: nplan.GetEdges) extends LeafFNode {
+  override def flatSchema = nnode.output ++ requiredProperties
 }
 
-case class Dual(jnode: jplan.Dual) extends LeafFNode {
+case class Dual(nnode: nplan.Dual) extends LeafFNode {
   override def flatSchema = Seq()
 }
 
 // unary nodes
-case class AllDifferent(jnode: jplan.AllDifferent,
+case class AllDifferent(nnode: nplan.AllDifferent,
                         child: FNode
                         ) extends UnaryFNode {
 
 }
 
-case class DuplicateElimination(jnode: jplan.DuplicateElimination,
+case class DuplicateElimination(nnode: nplan.DuplicateElimination,
                                 child: FNode
                                ) extends UnaryFNode {}
 
-case class Production(jnode: jplan.Production,
+case class Production(nnode: nplan.Production,
                       child: FNode
                      ) extends UnaryFNode {
-  override def output = jnode.output
+  override def output = nnode.output
   def outputNames: Iterable[String] = output.map(_.resolvedName.get.resolvedName.replaceAll("#\\d+$", "").replace('$', '.'))
 }
 
 case class Projection(requiredProperties: Seq[ResolvableName],
-                      jnode: jplan.Projection,
+                      nnode: nplan.Projection,
                       child: FNode
                      ) extends UnaryFNode {
-  override def flatSchema = jnode.projectList ++ requiredProperties
+  override def flatSchema = nnode.projectList ++ requiredProperties
   lazy val projectionTuple: Seq[Expression] =
-    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.flatSchema)) ++
+    nnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.flatSchema)) ++
       requiredProperties.map(SchemaMapper.transformExpression(_, child.flatSchema))
 }
 
 case class Grouping(requiredProperties: Seq[ResolvableName],
-                    jnode: jplan.Grouping,
+                    nnode: nplan.Grouping,
                     child: FNode
                      ) extends UnaryFNode {
-  override def flatSchema = jnode.projectList ++ requiredProperties
+  override def flatSchema = nnode.projectList ++ requiredProperties
   lazy val aggregationCriteria: Seq[Expression] =
-    jnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.flatSchema)) ++
+    nnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.flatSchema)) ++
       requiredProperties.map(SchemaMapper.transformExpression(_, child.flatSchema))
   lazy val projectionTuple: Seq[Expression] =
-    jnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.flatSchema)) ++
+    nnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.flatSchema)) ++
       requiredProperties.map(SchemaMapper.transformExpression(_, child.flatSchema))
 }
 
-case class Selection(jnode: jplan.Selection,
+case class Selection(nnode: nplan.Selection,
                      child: FNode
                     ) extends UnaryFNode {
   lazy val condition: Expression =
-    SchemaMapper.transformExpression(jnode.condition, child.flatSchema)
+    SchemaMapper.transformExpression(nnode.condition, child.flatSchema)
 }
 
-case class Unwind(jnode: jplan.Unwind,
+case class Unwind(nnode: nplan.Unwind,
                   child: FNode
                  ) extends UnaryFNode {
-  override def flatSchema = child.jnode.output ++ Seq(unwindAttribute)
+  override def flatSchema = child.nnode.output ++ Seq(unwindAttribute)
   lazy val unwindAttribute: UnwindAttribute =
     UnwindAttribute(
-      SchemaMapper.transformExpression(jnode.unwindAttribute.list, child.flatSchema),
-      jnode.unwindAttribute.name,
-      jnode.unwindAttribute.resolvedName
+      SchemaMapper.transformExpression(nnode.unwindAttribute.list, child.flatSchema),
+      nnode.unwindAttribute.name,
+      nnode.unwindAttribute.resolvedName
     )
 }
 
-case class SortAndTop(jnode: jplan.SortAndTop,
+case class SortAndTop(nnode: nplan.SortAndTop,
                       child: FNode
                      ) extends UnaryFNode {
-  lazy val skipExpr:  Option[Expression] = jnode.skipExpr
-  lazy val limitExpr: Option[Expression] = jnode.limitExpr
-  val order: Seq[SortOrder] = jnode.order.map(SchemaMapper.transformExpression(_, child.flatSchema).asInstanceOf[SortOrder])
+  lazy val skipExpr:  Option[Expression] = nnode.skipExpr
+  lazy val limitExpr: Option[Expression] = nnode.limitExpr
+  val order: Seq[SortOrder] = nnode.order.map(SchemaMapper.transformExpression(_, child.flatSchema).asInstanceOf[SortOrder])
 }
 
 // binary nodes
-case class Union(jnode: jplan.Union,
+case class Union(nnode: nplan.Union,
                  left: FNode,
                  right: FNode) extends BinaryFNode {
   override def flatSchema = left.flatSchema
 }
 
-case class AntiJoin(jnode: jplan.AntiJoin,
+case class AntiJoin(nnode: nplan.AntiJoin,
                     left: FNode,
                     right: FNode
                    ) extends BinaryFNode with JoinLike {
   override def flatSchema = left.flatSchema
 }
 
-case class Join(jnode: jplan.Join,
+case class Join(nnode: nplan.Join,
                 left: FNode,
                 right: FNode
                ) extends BinaryFNode with EquiJoinLike {}
 
-case class TransitiveJoin(jnode: jplan.TransitiveJoin,
+case class TransitiveJoin(nnode: nplan.TransitiveJoin,
                           left: FNode,
                           right: FNode) extends BinaryFNode with EquiJoinLike {
-  lazy val edgeList: EdgeListAttribute = jnode.edgeList
+  lazy val edgeList: EdgeListAttribute = nnode.edgeList
 
   override def flatSchema =
     left.flatSchema ++
@@ -140,21 +140,21 @@ case class TransitiveJoin(jnode: jplan.TransitiveJoin,
     right.flatSchema.filter(x => !x.isInstanceOf[EdgeAttribute] && !left.flatSchema.map(_.resolvedName).contains(x.resolvedName))
 }
 
-case class LeftOuterJoin(jnode: jplan.LeftOuterJoin,
+case class LeftOuterJoin(nnode: nplan.LeftOuterJoin,
                          left: FNode,
                          right: FNode
                         ) extends BinaryFNode with EquiJoinLike {}
 
-case class ThetaLeftOuterJoin(jnode: jplan.ThetaLeftOuterJoin,
+case class ThetaLeftOuterJoin(nnode: nplan.ThetaLeftOuterJoin,
                               left: FNode,
                               right: FNode) extends BinaryFNode with EquiJoinLike {
   lazy val condition: Expression =
-    SchemaMapper.transformExpression(jnode.condition, left.flatSchema, right.flatSchema, leftMask.size)
+    SchemaMapper.transformExpression(nnode.condition, left.flatSchema, right.flatSchema, leftMask.size)
 }
 
-case class Create(jnode: jplan.Create,
+case class Create(nnode: nplan.Create,
                   child: FNode) extends UnaryFNode {
-  lazy val attribute: ResolvableName = jnode.attribute match {
+  lazy val attribute: ResolvableName = nnode.attribute match {
     case VertexAttribute(name, labels, properties, isAnonymous, resolvedName) =>
       val tProperties = properties.map((kv) => kv._1 -> SchemaMapper.transformExpression(kv._2, child.flatSchema))
       VertexAttribute(name, labels, tProperties, isAnonymous, resolvedName)
@@ -168,23 +168,23 @@ case class Create(jnode: jplan.Create,
       )
       TupleEdgeAttribute(tSrc, tTrg, tEdge, dir)
   }
-  override def flatSchema = jnode.output ++ Seq(attribute)
+  override def flatSchema = nnode.output ++ Seq(attribute)
 }
 
-case class Delete(jnode: jplan.Delete,
+case class Delete(nnode: nplan.Delete,
                   child: FNode) extends UnaryFNode {
   lazy val attributes: Seq[TupleIndexLiteralAttribute] =
-    jnode.attributes.map(SchemaMapper.transformExpression(_, child.flatSchema).asInstanceOf[TupleIndexLiteralAttribute])
-  lazy val detach: Boolean = jnode.detach
+    nnode.attributes.map(SchemaMapper.transformExpression(_, child.flatSchema).asInstanceOf[TupleIndexLiteralAttribute])
+  lazy val detach: Boolean = nnode.detach
 }
 
-case class Merge(jnode: jplan.Merge,
+case class Merge(nnode: nplan.Merge,
                  child: FNode) extends UnaryFNode {}
 
-case class SetNode(jnode: jplan.SetNode,
+case class SetNode(nnode: nplan.SetNode,
                    child: FNode) extends UnaryFNode {}
 
-case class Remove(jnode: jplan.Remove,
+case class Remove(nnode: nplan.Remove,
                   child: FNode) extends UnaryFNode {}
 
 

@@ -14,7 +14,7 @@ import ingraph.model.expr._
 import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
 import ingraph.model.fplan
 import ingraph.model.fplan._
-import ingraph.model.jplan
+import ingraph.model.nplan
 import ingraph.parse.ExpressionParser
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression, Literal}
 
@@ -74,7 +74,7 @@ object EngineFactory {
 
           case op: BinaryFNode =>
             val node: ActorRef = op match {
-              case op: Union => newLocal(Props(new UnionNode(expr.child, op.jnode.bag)))
+              case op: Union => newLocal(Props(new UnionNode(expr.child, op.nnode.bag)))
               case op: JoinLike =>
                 val child = expr.child
                 val leftTupleWidth  = op.left. flatSchema.length
@@ -113,13 +113,13 @@ object EngineFactory {
 
     // leaf nodes
     private def getVertices(op: GetVertices, expr: ForwardConnection) = {
-      val labels = op.jnode.v.labels.vertexLabels.toSeq
+      val labels = op.nnode.v.labels.vertexLabels.toSeq
       vertexConverters.addBinding(labels, op)
-      inputs += (op.jnode.v.name -> expr.child)
+      inputs += (op.nnode.v.name -> expr.child)
     }
 
     private def getEdges(op: GetEdges, expr: ForwardConnection) = {
-      val labels = op.jnode.edge.labels.edgeLabels.toSeq
+      val labels = op.nnode.edge.labels.edgeLabels.toSeq
       assert(labels.nonEmpty, s"Querying all edges is prohibitively expensive, please use edge labels on $op")
       for (label <- labels) {
         edgeConverters.addBinding(label, op)
@@ -165,11 +165,11 @@ object EngineFactory {
         e => ExpressionParser[Any](e.child)).toVector
       newLocal(Props(new SortAndTopNode(
         expr.child,
-        op.jnode.order.length,
+        op.nnode.order.length,
         sortKeys,
         skip,
         limit,
-        op.jnode.order.map(_.direction == Ascending).toVector
+        op.nnode.order.map(_.direction == Ascending).toVector
       )))
     }
 
@@ -243,7 +243,7 @@ object EngineFactory {
         index =>
           val expr = ExpressionParser[Long](index)
           if (index.isVertex) {
-            (t: Tuple) => indexer.removeVertexById(expr(t), op.jnode.detach)
+            (t: Tuple) => indexer.removeVertexById(expr(t), op.nnode.detach)
           } else {
             (t: Tuple) => indexer.removeEdgeById(expr(t))
           }
