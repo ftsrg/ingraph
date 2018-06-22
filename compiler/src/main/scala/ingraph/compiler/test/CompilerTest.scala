@@ -1,35 +1,35 @@
 package ingraph.compiler.test
 
-import ingraph.compiler.CypherToQPlan
-import ingraph.compiler.cypher2qplan.CypherParser
+import ingraph.compiler.CypherToGPlan
+import ingraph.compiler.cypher2gplan.CypherParser
 import ingraph.compiler.exceptions.{CompilerConfigurationException, IncompleteCompilationException, IncompleteResolutionException}
-import ingraph.compiler.qplan2nplan.{NPlanToFPlan, QPlanToNPlan}
+import ingraph.compiler.plantransformers.{NPlanToFPlan, GPlanToNPlan}
 import ingraph.compiler.util.FormatterUtil
 import ingraph.emf.util.PrettyPrinter
 import ingraph.model.expr.{EStub, ResolvableName}
 import ingraph.model.fplan.{FNode, LeafFNode}
 import ingraph.model.nplan.NNode
-import ingraph.model.qplan.{QNode, QStub, UnresolvedDelete, UnresolvedProjection}
-import ingraph.model.treenodes.{ExpressionTreeNode, IngraphTreeNode, QPlanTreeNode}
+import ingraph.model.gplan.{GNode, GStub, UnresolvedDelete, UnresolvedProjection}
+import ingraph.model.treenodes.{ExpressionTreeNode, IngraphTreeNode, GPlanTreeNode}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.scalatest.FunSuite
 
 case class CompilerTestConfig(querySuitePath: Option[String] = None
-                             , skipQPlanResolve: Boolean = false
-                             , skipQPlanBeautify: Boolean = false
-                             , compileQPlanOnly: Boolean = false
-                             , printQuery: Boolean = true
-                             , printCypher: Boolean = false
-                             , printQPlan: Boolean = true
-                             , printNPlan: Boolean = true
-                             , printFPlan: Boolean = true
-                             , printTPlan: Boolean = true
+                              , skipGPlanResolve: Boolean = false
+                              , skipGPlanBeautify: Boolean = false
+                              , compileGPlanOnly: Boolean = false
+                              , printQuery: Boolean = true
+                              , printCypher: Boolean = false
+                              , printGPlan: Boolean = true
+                              , printNPlan: Boolean = true
+                              , printFPlan: Boolean = true
+                              , printTPlan: Boolean = true
                              ) {
   /**
     * Did we request anything to be printed?
     */
-  def printAny: Boolean = printQuery || printCypher || printQPlan || printNPlan || printFPlan || printTPlan
+  def printAny: Boolean = printQuery || printCypher || printGPlan || printNPlan || printFPlan || printTPlan
 }
 
 abstract class CompilerTest extends FunSuite {
@@ -41,12 +41,12 @@ abstract class CompilerTest extends FunSuite {
 
   def constructQueryFilePath(fileBaseName: String): String = {
     if (config.querySuitePath.isEmpty) {
-      throw new CompilerConfigurationException("QPlan compilation requested from file, but querySuitePath was not supplied in the compiler test config")
+      throw new CompilerConfigurationException("GPlan compilation requested from file, but querySuitePath was not supplied in the compiler test config")
     }
     s"../queries/${config.querySuitePath.get}/${fileBaseName}.cypher"
   }
 
-  case class CompilationStages(qplan: QNode,
+  case class CompilationStages(gplan: GNode,
                                nplan: NNode,
                                fplan: FNode)
 
@@ -78,23 +78,23 @@ abstract class CompilerTest extends FunSuite {
     val cypher = CypherParser.parseString(query)
     if (config.printCypher) formatPlan(PrettyPrinter.format(cypher), Some("Parsed query"))
 
-    val qplan = CypherToQPlan.build_IKnowWhatImDoing(cypher
+    val gplan = CypherToGPlan.build_IKnowWhatImDoing(cypher
       , queryName
-      , skipResolve = config.skipQPlanResolve
-      , skipBeautify = config.skipQPlanBeautify
+      , skipResolve = config.skipGPlanResolve
+      , skipBeautify = config.skipGPlanBeautify
     )
-    if (config.printQPlan ) formatPlan(qplan)
+    if (config.printGPlan ) formatPlan(gplan)
 
-    assertNoStub(qplan)
-    if (!config.skipQPlanResolve) assertResolved(qplan)
+    assertNoStub(gplan)
+    if (!config.skipGPlanResolve) assertResolved(gplan)
 
-    val nplan = if (config.compileQPlanOnly) null else QPlanToNPlan.transform(qplan)
+    val nplan = if (config.compileGPlanOnly) null else GPlanToNPlan.transform(gplan)
     if (config.printNPlan ) formatPlan(nplan)
 
-    val fplan = if (config.compileQPlanOnly) null else NPlanToFPlan.transform(nplan)
+    val fplan = if (config.compileGPlanOnly) null else NPlanToFPlan.transform(nplan)
     if (config.printFPlan ) formatPlan(fplan)
 
-    return CompilationStages(qplan, nplan, fplan)
+    return CompilationStages(gplan, nplan, fplan)
   }
 
   def getLeafNodes(plan: FNode): Seq[FNode] = {
@@ -102,20 +102,20 @@ abstract class CompilerTest extends FunSuite {
     return plan.children.flatMap(x => getLeafNodes(x))
   }
 
-  def assertNoStub(q: QNode): Unit = {
+  def assertNoStub(q: GNode): Unit = {
     val itn = IngraphTreeNode(q)
     IngraphTreeNode.find( (n) => n match {
-      case QPlanTreeNode(QStub(_)) => true
+      case GPlanTreeNode(GStub(_)) => true
       case ExpressionTreeNode(EStub(_)) => true
       case _ => false
     }, itn).fold[Unit](Unit)( e => throw new IncompleteCompilationException(e.toString))
   }
 
-  def assertResolved(q: QNode): Unit = {
+  def assertResolved(q: GNode): Unit = {
     val itn = IngraphTreeNode(q)
     IngraphTreeNode.find( (n) => n match {
-      case QPlanTreeNode(UnresolvedDelete(_, _, _)) => true
-      case QPlanTreeNode(UnresolvedProjection(_, _)) => true
+      case GPlanTreeNode(UnresolvedDelete(_, _, _)) => true
+      case GPlanTreeNode(UnresolvedProjection(_, _)) => true
       case ExpressionTreeNode(etn) => etn match {
         case UnresolvedAttribute(_) => true
         case UnresolvedFunction(_, _, _) => true

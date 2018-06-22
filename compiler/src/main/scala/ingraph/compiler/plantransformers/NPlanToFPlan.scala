@@ -1,4 +1,4 @@
-package ingraph.compiler.qplan2nplan
+package ingraph.compiler.plantransformers
 
 import ingraph.model.expr._
 import ingraph.model.expr.types.TProjectList

@@ -1,6 +1,6 @@
-package ingraph.compiler.cypher2qplan.structures
+package ingraph.compiler.cypher2gplan.structures
 
-import ingraph.model.qplan
+import ingraph.model.gplan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 
 /**
@@ -9,7 +9,7 @@ import org.apache.spark.sql.catalyst.{expressions => cExpr}
   * @param operatorTree Tree build from the patterns in a MATCH clause.
   * @param condition Condition from the attached WHERE clause.
   */
-case class MatchDescriptor(optional: Boolean, operatorTree: qplan.QNode, condition: Option[cExpr.Expression] = None) {
+case class MatchDescriptor(optional: Boolean, operatorTree: gplan.GNode, condition: Option[cExpr.Expression] = None) {
   def hasCondition: Boolean = condition.isDefined
   def isOptional: Boolean = optional
 }

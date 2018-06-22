@@ -1,9 +1,9 @@
-package ingraph.compiler.cypher2qplan
+package ingraph.compiler.cypher2gplan
 
-import ingraph.compiler.cypher2qplan.builders.AttributeBuilder
+import ingraph.compiler.cypher2gplan.builders.AttributeBuilder
 import ingraph.compiler.exceptions.ExpandChainException
 import ingraph.model.expr.ElementAttribute
-import ingraph.model.{expr, qplan}
+import ingraph.model.{expr, gplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
@@ -13,8 +13,8 @@ import org.apache.spark.sql.types.BooleanType
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-object QPlanBeautifier {
-  def beautifyResolvedQPlan(resolvedQueryPlan: qplan.QNode): qplan.QNode = {
+object GPlanBeautifier {
+  def beautifyResolvedGPlan(resolvedQueryPlan: gplan.GNode): gplan.GNode = {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
     /*
@@ -23,30 +23,30 @@ object QPlanBeautifier {
      */
     val beautiful = resolvedQueryPlan.transform(commonBeautifier).transform(commonBeautifier)
 
-    beautiful.asInstanceOf[qplan.QNode]
+    beautiful.asInstanceOf[gplan.GNode]
   }
 
-  def beautifyUnresolvedQPlan(unresolvedQueryPlan: qplan.QNode): qplan.QNode = {
+  def beautifyUnresolvedGPlan(unresolvedQueryPlan: gplan.GNode): gplan.GNode = {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
     val beautiful = unresolvedQueryPlan.transform(commonBeautifier)
 
-    beautiful.asInstanceOf[qplan.QNode]
+    beautiful.asInstanceOf[gplan.GNode]
   }
 
   /**
-    * These are the structural beautifier rules that applies to all QPlans,
+    * These are the structural beautifier rules that applies to all GPlans,
     * irrespectively whether it is resolved or not.
     *
     * Note: most rules will will be common.
     */
   val commonBeautifier: PartialFunction[LogicalPlan, LogicalPlan] = {
-    case qplan.Join(qplan.Dual(), o2) => o2
+    case gplan.Join(gplan.Dual(), o2) => o2
       // FIXME: projection should be introduced by the compiler, and also match it here
-    case qplan.Selection(cExpr.Not(e), qplan.LeftOuterJoin(base, filter)) if checkForAntijoin(e, filter) => qplan.AntiJoin(base, filter)
-    case qplan.Selection(cExpr.Not(e), qplan.LeftOuterJoin(filter, base)) if checkForAntijoin(e, filter) => qplan.AntiJoin(base, filter)
-    case qplan.Selection(cExpr.Literal(true, BooleanType), child) => child
-    case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionBeautifier), child)
+    case gplan.Selection(cExpr.Not(e), gplan.LeftOuterJoin(base, filter)) if checkForAntijoin(e, filter) => gplan.AntiJoin(base, filter)
+    case gplan.Selection(cExpr.Not(e), gplan.LeftOuterJoin(filter, base)) if checkForAntijoin(e, filter) => gplan.AntiJoin(base, filter)
+    case gplan.Selection(cExpr.Literal(true, BooleanType), child) => child
+    case gplan.Selection(condition, child) => gplan.Selection(condition.transform(expressionBeautifier), child)
   }
 
   val expressionBeautifier: PartialFunction[Expression, Expression] = {
@@ -67,7 +67,7 @@ object QPlanBeautifier {
     *  2. filter is a chain of the form Expand*GetVertices, where * stands for 0, 1 or more occurences
     *  3. attr_i in (1) correspond to those in the chain of (2)
     */
-  protected def checkForAntijoin(topLevelExpression: cExpr.Expression, filter: qplan.QNode): Boolean = {
+  protected def checkForAntijoin(topLevelExpression: cExpr.Expression, filter: gplan.GNode): Boolean = {
     var check1 = true
     // traverse topLevelExpression to see if it is composed solely of AND's of IsNotNull({Edge,Vertex}Attribute) constraints
     val exprQueue = mutable.Queue.apply(topLevelExpression)

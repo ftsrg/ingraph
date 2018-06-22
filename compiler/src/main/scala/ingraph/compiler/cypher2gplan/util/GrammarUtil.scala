@@ -1,4 +1,4 @@
-package ingraph.compiler.cypher2qplan.util
+package ingraph.compiler.cypher2gplan.util
 
 
 import org.eclipse.emf.ecore.EObject

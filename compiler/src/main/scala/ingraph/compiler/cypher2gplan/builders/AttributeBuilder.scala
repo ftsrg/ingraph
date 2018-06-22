@@ -1,11 +1,11 @@
-package ingraph.compiler.cypher2qplan.builders
+package ingraph.compiler.cypher2gplan.builders
 
 import java.util.concurrent.atomic.AtomicLong
 
-import ingraph.compiler.cypher2qplan.util.{BuilderUtil, StringUtil}
+import ingraph.compiler.cypher2gplan.util.{BuilderUtil, StringUtil}
 import ingraph.compiler.exceptions._
 import ingraph.model.expr.{EdgeLabelSet, ElementAttribute}
-import ingraph.model.{expr, qplan}
+import ingraph.model.{expr, gplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
@@ -72,15 +72,15 @@ object AttributeBuilder {
     * @throws ExpandChainException
     * @return
     */
-  def extractAttributesFromExpandChain(pattern: qplan.QNode): ListBuffer[Expression] = {
+  def extractAttributesFromExpandChain(pattern: gplan.GNode): ListBuffer[Expression] = {
     val relationshipVariableExpressions = ListBuffer.empty[Expression]
     var currOp = pattern
     var chainElem: ElementAttribute = null
     while (currOp != null) {
       currOp match {
-        case qplan.GetVertices(v) if chainElem == null || v == chainElem => relationshipVariableExpressions.append(v); currOp = null; chainElem = null
-        case qplan.Expand(src, trg, edge, _, child) if chainElem == null || trg == chainElem => relationshipVariableExpressions.append(trg, edge); currOp = child; chainElem = src
-        case qplan.GetVertices(_) | qplan.Expand(_, _, _, _, _) => throw new ExpandChainException("We should never see this condition: Expand and Getvertices not properly chained")
+        case gplan.GetVertices(v) if chainElem == null || v == chainElem => relationshipVariableExpressions.append(v); currOp = null; chainElem = null
+        case gplan.Expand(src, trg, edge, _, child) if chainElem == null || trg == chainElem => relationshipVariableExpressions.append(trg, edge); currOp = child; chainElem = src
+        case gplan.GetVertices(_) | gplan.Expand(_, _, _, _, _) => throw new ExpandChainException("We should never see this condition: Expand and Getvertices not properly chained")
         case e => throw new UnexpectedTypeException(e, "expand chain")
       }
     }

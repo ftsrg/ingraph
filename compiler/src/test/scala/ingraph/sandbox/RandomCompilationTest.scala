@@ -2,16 +2,16 @@ package ingraph.sandbox
 
 import ingraph.compiler.test.{CompilerTest, CompilerTestConfig}
 import ingraph.model.expr
-import ingraph.model.qplan
+import ingraph.model.gplan
 
 class RandomCompilationTest extends CompilerTest {
   override val config = CompilerTestConfig(querySuitePath = None
-    , compileQPlanOnly = false
-    , skipQPlanResolve = false
-    , skipQPlanBeautify = false
+    , compileGPlanOnly = false
+    , skipGPlanResolve = false
+    , skipGPlanBeautify = false
     , printQuery = false
     , printCypher = true
-    , printQPlan = true
+    , printGPlan = true
     , printNPlan = true
     , printFPlan = true
   )
@@ -318,13 +318,13 @@ class RandomCompilationTest extends CompilerTest {
 
   test("should compile MATCH") {
     val stages = compile("MATCH (n) RETURN n, n.foo")
-    assert(stages.qplan.asInstanceOf[qplan.Production].child.asInstanceOf[qplan.Projection].projectList.length==2)
+    assert(stages.gplan.asInstanceOf[gplan.Production].child.asInstanceOf[gplan.Projection].projectList.length==2)
   }
 
-  // see note in the QPlanResolver for resolving RETURN *
+  // see note in the GPlanResolver for resolving RETURN *
   test("should compile MATCH RETURN *") {
     val stages = compile("MATCH (n)-->(m) RETURN *")
-    assert(stages.qplan.asInstanceOf[qplan.Production].child.asInstanceOf[qplan.Projection].projectList.length==1)
+    assert(stages.gplan.asInstanceOf[gplan.Production].child.asInstanceOf[gplan.Projection].projectList.length==1)
   }
 
   test("should identify aggregation criteria after aggregation in RETURN") {
@@ -336,7 +336,7 @@ class RandomCompilationTest extends CompilerTest {
         |  destination.name,
         |  destination.population
         |""".stripMargin)
-    assert(stages.qplan.asInstanceOf[qplan.Production].child.asInstanceOf[qplan.Grouping].aggregationCriteria.length==2)
+    assert(stages.gplan.asInstanceOf[gplan.Production].child.asInstanceOf[gplan.Grouping].aggregationCriteria.length==2)
   }
 
   test("should resolve aliased property lookup two query parts later") {
@@ -401,7 +401,7 @@ class RandomCompilationTest extends CompilerTest {
         |RETURN post.id, message.id
         |""".stripMargin)
 
-    assert(stages.qplan.find( p => p.isInstanceOf[qplan.Expand] ).get.asInstanceOf[qplan.Expand].edge.asInstanceOf[expr.EdgeListAttribute].resolvedName.isDefined)
+    assert(stages.gplan.find(p => p.isInstanceOf[gplan.Expand] ).get.asInstanceOf[gplan.Expand].edge.asInstanceOf[expr.EdgeListAttribute].resolvedName.isDefined)
   }
 
   test("should resolve projected vertex fed into DELETE") {
@@ -413,26 +413,26 @@ class RandomCompilationTest extends CompilerTest {
         |DELETE n
         |""".stripMargin)
 
-    assert(stages.qplan.find( p => p.isInstanceOf[qplan.Delete] ).get.asInstanceOf[qplan.Delete].attributes(0).resolvedName.isDefined)
+    assert(stages.gplan.find(p => p.isInstanceOf[gplan.Delete] ).get.asInstanceOf[gplan.Delete].attributes(0).resolvedName.isDefined)
   }
 
 }
 
-/** Random compiler tests that must stop after QPlan compilation.
+/** Random compiler tests that must stop after GPlan compilation.
   *
   * This is because of limitations of the following stages.
   * See note for each of the cases.
   *
   * On the long term, this should contain no test cases.
   */
-class RandomQPlanCompilationTest extends CompilerTest {
+class RandomGPlanCompilationTest extends CompilerTest {
   override val config = CompilerTestConfig(querySuitePath = None
-    , compileQPlanOnly = true
-    , skipQPlanResolve = false
-    , skipQPlanBeautify = false
+    , compileGPlanOnly = true
+    , skipGPlanResolve = false
+    , skipGPlanBeautify = false
     , printQuery = false
     , printCypher = true
-    , printQPlan = true
+    , printGPlan = true
     , printNPlan = true
     , printFPlan = true
   )
@@ -444,7 +444,7 @@ class RandomQPlanCompilationTest extends CompilerTest {
 scala.MatchError: 'Unwind unwindattribute(listexpression(1, 2, 3), li, Some(li#0))
 +- Dual
  (of class ingraph.model.nplan.Unwind)
-	at ingraph.compiler.qplan2nplan.SchemaInferencer$.transform(SchemaInferencer.scala:18)
+	at ingraph.compiler.gplan2nplan.SchemaInferencer$.transform(SchemaInferencer.scala:18)
    */
   test("Random: compile UNWIND w/ list literal") {
     compile(

@@ -1,7 +1,7 @@
 package ingraph.sandbox
 
-import ingraph.compiler.CypherToQPlan
-import ingraph.compiler.cypher2qplan.CypherParser
+import ingraph.compiler.CypherToGPlan
+import ingraph.compiler.cypher2gplan.CypherParser
 import org.scalatest.FunSuite
 
 class TrainBenchmarkDmlTest extends FunSuite {
@@ -112,7 +112,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
 
   def parse(q: String): Unit = {
     val cypher = CypherParser.parseString("MATCH (n) SET n:Actor:Director")
-    val plan = CypherToQPlan.compileToQPlan(cypher)
+    val plan = CypherToGPlan.compileToGPlan(cypher)
     println(plan)
   }
 }

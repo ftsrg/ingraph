@@ -1,11 +1,11 @@
-package ingraph.compiler.cypher2qplan
+package ingraph.compiler.cypher2gplan
 
 import java.util.concurrent.atomic.AtomicLong
 
-import ingraph.compiler.cypher2qplan.util.TransformUtil
+import ingraph.compiler.cypher2gplan.util.TransformUtil
 import ingraph.compiler.exceptions.{CompilerException, IllegalAggregationException, NameResolutionException, UnexpectedTypeException}
-import ingraph.model.qplan.{QNode, UnaryQNode}
-import ingraph.model.{expr, misc, qplan}
+import ingraph.model.gplan.{GNode, UnaryGNode}
+import ingraph.model.{expr, misc, gplan}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction, UnresolvedStar}
 import org.apache.spark.sql.catalyst.expressions.{Expression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
@@ -14,7 +14,7 @@ import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-object QPlanResolver {
+object GPlanResolver {
   /**
     * structure to hold the name resolution cache:
     *   key is the lookup name (String)
@@ -39,15 +39,15 @@ object QPlanResolver {
   }
   type TScopedNameResolver = (String, cExpr.Expression) => expr.types.TResolvedName
 
-  def resolveQPlan(unresolvedQueryPlan: qplan.QNode): qplan.QNode = {
+  def resolveGPlan(unresolvedQueryPlan: gplan.GNode): gplan.GNode = {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
-    val resolvedNames = resolveNamesForQNode(unresolvedQueryPlan)
-    val resolved = resolvedNames.transform(qplanResolver).asInstanceOf[qplan.QNode]
+    val resolvedNames = resolveNamesForGNode(unresolvedQueryPlan)
+    val resolved = resolvedNames.transform(gplanResolver).asInstanceOf[gplan.GNode]
 
 //    val elements = unresolvedQueryPlan.flatMap {
-//      case qplan.GetVertices(v) => Some(v)
-//      case qplan.Expand(src, trg, edge, _, _) => Some(edge, trg)
+//      case gplan.GetVertices(v) => Some(v)
+//      case gplan.Expand(src, trg, edge, _, _) => Some(edge, trg)
 //      case _ => None
 //    }
 
@@ -55,46 +55,46 @@ object QPlanResolver {
   }
 
   /**
-    * This is to resolve the names in expressions of Qplan.
+    * This is to resolve the names in expressions of GPlan.
     */
-  private def resolveNamesForQNode(q: qplan.QNode): qplan.QNode = {
-    // this holds the QNode's to be processed to create build the reverse Polish Notation of the tree
-    val qNodeStack = mutable.Stack[qplan.QNode](q)
-    // this holds the qplan in reverse polish notation, i.e. stack head has the leafs while its bottom element should hold the root node
-    val qPlanPolishNotation = mutable.Stack[qplan.QNode]()
+  private def resolveNamesForGNode(q: gplan.GNode): gplan.GNode = {
+    // this holds the GNode's to be processed to create build the reverse Polish Notation of the tree
+    val qNodeStack = mutable.Stack[gplan.GNode](q)
+    // this holds the gplan in reverse polish notation, i.e. stack head has the leafs while its bottom element should hold the root node
+    val gPlanPolishNotation = mutable.Stack[gplan.GNode]()
     // this will hold the operand stack for the Polish Notation evaluation algorithm used to rebuild the tree
-    val operandStack = mutable.Stack[qplan.QNode]()
+    val operandStack = mutable.Stack[gplan.GNode]()
 
-    // create the reverse polish notation in the stack qPlanPolishNotation
+    // create the reverse polish notation in the stack gPlanPolishNotation
     while (qNodeStack.nonEmpty) {
       val n = qNodeStack.pop
-      qPlanPolishNotation.push(n)
+      gPlanPolishNotation.push(n)
       n match {
-        case u: qplan.UnaryQNode => qNodeStack.push(u.child)
+        case u: gplan.UnaryGNode => qNodeStack.push(u.child)
         /*
-         * Ensure that right child comes out first, so it will be closer in qPlanPolishNotation to n itself,
+         * Ensure that right child comes out first, so it will be closer in gPlanPolishNotation to n itself,
          * meaning that in "evaluation time" (i.e. for the sake of name resolution), left child will be evaluated first.
          *
          * This is important as query parts (those that end at WITH or RETURN clause) are assembled to form a left deep tree of join nodes
          *
          * This also means that name resolution builds on the operand order of joins, so before name resolution, joins are non-commutative
          */
-        case b: qplan.BinaryQNode => qNodeStack.push(b.left, b.right)
-        case _: qplan.LeafQNode => {}
-        case x => throw new UnexpectedTypeException(x, "QPlan tree")
+        case b: gplan.BinaryGNode => qNodeStack.push(b.left, b.right)
+        case _: gplan.LeafGNode => {}
+        case x => throw new UnexpectedTypeException(x, "GPlan tree")
       }
     }
 
-    reAssembleTreeResolvingNames(qPlanPolishNotation, operandStack)
+    reAssembleTreeResolvingNames(gPlanPolishNotation, operandStack)
 
     // return the re-constructed tree
     operandStack.length match {
       case 1 => operandStack.pop
-      case _ => throw new CompilerException(s"A single item expected in the stack after re-assembling the QNode tree at name resolution. Instead, it has ${operandStack.length} entries.")
+      case _ => throw new CompilerException(s"A single item expected in the stack after re-assembling the GNode tree at name resolution. Instead, it has ${operandStack.length} entries.")
     }
   }
 
-  protected def reAssembleTreeResolvingNames(qPlanPolishNotation: mutable.Stack[qplan.QNode], operandStack: mutable.Stack[qplan.QNode]) = {
+  protected def reAssembleTreeResolvingNames(gPlanPolishNotation: mutable.Stack[gplan.GNode], operandStack: mutable.Stack[gplan.GNode]) = {
     // this will hold those names that are in scope, so no new resolution should be invented
     var nameResolverCache = new TNameResolverCache
     // HACK: this will hold the previous name resolving scope, which will be used for Sort and Top operators
@@ -105,30 +105,30 @@ object QPlanResolver {
     def r2[T <: Expression](v: T, nrs: TNameResolverCache): T = v.transform(expressionNameResolver(new SNR(nrs))).asInstanceOf[T]
 
     // re-assemble the tree resolving names
-    while (qPlanPolishNotation.nonEmpty) {
-      val newQNode: qplan.QNode = qPlanPolishNotation.pop match {
-        case b: qplan.BinaryQNode => {
+    while (gPlanPolishNotation.nonEmpty) {
+      val newGNode: gplan.GNode = gPlanPolishNotation.pop match {
+        case b: gplan.BinaryGNode => {
           val rightChild = operandStack.pop
           val leftChild = operandStack.pop
-          val newOp: qplan.BinaryQNode = b match {
-            case qplan.Union(all, _, _) => qplan.Union(all, leftChild, rightChild)
-            case qplan.Join(_, _) => qplan.Join(leftChild, rightChild)
-            case qplan.LeftOuterJoin(_, _) => qplan.LeftOuterJoin(leftChild, rightChild)
-            case qplan.ThetaLeftOuterJoin(_, _, condition) => qplan.ThetaLeftOuterJoin(leftChild, rightChild, r(condition))
+          val newOp: gplan.BinaryGNode = b match {
+            case gplan.Union(all, _, _) => gplan.Union(all, leftChild, rightChild)
+            case gplan.Join(_, _) => gplan.Join(leftChild, rightChild)
+            case gplan.LeftOuterJoin(_, _) => gplan.LeftOuterJoin(leftChild, rightChild)
+            case gplan.ThetaLeftOuterJoin(_, _, condition) => gplan.ThetaLeftOuterJoin(leftChild, rightChild, r(condition))
             // case AntiJoin skipped because it is introduced later in the beautification step
           }
           newOp
         }
-        case u: qplan.UnaryQNode => {
+        case u: gplan.UnaryGNode => {
           val child = operandStack.pop
-          val newOp: qplan.UnaryQNode = u match {
-            case qplan.AllDifferent(e, _) => qplan.AllDifferent(e.map(r(_)), child)
-            case qplan.DuplicateElimination(_) => qplan.DuplicateElimination(child)
-            case qplan.Expand(src, trg, edge, dir, _) => qplan.Expand(r(src), r(trg), r(edge), dir, child)
+          val newOp: gplan.UnaryGNode = u match {
+            case gplan.AllDifferent(e, _) => gplan.AllDifferent(e.map(r(_)), child)
+            case gplan.DuplicateElimination(_) => gplan.DuplicateElimination(child)
+            case gplan.Expand(src, trg, edge, dir, _) => gplan.Expand(r(src), r(trg), r(edge), dir, child)
             // resolve names in listexpression, then resolve the unwindattribute itself
-            case qplan.Unwind(ua, _) => qplan.Unwind(r(expr.UnwindAttribute(r(ua.list), ua.name, ua.resolvedName)), child)
-            case qplan.Production(_) => qplan.Production(child)
-            case qplan.UnresolvedProjection(projectList, _) => {
+            case gplan.Unwind(ua, _) => gplan.Unwind(r(expr.UnwindAttribute(r(ua.list), ua.name, ua.resolvedName)), child)
+            case gplan.Production(_) => gplan.Production(child)
+            case gplan.UnresolvedProjection(projectList, _) => {
               // initialize new namespace applicable after the projection operator
               val nextQueryPartNameResolverCache = new TNameResolverCache
               val nextSnr = new SNR(nextQueryPartNameResolverCache)
@@ -158,11 +158,11 @@ object QPlanResolver {
               // retain old name resolver scope
               oldNameResolverScope = Some(nameResolverCache)
               nameResolverCache = nextQueryPartNameResolverCache
-              qplan.UnresolvedProjection(resolvedProjectList, child)
+              gplan.UnresolvedProjection(resolvedProjectList, child)
             }
             // case {Projection, Grouping} skipped because it is introduced in a later resolution stage
-            case qplan.Selection(condition, _) => qplan.Selection(r(condition), child)
-            case qplan.Sort(order, _) => qplan.Sort(order.map( _ match {
+            case gplan.Selection(condition, _) => gplan.Selection(r(condition), child)
+            case gplan.Sort(order, _) => gplan.Sort(order.map( _ match {
               case cExpr.SortOrder(sortExpr, dir, no, se) => try {
                 cExpr.SortOrder(r(sortExpr), dir, no, se)
               } catch {
@@ -170,24 +170,24 @@ object QPlanResolver {
                 case nre: NameResolutionException => cExpr.SortOrder(r2(sortExpr, oldNameResolverScope.getOrElse(throw nre)), dir, no, se)
               }
             }), child)
-            case qplan.Top(skipExpr, limitExpr, _) => qplan.Top(skipExpr, limitExpr, child)
-            case qplan.Create(attributes, _) => qplan.Create(attributes.map(r(_)), child)
-            case qplan.UnresolvedDelete(attributes, detach, _) => qplan.UnresolvedDelete(attributes, detach, child)
-            case qplan.Merge(attributes, _) => qplan.Merge(attributes.map(r(_)), child)
-            case qplan.SetNode(vertexLabelUpdates, _) => qplan.SetNode(vertexLabelUpdates, child)
-            case qplan.Remove(vertexLabelUpdates, _) => qplan.Remove(vertexLabelUpdates, child)
+            case gplan.Top(skipExpr, limitExpr, _) => gplan.Top(skipExpr, limitExpr, child)
+            case gplan.Create(attributes, _) => gplan.Create(attributes.map(r(_)), child)
+            case gplan.UnresolvedDelete(attributes, detach, _) => gplan.UnresolvedDelete(attributes, detach, child)
+            case gplan.Merge(attributes, _) => gplan.Merge(attributes.map(r(_)), child)
+            case gplan.SetNode(vertexLabelUpdates, _) => gplan.SetNode(vertexLabelUpdates, child)
+            case gplan.Remove(vertexLabelUpdates, _) => gplan.Remove(vertexLabelUpdates, child)
           }
           newOp
         }
-        case l: qplan.LeafQNode => {
-          val newOp: qplan.LeafQNode = l match {
-            case qplan.GetVertices(v) => qplan.GetVertices(r(v))
+        case l: gplan.LeafGNode => {
+          val newOp: gplan.LeafGNode = l match {
+            case gplan.GetVertices(v) => gplan.GetVertices(r(v))
             case x => x
           }
           newOp
         }
       }
-      operandStack.push(newQNode)
+      operandStack.push(newGNode)
     }
   }
 
@@ -297,33 +297,33 @@ object QPlanResolver {
 
 
   /**
-    * These are the resolver rules that applies to all unresolved QPlans.
+    * These are the resolver rules that applies to all unresolved GPlans.
     *
     * There are some nodes that do not need resolution: GetVertices, DuplicateElimination, Expand, Join, Union, etc.
     */
-  val qplanResolver: PartialFunction[LogicalPlan, LogicalPlan] = {
+  val gplanResolver: PartialFunction[LogicalPlan, LogicalPlan] = {
     // Unary
-//    case qplan.Projection(projectList, child) => qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
-    case qplan.UnresolvedProjection(projectList, child) => {
+//    case gplan.Projection(projectList, child) => gplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
+    case gplan.UnresolvedProjection(projectList, child) => {
       val resolvedProjectList = projectList.map( pi => expr.ReturnItem(pi.child.transform(expressionResolver), pi.alias, pi.resolvedName) )
       projectionResolveHelper(resolvedProjectList, child)
     }
-    case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
-    case qplan.Sort(order, child) => qplan.Sort(
+    case gplan.Selection(condition, child) => gplan.Selection(condition.transform(expressionResolver), child)
+    case gplan.Sort(order, child) => gplan.Sort(
       order.map(_.transform(expressionResolver) match {
         case so: SortOrder => so
         case x => throw new UnexpectedTypeException(x, "sort items after resolution")
       })
       , child)
-    case qplan.ThetaLeftOuterJoin(left, right, condition) => qplan.ThetaLeftOuterJoin(left, right, condition.transform(expressionResolver))
-    case qplan.Top(skipExpr, limitExpr, child) => qplan.Top(
+    case gplan.ThetaLeftOuterJoin(left, right, condition) => gplan.ThetaLeftOuterJoin(left, right, condition.transform(expressionResolver))
+    case gplan.Top(skipExpr, limitExpr, child) => gplan.Top(
       TransformUtil.transformOption(skipExpr, expressionResolver)
       , TransformUtil.transformOption(limitExpr, expressionResolver)
       , child)
-    case qplan.Unwind(expr.UnwindAttribute(collection, alias, resolvedName), child) => qplan.Unwind(expr.UnwindAttribute(collection.transform(expressionResolver), alias, resolvedName), child)
+    case gplan.Unwind(expr.UnwindAttribute(collection, alias, resolvedName), child) => gplan.Unwind(expr.UnwindAttribute(collection.transform(expressionResolver), alias, resolvedName), child)
     // DML
-    case qplan.UnresolvedDelete(attributes, detach, child) => qplan.Delete(resolveAttributes(attributes, child), detach, child)
-    case qplan.Create(attributes, child) => qplan.Create(filterForAttributesOfChildOutput(attributes, child, invert=true), child)
+    case gplan.UnresolvedDelete(attributes, detach, child) => gplan.Delete(resolveAttributes(attributes, child), detach, child)
+    case gplan.Create(attributes, child) => gplan.Create(filterForAttributesOfChildOutput(attributes, child, invert=true), child)
   }
 
   val expressionResolver: PartialFunction[Expression, Expression] = {
@@ -332,12 +332,12 @@ object QPlanResolver {
   }
 
   /**
-    * Resolve attribute references according to the output schema of the child QNode
+    * Resolve attribute references according to the output schema of the child GNode
     * @param attributes
     * @param child
     * @return
     */
-  protected def resolveAttributes(attributes: Seq[cExpr.NamedExpression], child: qplan.QNode): Seq[expr.ResolvableName] = {
+  protected def resolveAttributes(attributes: Seq[cExpr.NamedExpression], child: gplan.GNode): Seq[expr.ResolvableName] = {
     val transformedAttributes = attributes.flatMap( a => child.output.find( co => co.name == a.name ) )
 
     if (attributes.length != transformedAttributes.length) {
@@ -354,7 +354,7 @@ object QPlanResolver {
     * @param invert iff true, match is inverted, i.e. only those are returned which were not found
     * @return
     */
-  protected def filterForAttributesOfChildOutput(attributes: Seq[expr.ResolvableName], child: qplan.QNode, invert: Boolean = false): Seq[expr.ResolvableName] = {
+  protected def filterForAttributesOfChildOutput(attributes: Seq[expr.ResolvableName], child: gplan.GNode, invert: Boolean = false): Seq[expr.ResolvableName] = {
     attributes.flatMap( a => if ( invert.^(child.output.exists( co => co.name == a.name )) ) Some(a) else None )
   }
 
@@ -369,7 +369,7 @@ object QPlanResolver {
     * @param projectList
     * @return
     */
-  protected def projectionResolveHelper(projectList: expr.types.TProjectList, child: QNode): UnaryQNode with expr.ProjectionDescriptor = {
+  protected def projectionResolveHelper(projectList: expr.types.TProjectList, child: GNode): UnaryGNode with expr.ProjectionDescriptor = {
     /**
       * Returns true iff e is an expression having a call to an aggregation function at its top-level.
       * @param e
@@ -407,9 +407,9 @@ object QPlanResolver {
 
     // FIXME: when resolving UnresolvedStar, this needs revising
     if (aggregationCriteriaCandidate.length != projectList.length) {
-      qplan.Grouping(aggregationCriteriaCandidate, projectList, child)
+      gplan.Grouping(aggregationCriteriaCandidate, projectList, child)
     } else {
-      qplan.Projection(projectList, child)
+      gplan.Projection(projectList, child)
     }
   }
 }

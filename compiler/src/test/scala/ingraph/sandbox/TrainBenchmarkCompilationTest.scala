@@ -5,12 +5,12 @@ import ingraph.compiler.test.{CompilerTest, CompilerTestConfig}
 class TrainBenchmarkCompilationTest extends CompilerTest {
 
   override val config = CompilerTestConfig(querySuitePath = Some("trainbenchmark")
-    , compileQPlanOnly = true
-    , skipQPlanResolve = false
-    , skipQPlanBeautify = false
+    , compileGPlanOnly = true
+    , skipGPlanResolve = false
+    , skipGPlanBeautify = false
     , printQuery = false
     , printCypher = true
-    , printQPlan = true
+    , printGPlan = true
     , printNPlan = false
     , printFPlan = false
   )

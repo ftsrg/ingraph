@@ -2,7 +2,7 @@ package ingraph.compiler.util
 
 import ingraph.model.fplan.FNode
 import ingraph.model.nplan.NNode
-import ingraph.model.qplan.QNode
+import ingraph.model.gplan.GNode
 import ingraph.util.PlanPrettyPrinter
 
 object FormatterUtil {
@@ -17,7 +17,7 @@ object FormatterUtil {
   def formatPlan(stuff: Any, heading: Option[String] = None, out: String => Unit = printlnSuppressIfIngraph): Unit = {
     val _heading: String = heading.getOrElse(
       stuff match {
-        case _: QNode => "QPlan"
+        case _: GNode => "GPlan"
         case _: NNode => "NPlan"
         case _: FNode => "FPlan"
         case null => return

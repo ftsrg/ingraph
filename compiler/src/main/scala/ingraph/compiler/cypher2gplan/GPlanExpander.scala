@@ -1,33 +1,33 @@
-package ingraph.compiler.cypher2qplan
+package ingraph.compiler.cypher2gplan
 
-import ingraph.model.{expr, qplan}
+import ingraph.model.{expr, gplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 
-object QPlanExpander {
-  def expandQPlan(rawQueryPlan: qplan.QNode): qplan.QNode = {
+object GPlanExpander {
+  def expandGPlan(rawQueryPlan: gplan.GNode): gplan.GNode = {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
     // expanding GetVertices involves creating other GetVertices, so transformUp is to avoid infinite recursion
-    val full = rawQueryPlan.transformUp(qplanExpander)
+    val full = rawQueryPlan.transformUp(gplanExpander)
 
-    full.asInstanceOf[qplan.QNode]
+    full.asInstanceOf[gplan.GNode]
   }
 
   /**
     * These are the expand rules to complement compiler's brewity.
     */
-  val qplanExpander: PartialFunction[LogicalPlan, LogicalPlan] = {
+  val gplanExpander: PartialFunction[LogicalPlan, LogicalPlan] = {
     // Nullary
-    case qplan.GetVertices(vertexAttribute) if vertexAttribute.properties.nonEmpty => {
+    case gplan.GetVertices(vertexAttribute) if vertexAttribute.properties.nonEmpty => {
       val condition: Expression = propertyMapToCondition(vertexAttribute.properties, vertexAttribute.name)
-      qplan.Selection(condition, qplan.GetVertices(vertexAttribute))
+      gplan.Selection(condition, gplan.GetVertices(vertexAttribute))
     }
-    case qplan.Expand(srcVertexAttribute, trgVertexAttribute, edge, dir, child) if edge.properties.nonEmpty || trgVertexAttribute.properties.nonEmpty => {
-      val selectionOnEdge = qplan.Selection(propertyMapToCondition(edge.properties, edge.name), qplan.Expand(srcVertexAttribute, trgVertexAttribute, edge, dir, child))
-      val selectionOnTargetVertex = qplan.Selection(propertyMapToCondition(trgVertexAttribute.properties, trgVertexAttribute.name), selectionOnEdge)
+    case gplan.Expand(srcVertexAttribute, trgVertexAttribute, edge, dir, child) if edge.properties.nonEmpty || trgVertexAttribute.properties.nonEmpty => {
+      val selectionOnEdge = gplan.Selection(propertyMapToCondition(edge.properties, edge.name), gplan.Expand(srcVertexAttribute, trgVertexAttribute, edge, dir, child))
+      val selectionOnTargetVertex = gplan.Selection(propertyMapToCondition(trgVertexAttribute.properties, trgVertexAttribute.name), selectionOnEdge)
       selectionOnTargetVertex
     }
   }

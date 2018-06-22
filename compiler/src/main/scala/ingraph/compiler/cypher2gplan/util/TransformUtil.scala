@@ -1,4 +1,4 @@
-package ingraph.compiler.cypher2qplan.util
+package ingraph.compiler.cypher2gplan.util
 
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 

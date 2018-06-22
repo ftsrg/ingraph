@@ -4,7 +4,7 @@ import ingraph.compiler.exceptions.UnexpectedTypeException
 import ingraph.model.expr.{HasExtraChildren, RichEdgeAttribute}
 import ingraph.model.fplan.FNode
 import ingraph.model.nplan.NNode
-import ingraph.model.qplan.QNode
+import ingraph.model.gplan.GNode
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 
@@ -33,13 +33,13 @@ sealed trait IngraphTreeNodeType
 case class ExpressionTreeNode(n: cExpr.Expression) extends IngraphTreeNodeType
 //case class FPlanTreeNode(n: FNode) extends IngraphTreeNode
 //case class NPlanTreeNode(n: NNode) extends IngraphTreeNode
-case class QPlanTreeNode(n: LogicalPlan) extends IngraphTreeNodeType
+case class GPlanTreeNode(n: LogicalPlan) extends IngraphTreeNodeType
 //case class TPlanTreeNode(n: TNode) extends IngraphTreeNode
 
 object IngraphTreeNodeType {
   def apply(tn: Any): IngraphTreeNodeType = tn match {
     case e: cExpr.Expression => ExpressionTreeNode(e)
-    case q: QNode => QPlanTreeNode(q)
+    case q: GNode => GPlanTreeNode(q)
     case x => throw new UnexpectedTypeException(x, "IngraphTreeNode construction")
   }
 }
@@ -65,9 +65,9 @@ object IngraphTreeNode {
       case hec: HasExtraChildren => (hec.extraChildren ++ hec.children).map(ExpressionTreeNode(_))
       case e => e.children.map(ExpressionTreeNode(_))
     }
-    case QPlanTreeNode(q) => q match {
-      case n: QNode => n.expressionChildren.map(ExpressionTreeNode(_)) ++ n.children.map(QPlanTreeNode (_) )
-      case n => n.children.map(QPlanTreeNode (_))
+    case GPlanTreeNode(q) => q match {
+      case n: GNode => n.expressionChildren.map(ExpressionTreeNode(_)) ++ n.children.map(GPlanTreeNode (_) )
+      case n => n.children.map(GPlanTreeNode (_))
     }
   }
 

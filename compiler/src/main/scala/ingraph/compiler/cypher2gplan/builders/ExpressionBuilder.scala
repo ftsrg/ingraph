@@ -1,11 +1,11 @@
-package ingraph.compiler.cypher2qplan.builders
+package ingraph.compiler.cypher2gplan.builders
 
 import java.util
 
-import ingraph.compiler.cypher2qplan.util.BuilderUtil
+import ingraph.compiler.cypher2gplan.util.BuilderUtil
 import ingraph.compiler.exceptions.{CompilerException, PatternNotAllowedException, UnexpectedTypeException, UnsupportedException}
 import ingraph.model.misc.Function
-import ingraph.model.{expr, qplan}
+import ingraph.model.{expr, gplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
 import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
@@ -16,7 +16,7 @@ import scala.collection.mutable.ListBuffer
 
 object ExpressionBuilder {
 
-  def buildExpression(expression: oc.Expression, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+  def buildExpression(expression: oc.Expression, joins: ListBuffer[gplan.GNode]): cExpr.Expression = {
     expression match {
       case e: oc.ExpressionComparison => buildExpressionComparision(e, joins)
       case e: oc.ExpressionAnd => cExpr.And(buildExpression(e.getLeft, joins), buildExpression(e.getRight, joins))
@@ -69,7 +69,7 @@ object ExpressionBuilder {
   def buildExpressionNoJoinAllowed(e: oc.Expression): cExpr.Expression = {
     // there should be no join clauses added when we build
     // a logical expression outside the WHERE clause
-    val dummyJoins = ListBuffer[qplan.QNode]()
+    val dummyJoins = ListBuffer[gplan.GNode]()
     val logicalExp = buildExpression(e, dummyJoins)
     if (!dummyJoins.isEmpty) {
       //FIXME: proper error handling
@@ -79,7 +79,7 @@ object ExpressionBuilder {
     logicalExp
   }
 
-  def buildExpressionXor(e: oc.ExpressionXor, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+  def buildExpressionXor(e: oc.ExpressionXor, joins: ListBuffer[gplan.GNode]): cExpr.Expression = {
     // process them only once because of the possible joins there
     val l = buildExpression(e.getLeft, joins)
     val r = buildExpression(e.getRight, joins)
@@ -87,7 +87,7 @@ object ExpressionBuilder {
     cExpr.Or(cExpr.And(l, cExpr.Not(r)), cExpr.And(cExpr.Not(l), r))
   }
 
-  def buildExpressionPattern(e: oc.RelationshipsPattern, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+  def buildExpressionPattern(e: oc.RelationshipsPattern, joins: ListBuffer[gplan.GNode]): cExpr.Expression = {
     val currentPattern = PatternBuilder.buildPattern(e)
     joins += currentPattern
 
@@ -95,7 +95,7 @@ object ExpressionBuilder {
     AttributeBuilder.extractAttributesFromExpandChain(currentPattern).map( e => cExpr.IsNotNull(e) ).foldLeft[Expression]( cExpr.Literal(true) )( (b, a) => cExpr.And(b, a) )
   }
 
-  def buildExpressionComparision(e: oc.ExpressionComparison, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+  def buildExpressionComparision(e: oc.ExpressionComparison, joins: ListBuffer[gplan.GNode]): cExpr.Expression = {
     //FIXME: this was invoked as LogicalExpressionBuilder.buildLogicalExpressionNoJoinAllowed(e, ce)
     // process them only once because of the possible joins there
     val l = buildExpression(e.getLeft, joins)
@@ -129,7 +129,7 @@ object ExpressionBuilder {
 //    ]
 //  }
 
-  def buildExpressionArithmetic(e: oc.ExpressionPlusMinus, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+  def buildExpressionArithmetic(e: oc.ExpressionPlusMinus, joins: ListBuffer[gplan.GNode]): cExpr.Expression = {
     // process them only once because of the possible joins there
     val l = buildExpression(e.getLeft, joins)
     val r = buildExpression(e.getRight, joins)
@@ -140,7 +140,7 @@ object ExpressionBuilder {
     }
   }
 
-  def buildExpressionArithmetic(e: oc.ExpressionUnaryPlusMinus, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+  def buildExpressionArithmetic(e: oc.ExpressionUnaryPlusMinus, joins: ListBuffer[gplan.GNode]): cExpr.Expression = {
     // process them only once because of the possible joins there
     val l = buildExpression(e.getLeft, joins)
 
@@ -150,7 +150,7 @@ object ExpressionBuilder {
     }
   }
 
-  def buildExpressionArithmetic(e: oc.ExpressionMulDiv, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+  def buildExpressionArithmetic(e: oc.ExpressionMulDiv, joins: ListBuffer[gplan.GNode]): cExpr.Expression = {
     // process them only once because of the possible joins there
     val l = buildExpression(e.getLeft, joins)
     val r = buildExpression(e.getRight, joins)
@@ -162,7 +162,7 @@ object ExpressionBuilder {
     }
   }
 
-  def buildExpressionArithmetic(e: oc.ExpressionPower, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+  def buildExpressionArithmetic(e: oc.ExpressionPower, joins: ListBuffer[gplan.GNode]): cExpr.Expression = {
     // process them only once because of the possible joins there
     val l = buildExpression(e.getLeft, joins)
     val r = buildExpression(e.getRight, joins)
