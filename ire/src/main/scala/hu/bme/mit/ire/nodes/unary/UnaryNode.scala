@@ -5,7 +5,6 @@ import hu.bme.mit.ire._
 import hu.bme.mit.ire.messages._
 
 abstract class UnaryNode(val expectedTerminatorCount: Int = 1) extends Actor with Forwarder with Stash with TerminatorHandler {
-  val log = context.system.log
   val name = self.path.name
 
   def onChangeSet(changeSet: ChangeSet)
