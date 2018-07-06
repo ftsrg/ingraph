@@ -6,6 +6,8 @@ dependencies {
   compile project(':driver')
   compile project(':compiler')
   compile 'org.xerial:sqlite-jdbc:3.21.0.1'
+  compile group: 'org.opencypher', name: 'tck', version: opencypherVersion
+  compile group: 'org.opencypher', name: 'tck-api', version: opencypherVersion
 
   testCompile group: 'junit', name: 'junit', version: junitVersion
 }
