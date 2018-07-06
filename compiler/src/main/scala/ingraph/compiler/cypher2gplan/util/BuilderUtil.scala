@@ -1,6 +1,6 @@
-package ingraph.compiler.cypher2qplan.util
+package ingraph.compiler.cypher2gplan.util
 
-import ingraph.compiler.cypher2qplan.builders.{ExpressionBuilder, LiteralBuilder}
+import ingraph.compiler.cypher2gplan.builders.{ExpressionBuilder, LiteralBuilder}
 import ingraph.compiler.exceptions.CompilerException
 import ingraph.model.expr
 import org.apache.spark.sql.catalyst.{expressions => cExpr}

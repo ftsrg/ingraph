@@ -14,7 +14,7 @@
 
 Some of our operators for the basic (non-incremental) query plan are similar to the operators of Spark SQL:
 
-| qplan | Catalyst |
+| gplan | Catalyst |
 | ----- | -------- |
 | `AntiJoin` | `plans.LeftAnti` |
 | `Dual` | `OneRowRelation` |

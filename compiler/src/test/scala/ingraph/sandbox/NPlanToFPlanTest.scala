@@ -1,15 +1,15 @@
 package ingraph.sandbox
 
 import ingraph.compiler.FPlanParser
-import ingraph.compiler.cypher2qplan.QPlanResolver
-import ingraph.compiler.qplan2jplan.{JPlanToFPlan, QPlanToJPlan}
+import ingraph.compiler.cypher2gplan.GPlanResolver
+import ingraph.compiler.plantransformers.{NPlanToFPlan, GPlanToNPlan}
 import ingraph.model.expr._
 import ingraph.model.fplan.{FNode, LeafFNode}
-import ingraph.model.{fplan, jplan, qplan}
+import ingraph.model.{fplan, nplan, gplan}
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
-class JPlanToFPlanTest extends FunSuite {
+class NPlanToFPlanTest extends FunSuite {
 
   def getLeafNodes(plan: FNode): Seq[FNode] = {
     if (plan.isInstanceOf[LeafFNode]) return plan :: Nil
@@ -18,12 +18,12 @@ class JPlanToFPlanTest extends FunSuite {
 
   test("infer schema #1") {
     val v = VertexAttribute("v")
-    val gv = qplan.GetVertices(v)
-    val de = qplan.DuplicateElimination(gv)
+    val gv = gplan.GetVertices(v)
+    val de = gplan.DuplicateElimination(gv)
 
     val qp = de
-    val jp = QPlanToJPlan.transform(qp)
-    val fp = JPlanToFPlan.transform(jp)
+    val jp = GPlanToNPlan.transform(qp)
+    val fp = NPlanToFPlan.transform(jp)
 
     assert(fp.flatSchema.size == 1)
     assert(fp.children(0).flatSchema.size == 1)
@@ -39,16 +39,16 @@ class JPlanToFPlanTest extends FunSuite {
     val projectList = Seq(ReturnItem(name))
     val condition = GreaterThan(age, Literal(27))
 
-    val qp = qplan.UnresolvedProjection(
+    val qp = gplan.UnresolvedProjection(
       projectList,
-      qplan.Selection(
+      gplan.Selection(
         condition,
-        qplan.GetVertices(n)
+        gplan.GetVertices(n)
       )
     )
-    val rqp = QPlanResolver.resolveQPlan(qp)
-    val jp = QPlanToJPlan.transform(rqp)
-    val fp = JPlanToFPlan.transform(jp)
+    val rqp = GPlanResolver.resolveGPlan(qp)
+    val jp = GPlanToNPlan.transform(rqp)
+    val fp = NPlanToFPlan.transform(jp)
 
     assert(fp.flatSchema.size == 1)
     assert(fp.children(0).flatSchema.size == 3)
@@ -62,13 +62,13 @@ class JPlanToFPlanTest extends FunSuite {
     val name = PropertyAttribute("name", n)
     val projectList = Seq(ReturnItem(name))
 
-    val qp = qplan.UnresolvedProjection(
+    val qp = gplan.UnresolvedProjection(
       projectList,
-      qplan.GetVertices(n)
+      gplan.GetVertices(n)
     )
-    val rqp = QPlanResolver.resolveQPlan(qp)
-    val jp = QPlanToJPlan.transform(rqp)
-    val fp = JPlanToFPlan.transform(jp)
+    val rqp = GPlanResolver.resolveGPlan(qp)
+    val jp = GPlanToNPlan.transform(rqp)
+    val fp = NPlanToFPlan.transform(jp)
 
     assert(fp.flatSchema.size == 1)
     assert(fp.children(0).flatSchema.size == 2)
@@ -92,14 +92,14 @@ class JPlanToFPlanTest extends FunSuite {
 
     val projectList = Seq(ReturnItem(segment), ReturnItem(length))
 
-    val qp = qplan.UnresolvedProjection(
+    val qp = gplan.UnresolvedProjection(
       projectList,
-      qplan.GetVertices(segment)
+      gplan.GetVertices(segment)
     )
 
-    val rqp = QPlanResolver.resolveQPlan(qp)
-    val jp = QPlanToJPlan.transform(rqp)
-    val fp = JPlanToFPlan.transform(jp)
+    val rqp = GPlanResolver.resolveGPlan(qp)
+    val jp = GPlanToNPlan.transform(rqp)
+    val fp = NPlanToFPlan.transform(jp)
 
     assert(fp.flatSchema.size == 2)
     assert(fp.children(0).flatSchema.size == 2)

@@ -1,14 +1,14 @@
 package ingraph.compiler
 
-import ingraph.compiler.cypher2qplan.CypherParser
-import ingraph.compiler.qplan2jplan.{JPlanToFPlan, QPlanToJPlan}
+import ingraph.compiler.cypher2gplan.CypherParser
+import ingraph.compiler.plantransformers.{NPlanToFPlan, GPlanToNPlan}
 import ingraph.model.fplan.FNode
 
 object FPlanParser {
   def parse(query: String): FNode = {
-    JPlanToFPlan.transform(
-      QPlanToJPlan.transform(
-        CypherToQPlan.build(
+    NPlanToFPlan.transform(
+      GPlanToNPlan.transform(
+        CypherToGPlan.build(
           CypherParser.parseString(query), Some("test")
         )
       )

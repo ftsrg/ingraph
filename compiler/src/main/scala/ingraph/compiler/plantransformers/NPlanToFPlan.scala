@@ -1,20 +1,20 @@
-package ingraph.compiler.qplan2jplan
+package ingraph.compiler.plantransformers
 
 import ingraph.model.expr._
 import ingraph.model.expr.types.TProjectList
-import ingraph.model.{fplan, jplan}
+import ingraph.model.{fplan, nplan}
 import org.apache.spark.sql.catalyst.expressions.Expression
 
 /**
-  * Performs schema inferencing to transform a JPlan to an FPlan.
+  * Performs schema inferencing to transform a NPlan to an FPlan.
   */
-object JPlanToFPlan {
+object NPlanToFPlan {
 
-  def transform(jnode: jplan.JNode): fplan.FNode = {
-    transform(jnode, Seq())
+  def transform(nnode: nplan.NNode): fplan.FNode = {
+    transform(nnode, Seq())
   }
 
-  private def transform(jnode: jplan.JNode, req: Seq[ResolvableName]): fplan.FNode = {
+  private def transform(nnode: nplan.NNode, req: Seq[ResolvableName]): fplan.FNode = {
 
     /**
       * Return whether a property selected for propagation is a duplicate:
@@ -25,51 +25,51 @@ object JPlanToFPlan {
       inputOperatorOutput.map(_.resolvedName).contains(attribute.resolvedName) || requiredProperties.map(_.resolvedName).contains(attribute.resolvedName)
     }
 
-    jnode match {
+    nnode match {
       // leaf
-      case o: jplan.GetEdges     => fplan.GetEdges(req, o)
-      case o: jplan.GetVertices  => fplan.GetVertices(req, o)
-      case o: jplan.Dual         =>
+      case o: nplan.GetEdges     => fplan.GetEdges(req, o)
+      case o: nplan.GetVertices  => fplan.GetVertices(req, o)
+      case o: nplan.Dual         =>
         if (req.nonEmpty) {
           throw new IllegalStateException(s"Dual node cannot provide properties: ${req}")
         }
         fplan.Dual(o)
 
       // unary
-      case o: jplan.Projection =>
+      case o: nplan.Projection =>
         val reqOp = extractProperties(o.projectList).filter(!duplicate(_, o.child.output, req))
         fplan.Projection(req, o, transform(o.child, req ++ reqOp))
-      case o: jplan.Grouping =>
+      case o: nplan.Grouping =>
         val reqOp = extractProperties(o.projectList).filter(!duplicate(_, o.child.output, req))
         fplan.Grouping(req, o, transform(o.child, req ++ reqOp))
-      case o: jplan.Selection =>
+      case o: nplan.Selection =>
         val reqOp = extractProperties(o.condition).filter(!duplicate(_, o.child.output, req))
         fplan.Selection(o, transform(o.child, req ++ reqOp))
-      case o: jplan.Unwind =>
+      case o: nplan.Unwind =>
         fplan.Unwind(o, transform(o.child, req ++ extractProperties(o.unwindAttribute.list)))
-      case o: jplan.SortAndTop =>
+      case o: nplan.SortAndTop =>
         val reqOp = o.order.flatMap(x => extractProperties(x.child)).filter(!duplicate(_, o.child.output, req))
         fplan.SortAndTop (o, transform(o.child, req ++ reqOp))
 
       // the rest is just the same, isn't it?
-      case o: jplan.AllDifferent         => fplan.AllDifferent        (o, transform(o.child, req))
-      case o: jplan.DuplicateElimination => fplan.DuplicateElimination(o, transform(o.child, req))
-      case o: jplan.Production           => fplan.Production          (o, transform(o.child, req))
+      case o: nplan.AllDifferent         => fplan.AllDifferent        (o, transform(o.child, req))
+      case o: nplan.DuplicateElimination => fplan.DuplicateElimination(o, transform(o.child, req))
+      case o: nplan.Production           => fplan.Production          (o, transform(o.child, req))
       // unary DMLs
-      case o: jplan.Create               =>
+      case o: nplan.Create               =>
         val reqOp = extractPropertiesFromInsertion(o.attribute)
         fplan.Create(o, transform(o.child, req ++ reqOp))
-      case o: jplan.Delete               => fplan.Delete(o, transform(o.child, req))
-      case o: jplan.Merge                =>
+      case o: nplan.Delete               => fplan.Delete(o, transform(o.child, req))
+      case o: nplan.Merge                =>
         fplan.Merge(o, transform(o.child, req))
-      case o: jplan.Remove               => fplan.Remove(o, transform(o.child, req))
-      case o: jplan.SetNode              => fplan.SetNode(o, transform(o.child, req))
+      case o: nplan.Remove               => fplan.Remove(o, transform(o.child, req))
+      case o: nplan.SetNode              => fplan.SetNode(o, transform(o.child, req))
 
       // binary
-      case j: jplan.JoinLike => {
+      case j: nplan.JoinLike => {
         // ThetaLeftOuterJoins require special treatment: they are the only join operators that can require new properties
         val reqOp = j match {
-          case o: jplan.ThetaLeftOuterJoin => extractProperties(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, req))
+          case o: nplan.ThetaLeftOuterJoin => extractProperties(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, req))
           case _ => Seq()
         }
 
@@ -90,19 +90,19 @@ object JPlanToFPlan {
         val right = transform(j.right, rpRight)
 
         j match {
-          case o: jplan.AntiJoin => {
+          case o: nplan.AntiJoin => {
             assert(rpRight.isEmpty)
             fplan.AntiJoin(o, left, right)
           }
-          case o: jplan.Join => fplan.Join(o, left, right)
-          case o: jplan.LeftOuterJoin => fplan.LeftOuterJoin(o, left, right)
-          case o: jplan.ThetaLeftOuterJoin =>
+          case o: nplan.Join => fplan.Join(o, left, right)
+          case o: nplan.LeftOuterJoin => fplan.LeftOuterJoin(o, left, right)
+          case o: nplan.ThetaLeftOuterJoin =>
             val reqOp = extractProperties(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, rpTotal))
             fplan.ThetaLeftOuterJoin(o, left, right)
-          case o: jplan.TransitiveJoin => fplan.TransitiveJoin(o, left, right)
+          case o: nplan.TransitiveJoin => fplan.TransitiveJoin(o, left, right)
         }
       }
-      case o: jplan.Union => fplan.Union(o,
+      case o: nplan.Union => fplan.Union(o,
         transform(o.left, req),
         transform(o.right, req)
       )

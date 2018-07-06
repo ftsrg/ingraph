@@ -1,9 +1,9 @@
-package ingraph.compiler.cypher2qplan.builders
+package ingraph.compiler.cypher2gplan.builders
 
-import ingraph.compiler.cypher2qplan.structures.MatchDescriptor
-import ingraph.compiler.cypher2qplan.util.GrammarUtil
-import ingraph.model.qplan.QNode
-import ingraph.model.{expr, qplan}
+import ingraph.compiler.cypher2gplan.structures.MatchDescriptor
+import ingraph.compiler.cypher2gplan.util.GrammarUtil
+import ingraph.model.gplan.GNode
+import ingraph.model.{expr, gplan}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -11,22 +11,22 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 object StatementBuilder {
-  def dispatchBuildStatement(statement: oc.Statement): qplan.QNode = {
+  def dispatchBuildStatement(statement: oc.Statement): gplan.GNode = {
     statement match {
       case s: oc.SingleQuery => buildStatement(s)
       case s: oc.CombinedQuery => buildStatement(s)
     }
   }
 
-  /** Builds the qplan for a single query built from several query parts.
+  /** Builds the gplan for a single query built from several query parts.
     */
-  def buildStatement(q: oc.SingleQuery): qplan.QNode = {
+  def buildStatement(q: oc.SingleQuery): gplan.GNode = {
     val clauses = q.getClauses.asScala.toVector // we are to use indexed access
 
     // Compiled form of the query is the chain of the query parts.
     // The first query part will receive a dual object source there.
     // Accumulate tree built from successive query parts in result
-    var result: qplan.QNode = qplan.Dual()
+    var result: gplan.GNode = gplan.Dual()
 
     // Do some checks on the clauses of the single query
     //FIXME: Validator.checkSingleQueryClauseSequence(clauses, ce.l)
@@ -63,11 +63,11 @@ object StatementBuilder {
     result
   }
 
-  def buildStatement(q: oc.CombinedQuery): qplan.QNode = {
+  def buildStatement(q: oc.CombinedQuery): gplan.GNode = {
     var result = buildStatement(q.getSingleQuery)
 
     for (u <- q.getUnion.asScala) {
-      result = qplan.Union(u.isAll, result, buildStatement(u.getSingleQuery))
+      result = gplan.Union(u.isAll, result, buildStatement(u.getSingleQuery))
     }
 
     // FIXME: validator
@@ -82,7 +82,7 @@ object StatementBuilder {
     *
     * @param chain is the compiled form of the query parts processed so far. This will be put at the appropriate place.
     */
-  protected def buildQueryPart(clauses: Seq[oc.Clause], chain: qplan.QNode): qplan.QNode = {
+  protected def buildQueryPart(clauses: Seq[oc.Clause], chain: gplan.GNode): gplan.GNode = {
 //    // FIXME: do some checks on the MATCH clauses
 //    Validator.checkSubQueryMatchClauseSequence(clauses.filter(typeof(Match)), ce.l)
 //    // FIXME: do some checks on the clause sequence of this subquery
@@ -91,13 +91,13 @@ object StatementBuilder {
     /* We compile all MATCH clauses and chain them together using different join operations.
      * We start from what was passed in as chain, i.e. the tree built from query parts so far.
      */
-    val content: QNode = clauses.foldLeft(chain)(
+    val content: GNode = clauses.foldLeft(chain)(
       (prev, clause) => clause match {
         case m: oc.Match => buildMatchDescriptor(m) match {
-          case MatchDescriptor(true , opTree, Some(condition)) => qplan.ThetaLeftOuterJoin(prev, opTree, condition)
-          case MatchDescriptor(true , opTree, None           ) => qplan.LeftOuterJoin(prev, opTree)
-          case MatchDescriptor(false, opTree, Some(condition)) => qplan.Selection(condition, qplan.Join(prev, opTree))
-          case MatchDescriptor(false, opTree, None           ) => qplan.Join(prev, opTree)
+          case MatchDescriptor(true , opTree, Some(condition)) => gplan.ThetaLeftOuterJoin(prev, opTree, condition)
+          case MatchDescriptor(true , opTree, None           ) => gplan.LeftOuterJoin(prev, opTree)
+          case MatchDescriptor(false, opTree, Some(condition)) => gplan.Selection(condition, gplan.Join(prev, opTree))
+          case MatchDescriptor(false, opTree, None           ) => gplan.Join(prev, opTree)
         }
         case _ => prev
       }
@@ -109,20 +109,20 @@ object StatementBuilder {
      * Note: we don't care about possible repetition of WITH/RETURN and UNWIND clauses as it does not affect compilation.
      * Clause order is already checked when query was split to query parts.
      */
-    val afterReturnAndUnwind: QNode = clauses.foldLeft(content)(
+    val afterReturnAndUnwind: GNode = clauses.foldLeft(content)(
       (prev, clause) => clause match {
         case w: oc.With   => ReturnBuilder.dispatchBuildReturn(w, prev)
         case r: oc.Return => ReturnBuilder.dispatchBuildReturn(r, prev)
         case u: oc.Unwind => {
           val expression = ExpressionBuilder.buildExpressionNoJoinAllowed(u.getExpression)
-          qplan.Unwind(expr.UnwindAttribute(expression, u.getVariable.getName), prev)
+          gplan.Unwind(expr.UnwindAttribute(expression, u.getVariable.getName), prev)
         }
         case _ => prev
       }
     )
 
     // process CUD operations
-    val afterCud: QNode = clauses.foldLeft(afterReturnAndUnwind)(
+    val afterCud: GNode = clauses.foldLeft(afterReturnAndUnwind)(
       (prev, clause) => clause match {
         case c: oc.Create => CudBuilder.buildCreateOperator(c, prev)
         case c: oc.Delete => CudBuilder.buildDeleteOperator(c, prev)
@@ -156,27 +156,30 @@ object StatementBuilder {
   def buildMatchDescriptor(m: oc.Match): MatchDescriptor = {
     val optionalMatch = m.isOptional
 
-    val edgeAttributesOfMatchClause = mutable.HashSet.empty[expr.EdgeAttribute]
+    val edgeAttributesOfMatchClause = mutable.HashSet.empty[expr.AbstractEdgeAttribute]
     // handle comma-separated patternParts in the MATCH clause
-    val pattern_PatternPartList = ListBuffer.empty[qplan.QNode]
+    val pattern_PatternPartList = ListBuffer.empty[gplan.GNode]
     for (pattern <- m.getPattern.getPatterns.asScala) {
       val op = PatternBuilder.buildPattern(pattern)
 
-      //FIXME: edgeVariablesOfMatchClause += Cypher2RelalgUtil.extractEdgeVariables(op)
+      edgeAttributesOfMatchClause ++= op.flatMap[expr.AbstractEdgeAttribute]( _ match {
+        case e: gplan.Expand => Seq(e.edge)
+        case _ => Seq.empty
+      })
 
       pattern_PatternPartList += op
     }
 
     // they are natural joined together
-    val allDifferentOperator = qplan.AllDifferent(
+    val allDifferentOperator = gplan.AllDifferent(
       edgeAttributesOfMatchClause.toSeq,
-      pattern_PatternPartList.foldLeft[qplan.QNode]( qplan.Dual() )( (b, a) => qplan.Join(b, a) )
+      pattern_PatternPartList.foldLeft[gplan.GNode]( gplan.Dual() )((b, a) => gplan.Join(b, a) )
     )
 
     Option(m.getWhere).fold( MatchDescriptor(optionalMatch, allDifferentOperator) )(
       (where)  => {
         // left outer joins extracted from the patterns in the where clause
-        val joinOperationsOfWhereClause = ListBuffer.empty[qplan.QNode]
+        val joinOperationsOfWhereClause = ListBuffer.empty[gplan.GNode]
 
         val condition = Some(ExpressionBuilder.buildExpression(where.getExpression, joinOperationsOfWhereClause))
 
@@ -184,7 +187,7 @@ object StatementBuilder {
          * add allDifferentOperator before the joins derived from the where clause (if any)
          * and create the tree of left outer joins
          */
-        val op = joinOperationsOfWhereClause.foldLeft[qplan.QNode]( allDifferentOperator )( (b, a) => qplan.LeftOuterJoin(b, a) )
+        val op = joinOperationsOfWhereClause.foldLeft[gplan.GNode]( allDifferentOperator )((b, a) => gplan.LeftOuterJoin(b, a) )
 
         MatchDescriptor(optionalMatch, op, condition)
       }

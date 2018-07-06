@@ -1,4 +1,4 @@
-package ingraph.compiler.cypher2qplan
+package ingraph.compiler.cypher2gplan
 
 import java.io.ByteArrayInputStream
 

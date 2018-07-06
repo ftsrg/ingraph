@@ -1,21 +1,21 @@
-package ingraph.compiler.cypher2qplan.builders
+package ingraph.compiler.cypher2gplan.builders
 
-import ingraph.compiler.cypher2qplan.util.BuilderUtil
-import ingraph.model.qplan
+import ingraph.compiler.cypher2gplan.util.BuilderUtil
+import ingraph.model.gplan
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
 
 object PatternBuilder {
-  def buildPattern(pattern: oc.PatternPart): qplan.QNode = {
+  def buildPattern(pattern: oc.PatternPart): gplan.GNode = {
     pattern match {
       case p: oc.PatternElement => buildPatternHelper(p.getNodepattern, p.getChain.asScala)
-      case p: oc.PatternElementChain => qplan.QStub()
+      case p: oc.PatternElementChain => gplan.GStub()
       // general PatternPart instance
-      case p => qplan.QStub()
+      case p => gplan.GStub()
     }
   }
-  def buildPattern(pattern: oc.RelationshipsPattern): qplan.QNode = {
+  def buildPattern(pattern: oc.RelationshipsPattern): gplan.GNode = {
     buildPatternHelper(pattern.getNodePattern, pattern.getChain.asScala)
   }
 
@@ -57,18 +57,18 @@ object PatternBuilder {
    *
    * This was factored out to handle PatternElement and RelationshipsPattern in the same code
    */
-  def buildPatternHelper(n: oc.NodePattern, chain: Seq[oc.PatternElementChain]): qplan.QNode = {
+  def buildPatternHelper(n: oc.NodePattern, chain: Seq[oc.PatternElementChain]): gplan.GNode = {
     val firstAttr = AttributeBuilder.buildAttribute(n)
-    val firstNode: qplan.QNode = qplan.GetVertices(firstAttr)
+    val firstNode: gplan.GNode = gplan.GetVertices(firstAttr)
 
-    chain.foldLeft[qplan.QNode](firstNode)( (lastNode, el) => {
+    chain.foldLeft[gplan.GNode](firstNode)((lastNode, el) => {
       val v = AttributeBuilder.buildAttribute(el.getNodePattern)
       val e = AttributeBuilder.buildAttribute(el.getRelationshipPattern)
       val srcAttr = lastNode match {
-        case e: qplan.Expand => e.trg
-        case gv: qplan.GetVertices => gv.v
+        case e: gplan.Expand => e.trg
+        case gv: gplan.GetVertices => gv.v
       }
-      qplan.Expand(src = srcAttr,
+      gplan.Expand(src = srcAttr,
         trg = v,
         edge = e,
         dir = BuilderUtil.convertToDirection(el.getRelationshipPattern),

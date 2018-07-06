@@ -1,4 +1,4 @@
-package ingraph.compiler.cypher2qplan.util
+package ingraph.compiler.cypher2gplan.util
 
 import java.io.UnsupportedEncodingException
 import java.util.regex.{Matcher, Pattern}

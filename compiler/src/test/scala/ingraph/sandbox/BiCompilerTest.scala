@@ -4,13 +4,13 @@ import ingraph.compiler.test.{CompilerTest, CompilerTestConfig}
 
 class BiCompilerTest extends CompilerTest {
   override val config = CompilerTestConfig(querySuitePath = Some("ldbc-snb-bi")
-    , compileQPlanOnly = false
-    , skipQPlanResolve = false
-    , skipQPlanBeautify = false
+    , compileGPlanOnly = false
+    , skipGPlanResolve = false
+    , skipGPlanBeautify = false
     , printQuery = true
     , printCypher = false
-    , printQPlan = true
-    , printJPlan = true
+    , printGPlan = true
+    , printNPlan = true
     , printFPlan = true
   )
 

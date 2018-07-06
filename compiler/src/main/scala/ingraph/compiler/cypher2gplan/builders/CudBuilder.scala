@@ -1,11 +1,11 @@
-package ingraph.compiler.cypher2qplan.builders
+package ingraph.compiler.cypher2gplan.builders
 
-import ingraph.compiler.cypher2qplan.util.BuilderUtil
+import ingraph.compiler.cypher2gplan.util.BuilderUtil
 import ingraph.compiler.exceptions.CompilerException
 import ingraph.model.expr._
 import ingraph.model.expr.types.VertexLabel
-import ingraph.model.qplan
-import ingraph.model.qplan.QNode
+import ingraph.model.gplan
+import ingraph.model.gplan.GNode
 import org.slizaa.neo4j.opencypher.openCypher.SetItem
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
@@ -20,7 +20,7 @@ object CudBuilder {
   /**
     * Build and return a create operator from the CREATE clause and attach p_input to its input.
     */
-  def buildCreateOperator(u0: oc.Create, child: qplan.QNode): QNode = {
+  def buildCreateOperator(u0: oc.Create, child: gplan.GNode): GNode = {
     val attributes = u0.getPattern.getPatterns.asScala.flatMap {
       // Iterate through the comma-separated patterns of the create clause
       case pe: oc.PatternElement => Some(pe)
@@ -48,7 +48,7 @@ object CudBuilder {
       edgesAndVertices
     })
 
-    return qplan.Create(attributes, child)
+    return gplan.Create(attributes, child)
 
 
 //      val t0 = ce.vb.vertexVariableFactoryElements.containsKey(u2.nodepattern.variable?.name)
@@ -152,25 +152,25 @@ object CudBuilder {
   /**
     * Build and return a delete operator from the DELETE clause and attach child to its input.
     */
-  def buildDeleteOperator(element: oc.Delete, child: qplan.QNode): QNode = {
+  def buildDeleteOperator(element: oc.Delete, child: gplan.GNode): GNode = {
     val attributes = element.getExpressions.asScala.flatMap {
       case v: oc.VariableRef => Some(AttributeBuilder.buildAttribute(v))
       case _ => None
     }
-    qplan.UnresolvedDelete(attributes, element.isDetach, child)
+    gplan.UnresolvedDelete(attributes, element.isDetach, child)
   }
 
   /**
     * Build and return a merge operator from the MERGE clause and attach child to its input.
     */
-  def buildMergeOperator(element: oc.Merge, child: qplan.QNode): QNode = {
-    qplan.Merge(Seq(), child)
+  def buildMergeOperator(element: oc.Merge, child: gplan.GNode): GNode = {
+    gplan.Merge(Seq(), child)
   }
 
   /**
     * Build and return a remove operator from the SET clause and attach child to its input.
     */
-  def buildSetOperator(element: oc.Set, child: qplan.QNode): QNode = {
+  def buildSetOperator(element: oc.Set, child: gplan.GNode): GNode = {
     val vertexLabelUpdates = element.getSetItems.asScala.map(
       r => r match {
         //case pe: oc.PropertyExpression => ???
@@ -182,13 +182,13 @@ object CudBuilder {
         }
       }
     ).toSet
-    qplan.SetNode(vertexLabelUpdates, child)
+    gplan.SetNode(vertexLabelUpdates, child)
   }
 
   /**
     * Build and return a remove operator from the REMOVE clause and attach child to its input.
     */
-  def buildRemoveOperator(element: oc.Remove, child: qplan.QNode): QNode = {
+  def buildRemoveOperator(element: oc.Remove, child: gplan.GNode): GNode = {
     val vertexLabelUpdates = element.getRemoveItems.asScala.map(
       r => r match {
         //case r: oc.RemoveItemProperty => ???
@@ -200,7 +200,7 @@ object CudBuilder {
         }
       }
     ).toSet
-    qplan.Remove(vertexLabelUpdates, child)
+    gplan.Remove(vertexLabelUpdates, child)
   }
 
 }

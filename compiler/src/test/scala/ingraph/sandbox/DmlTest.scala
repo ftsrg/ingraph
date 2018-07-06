@@ -1,9 +1,6 @@
 package ingraph.sandbox
 
-import ingraph.compiler.CypherToQPlan
-import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.compiler.test.CompilerTest
-import ingraph.model.fplan
 
 class DmlTest extends CompilerTest {
 

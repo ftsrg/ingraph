@@ -1,7 +1,7 @@
-package ingraph.compiler.cypher2qplan.builders
+package ingraph.compiler.cypher2gplan.builders
 
-import ingraph.compiler.cypher2qplan.util.BuilderUtil
-import ingraph.model.{expr, qplan}
+import ingraph.compiler.cypher2gplan.util.BuilderUtil
+import ingraph.model.{expr, gplan}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedStar}
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
@@ -10,20 +10,20 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 object ReturnBuilder {
-  def dispatchBuildReturn(clause: oc.Clause, content: qplan.QNode): qplan.QNode = {
+  def dispatchBuildReturn(clause: oc.Clause, content: gplan.GNode): gplan.GNode = {
     clause match {
       case r: oc.Return => buildReturnBody(r.isDistinct, r.getBody, content)
       case w: oc.With => buildWithClause(w, content)
     }
   }
 
-  def buildWithClause(w: oc.With, content: qplan.QNode): qplan.QNode = {
+  def buildWithClause(w: oc.With, content: gplan.GNode): gplan.GNode = {
     val rb = buildReturnBody(w.isDistint, w.getReturnBody, content)
 
     Option(w.getWhere).fold(rb)(
       (where) => {
         val condition = ExpressionBuilder.buildExpressionNoJoinAllowed(where.getExpression)
-        qplan.Selection(condition, rb)
+        gplan.Selection(condition, rb)
       }
     )
   }
@@ -33,7 +33,7 @@ object ReturnBuilder {
     * Process the common part of a RETURN and a WITH clause,
     * i.e. the distinct flag and the ReturnBody.
     */
-  def buildReturnBody(distinct: Boolean, returnBody: oc.ReturnBody, content: qplan.QNode): qplan.QNode = {
+  def buildReturnBody(distinct: Boolean, returnBody: oc.ReturnBody, content: gplan.GNode): gplan.GNode = {
     val returnItems = returnBody.getReturnItems
 
     // this will hold the project list compiled
@@ -53,10 +53,10 @@ object ReturnBuilder {
     //TODO: check after resolving: if (elements.empty) unrecoverableError('''RETURN items processed and resulted in no column values to return''')
 
     // We create an unresolved projection which is to be resolved to either Projection or Grouping
-    val projection = qplan.UnresolvedProjection(elements, content)
+    val projection = gplan.UnresolvedProjection(elements, content)
 
     // add duplicate-elimination operator if return DISTINCT was specified
-    val op1 = if (distinct) qplan.DuplicateElimination(projection) else projection
+    val op1 = if (distinct) gplan.DuplicateElimination(projection) else projection
 
     val op2 = Option(returnBody.getOrder).fold(op1)(
       (order) => {
@@ -67,7 +67,7 @@ object ReturnBuilder {
             .fold[cExpr.SortDirection](cExpr.Ascending)( _ => cExpr.Descending)
           cExpr.SortOrder(sortExpression, sortDirection)
         })
-        qplan.Sort(sortEntries, op1)
+        gplan.Sort(sortEntries, op1)
       }
     )
 
@@ -76,7 +76,7 @@ object ReturnBuilder {
       case (skipOpt, limitOpt) => {
         val s = skipOpt.flatMap( (skip)  => BuilderUtil.convertToSkipLimitConstant(skip.getSkip) )
         val l = limitOpt.flatMap( (limit) => BuilderUtil.convertToSkipLimitConstant(limit.getLimit) )
-        qplan.Top(s, l, op2)
+        gplan.Top(s, l, op2)
       }
     }
     op3

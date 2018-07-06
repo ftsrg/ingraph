@@ -3,10 +3,10 @@
 
 Build the project, and move the files to the root of the repository.
 
-```
+```console
 cd $(git rev-parse --show-toplevel) && \
   rm -rf lib/ bin/ && \
-  ./gradlew clean build installDist && \
+  ./gradlew clean build installDist -x test && \
   cp -R tests/build/install/tests/. . && \
   cd bin
 ```
@@ -22,3 +22,5 @@ To use the SF1 data set and benchmark query 4, run something like the following 
 ```bash
 ./tests 1 4 ~/neo4j/data/databases/graph.db
 ```
+
+To run ingraph, simply omit the Neo4j directory.

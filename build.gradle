@@ -12,11 +12,11 @@ ext {
   junitVersion = '4.12'
   log4jVersion = '1.2.17'
   neo4jDriverVersion = '1.4.6'
-  neo4jVersion = '3.3.3'
+  neo4jVersion = '3.3.5'
   neo4jApocVersion = '3.3.0.1'
   pegdownVersion = '1.6.0'
   scalaShortVersion = '2.11'
-  scalaTestVersion = '3.0.1'
+  scalaTestVersion = '3.0.5'
   scalaVersion = '2.11.12'
   sparkVersion = '2.3.0'
   slizaaVersion = '1.0.0-SNAPSHOT'
@@ -43,6 +43,7 @@ subprojects {
     maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
     maven { url 'https://repo.eclipse.org/content/groups/viatra2' }
     maven { url 'https://docs.inf.mit.bme.hu/ingraph-deps' }
+    maven { url 'https://dl.bintray.com/ldbc/snb' }
   }
 
   dependencies {

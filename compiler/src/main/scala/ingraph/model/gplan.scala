@@ -1,4 +1,4 @@
-package ingraph.model.qplan
+package ingraph.model.gplan
 
 import ingraph.model.expr._
 import ingraph.model.expr.types.TProjectList
@@ -8,34 +8,34 @@ import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 /**
-  * QNodes for building a qplan tree
+  * GNodes for building a gplan tree
   */
-trait QNode extends LogicalPlan {
+trait GNode extends LogicalPlan {
   override def output: Seq[ResolvableName]
   def expressionChildren: Seq[Expression] = Seq()
 }
-abstract class LeafQNode extends GenericLeafNode[QNode] with QNode
-abstract class UnaryQNode extends GenericUnaryNode[QNode] with QNode {
+abstract class LeafGNode extends GenericLeafNode[GNode] with GNode
+abstract class UnaryGNode extends GenericUnaryNode[GNode] with GNode {
   override def output: Seq[ResolvableName] = child.output
 }
-abstract class BinaryQNode extends GenericBinaryNode[QNode] with QNode
+abstract class BinaryGNode extends GenericBinaryNode[GNode] with GNode
 
 /**
-  * A stub leaf node for the qplan indicating incomplete compilation.
+  * A stub leaf node for the gplan indicating incomplete compilation.
   */
-abstract class AbstractQStub extends LeafQNode {
+abstract class AbstractGStub extends LeafGNode {
   override def output = Seq()
 }
 
 /**
-  * A stub leaf node for the qplan indicating incomplete compilation,
+  * A stub leaf node for the gplan indicating incomplete compilation,
   * i.e. something is not implemented but would be needed to compile the particular query.
   * @param note An optional note
   */
-case class QStub(note: String = "FIXME") extends AbstractQStub {}
+case class GStub(note: String = "FIXME") extends AbstractGStub {}
 
 /**
-  * A placeholder leafnode which should never leave the cypher2qplan compiler.
+  * A placeholder leafnode which should never leave the cypher2gplan compiler.
   *
   * This compiler sometimes creates incomplete subtrees,
   * e.g. a Join whose left input will be used for chaining.
@@ -44,35 +44,35 @@ case class QStub(note: String = "FIXME") extends AbstractQStub {}
   *
   * \@jmarton is not sure if we need this as its original aim to chain query parts together was solved in a different way.
   */
-abstract class PlaceHolder() extends AbstractQStub() {}
+abstract class PlaceHolder() extends AbstractGStub() {}
 
 // leaf nodes
-case class GetVertices(v: VertexAttribute) extends LeafQNode {
+case class GetVertices(v: VertexAttribute) extends LeafGNode {
   override def output = Seq(v)
   override def expressionChildren = Seq(v)
 }
 
-case class Dual() extends LeafQNode {
+case class Dual() extends LeafGNode {
   override def output = Seq()
 }
 
 // unary nodes
-case class AllDifferent(edges: Seq[EdgeAttribute], child: QNode) extends UnaryQNode {
+case class AllDifferent(edges: Seq[AbstractEdgeAttribute], child: GNode) extends UnaryGNode {
   override def expressionChildren = edges
 }
 
-case class DuplicateElimination(child: QNode) extends UnaryQNode {}
+case class DuplicateElimination(child: GNode) extends UnaryGNode {}
 
 case class Expand(src: VertexAttribute,
                   trg: VertexAttribute,
                   edge: AbstractEdgeAttribute,
                   dir: Direction,
-                  child: QNode) extends UnaryQNode with NavigationDescriptor {
+                  child: GNode) extends UnaryGNode with NavigationDescriptor {
   override def output = child.output ++ Seq(edge, trg)
   override def expressionChildren = Seq(src, trg, edge)
 }
 
-case class Production(child: QNode) extends UnaryQNode {}
+case class Production(child: GNode) extends UnaryGNode {}
 
 /**
   * The Projection operator is the renaissance man of the query plan specification.
@@ -84,7 +84,7 @@ case class Production(child: QNode) extends UnaryQNode {}
   *   (i.e. the inferencer algorithm has to propagate these variables to the LeafQNode instances)
   * - Evaluate other functions, e.g. sin(x), substring(s, from, to), toBoolean(s), etc.
   */
-abstract class AbstractProjection(projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
+abstract class AbstractProjection(projectList: TProjectList, child: GNode) extends UnaryGNode with ProjectionDescriptor {
   override def output = projectList
   override def expressionChildren = projectList
 }
@@ -92,42 +92,42 @@ abstract class AbstractProjection(projectList: TProjectList, child: QNode) exten
 /**
   * An UnresolvedProjection will either be resolved to a Projection or to a Grouping based on its projectList.
   */
-case class UnresolvedProjection(override val projectList: TProjectList, override val child: QNode) extends AbstractProjection(projectList, child)
-case class Projection(override val projectList: TProjectList, override val child: QNode) extends AbstractProjection(projectList, child)
+case class UnresolvedProjection(override val projectList: TProjectList, override val child: GNode) extends AbstractProjection(projectList, child)
+case class Projection(override val projectList: TProjectList, override val child: GNode) extends AbstractProjection(projectList, child)
 
 /**
   * The Grouping operator adds grouping functionality to the basic ProjectionDescriptor.
   *
   * If Projection operator was the renaissance man, this is Baroque of the relational graph algebra model.
   */
-case class Grouping(aggregationCriteria: Seq[Expression], projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
+case class Grouping(aggregationCriteria: Seq[Expression], projectList: TProjectList, child: GNode) extends UnaryGNode with ProjectionDescriptor {
   override def output = projectList
   override def expressionChildren = projectList ++ aggregationCriteria
 }
 
-case class Selection(condition: Expression, child: QNode) extends UnaryQNode {
+case class Selection(condition: Expression, child: GNode) extends UnaryGNode {
   override def expressionChildren = Seq(condition)
 }
 
-case class Sort(order: Seq[SortOrder], child: QNode) extends UnaryQNode {
+case class Sort(order: Seq[SortOrder], child: GNode) extends UnaryGNode {
   override def expressionChildren = order
 }
 
-case class Top(skipExpr: Option[Expression] = None, limitExpr: Option[Expression] = None, child: QNode) extends UnaryQNode {
+case class Top(skipExpr: Option[Expression] = None, limitExpr: Option[Expression] = None, child: GNode) extends UnaryGNode {
   override def expressionChildren = Seq(skipExpr, limitExpr).flatten
 }
 
-case class Unwind(unwindAttribute: UnwindAttribute, child: QNode) extends UnaryQNode {
+case class Unwind(unwindAttribute: UnwindAttribute, child: GNode) extends UnaryGNode {
   override def output = child.output ++ Seq(unwindAttribute)
   override def expressionChildren = Seq(unwindAttribute)
 }
 
 // binary nodes
-case class Union(all: Boolean, left: QNode, right: QNode) extends BinaryQNode {
+case class Union(all: Boolean, left: GNode, right: GNode) extends BinaryGNode {
   override def output: Seq[ResolvableName] = left.output
 }
 
-abstract class JoinLike extends BinaryQNode {
+abstract class JoinLike extends BinaryGNode {
   def commonAttributes = left.output.filterNot(right.output.contains(_))
   override def output: Seq[ResolvableName] = left.output ++ right.output
 }
@@ -136,9 +136,9 @@ abstract class EquiJoinLike extends JoinLike {
   override def output: Seq[ResolvableName] = left.output ++ right.output.filterNot(commonAttributes.contains(_))
 }
 
-case class Join(left: QNode, right: QNode) extends EquiJoinLike {}
+case class Join(left: GNode, right: GNode) extends EquiJoinLike {}
 
-case class LeftOuterJoin(left: QNode, right: QNode) extends EquiJoinLike {}
+case class LeftOuterJoin(left: GNode, right: GNode) extends EquiJoinLike {}
 
 /**
   * An equi-join like left outer join, i.e. the join condition is composed of two parts AND-ed:
@@ -147,36 +147,36 @@ case class LeftOuterJoin(left: QNode, right: QNode) extends EquiJoinLike {}
   *
   * Note: this never filters on its left input!
   */
-case class ThetaLeftOuterJoin(left: QNode, right: QNode, condition: Expression) extends EquiJoinLike {
+case class ThetaLeftOuterJoin(left: GNode, right: GNode, condition: Expression) extends EquiJoinLike {
   override def expressionChildren = Seq(condition)
 }
 
-case class AntiJoin(left: QNode, right: QNode) extends EquiJoinLike {
+case class AntiJoin(left: GNode, right: GNode) extends EquiJoinLike {
   override def output: Seq[ResolvableName] = left.output
 }
 
 // DML operators
-abstract class CudOperator(child: QNode) extends UnaryQNode
+abstract class CudOperator(child: GNode) extends UnaryGNode
 
-case class Create(attributes: Seq[ResolvableName], child: QNode) extends CudOperator(child) {
+case class Create(attributes: Seq[ResolvableName], child: GNode) extends CudOperator(child) {
   override def expressionChildren = attributes
 }
 
-case class UnresolvedDelete(attributes: Seq[UnresolvedAttribute], detach: Boolean, child: QNode) extends CudOperator(child) {
+case class UnresolvedDelete(attributes: Seq[UnresolvedAttribute], detach: Boolean, child: GNode) extends CudOperator(child) {
   override def expressionChildren = attributes
 }
-case class Delete(attributes: Seq[ResolvableName], detach: Boolean, child: QNode) extends CudOperator(child) {
-  override def expressionChildren = attributes
-}
-
-case class Merge(attributes: Seq[ResolvableName], child: QNode) extends CudOperator(child) {
+case class Delete(attributes: Seq[ResolvableName], detach: Boolean, child: GNode) extends CudOperator(child) {
   override def expressionChildren = attributes
 }
 
-case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child) {
+case class Merge(attributes: Seq[ResolvableName], child: GNode) extends CudOperator(child) {
+  override def expressionChildren = attributes
+}
+
+case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: GNode) extends CudOperator(child) {
   override def expressionChildren = vertexLabelUpdates.map( vlu => vlu.vertex ).toSeq
 }
 
-case class Remove(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child) {
+case class Remove(vertexLabelUpdates: Set[VertexLabelUpdate], child: GNode) extends CudOperator(child) {
   override def expressionChildren = vertexLabelUpdates.map( vlu => vlu.vertex ).toSeq
 }
