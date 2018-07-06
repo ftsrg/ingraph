@@ -56,14 +56,14 @@ class CompileSql(query: String) extends CompilerTest {
       case node: GetVertices => {
         val columns =
           (
-            s"""vertex_id AS "${escapeQuotes(node.jnode.v.resolvedName.get.resolvedName)}"""" +:
+            s"""vertex_id AS "${escapeQuotes(node.nnode.v.resolvedName.get.resolvedName)}"""" +:
               node.requiredProperties.map(prop =>s"""(SELECT value FROM vertex_property WHERE parent = vertex_id AND key = '${escapeSingleQuotes(prop.name)}') AS "${escapeQuotes(prop.resolvedName.get.resolvedName)}""""))
             .mkString(", ")
 
         s"""SELECT $columns FROM vertex"""
       }
       case node: Join => {
-        val joinAttributesConditions = node.left.jnode.outputSet.intersect(node.right.jnode.outputSet)
+        val joinAttributesConditions = node.left.nnode.outputSet.intersect(node.right.nnode.outputSet)
           .map(attr => attr.asInstanceOf[ElementAttribute].resolvedName.get.resolvedName)
           .map(name => s""""${escapeQuotes(name)}"""")
           .map(escapedName => s"left_query.$escapedName = right_query.$escapedName")
@@ -82,11 +82,11 @@ class CompileSql(query: String) extends CompilerTest {
         getProjectionSql(node, renamePairs)
       }
       case node: Projection => {
-        val renamePairs = node.jnode.projectList.map(proj => (getSql(proj.child), getSql(proj)))
+        val renamePairs = node.nnode.projectList.map(proj => (getSql(proj.child), getSql(proj)))
         getProjectionSql(node, renamePairs)
       }
       case node: Selection =>
-        val condition = getSql(node.jnode.condition)
+        val condition = getSql(node.nnode.condition)
         s"""SELECT * FROM
            |  (
            |    ${getSql(node.child)}
@@ -97,18 +97,18 @@ class CompileSql(query: String) extends CompilerTest {
           node.requiredProperties.map(getSqlForProperty)
           ).mkString(", ")
 
-        val fromColumnName = escapeQuotes(node.jnode.src.resolvedName.get.resolvedName)
-        val edgeColumnName = escapeQuotes(node.jnode.edge.resolvedName.get.resolvedName)
-        val toColumnName = escapeQuotes(node.jnode.trg.resolvedName.get.resolvedName)
+        val fromColumnName = escapeQuotes(node.nnode.src.resolvedName.get.resolvedName)
+        val edgeColumnName = escapeQuotes(node.nnode.edge.resolvedName.get.resolvedName)
+        val toColumnName = escapeQuotes(node.nnode.trg.resolvedName.get.resolvedName)
 
-        val edgeLabelsEscaped = node.jnode.edge.labels.edgeLabels.map(name =>s"""'${escapeSingleQuotes(name)}'""")
+        val edgeLabelsEscaped = node.nnode.edge.labels.edgeLabels.map(name =>s"""'${escapeSingleQuotes(name)}'""")
         val typeConstraintPart = if (edgeLabelsEscaped.isEmpty)
           ""
         else
           s"""  WHERE type IN (${edgeLabelsEscaped.mkString(", ")})
              |""".stripMargin
 
-        val undirectedSelectPart = if (node.jnode.directed)
+        val undirectedSelectPart = if (node.nnode.directed)
           ""
         else
           s"""  UNION ALL
@@ -122,7 +122,7 @@ class CompileSql(query: String) extends CompilerTest {
       case node: AllDifferent => {
         val childSql = getSql(node.child)
 
-        val edges = node.jnode.outputSet.collect { case attr: EdgeAttribute => attr }.toList
+        val edges = node.nnode.outputSet.collect { case attr: EdgeAttribute => attr }.toList
         if (edges.length <= 1)
           childSql
         else {
