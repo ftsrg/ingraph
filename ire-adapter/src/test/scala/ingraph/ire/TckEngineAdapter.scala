@@ -11,6 +11,7 @@ class TckEngineAdapter extends Graph {
   val indexer = new Indexer()
 
   override def cypher(query: String, params: Map[String, CypherValue], meta: QueryType): Result = {
+    println(meta)
     println(query)
     val result = meta match {
       case InitQuery => {
@@ -22,6 +23,8 @@ class TckEngineAdapter extends Graph {
       // TODO fix id()
       case SideEffectQuery => CypherValueRecords.empty
       case _ => {
+        println("++++++++++++++++")
+
         val readAdapter = new IngraphIncrementalAdapter(query, meta.toString, indexer)
 
         val columnNames = readAdapter.plan.asInstanceOf[Production].outputNames.toSeq
@@ -30,6 +33,8 @@ class TckEngineAdapter extends Graph {
         val tupleConversion: Tuple => Map[String, String] = tuple => columnNames.zip(tuple.map(_.toString))(breakOut)
         val result = resultTuples.map(tupleConversion).toList
         result.foreach(println)
+
+        readAdapter.close()
 
         // TODO use orderedLists parameter
         CypherValueRecords.fromRows(columnNames.toList, result, false)

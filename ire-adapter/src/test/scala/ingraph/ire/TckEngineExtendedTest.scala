@@ -7,11 +7,14 @@ import org.scalatest.FunSuite
 class TckEngineExtendedTest extends FunSuite {
 
   val scenarios = CypherTCK.parseClasspathFeatures("/features").flatMap(_.scenarios)
-  val selectedFeatures = Set("MatchAcceptance")
-  val selectedScenarios = Set(
+  val selectedFeatures = Set("MatchAcceptance", "MatchAcceptance2")
+  val selectedScenarios = Set[String](
     "Use multiple MATCH clauses to do a Cartesian product"
-    // TODO support node format
-    //    , "Filter out based on node prop name"
+  )
+  val ignoredScenarios = Set(
+    "Variable length pattern checking labels on endnodes"
+    , "Matching variable length patterns from a bound node"
+    , "Variable length relationship in OPTIONAL MATCH"
   )
 
   def runTests() = {
@@ -21,8 +24,11 @@ class TckEngineExtendedTest extends FunSuite {
       .foreach(sc => {
         val testName = sc.toString
 
-        if (selectedScenarios.contains(sc.name))
+        if ((selectedScenarios.contains(sc.name) || selectedScenarios.isEmpty) && !ignoredScenarios.contains(sc.name))
           test(testName) {
+            println(testName)
+            println()
+
             sc(new TckEngineAdapter).execute()
           }
         else
