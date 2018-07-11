@@ -3,12 +3,26 @@ package ingraph.ire
 import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.model.fplan.Production
 import org.opencypher.tools.tck.api._
-import org.opencypher.tools.tck.values.CypherValue
+import org.opencypher.tools.tck.values._
 
 import scala.collection.breakOut
 
 class TckEngineAdapter extends Graph {
   val indexer = new Indexer()
+
+  def toCypherValue(value: Any, adapter: AbstractIngraphAdapter): CypherValue = {
+    val indexer = adapter.indexer
+    value match {
+      case value: String => CypherString(value)
+      //      case value: Long => CypherInteger(value)
+      case value: Long => {
+        val vertex = indexer.vertexLookup(value)
+        val properties = CypherPropertyMap(vertex.properties.map(pair => pair._1 -> toCypherValue(pair._2, adapter)))
+
+        CypherNode(vertex.labels, properties)
+      }
+    }
+  }
 
   override def cypher(query: String, params: Map[String, CypherValue], meta: QueryType): Result = {
     println(meta)
@@ -30,14 +44,13 @@ class TckEngineAdapter extends Graph {
         val columnNames = readAdapter.plan.asInstanceOf[Production].outputNames.toSeq
         val resultTuples = readAdapter.result
 
-        val tupleConversion: Tuple => Map[String, String] = tuple => columnNames.zip(tuple.map(_.toString))(breakOut)
+        val tupleConversion: Tuple => Map[String, CypherValue] = tuple => columnNames.zip(tuple.map(toCypherValue(_, readAdapter)))(breakOut)
         val result = resultTuples.map(tupleConversion).toList
         result.foreach(println)
 
         readAdapter.close()
 
-        // TODO use orderedLists parameter
-        CypherValueRecords.fromRows(columnNames.toList, result, false)
+        CypherValueRecords(columnNames.toList, result)
       }
     }
     println()

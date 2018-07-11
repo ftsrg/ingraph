@@ -1,6 +1,5 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.datatypes.Tuple
 import org.opencypher.tools.tck.api.CypherTCK
 import org.scalatest.FunSuite
 
@@ -9,7 +8,9 @@ class TckEngineExtendedTest extends FunSuite {
   val scenarios = CypherTCK.parseClasspathFeatures("/features").flatMap(_.scenarios)
   val selectedFeatures = Set("MatchAcceptance", "MatchAcceptance2")
   val selectedScenarios = Set[String](
-    "Use multiple MATCH clauses to do a Cartesian product"
+//    "Use multiple MATCH clauses to do a Cartesian product"
+//    ,
+    "Filter out based on node prop name"
   )
   val ignoredScenarios = Set(
     "Variable length pattern checking labels on endnodes"
