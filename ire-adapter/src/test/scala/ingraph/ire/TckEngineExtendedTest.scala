@@ -12,11 +12,9 @@ class TckEngineExtendedTest extends FunSuite {
     .flatMap(_.scenarios)
   val selectedFeatures = Set("MatchAcceptance", "MatchAcceptance2", "Local")
   val selectedScenarios = Set[String](
-    //    "Use multiple MATCH clauses to do a Cartesian product"
-    //    ,
-    //    "Filter out based on node prop name"
-    //    ,
-    "Get integer property"
+    "Use multiple MATCH clauses to do a Cartesian product"
+    , "Filter out based on node prop name"
+    , "Get integer property"
   )
   val ignoredScenarios = Set(
     "Variable length pattern checking labels on endnodes"

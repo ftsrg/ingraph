@@ -1,6 +1,7 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
+import ingraph.model.expr.{AbstractReturnItem, ResolvableName, VertexAttribute}
 import ingraph.model.fplan.Production
 import org.opencypher.tools.tck.api._
 import org.opencypher.tools.tck.values._
@@ -10,14 +11,22 @@ import scala.collection.breakOut
 class TckEngineAdapter extends Graph {
   val indexer = new Indexer()
 
-  def toCypherValue(value: Any, adapter: AbstractIngraphAdapter): CypherValue = {
-    val indexer = adapter.indexer
+  def toCypherPropertyMap(map: Map[String, Any]): CypherPropertyMap = {
+    CypherPropertyMap(map.map { case (columnName, value) => columnName -> toCypherValue(value) })
+  }
+
+  def toCypherValue(value: Any, attribute: Option[ResolvableName] = None, indexer: Option[Indexer] = None): CypherValue = {
+    val isVertex = attribute
+      .collect { case a: AbstractReturnItem => a.toAttribute }
+      .collect { case a: VertexAttribute => a }
+      .isDefined
+
     value match {
       case value: String => CypherString(value)
-      //      case value: Long => CypherInteger(value)
-      case value: Long => {
-        val vertex = indexer.vertexLookup(value)
-        val properties = CypherPropertyMap(vertex.properties.map(pair => pair._1 -> toCypherValue(pair._2, adapter)))
+      case value: Long if !isVertex => CypherInteger(value)
+      case value: Long if isVertex => {
+        val vertex = indexer.get.vertexLookup(value)
+        val properties = toCypherPropertyMap(vertex.properties)
 
         CypherNode(vertex.labels, properties)
       }
@@ -41,10 +50,14 @@ class TckEngineAdapter extends Graph {
 
         val readAdapter = new IngraphIncrementalAdapter(query, meta.toString, indexer)
 
-        val columnNames = readAdapter.plan.asInstanceOf[Production].outputNames.toSeq
+        val plan = readAdapter.plan.asInstanceOf[Production]
+        val columnNames = plan.outputNames.toSeq
         val resultTuples = readAdapter.result
 
-        val tupleConversion: Tuple => Map[String, CypherValue] = tuple => columnNames.zip(tuple.map(toCypherValue(_, readAdapter)))(breakOut)
+        val tupleConversion: Tuple => Map[String, CypherValue] = tuple => {
+          val cellInfos = columnNames zip plan.output zip tuple
+          cellInfos.map { case ((columnName, attribute), value) => columnName -> toCypherValue(value, Some(attribute), Some(readAdapter.indexer)) }(breakOut)
+        }
         val result = resultTuples.map(tupleConversion).toList
         result.foreach(println)
 
