@@ -17,6 +17,7 @@ class TckEngineExtendedTest extends FunSuite {
     "Cope with shadowed variables",
     "Do not return non-existent nodes",
     "Do not return non-existent relationships",
+    "Filter based on rel prop name",
     "Filter out based on node prop name",
     "Get neighbours",
     "Get two related nodes",
@@ -44,9 +45,6 @@ class TckEngineExtendedTest extends FunSuite {
   ).filter(!_.isEmpty)
 
   val ignoredScenarios = Set(
-    // https://github.com/FTSRG/ingraph/issues/342
-    "Filter based on rel prop name",
-
     // tests that causes the execution to hang
     "Variable length pattern checking labels on endnodes",
     "Matching variable length patterns from a bound node",
