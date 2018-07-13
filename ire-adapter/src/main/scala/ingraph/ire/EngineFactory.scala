@@ -204,8 +204,17 @@ object EngineFactory {
           case n: TupleEdgeAttribute =>
             // you've got to love the Law of Demeter
             val demeter = n.edge.labels.edgeLabels.head
-            val sourceIndex = ExpressionParser[Long](n.src)
-            val targetIndex = ExpressionParser[Long](n.trg)
+            val src = ExpressionParser[Long](n.src)
+            val trg = ExpressionParser[Long](n.trg)
+
+            val sourceIndex = n.dir match {
+              case Out => src
+              case In => trg
+            }
+            val targetIndex = n.dir match {
+              case Out => trg
+              case In => src
+            }
             val props = propsParser(n)
             (t: Tuple) => {
               indexer.addEdge(
