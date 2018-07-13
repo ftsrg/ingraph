@@ -1,7 +1,7 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
-import ingraph.model.expr.{AbstractReturnItem, ResolvableName, VertexAttribute}
+import ingraph.model.expr.{AbstractReturnItem, EdgeListAttribute, ResolvableName, VertexAttribute}
 import ingraph.model.fplan.Production
 import org.opencypher.tools.tck.api._
 import org.opencypher.tools.tck.values._
@@ -15,13 +15,23 @@ class TckEngineAdapter extends Graph {
     CypherPropertyMap(map.map { case (columnName, value) => columnName -> toCypherValue(value) })
   }
 
+  def toCypherRelationship(id: Long, indexer: Indexer) = {
+    val edge = indexer.edgeLookup(id)
+    CypherRelationship(edge.`type`, toCypherPropertyMap(edge.properties))
+  }
+
   def toCypherValue(value: Any, attribute: Option[ResolvableName] = None, indexer: Option[Indexer] = None): CypherValue = {
     val isVertex = attribute
       .collect { case a: AbstractReturnItem => a.toAttribute }
       .collect { case a: VertexAttribute => a }
       .isDefined
+    val isEdgeListAttribute = attribute
+      .collect { case a: AbstractReturnItem => a.toAttribute }
+      .collect { case a: EdgeListAttribute => a }
+      .isDefined
 
     value match {
+      case null => CypherNull
       case value: String => CypherString(value)
       case value: Long if !isVertex => CypherInteger(value)
       case value: Long if isVertex => {
@@ -30,6 +40,8 @@ class TckEngineAdapter extends Graph {
 
         CypherNode(vertex.labels, properties)
       }
+      case value: Seq[Any] if !isEdgeListAttribute => CypherOrderedList(value.map(toCypherValue(_)).toList)
+      case value: Seq[Long] if isEdgeListAttribute => CypherOrderedList(value.map(toCypherRelationship(_, indexer.get)).toList)
     }
   }
 
