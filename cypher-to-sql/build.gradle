@@ -2,6 +2,10 @@ plugins {
   id 'com.github.maiflai.scalatest' version '0.22'
 }
 
+test {
+  maxParallelForks = 1
+}
+
 dependencies {
   compile project(':driver')
   compile project(':compiler')
