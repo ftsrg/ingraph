@@ -6,6 +6,8 @@ dependencies {
   compile project(':driver')
   compile project(':compiler')
   compile 'org.xerial:sqlite-jdbc:3.21.0.1'
+  compile 'ru.yandex.qatools.embed:postgresql-embedded:2.9'
+  compile 'org.postgresql:postgresql:42.2.4'
   compile group: 'org.opencypher', name: 'tck', version: opencypherVersion
   compile group: 'org.opencypher', name: 'tck-api', version: opencypherVersion
 
