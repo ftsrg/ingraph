@@ -3,7 +3,7 @@ package ingraph.compiler.sql
 import org.opencypher.tools.tck.api._
 import org.opencypher.tools.tck.values.CypherValue
 
-object Main extends App {
+object TckScenarioMain extends App {
   val scenario = CypherTCK.parseClasspathFeatures("/features").flatMap(_.scenarios).find(sc => sc.name == "Use multiple MATCH clauses to do a Cartesian product").get
   println(scenario)
 
