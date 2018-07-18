@@ -12,7 +12,7 @@ object PostgreSqlMain extends App {
   // https://github.com/yandex-qatools/postgresql-embedded/tree/ea26f6945478da8e8b48e382f8869896da2fda30#howto
   val postgres = new EmbeddedPostgres(Version.V10_3)
 
-  val url = postgres.start("localhost", 5432+1, "dbName", "userName", "password")
+  val url = postgres.start()
 
   try {
     withResources(DriverManager.getConnection(url)) { conn =>
