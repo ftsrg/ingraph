@@ -13,7 +13,13 @@ class ExportStep(val exportCypherQuery: String, val tableName: String) {
     val cypherResult = cypherTransaction.run(exportCypherQuery)
 
     val keysInRecord = cypherResult.keys.size
-    val valueParameters = Stream.fill(keysInRecord)("?").mkString(", ")
+    val valueParameters = cypherResult.keys.asScala
+      .map(key =>
+        if (key == "value")
+          "to_variant(?)"
+        else
+          "?")
+      .mkString(", ")
     val insertQueryString = s"INSERT INTO $tableName VALUES ($valueParameters)"
 
     withResources(sqlConnection.prepareStatement(insertQueryString))(insertStatement => {
