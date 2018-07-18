@@ -4,6 +4,7 @@ import java.sql.{Connection, DriverManager, Statement}
 
 import ingraph.compiler.sql.Util.withResources
 import ingraph.driver.CypherDriverFactory
+import org.apache.log4j.{Level, LogManager}
 import org.neo4j.driver.internal.value.{IntegerValue, NodeValue, StringValue}
 import org.neo4j.driver.v1.{AuthTokens, Transaction}
 import org.scalatest.FunSuite
@@ -12,6 +13,8 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 class CompileSqlTest extends FunSuite {
+
+  LogManager.getRootLogger.setLevel(Level.OFF)
 
   private def compileAndRunQuery(createCypherQuery: String, selectCypherQuery: String, orderedResults: Boolean = false): Unit = {
     val selectSqlQuery = new CompileSql(selectCypherQuery).run
