@@ -48,7 +48,7 @@ class CompileSql(query: String) extends CompilerTest {
     s"""SELECT $columns FROM
        |  (
        |    ${getSql(node.child)}
-       |  )""".stripMargin
+       |  ) subquery""".stripMargin
   }
 
   private def getSql(node: Any): String = {
@@ -90,7 +90,7 @@ class CompileSql(query: String) extends CompilerTest {
         s"""SELECT * FROM
            |  (
            |    ${getSql(node.child)}
-           |  )
+           |  ) subquery
            |WHERE $condition""".stripMargin
       case node: GetEdges =>
         val columns = ("*" +:
@@ -118,7 +118,7 @@ class CompileSql(query: String) extends CompilerTest {
         s"""SELECT $columns FROM
            |  (
            |    SELECT "from" AS "$fromColumnName", edge_id AS "$edgeColumnName", "to" AS "$toColumnName" FROM edge
-           |  $typeConstraintPart$undirectedSelectPart)""".stripMargin
+           |  $typeConstraintPart$undirectedSelectPart) subquery""".stripMargin
       case node: AllDifferent => {
         val childSql = getSql(node.child)
 
@@ -135,7 +135,7 @@ class CompileSql(query: String) extends CompilerTest {
           s"""SELECT * FROM
              |  (
              |    $childSql
-             |  )
+             |  ) subquery
              |  WHERE ${edgeConditions.mkString("\n  AND ")}""".stripMargin
         }
       }

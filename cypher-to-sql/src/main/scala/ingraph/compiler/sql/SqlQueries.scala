@@ -27,7 +27,7 @@ object SqlQueries {
       |(
       |    parent INTEGER NOT NULL REFERENCES vertex (vertex_id),
       |    key TEXT NOT NULL,
-      |    value BLOB NOT NULL,
+      |    value TEXT NOT NULL,
       |    UNIQUE(parent, key)
       |);
       |
@@ -35,7 +35,7 @@ object SqlQueries {
       |(
       |    parent INTEGER NOT NULL REFERENCES edge (edge_id),
       |    key TEXT NOT NULL,
-      |    value BLOB NOT NULL,
+      |    value TEXT NOT NULL,
       |    UNIQUE(parent, key)
       |);
     """.stripMargin
