@@ -1,5 +1,6 @@
 package ingraph.compiler.sql
 
+import java.nio.file.Paths
 import java.sql.DriverManager
 
 import ingraph.compiler.sql.Util.withResources
@@ -12,7 +13,7 @@ object PostgreSqlMain extends App {
   // https://github.com/yandex-qatools/postgresql-embedded/tree/ea26f6945478da8e8b48e382f8869896da2fda30#howto
   val postgres = new EmbeddedPostgres(Version.V10_3)
 
-  val url = postgres.start()
+  val url = postgres.start(EmbeddedPostgres.cachedRuntimeConfig(Paths.get(System.getProperty("user.home"), ".embedpostgresql/extracted")))
 
   try {
     withResources(DriverManager.getConnection(url)) { conn =>

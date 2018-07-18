@@ -12,6 +12,7 @@ cache:
   directories:
     - $HOME/.gradle/cache
     - $HOME/.gradle/wrapper
+    - $HOME/.embedpostgresql
 
 before_install:
 # we re-generate openCypher TCK tests with the actual regressionTest/failingTest classification
