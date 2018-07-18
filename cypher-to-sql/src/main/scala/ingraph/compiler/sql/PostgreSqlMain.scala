@@ -11,12 +11,8 @@ import ru.yandex.qatools.embed.postgresql.distribution.Version
 object PostgreSqlMain extends App {
 
   // https://github.com/yandex-qatools/postgresql-embedded/tree/ea26f6945478da8e8b48e382f8869896da2fda30#howto
-  val postgres = new EmbeddedPostgres(Version.V10_3)
-
-  val url = postgres.start(EmbeddedPostgres.cachedRuntimeConfig(Paths.get(System.getProperty("user.home"), ".embedpostgresql/extracted")))
-
-  try {
-    withResources(DriverManager.getConnection(url)) { conn =>
+  withResources(new EmbeddedPostgresWrapper) { postgres =>
+    withResources(DriverManager.getConnection(postgres.Url)) { conn =>
       withResources(conn.createStatement()) {
         _.execute("CREATE TABLE films (code char(5));")
       }
@@ -38,11 +34,5 @@ object PostgreSqlMain extends App {
         assert(code == "movie")
       }
     }
-  }
-  catch {
-    case exception => throw exception
-  }
-  finally {
-    postgres.stop()
   }
 }
