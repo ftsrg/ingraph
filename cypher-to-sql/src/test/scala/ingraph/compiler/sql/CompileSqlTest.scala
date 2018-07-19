@@ -208,14 +208,14 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L97
-  ignore("Filter out based on node prop name") {
+  test("Filter out based on node prop name") {
     compileAndRunQuery("CREATE ({name: 'Someone'})<-[:X]-()-[:X]->({name: 'Andres'})",
       """MATCH ()-[rel:X]-(a)
         |WHERE a.name = 'Andres'
         |RETURN a""".stripMargin)
   }
 
-  ignore("Filter out based on node prop name / fragment #1") {
+  test("Filter out based on node prop name / fragment #1") {
     compileAndRunQuery(
       """CREATE ()""",
       """MATCH (a)
@@ -233,7 +233,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131
-  ignore("Filter based on rel prop name") {
+  test("Filter based on rel prop name") {
     compileAndRunQuery(
       """CREATE (:A)<-[:KNOWS {name: 'monkey'}]-()-[:KNOWS {name: 'woot'}]->(:B)""",
       """MATCH (node)-[r:KNOWS]->(a)
@@ -364,7 +364,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L243
-  ignore("Return two subgraphs with bound undirected relationship") {
+  test("Return two subgraphs with bound undirected relationship") {
     compileAndRunQuery(
       """CREATE (a:A {value: 1})-[:REL {name: 'r'}]->(b:B {value: 2})
       """.stripMargin,
@@ -375,7 +375,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
-  ignore("Handle OR in the WHERE clause") {
+  test("Handle OR in the WHERE clause") {
     compileAndRunQuery(
       """CREATE (a:A {p1: 12}),
         |  (b:B {p2: 13}),

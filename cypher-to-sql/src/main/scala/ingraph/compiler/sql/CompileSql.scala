@@ -1,15 +1,18 @@
 package ingraph.compiler.sql
 
+import com.google.gson.Gson
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
 import ingraph.model.fplan._
 import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal}
-import org.apache.spark.sql.types.LongType
+import org.apache.spark.sql.types.StringType
 
 object CompileSql {
   def escapeQuotes(name: String, toBeDoubled: String = "\"") = name.replace(toBeDoubled, toBeDoubled + toBeDoubled)
 
   def escapeSingleQuotes(string: String) = escapeQuotes(string, "'")
+
+  private val gson = new Gson()
 }
 
 class CompileSql(query: String) extends CompilerTest {
@@ -142,9 +145,18 @@ class CompileSql(query: String) extends CompilerTest {
       case node: FNode => node.children.map(getSql).mkString("\n")
       case node: BinaryOperator => s"""(${getSql(node.left)} ${node.sqlOperator} ${getSql(node.right)})"""
       case node: ResolvableName => '"' + escapeQuotes(node.resolvedName.get.resolvedName) + '"'
-      // SQLite cannot parse literal suffix (e.g. 42L)
-      case node: Literal if node.dataType.isInstanceOf[LongType] => node.value.toString
-      case node: Literal => node.sql
+      case node: Literal => {
+        val pojoValue = node.dataType match {
+          // https://github.com/apache/spark/blob/b3d88ac02940eff4c867d3acb79fe5ff9d724e83/sql/catalyst/src/main/scala/org/apache/spark/sql/catalyst/expressions/literals.scala#L59
+          // String is stored in other type, needs conversion before JSON serialization
+          case _: StringType => node.value.toString
+          case _ => node.value
+        }
+        val jsonString = CompileSql.gson.toJson(pojoValue)
+        val sqlStringLiteral = Literal(jsonString)
+
+        sqlStringLiteral.sql
+      }
       case _ => ""
     }
   }
