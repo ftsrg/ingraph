@@ -66,19 +66,18 @@ class CompileSql(query: String) extends CompilerTest {
         s"""SELECT $columns FROM vertex"""
       }
       case node: Join => {
-        val joinAttributesConditions = node.left.nnode.outputSet.intersect(node.right.nnode.outputSet)
+        val joinAttributeNames = node.left.nnode.outputSet.intersect(node.right.nnode.outputSet)
           .map(attr => attr.asInstanceOf[ElementAttribute].resolvedName.get.resolvedName)
           .map(name => s""""${escapeQuotes(name)}"""")
-          .map(escapedName => s"left_query.$escapedName = right_query.$escapedName")
-        val wherePart = if (joinAttributesConditions.isEmpty)
+        val usingPart = if (joinAttributeNames.isEmpty)
           ""
         else
-          "\nWHERE " + joinAttributesConditions.mkString(" AND ")
+          "\nUSING (" + joinAttributeNames.mkString(", ") + ")"
 
         s"""SELECT * FROM
            |  (${getSql(node.left)}) left_query
-           |  ,
-           |  (${getSql(node.right)}) right_query$wherePart""".stripMargin
+           |  INNER JOIN
+           |  (${getSql(node.right)}) right_query$usingPart""".stripMargin
       }
       case node: Production => {
         val renamePairs = node.output.zip(node.outputNames).map(pair => (getSql(pair._1), '"' + escapeQuotes(pair._2) + '"'))

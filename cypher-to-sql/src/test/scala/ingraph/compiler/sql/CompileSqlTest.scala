@@ -326,7 +326,7 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
-  ignore("Get related to related to / more edges") {
+  test("Get related to related to / more edges") {
     compileAndRunQuery(
       """CREATE (a:A {value: 1})-[:KNOWS]->(b:B {value: 2})-[:FRIEND]->(c:C {value: 3}), (b)-[:FRIEND]->(d:D {value: 4})""",
       """MATCH (n)-->(a)-->(b), (a)-->(d)
