@@ -3,21 +3,6 @@ package ingraph.compiler.sql
 object SqlQueries {
   val createTables =
     """-- createTables
-      |CREATE TYPE variant AS (
-      |  text  TEXT,
-      |  int   INTEGER
-      |);
-      |
-      |CREATE FUNCTION to_variant(INTEGER)
-      |  RETURNS variant
-      |STRICT IMMUTABLE LANGUAGE SQL AS
-      |'SELECT ROW(NULL, $1)::variant;';
-      |
-      |CREATE FUNCTION to_variant(TEXT)
-      |  RETURNS variant
-      |STRICT IMMUTABLE LANGUAGE SQL AS
-      |'SELECT ROW($1, NULL)::variant;';
-      |
       |CREATE TABLE vertex
       |(
       |  vertex_id INTEGER PRIMARY KEY
@@ -42,7 +27,7 @@ object SqlQueries {
       |(
       |    parent INTEGER NOT NULL REFERENCES vertex (vertex_id),
       |    key TEXT NOT NULL,
-      |    value variant NOT NULL,
+      |    value jsonb NOT NULL,
       |    UNIQUE(parent, key)
       |);
       |
@@ -50,7 +35,7 @@ object SqlQueries {
       |(
       |    parent INTEGER NOT NULL REFERENCES edge (edge_id),
       |    key TEXT NOT NULL,
-      |    value variant NOT NULL,
+      |    value jsonb NOT NULL,
       |    UNIQUE(parent, key)
       |);
     """.stripMargin

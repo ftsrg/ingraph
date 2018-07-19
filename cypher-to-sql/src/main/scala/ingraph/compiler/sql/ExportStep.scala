@@ -2,6 +2,7 @@ package ingraph.compiler.sql
 
 import java.sql.Connection
 
+import com.google.gson.Gson
 import ingraph.compiler.sql.Util.withResources
 import org.neo4j.driver.v1.Transaction
 
@@ -16,7 +17,7 @@ class ExportStep(val exportCypherQuery: String, val tableName: String) {
     val valueParameters = cypherResult.keys.asScala
       .map(key =>
         if (key == "value")
-          "to_variant(?)"
+          "?::jsonb"
         else
           "?")
       .mkString(", ")
@@ -26,7 +27,14 @@ class ExportStep(val exportCypherQuery: String, val tableName: String) {
       for (cypherRecord <- cypherResult.asScala) {
         for (keyIndex <- 0 until keysInRecord) {
           val columnIndex = keyIndex + 1
-          insertStatement.setObject(columnIndex, cypherRecord.get(keyIndex).asObject)
+          val cypherValue = cypherRecord.get(keyIndex).asObject
+          val value =
+            if (cypherRecord.keys().get(keyIndex) == "value")
+              ExportStep.gson.toJson(cypherValue)
+            else
+              cypherValue
+
+          insertStatement.setObject(columnIndex, value)
         }
         insertStatement.addBatch()
       }
@@ -34,4 +42,8 @@ class ExportStep(val exportCypherQuery: String, val tableName: String) {
       insertStatement.executeBatch()
     })
   }
+}
+
+object ExportStep {
+  val gson = new Gson()
 }
