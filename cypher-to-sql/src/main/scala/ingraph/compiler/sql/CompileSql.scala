@@ -70,14 +70,15 @@ class CompileSql(query: String) extends CompilerTest {
           .map(attr => attr.asInstanceOf[ElementAttribute].resolvedName.get.resolvedName)
           .map(name => s""""${escapeQuotes(name)}"""")
         val usingPart = if (joinAttributeNames.isEmpty)
-          ""
+          "ON TRUE"
         else
-          "\nUSING (" + joinAttributeNames.mkString(", ") + ")"
+          "USING (" + joinAttributeNames.mkString(", ") + ")"
 
         s"""SELECT * FROM
            |  (${getSql(node.left)}) left_query
            |  INNER JOIN
-           |  (${getSql(node.right)}) right_query$usingPart""".stripMargin
+           |  (${getSql(node.right)}) right_query
+           |  $usingPart""".stripMargin
       }
       case node: Production => {
         val renamePairs = node.output.zip(node.outputNames).map(pair => (getSql(pair._1), '"' + escapeQuotes(pair._2) + '"'))
