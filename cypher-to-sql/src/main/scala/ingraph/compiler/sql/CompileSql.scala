@@ -125,7 +125,8 @@ class CompileSql(query: String) extends CompilerTest {
       case node: AllDifferent => {
         val childSql = getSql(node.child)
 
-        val edges = node.nnode.outputSet.collect { case attr: EdgeAttribute => attr }.toList
+        // TODO handle EdgeListAttribute too
+        val edges = node.nnode.edges.collect { case attr: EdgeAttribute => attr }.toList
         if (edges.length <= 1)
           childSql
         else {
