@@ -6,6 +6,7 @@ import ingraph.model.expr._
 import ingraph.model.fplan._
 import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal}
 import org.apache.spark.sql.types.StringType
+import IndentationPreservingStringInterpolation._
 
 object CompileSql {
   def escapeQuotes(name: String, toBeDoubled: String = "\"") = name.replace(toBeDoubled, toBeDoubled + toBeDoubled)
@@ -48,10 +49,10 @@ class CompileSql(query: String) extends CompilerTest {
 
   private def getProjectionSql(node: UnaryFNode, renamePairs: Traversable[(String, String)]): String = {
     val columns = renamePairs.map(pair => s"""${pair._1} AS ${pair._2}""").mkString(", ")
-    s"""SELECT $columns FROM
+    i"""SELECT $columns FROM
        |  (
        |    ${getSql(node.child)}
-       |  ) subquery""".stripMargin
+       |  ) subquery"""
   }
 
   private def getSql(node: Any): String = {
@@ -74,11 +75,11 @@ class CompileSql(query: String) extends CompilerTest {
         else
           "USING (" + joinAttributeNames.mkString(", ") + ")"
 
-        s"""SELECT * FROM
+        i"""SELECT * FROM
            |  (${getSql(node.left)}) left_query
            |  INNER JOIN
            |  (${getSql(node.right)}) right_query
-           |  $usingPart""".stripMargin
+           |  $usingPart"""
       }
       case node: Production => {
         val renamePairs = node.output.zip(node.outputNames).map(pair => (getSql(pair._1), '"' + escapeQuotes(pair._2) + '"'))
@@ -90,11 +91,11 @@ class CompileSql(query: String) extends CompilerTest {
       }
       case node: Selection =>
         val condition = getSql(node.nnode.condition)
-        s"""SELECT * FROM
+        i"""SELECT * FROM
            |  (
            |    ${getSql(node.child)}
            |  ) subquery
-           |WHERE $condition""".stripMargin
+           |WHERE $condition"""
       case node: GetEdges =>
         val columns = ("*" +:
           node.requiredProperties.map(getSqlForProperty)
@@ -108,20 +109,20 @@ class CompileSql(query: String) extends CompilerTest {
         val typeConstraintPart = if (edgeLabelsEscaped.isEmpty)
           ""
         else
-          s"""  WHERE type IN (${edgeLabelsEscaped.mkString(", ")})
-             |""".stripMargin
+          i"""  WHERE type IN (${edgeLabelsEscaped.mkString(", ")})
+             |"""
 
         val undirectedSelectPart = if (node.nnode.directed)
           ""
         else
-          s"""  UNION ALL
+          i"""  UNION ALL
              |  SELECT "to", edge_id, "from" FROM edge
-             |$typeConstraintPart""".stripMargin
+             |$typeConstraintPart"""
 
-        s"""SELECT $columns FROM
+        i"""SELECT $columns FROM
            |  (
            |    SELECT "from" AS "$fromColumnName", edge_id AS "$edgeColumnName", "to" AS "$toColumnName" FROM edge
-           |  $typeConstraintPart$undirectedSelectPart) subquery""".stripMargin
+           |  $typeConstraintPart$undirectedSelectPart) subquery"""
       case node: AllDifferent => {
         val childSql = getSql(node.child)
 
@@ -136,11 +137,11 @@ class CompileSql(query: String) extends CompilerTest {
             .filter(pair => pair._1 < pair._2)
             .map(pair => s"""${pair._1} <> ${pair._2}""")
 
-          s"""SELECT * FROM
+          i"""SELECT * FROM
              |  (
              |    $childSql
              |  ) subquery
-             |  WHERE ${edgeConditions.mkString("\n  AND ")}""".stripMargin
+             |  WHERE ${edgeConditions.mkString("\n  AND ")}"""
         }
       }
       case node: FNode => node.children.map(getSql).mkString("\n")
