@@ -9,8 +9,9 @@ import org.apache.log4j.{Level, LogManager}
 import org.neo4j.driver.internal.value.{IntegerValue, NodeValue, StringValue}
 import org.neo4j.driver.v1.{AuthTokens, Transaction}
 import org.postgresql.util.PGobject
-import org.scalatest.FunSuite
+import org.scalactic.source
 import org.scalatest.exceptions.TestFailedException
+import org.scalatest.{FunSuite, Tag}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
@@ -24,6 +25,10 @@ class CompileSqlTest extends FunSuite {
   LogManager.getRootLogger.setLevel(Level.OFF)
 
   private def compileAndRunQuery(createCypherQuery: String, selectCypherQuery: String, orderedResults: Boolean = false): Unit = {
+    println("Create query:")
+    println(createCypherQuery)
+    println()
+
     val selectSqlQuery = new CompileSql(selectCypherQuery).run
 
     runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery, orderedResults)
@@ -148,6 +153,15 @@ class CompileSqlTest extends FunSuite {
 
       println("----------------------------------")
     })
+  }
+
+  override def test(testName: String, testTags: Tag*)(testFun: => Any /* Assertion */)(implicit pos: source.Position): Unit = {
+    super.test(testName, testTags: _*) {
+      println(s"vvvvvvvvvvvvvvvv $testName vvvvvvvvvvvvvvvv")
+      println()
+
+      testFun
+    }(pos)
   }
 
   test("Comparison") {
