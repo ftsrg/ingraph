@@ -43,7 +43,7 @@ object AttributeBuilder {
     }
   }
 
-  def buildAttribute(e: oc.ExpressionPropertyLookup): UnresolvedAttribute = {
+  def buildAttribute(e: oc.PropertyLookupExpression): UnresolvedAttribute = {
     UnresolvedAttribute(Seq(e.getLeft.asInstanceOf[oc.VariableRef].getVariableRef.getName, e.getPropertyLookups.get(0).getPropertyKeyName))
   }
 

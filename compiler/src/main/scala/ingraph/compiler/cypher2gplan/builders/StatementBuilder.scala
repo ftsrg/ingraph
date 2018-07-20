@@ -18,11 +18,42 @@ object StatementBuilder {
     }
   }
 
+  /**
+    * Transform a SinglePartQuery to a sequence of clauses.
+    */
+  def siglePartQuery2Clauses(spq: oc.SinglePartQuery): Seq[oc.Clause] = {
+    spq match {
+      case roe: oc.ReadOnlyEnd => roe.getReadPart.getReadingClause.asScala ++Seq(roe.getReturn)
+      case rue: oc.ReadUpdateEnd => rue.getReadingClauses.asScala ++ rue.getUpdatingClauses.asScala ++ Seq(Option(rue.getReturn)).flatten[oc.Clause]
+      case ue: oc.UpdatingEnd => Seq(ue.getUpdatingStartClause) ++ ue.getUpdatingClauses.asScala ++ Seq(Option(ue.getReturn)).flatten[oc.Clause]
+    }
+  }
+
+  /**
+    * Transform the first part of a MultiPartQuery to a sequence of clauses.
+    */
+  def multiPartQuery_FirstPart2Clauses(mpq: oc.MultiPartQuery): Seq[oc.Clause] = {
+    (
+      Option(mpq.getReadPart) match {
+        case Some(rp) => rp.getReadingClause.asScala
+        case None => Seq(mpq.getUpdatingStartClause) ++ mpq.getUpdatingPart.getUpdatingClauses.asScala
+      }
+    ) ++ Seq(mpq.getWithPart)
+  }
+
+  /**
+    * Transform a MultiPartSubQuery(*) to a sequence of clauses.
+    *
+    * (*): MultiPartSubQuery is a structural sugar in the openCypher Xtext grammar
+    *      not present in the original openCypher grammar
+    */
+  def multiPartSubQuery2Clauses(mpsq: oc.MultiPartSubQuery): Seq[oc.Clause] = {
+      Seq(mpsq.getReadPart.getReadingClause.asScala, mpsq.getUpdatingPart.getUpdatingClauses.asScala).flatten[oc.Clause]
+  }
+
   /** Builds the gplan for a single query built from several query parts.
     */
   def buildStatement(q: oc.SingleQuery): gplan.GNode = {
-    val clauses = q.getClauses.asScala.toVector // we are to use indexed access
-
     // Compiled form of the query is the chain of the query parts.
     // The first query part will receive a dual object source there.
     // Accumulate tree built from successive query parts in result
@@ -30,33 +61,21 @@ object StatementBuilder {
 
     // Do some checks on the clauses of the single query
     //FIXME: Validator.checkSingleQueryClauseSequence(clauses, ce.l)
+    // A query part should have the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
 
-    /* Process each query part.
-     *
-     * A query part has the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
-     *
-     * Note: GrammarUtil.isCudClause is currently limited to CREATE and DELETE clauses.
-     */
-    var from = 0
-    for (i <- clauses.indices) {
-      val current = clauses(i)
-      val next = if (i + 1 < clauses.length) {
-        clauses(i + 1)
-      } else {
-        null
+    q match {
+      case spq: oc.SinglePartQuery => {
+        val clauses: Seq[oc.Clause] = siglePartQuery2Clauses(spq)
+        result = buildQueryPart(clauses, result)
       }
-      if (GrammarUtil.isCudClause(current) && ! GrammarUtil.isCudClause(next) && ! next.isInstanceOf[oc.Return]
-        || current.isInstanceOf[oc.With] && ! next.isInstanceOf[oc.Unwind]
-        || current.isInstanceOf[oc.Unwind]
-        || current.isInstanceOf[oc.Return]
-      ) {
-        // [fromX, toX) is the range of clauses that form a query part
-        val fromX = from
-        val toX = i + 1
+      case mpq: oc.MultiPartQuery => {
+        result = buildQueryPart(multiPartQuery_FirstPart2Clauses(mpq), result)
 
-        result = buildQueryPart(clauses.slice(fromX, toX), result)
+        for (queryPart <- mpq.getSubQueries.asScala) {
+          result = buildQueryPart(multiPartSubQuery2Clauses(queryPart), result)
+        }
 
-        from = i + 1
+        result = buildQueryPart(siglePartQuery2Clauses(mpq.getSinglePartQuery), result)
       }
     }
 

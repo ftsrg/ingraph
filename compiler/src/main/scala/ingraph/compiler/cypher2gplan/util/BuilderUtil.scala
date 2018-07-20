@@ -54,7 +54,7 @@ object BuilderUtil {
     Option(expression).fold[ Option[cExpr.Expression] ](
       None //this is in-line with a null-safe call on expression as it was used before
     )( _ match {
-      case e: oc.NumberConstant => Some(LiteralBuilder.buildNumberLiteral(e))
+      case e: oc.NumberLiteral => Some(LiteralBuilder.buildNumberLiteral(e))
       case e: oc.Parameter => Some(ExpressionBuilder.buildParameter(e))
       case e => throw new CompilerException(s"Only NumberConstants and parameters are supported as SKIP/LIMIT values, got ${e.getClass.getName}")
     })
