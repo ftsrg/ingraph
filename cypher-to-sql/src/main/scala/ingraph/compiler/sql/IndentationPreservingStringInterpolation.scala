@@ -34,7 +34,7 @@ class IndentationPreservingStringInterpolation(sc: StringContext) {
         for (char <- argumentString) {
           sb append char
           if (char == '\n')
-            sb append indentation
+            sb appendAll indentation
         }
       }
     }
@@ -46,9 +46,16 @@ class IndentationPreservingStringInterpolation(sc: StringContext) {
     sb.toString()
   }
 
-  private def getLastIndentation(buf: StringBuilder) = {
-    val positionOfLastIndentation = buf.size - buf.reverseIterator.takeWhile(char => char.isWhitespace && char != '\n').size
-    buf.substring(positionOfLastIndentation)
+  private def getLastIndentation(buf: StringBuilder): Array[Char] = {
+    new String()
+    buf
+      .reverseIterator
+      .takeWhile(_ != '\n')
+      .map(char =>
+        if (char.isWhitespace) char
+        else ' ')
+      .toArray
+      .reverse
   }
 }
 
