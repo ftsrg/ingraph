@@ -36,7 +36,8 @@ object ExpressionBuilder {
       //FIXME#206: this should pass function name unresolved
       case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
       case _: oc.Count => UnresolvedFunction(Function.COUNT_ALL.getPrettyName, Seq[cExpr.Expression](), false)
-      case e: oc.IndexExpression => buildExpressionIndex(e)
+      case e: oc.IndexRangeExpression => buildExpressionIndexRange(e) // foo[a..b], should return list, even for foo[1..2]
+      case e: oc.IndexLookupExpression => buildExpressionIndexLookup(e) // foo[a], should return scalar
       case e: oc.InCollectionExpression => UnresolvedFunction(Function.IN_COLLECTION.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false)
       // String predicates
       case e: oc.ContainsExpression => UnresolvedFunction(Function.CONTAINS.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false) //cExpr.Contains
@@ -49,9 +50,7 @@ object ExpressionBuilder {
       case e: oc.StringLiteral => LiteralBuilder.buildStringLiteral(e)
       case e: oc.VariableRef => AttributeBuilder.buildAttribute(e)
       case e: oc.CaseExpression => buildExpressionCase(e)
-      //FIXME: ListExpression or ListLiteral? See: RandomCompilationTest/should compile simple index expression
       case e: oc.ListLiteral => expr.ListExpression( e.getExpressions.asScala.map( buildExpressionNoJoinAllowed(_) ) )
-      //TODO: case e: oc.IndexExpression => buildExpressionAux(e, joins)
       case e: oc.NULL => cExpr.Literal(null)
       case e: oc.BooleanLiteral => LiteralBuilder.buildBoolLiteral(e)
 
@@ -187,22 +186,38 @@ object ExpressionBuilder {
 //    }
 //  }
 
-  // FIXME: when resolved https://github.com/slizaa/slizaa-opencypher-xtext/issues/34
-  def buildExpressionIndex(indexExpr: oc.IndexExpression): expr.AbstractIndexExpression = {
-    def buildBoundary(b: oc.Expression): Option[Int] = b match {
-      case n: oc.NumberLiteral => Option(LiteralBuilder.buildNumber(n)) match {
-        case None => throw new UnsupportedException("boundary is missing")
-        case Some(m) if m<0 => throw new UnsupportedException("negative indexing")
-        case x => x
+  def buildExpressionIndexRange(indexExpr: oc.IndexRangeExpression): expr.IndexRangeExpression = {
+    def buildBoundary(b: oc.Expression): Option[Int] = Option(b) match {
+      case None => None
+      case Some(n) => n match {
+        case n: oc.NumberLiteral => Option(LiteralBuilder.buildNumber(n)) match {
+          case None => throw new UnsupportedException("boundary is missing")
+          case Some(m) if m < 0 => throw new UnsupportedException("negative indexing")
+          case x => x
+        }
+        case x => throw new UnexpectedTypeException(x, "only literal indexing is supported for index expressions")
       }
-      case x => throw new UnexpectedTypeException(x, "only literal indexing is supported for index expressions")
     }
+
     val collection = buildExpressionNoJoinAllowed(indexExpr.getLeft)
     val lower = buildBoundary(indexExpr.getLower)
-    Option(indexExpr.getUpper) match {
-      case None => expr.IndexLookupExpression(collection, lower.get)
-      case Some(upper) => expr.IndexRangeExpression(collection, lower, buildBoundary(upper))
+    val upper = buildBoundary(indexExpr.getUpper)
+
+    if (lower.isEmpty && upper.isEmpty) {
+      throw new UnsupportedException("Both lower and upper bound are missing")
     }
+
+    expr.IndexRangeExpression(collection, lower, upper)
+  }
+
+  def buildExpressionIndexLookup(indexLookupExpr: oc.IndexLookupExpression): expr.IndexLookupExpression = {
+    val collection = buildExpressionNoJoinAllowed(indexLookupExpr.getLeft)
+    val idx = indexLookupExpr.getExpression match {
+      case n: oc.NumberLiteral => LiteralBuilder.buildNumber(n)
+      case x => throw new UnexpectedTypeException(x, "only literal indexing is supported for index expressions")
+    }
+
+    expr.IndexLookupExpression(collection, idx)
   }
 
   def buildExpressionCase(caseExpr: oc.CaseExpression): cExpr.Expression = {
