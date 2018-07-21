@@ -10,14 +10,6 @@ import org.slizaa.neo4j.opencypher.{openCypher => oc}
 import scala.collection.JavaConverters._
 
 object BuilderUtil {
-  def parseToVertexLabelSet(ll: oc.NodeLabels): expr.VertexLabelSet = {
-    if (ll != null && ll.getNodeLabels != null && !ll.getNodeLabels.isEmpty) {
-      parseToVertexLabelSet(ll.getNodeLabels)
-    } else {
-      expr.VertexLabelSet()
-    }
-  }
-
   def parseToVertexLabelSet(el: EList[oc.NodeLabel]): expr.VertexLabelSet = {
     if (el != null && !el.isEmpty) {
       expr.VertexLabelSet(el.asScala.map( l => l.getLabelName ).toSet, expr.NonEmpty)
@@ -26,9 +18,9 @@ object BuilderUtil {
     }
   }
 
-  def parseToEdgeLabelSet(tl: oc.RelationshipTypes): expr.EdgeLabelSet = {
-    if (tl != null && tl.getRelTypeName != null && !tl.getRelTypeName.isEmpty) {
-      expr.EdgeLabelSet(tl.getRelTypeName.asScala.toSet, expr.NonEmpty)
+  def parseToEdgeLabelSet(tl: EList[String]): expr.EdgeLabelSet = {
+    if (tl != null && !tl.isEmpty) {
+      expr.EdgeLabelSet(tl.asScala.toSet, expr.NonEmpty)
     } else {
       expr.EdgeLabelSet()
     }

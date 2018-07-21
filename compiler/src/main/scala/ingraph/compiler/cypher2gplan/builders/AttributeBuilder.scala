@@ -31,7 +31,7 @@ object AttributeBuilder {
           case Some(ev) => (ev.getName, false)
           case None => (generateUniqueName, true)
         }
-        val els = BuilderUtil.parseToEdgeLabelSet(elDetail.getTypes)
+        val els = BuilderUtil.parseToEdgeLabelSet(elDetail.getRelTypeNames)
         val props = LiteralBuilder.buildProperties(elDetail.getProperties)
 
         Option(elDetail.getRange) match {
