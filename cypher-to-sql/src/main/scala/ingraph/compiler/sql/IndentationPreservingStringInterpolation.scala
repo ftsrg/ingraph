@@ -4,24 +4,45 @@ package ingraph.compiler.sql
 class IndentationPreservingStringInterpolation(sc: StringContext) {
 
   // https://github.com/scala/scala/blob/d209ff49442a902bd0492a72c9862841d36d32cc/src/library/scala/collection/immutable/StringLike.scala#L186
-  private def appendWithStrippedMargin(targetBuffer: StringBuilder, string: String, marginChar: Char = '|'): Unit = {
+  private def appendWithStrippedMargin(targetBuffer: StringBuilder, string: String, preserveLeadingMargin: Boolean = false, marginChar: Char = '|'): Unit = {
     // possibly reserves more space, because margins will be stripped
     targetBuffer.ensureCapacity(targetBuffer.size + string.length)
 
+    // preserveLeadingMargin:
+    // if the whole string starts with the margin character, preserve it
+    var preserveNextMargin = preserveLeadingMargin
     for (line <- string.linesWithSeparators) {
       val len = line.length
       var index = 0
+
       while (index < len && line.charAt(index) <= ' ') index += 1
+
+      // if the margin character is not the first, then the margin should be removed
+      if (preserveNextMargin && index != 0)
+        preserveNextMargin = false
+
       targetBuffer append
-        (if (index < len && line.charAt(index) == marginChar) line.substring(index + 1) else line)
+        (if (index < len && line.charAt(index) == marginChar && !preserveNextMargin)
+          line.substring(index + 1)
+        else
+          line)
+
+      preserveNextMargin = false
     }
   }
 
   def i(args: Any*): String = {
     val sb = new StringBuilder()
 
+    var firstStringPart = true
     for ((stringPart, argument) <- sc.parts zip args) {
-      appendWithStrippedMargin(sb, stringPart)
+
+      // With the exception of the first string part every string part is after an argument.
+      // Immediately after an argument (without any newline or other character)
+      //  the margin character (|) should be preserved, since it is not at the beginning of the line.
+      appendWithStrippedMargin(sb, stringPart, !firstStringPart)
+      firstStringPart = false
+
       val indentation = getLastIndentation(sb)
 
       val argumentString = argument.toString
