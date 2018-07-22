@@ -444,6 +444,48 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
+  ignore("Simple variable length pattern / exact length") {
+    compileAndRunQuery(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (c {name: 'C'}), (d {name: 'D'})
+        |CREATE (a)-[:CONTAINS]->(b),
+        |       (b)-[:CONTAINS]->(c),
+        |       (c)-[:CONTAINS]->(d)
+      """.stripMargin,
+      """MATCH (a {name: 'A'})-[:CONTAINS*2]->(x)
+        |RETURN x
+      """.stripMargin
+    )
+  }
+
+  ignore("Simple variable length pattern / same upper and lower bound") {
+    compileAndRunQuery(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (c {name: 'C'}), (d {name: 'D'})
+        |CREATE (a)-[:CONTAINS]->(b),
+        |       (b)-[:CONTAINS]->(c),
+        |       (c)-[:CONTAINS]->(d)
+      """.stripMargin,
+      """MATCH (a {name: 'A'})-[:CONTAINS*2..2]->(x)
+        |RETURN x
+      """.stripMargin
+    )
+  }
+
+  ignore("Simple variable length pattern / zero lower bound") {
+    compileAndRunQuery(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (c {name: 'C'}), (d {name: 'D'})
+        |CREATE (a)-[:CONTAINS]->(b),
+        |       (b)-[:CONTAINS]->(c),
+        |       (c)-[:CONTAINS]->(d)
+      """.stripMargin,
+      """MATCH (a {name: 'A'})-[:CONTAINS*0..]->(x)
+        |RETURN x
+      """.stripMargin
+    )
+  }
+
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L191
   ignore("Returning bound nodes that are not part of the pattern") {
     compileAndRunQuery(
