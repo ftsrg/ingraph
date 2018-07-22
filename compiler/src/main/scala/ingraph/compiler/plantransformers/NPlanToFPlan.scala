@@ -99,7 +99,7 @@ object NPlanToFPlan {
           case o: nplan.ThetaLeftOuterJoin =>
             val reqOp = extractProperties(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, rpTotal))
             fplan.ThetaLeftOuterJoin(o, left, right)
-          case o: nplan.TransitiveJoin => fplan.TransitiveJoin(o, left, right)
+          case o: nplan.TransitiveJoin => fplan.TransitiveJoin(o, left, right.asInstanceOf[fplan.GetEdges]) // TODO replace cast
         }
       }
       case o: nplan.Union => fplan.Union(o,

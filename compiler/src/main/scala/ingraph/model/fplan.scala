@@ -131,7 +131,7 @@ case class Join(nnode: nplan.Join,
 
 case class TransitiveJoin(nnode: nplan.TransitiveJoin,
                           left: FNode,
-                          right: FNode) extends BinaryFNode with EquiJoinLike {
+                          right: GetEdges) extends BinaryFNode with EquiJoinLike {
   lazy val edgeList: EdgeListAttribute = nnode.edgeList
 
   override def flatSchema =
