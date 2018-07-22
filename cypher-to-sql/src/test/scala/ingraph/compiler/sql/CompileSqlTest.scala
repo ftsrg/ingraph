@@ -430,7 +430,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L129
-  ignore("Simple variable length pattern") {
+  test("Simple variable length pattern") {
     compileAndRunQuery(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (c {name: 'C'}), (d {name: 'D'})
@@ -458,7 +458,7 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
-  ignore("Simple variable length pattern / same upper and lower bound") {
+  test("Simple variable length pattern / same upper and lower bound") {
     compileAndRunQuery(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (c {name: 'C'}), (d {name: 'D'})
@@ -472,7 +472,7 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
-  ignore("Simple variable length pattern / zero lower bound") {
+  test("Simple variable length pattern / zero lower bound") {
     compileAndRunQuery(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (c {name: 'C'}), (d {name: 'D'})

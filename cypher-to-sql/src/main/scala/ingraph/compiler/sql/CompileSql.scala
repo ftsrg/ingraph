@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
 import ingraph.model.fplan._
+import ingraph.model.nplan
 import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal}
 import org.apache.spark.sql.types.StringType
 import IndentationPreservingStringInterpolation._
@@ -64,6 +65,39 @@ class CompileSql(query: String) extends CompilerTest {
        |  ) subquery"""
   }
 
+  private def getGetEdgesSql(node: GetEdges, forcedFromColumnName: Option[String] = None, forcedEdgeColumnName: Option[String] = None, forcedToColumnName: Option[String] = None) = {
+    def getColumnName(forcedColumnName: Option[String], originalAttributeProvider: nplan.GetEdges => ResolvableName): String = {
+      forcedColumnName.map(getQuotedColumnName).getOrElse(getQuotedColumnName(originalAttributeProvider(node.nnode)))
+    }
+
+    val columns = ("*" +:
+      node.requiredProperties.map(getSqlForProperty)
+      ).mkString(", ")
+
+    val fromColumnName = getColumnName(forcedFromColumnName, _.src)
+    val edgeColumnName = getColumnName(forcedEdgeColumnName, _.edge)
+    val toColumnName = getColumnName(forcedToColumnName, _.trg)
+
+    val edgeLabelsEscaped = node.nnode.edge.labels.edgeLabels.map(name => getSingleQuotedString(name))
+    val typeConstraintPart = if (edgeLabelsEscaped.isEmpty)
+      ""
+    else
+      s"WHERE type IN (${edgeLabelsEscaped.mkString(", ")})"
+
+    val undirectedSelectPart = if (node.nnode.directed)
+      ""
+    else
+      s"""  UNION ALL
+         |  SELECT "to", edge_id, "from" FROM edge
+         |  $typeConstraintPart""".stripMargin
+
+    i"""SELECT $columns FROM
+       |  (
+       |    SELECT "from" AS $fromColumnName, edge_id AS $edgeColumnName, "to" AS $toColumnName FROM edge
+       |    $typeConstraintPart
+       |  $undirectedSelectPart) subquery"""
+  }
+
   private def getSql(node: Any): String = {
     val sqlString =
       node match {
@@ -94,6 +128,65 @@ class CompileSql(query: String) extends CompilerTest {
              |  ) right_query
              |$usingPart"""
         }
+        case node: TransitiveJoin => {
+
+          val leftNode = node.left
+          val edgesNode = node.right
+
+          val leftSql = getSql(leftNode)
+          val edgesSql = getGetEdgesSql(edgesNode, Some("current_from"), Some("edge_id"))
+
+          val edgeListAttribute = node.nnode.edgeList
+          val edgeListName = getQuotedColumnName(edgesNode.nnode.edge)
+          val edgesFromVertexName = getQuotedColumnName(edgesNode.nnode.src)
+          val edgesToVertexName = getQuotedColumnName(edgesNode.nnode.trg)
+          val leftNodeColumnNames = leftNode.flatSchema.map(getQuotedColumnName).mkString(", ")
+          val joinNodeColumnNames = node.flatSchema.map(getQuotedColumnName).mkString(",\n")
+
+          val lowerBound = edgeListAttribute.minHops.getOrElse(1)
+          val lowerBoundConstraint =
+            if (lowerBound != 0)
+              s"""
+                 |WHERE coalesce(array_length($edgeListName, 1), 0) >= $lowerBound""".stripMargin
+            else
+              ""
+
+          val upperBoundConstraint =
+            if (edgeListAttribute.maxHops.isDefined)
+              s"""
+                 |AND coalesce(array_length($edgeListName, 1), 0) < ${edgeListAttribute.maxHops.get}""".stripMargin
+            else
+              ""
+
+          i"""WITH RECURSIVE recursive_table AS (
+             |  (
+             |    WITH left_query AS (
+             |      $leftSql
+             |    )
+             |    SELECT
+             |      *,
+             |      ARRAY [] :: integer [] AS $edgeListName,
+             |      $edgesFromVertexName AS next_from,
+             |      $edgesFromVertexName AS $edgesToVertexName
+             |    FROM left_query
+             |  )
+             |  UNION ALL
+             |  SELECT
+             |    $leftNodeColumnNames,
+             |    ($edgeListName|| edge_id) AS $edgeListName,
+             |    edges.$edgesToVertexName AS nextFrom,
+             |    edges.$edgesToVertexName
+             |  FROM
+             |    ( $edgesSql
+             |    ) edges
+             |    INNER JOIN recursive_table
+             |      ON edge_id <> ALL ($edgeListName) -- edge uniqueness
+             |         AND next_from = current_from$upperBoundConstraint
+             |)
+             |SELECT
+             |  $joinNodeColumnNames
+             |FROM recursive_table$lowerBoundConstraint"""
+        }
         case node: Production => {
           val renamePairs = node.output.zip(node.outputNames).map { case (attribute, outputName) => (getQuotedColumnName(attribute), getQuotedColumnName(outputName)) }
           getProjectionSql(node, renamePairs)
@@ -110,32 +203,7 @@ class CompileSql(query: String) extends CompilerTest {
              |  ) subquery
              |WHERE $condition"""
         case node: GetEdges =>
-          val columns = ("*" +:
-            node.requiredProperties.map(getSqlForProperty)
-            ).mkString(", ")
-
-          val fromColumnName = getQuotedColumnName(node.nnode.src)
-          val edgeColumnName = getQuotedColumnName(node.nnode.edge)
-          val toColumnName = getQuotedColumnName(node.nnode.trg)
-
-          val edgeLabelsEscaped = node.nnode.edge.labels.edgeLabels.map(name => getSingleQuotedString(name))
-          val typeConstraintPart = if (edgeLabelsEscaped.isEmpty)
-            ""
-          else
-            s"WHERE type IN (${edgeLabelsEscaped.mkString(", ")})"
-
-          val undirectedSelectPart = if (node.nnode.directed)
-            ""
-          else
-            s"""  UNION ALL
-               |  SELECT "to", edge_id, "from" FROM edge
-               |  $typeConstraintPart""".stripMargin
-
-          i"""SELECT $columns FROM
-             |  (
-             |    SELECT "from" AS $fromColumnName, edge_id AS $edgeColumnName, "to" AS $toColumnName FROM edge
-             |    $typeConstraintPart
-             |  $undirectedSelectPart) subquery"""
+          getGetEdgesSql(node)
         case node: AllDifferent => {
           val childSql = getSql(node.child)
 
