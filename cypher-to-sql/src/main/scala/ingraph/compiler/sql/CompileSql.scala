@@ -156,6 +156,7 @@ class CompileSql(query: String) extends CompilerTest {
                |  WHERE ${edgeConditions.mkString("\n  AND ")}"""
           }
         }
+        case node: Dual => "SELECT"
         case node: FNode => node.children.map(getSql).mkString("\n")
         case node: BinaryOperator => s"""(${getSql(node.left)} ${node.sqlOperator} ${getSql(node.right)})"""
         case node: ResolvableName => getQuotedColumnName(node)

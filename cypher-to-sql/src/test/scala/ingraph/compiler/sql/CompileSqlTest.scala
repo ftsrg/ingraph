@@ -214,6 +214,11 @@ class CompileSqlTest extends FunSuite {
     }
   }
 
+  ignore("Return literal and sum") {
+    compileAndRunQuery("CREATE ()",
+      "RETURN 1 AS value, 1+1 AS sum")
+  }
+
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L52
   test("Use multiple MATCH clauses to do a Cartesian product") {
     compileAndRunQuery("CREATE ({value: 1}), ({value: 2}), ({value: 3})",
