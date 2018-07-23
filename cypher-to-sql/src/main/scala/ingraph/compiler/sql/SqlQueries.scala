@@ -38,5 +38,17 @@ object SqlQueries {
       |    value jsonb NOT NULL,
       |    UNIQUE(parent, key)
       |);
+      |
+      |CREATE EXTENSION intarray;
+      |
+      |-- if needed for other types, check https://stackoverflow.com/q/3994556
+      |CREATE FUNCTION is_unique(INTEGER [])
+      |  RETURNS BOOLEAN
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'WITH arr AS (SELECT $1 AS arr)
+      |SELECT array_length(uniq(sort(arr)), 1) = array_length(arr, 1) as is_unique
+      |FROM arr;';
     """.stripMargin
 }

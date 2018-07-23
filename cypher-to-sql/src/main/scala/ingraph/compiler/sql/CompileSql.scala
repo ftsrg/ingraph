@@ -207,23 +207,13 @@ class CompileSql(query: String) extends CompilerTest {
           getGetEdgesSql(node)
         case node: AllDifferent => {
           val childSql = getSql(node.child)
+          val edgeIdsArray = "ARRAY[]::INTEGER[]" +: node.nnode.edges.map(getQuotedColumnName).mkString(" || ")
 
-          // TODO handle EdgeListAttribute too
-          val edges = node.nnode.edges.collect { case attr: EdgeAttribute => attr }.toList
-          if (edges.length <= 1)
-            childSql
-          else {
-            val edgeNames = edges.map(getQuotedColumnName)
-            val edgeConditions = edgeNames.flatMap(column1 => edgeNames.map((column1, _)))
-              .filter(pair => pair._1 < pair._2)
-              .map(pair => s"""${pair._1} <> ${pair._2}""")
-
-            i"""SELECT * FROM
-               |  (
-               |    $childSql
-               |  ) subquery
-               |  WHERE ${edgeConditions.mkString("\n  AND ")}"""
-          }
+          i"""SELECT * FROM
+             |  (
+             |    $childSql
+             |  ) subquery
+             |  WHERE is_unique($edgeIdsArray)"""
         }
         case node: Dual => "SELECT"
         case node: FNode => node.children.map(getSql).mkString("\n")
