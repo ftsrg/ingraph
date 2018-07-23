@@ -8,7 +8,7 @@ pgsql/bin/pg_ctl -D ~/db-data -l ~/logfile start
 https://stackoverflow.com/a/12072002
 
 ```sql
-DROP SCHEMA PUBLIC CASCADE;
+DROP SCHEMA IF EXISTS PUBLIC CASCADE;
 CREATE SCHEMA PUBLIC AUTHORIZATION "postgres";
 GRANT ALL ON SCHEMA public TO public;
 ```
