@@ -43,19 +43,31 @@ class IndentationPreservingStringInterpolation(sc: StringContext) {
       appendWithStrippedMargin(sb, stringPart, !firstStringPart)
       firstStringPart = false
 
-      val indentation = getLastIndentation(sb)
+      val indentation = getIndentationToCurrentColumn(sb)
 
       val argumentString = argument.toString
-      // possibly more space is needed for indentation
-      sb.ensureCapacity(sb.size + argumentString.length)
 
-      if (indentation.isEmpty) {
-        sb append argumentString
+      if (argumentString.isEmpty) {
+        // remove the current line if its first argument empty to remove empty lines
+        // i"""last line\n    $emptyArg""" -> "last line"
+        // this can be unexpected if more args (e.g. $arg2) is present
+        // i"""last line\n    $emptyArg$arg2""" -> "last lineARG2"
+
+        val start = getWhitespaceIndentationStartIndex(sb)
+        if (start.isDefined)
+          sb.delete(start.get, sb.length)
       } else {
-        for (char <- argumentString) {
-          sb append char
-          if (char == '\n')
-            sb appendAll indentation
+        // possibly more space is needed for indentation
+        sb.ensureCapacity(sb.size + argumentString.length)
+
+        if (indentation.isEmpty) {
+          sb append argumentString
+        } else {
+          for (char <- argumentString) {
+            sb append char
+            if (char == '\n')
+              sb appendAll indentation
+          }
         }
       }
     }
@@ -67,8 +79,7 @@ class IndentationPreservingStringInterpolation(sc: StringContext) {
     sb.toString()
   }
 
-  private def getLastIndentation(buf: StringBuilder): Array[Char] = {
-    new String()
+  private def getIndentationToCurrentColumn(buf: StringBuilder): Array[Char] = {
     buf
       .reverseIterator
       .takeWhile(_ != '\n')
@@ -77,6 +88,21 @@ class IndentationPreservingStringInterpolation(sc: StringContext) {
         else ' ')
       .toArray
       .reverse
+  }
+
+  private def getWhitespaceIndentationStartIndex(buf: StringBuilder): Option[Int] = {
+    val lastNewline = buf.lastIndexOf("\n")
+
+    val startIndex =
+      if (lastNewline == -1) 0
+      else lastNewline
+
+    val isAllWhitespace = buf.substring(startIndex).forall(_ <= ' ')
+
+    if (isAllWhitespace)
+      Some(startIndex)
+    else
+      None
   }
 }
 

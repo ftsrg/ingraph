@@ -87,15 +87,16 @@ class CompileSql(query: String) extends CompilerTest {
     val undirectedSelectPart = if (node.nnode.directed)
       ""
     else
-      s"""  UNION ALL
-         |  SELECT "to", edge_id, "from" FROM edge
-         |  $typeConstraintPart""".stripMargin
+      i"""UNION ALL
+         |SELECT "to", edge_id, "from" FROM edge
+         |$typeConstraintPart"""
 
     i"""SELECT $columns FROM
        |  (
        |    SELECT "from" AS $fromColumnName, edge_id AS $edgeColumnName, "to" AS $toColumnName FROM edge
        |    $typeConstraintPart
-       |  $undirectedSelectPart) subquery"""
+       |    $undirectedSelectPart
+       |  ) subquery"""
   }
 
   private def getSql(node: Any): String = {
@@ -146,15 +147,13 @@ class CompileSql(query: String) extends CompilerTest {
           val lowerBound = edgeListAttribute.minHops.getOrElse(1)
           val lowerBoundConstraint =
             if (lowerBound != 0)
-              s"""
-                 |WHERE coalesce(array_length($edgeListName, 1), 0) >= $lowerBound""".stripMargin
+              s"WHERE coalesce(array_length($edgeListName, 1), 0) >= $lowerBound"
             else
               ""
 
           val upperBoundConstraint =
             if (edgeListAttribute.maxHops.isDefined)
-              s"""
-                 |AND coalesce(array_length($edgeListName, 1), 0) < ${edgeListAttribute.maxHops.get}""".stripMargin
+              s"AND coalesce(array_length($edgeListName, 1), 0) < ${edgeListAttribute.maxHops.get}"
             else
               ""
 
@@ -181,11 +180,13 @@ class CompileSql(query: String) extends CompilerTest {
              |    ) edges
              |    INNER JOIN recursive_table
              |      ON edge_id <> ALL ($edgeListName) -- edge uniqueness
-             |         AND next_from = current_from$upperBoundConstraint
+             |         AND next_from = current_from
+             |         $upperBoundConstraint
              |)
              |SELECT
              |  $joinNodeColumnNames
-             |FROM recursive_table$lowerBoundConstraint"""
+             |FROM recursive_table
+             |$lowerBoundConstraint"""
         }
         case node: Production => {
           val renamePairs = node.output.zip(node.outputNames).map { case (attribute, outputName) => (getQuotedColumnName(attribute), getQuotedColumnName(outputName)) }
