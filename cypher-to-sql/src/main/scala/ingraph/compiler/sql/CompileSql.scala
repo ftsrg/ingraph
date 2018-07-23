@@ -114,7 +114,7 @@ class CompileSql(query: String) extends CompilerTest {
              |FROM vertex"""
         }
         case node: Join => {
-          val joinAttributeNames = node.left.nnode.outputSet.intersect(node.right.nnode.outputSet)
+          val joinAttributeNames = node.flatCommon
             .map(attr => getQuotedColumnName(attr.asInstanceOf[ElementAttribute]))
           val usingPart = if (joinAttributeNames.isEmpty)
             "ON TRUE"

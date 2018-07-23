@@ -487,7 +487,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L191
-  ignore("Returning bound nodes that are not part of the pattern") {
+  test("Returning bound nodes that are not part of the pattern") {
     compileAndRunQuery(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (c {name: 'C'})
@@ -501,7 +501,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L210
-  ignore("Two bound nodes pointing to the same node") {
+  test("Two bound nodes pointing to the same node") {
     compileAndRunQuery(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (x1 {name: 'x1'}), (x2 {name: 'x2'})
@@ -518,7 +518,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L233
-  ignore("Three bound nodes pointing to the same node") {
+  test("Three bound nodes pointing to the same node") {
     compileAndRunQuery(
       """CREATE (a {name: 'A'}), (b {name: 'B'}), (c {name: 'C'}),
         |       (x1 {name: 'x1'}), (x2 {name: 'x2'})
