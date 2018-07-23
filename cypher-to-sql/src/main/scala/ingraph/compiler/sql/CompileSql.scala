@@ -147,13 +147,13 @@ class CompileSql(query: String) extends CompilerTest {
           val lowerBound = edgeListAttribute.minHops.getOrElse(1)
           val lowerBoundConstraint =
             if (lowerBound != 0)
-              s"WHERE coalesce(array_length($edgeListName, 1), 0) >= $lowerBound"
+              s"WHERE array_length($edgeListName) >= $lowerBound"
             else
               ""
 
           val upperBoundConstraint =
             if (edgeListAttribute.maxHops.isDefined)
-              s"AND coalesce(array_length($edgeListName, 1), 0) < ${edgeListAttribute.maxHops.get}"
+              s"AND array_length($edgeListName) < ${edgeListAttribute.maxHops.get}"
             else
               ""
 
@@ -207,7 +207,7 @@ class CompileSql(query: String) extends CompilerTest {
           getGetEdgesSql(node)
         case node: AllDifferent => {
           val childSql = getSql(node.child)
-          val edgeIdsArray = "ARRAY[]::INTEGER[]" +: node.nnode.edges.map(getQuotedColumnName).mkString(" || ")
+          val edgeIdsArray = ("ARRAY[]::INTEGER[]" +: node.nnode.edges.map(getQuotedColumnName)).mkString(" || ")
 
           i"""SELECT * FROM
              |  (

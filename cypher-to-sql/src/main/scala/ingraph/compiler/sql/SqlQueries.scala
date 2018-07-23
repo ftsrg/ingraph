@@ -39,6 +39,13 @@ object SqlQueries {
       |    UNIQUE(parent, key)
       |);
       |
+      |CREATE FUNCTION array_length(ANYARRAY)
+      |  RETURNS INTEGER
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'SELECT coalesce(array_length($1, 1), 0) AS array_length;';
+      |
       |CREATE EXTENSION intarray;
       |
       |-- if needed for other types, check https://stackoverflow.com/q/3994556
@@ -47,8 +54,9 @@ object SqlQueries {
       |STRICT
       |IMMUTABLE
       |LANGUAGE SQL AS
-      |'WITH arr AS (SELECT $1 AS arr)
-      |SELECT array_length(uniq(sort(arr)), 1) = array_length(arr, 1) as is_unique
-      |FROM arr;';
+      |'WITH arr AS (SELECT $1 AS arr),
+      |    orig_length AS (SELECT array_length(arr) AS orig_length FROM arr)
+      |SELECT (orig_length <= 1 OR array_length(uniq(sort(arr))) = orig_length) AS is_unique
+      |FROM arr, orig_length;';
     """.stripMargin
 }
