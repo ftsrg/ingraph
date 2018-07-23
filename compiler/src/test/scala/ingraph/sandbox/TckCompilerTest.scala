@@ -1,7 +1,8 @@
 package ingraph.sandbox
 
 import ingraph.compiler.test.CompilerTest
-import ingraph.model.fplan.Selection
+import ingraph.model.fplan.{FNode, LeafFNode, Selection}
+import ingraph.model.{nplan, fplan}
 
 class TckCompilerTest extends CompilerTest {
 
@@ -133,6 +134,35 @@ class TckCompilerTest extends CompilerTest {
     )
     assert(getLeafNodes(stages.fplan)(0).flatSchema.length == 1)
   }
+
+  def getNodes(plan: FNode): Seq[FNode] = {
+    if (plan.isInstanceOf[LeafFNode]) plan :: Nil
+    else plan.children.flatMap(x => getNodes(x)) :+ plan
+  }
+
+  def variableLengthPatternTest(testName: String, boundsPart: String, lowerBound: Option[Int], upperBound: Option[Int]): Unit = {
+    test(testName) {
+      val stages = compile(
+        s"""MATCH (a)-[e*$boundsPart]-(b)
+           |RETURN *
+        """.stripMargin
+      )
+      val edgeListAttribute = getNodes(stages.fplan)
+        .collectFirst { case node: fplan.TransitiveJoin => node }
+        .get.nnode.edgeList
+
+      assert(edgeListAttribute.minHops == lowerBound)
+      assert(edgeListAttribute.maxHops == upperBound)
+    }
+  }
+
+  variableLengthPatternTest("Variable-length pattern: no bounds", "", None, None)
+  variableLengthPatternTest("Variable-length pattern: no bounds with range", "..", None, None)
+  variableLengthPatternTest("Variable-length pattern: exact bound", "2", Some(2), Some(2))
+  variableLengthPatternTest("Variable-length pattern: lower bound", "2..", Some(2), None)
+  variableLengthPatternTest("Variable-length pattern: upper bound", "..2", None, Some(2))
+  variableLengthPatternTest("Variable-length pattern: same lower and upper bounds", "2..2", Some(2), Some(2))
+  variableLengthPatternTest("Variable-length pattern: zero as lower bound", "0..", Some(0), None)
 
   ignore("Start with WITH") {
     val stages = compile(
