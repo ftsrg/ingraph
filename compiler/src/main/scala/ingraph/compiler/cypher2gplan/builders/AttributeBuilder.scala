@@ -35,7 +35,14 @@ object AttributeBuilder {
         val props = LiteralBuilder.buildProperties(elDetail.getProperties)
 
         Option(elDetail.getRange) match {
-          case Some(r) => expr.EdgeListAttribute(name, els, props, isAnonymous = isAnon, StringUtil.toOptionInt(r.getLower), StringUtil.toOptionInt(r.getUpper))
+          case Some(r) => {
+            val minHops = StringUtil.toOptionInt(r.getLower)
+            val maxHops = StringUtil.toOptionInt(r.getUpper) match {
+              case None => minHops
+              case x => x
+            }
+            expr.EdgeListAttribute(name, els, props, isAnonymous = isAnon, minHops, maxHops)
+          }
           case None => expr.EdgeAttribute(name, els, props, isAnonymous = isAnon)
         }
       }
