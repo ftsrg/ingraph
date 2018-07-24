@@ -207,12 +207,18 @@ class CompileSql(query: String) extends CompilerTest {
         case node: AllDifferent => {
           val childSql = getSql(node.child)
           val edgeIdsArray = ("ARRAY[]::INTEGER[]" +: node.nnode.edges.map(getQuotedColumnName)).mkString(" || ")
+          // only more than 1 node must be checked for uniqueness (edge list can contain more edges)
+          val allDifferentNeeded = node.nnode.edges.size > 1 || node.nnode.edges.exists(_.isInstanceOf[EdgeListAttribute])
 
-          i"""SELECT * FROM
-             |  (
-             |    $childSql
-             |  ) subquery
-             |  WHERE is_unique($edgeIdsArray)"""
+          if (allDifferentNeeded)
+            i"""SELECT * FROM
+               |  (
+               |    $childSql
+               |  ) subquery
+               |  WHERE is_unique($edgeIdsArray)"""
+          else
+            s"""   -- noop
+               |$childSql""".stripMargin
         }
         case node: Dual => "SELECT"
         case node: FNode => node.children.map(getSql).mkString("\n")
