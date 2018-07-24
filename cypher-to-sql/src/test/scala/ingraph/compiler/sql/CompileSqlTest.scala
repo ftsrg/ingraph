@@ -448,7 +448,7 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
-  ignore("Simple variable length pattern / exact length") {
+  test("Simple variable length pattern / exact length") {
     compileAndRunQuery(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
         |       (c {name: 'C'}), (d {name: 'D'})
