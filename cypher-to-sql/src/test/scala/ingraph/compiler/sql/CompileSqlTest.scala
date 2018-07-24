@@ -155,6 +155,10 @@ class CompileSqlTest extends FunSuite {
     })
   }
 
+  override def ignore(testName: String, testTags: Tag*)(testFun: => Any /* Assertion */)(implicit pos: source.Position): Unit = {
+    super.ignore(testName, testTags: _*)(testFun)(pos)
+  }
+
   override def test(testName: String, testTags: Tag*)(testFun: => Any /* Assertion */)(implicit pos: source.Position): Unit = {
     super.test(testName, testTags: _*) {
       println(s"vvvvvvvvvvvvvvvv $testName vvvvvvvvvvvvvvvv")
