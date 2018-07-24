@@ -9,6 +9,7 @@ import ingraph.model.{expr, gplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
+import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.mutable.ListBuffer
@@ -37,9 +38,10 @@ object AttributeBuilder {
         Option(elDetail.getRange) match {
           case Some(r) => {
             val minHops = StringUtil.toOptionInt(r.getLower)
-            val maxHops = StringUtil.toOptionInt(r.getUpper) match {
-              case None => minHops
-              case x => x
+            val maxHops = if (r.isVariableLength) {
+              StringUtil.toOptionInt(r.getUpper)
+            } else {
+              minHops
             }
             expr.EdgeListAttribute(name, els, props, isAnonymous = isAnon, minHops, maxHops)
           }
