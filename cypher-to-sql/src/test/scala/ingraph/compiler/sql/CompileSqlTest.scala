@@ -573,7 +573,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L80
-  ignore("Aliasing") {
+  test("Aliasing") {
     compileAndRunQuery(
       """CREATE (:Begin {prop: 42}),
         |       (:End {prop: 42}),
@@ -773,5 +773,30 @@ class CompileSqlTest extends FunSuite {
         |RETURN count(n) AS cn
       """.stripMargin
     )
+  }
+
+  test("Filter out based on node label") {
+    compileAndRunQuery("CREATE (:A {labels: 'A'}), (:A:B {labels: 'A-B'}), (:B {labels: 'B'}), (:C {labels: 'C'}), ({labels: ''})",
+      """MATCH (a:A)
+        |RETURN a, a.labels""".stripMargin)
+  }
+
+  test("Filter out based on more node labels") {
+    compileAndRunQuery("CREATE (:A {labels: 'A'}), (:A:B {labels: 'A-B'}), (:B {labels: 'B'}), (:C {labels: 'C'}), ({labels: ''})",
+      """MATCH (a:A:B)
+        |RETURN a, a.labels""".stripMargin)
+  }
+
+  test("Filter out based on node label with duplicate") {
+    compileAndRunQuery("CREATE (:A {labels: 'A'}), (:A:B {labels: 'A-B'}), (:B {labels: 'B'}), (:C {labels: 'C'}), ({labels: ''})",
+      """MATCH (a:A:A)
+        |RETURN a, a.labels""".stripMargin)
+  }
+
+  ignore("Filter out based on node label in WHERE clause") {
+    compileAndRunQuery("CREATE (:A {labels: 'A'}), (:A:B {labels: 'A-B'}), (:B {labels: 'B'}), (:C {labels: 'C'}), ({labels: ''})",
+      """MATCH (a)
+        |WHERE a:A OR a:C
+        |RETURN a, a.labels""".stripMargin)
   }
 }

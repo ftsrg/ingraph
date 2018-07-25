@@ -109,9 +109,20 @@ class CompileSql(query: String) extends CompilerTest {
                 node.requiredProperties.map(prop =>s"""(SELECT value FROM vertex_property WHERE parent = vertex_id AND key = ${getSingleQuotedString(prop.name)}) AS ${getQuotedColumnName(prop)}"""))
               .mkString(",\n")
 
+          val vertexLabelsAsRowValues = node.nnode.v.labels.vertexLabels.map("(" + getSingleQuotedString(_) + ")")
+          val labelConstraint = if (vertexLabelsAsRowValues.isEmpty)
+            ""
+          else
+            s"""WHERE NOT EXISTS(VALUES ${vertexLabelsAsRowValues.mkString(", ")}
+               |                 EXCEPT ALL
+               |                 SELECT name
+               |                 FROM label
+               |                 WHERE parent = vertex_id)""".stripMargin
+
           i"""SELECT
              |  $columns
-             |FROM vertex"""
+             |FROM vertex
+             |$labelConstraint"""
         }
         case node: Join => {
           val joinAttributeNames = node.flatCommon.map(getQuotedColumnName)
