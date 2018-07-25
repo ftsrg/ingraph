@@ -544,7 +544,7 @@ class CompileSqlTest extends FunSuite {
   // from https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance2.feature#L258
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L38
-  ignore("ORDER BY and LIMIT can be used - edited") {
+  test("ORDER BY and LIMIT can be used - edited") {
     compileAndRunQuery(
       """CREATE (a:A {name: 'X'}),
         |(a)-[:REL]->()
@@ -555,6 +555,33 @@ class CompileSqlTest extends FunSuite {
         |LIMIT 1
         |MATCH (a)-[:REL]->(b)
         |RETURN a
+      """.stripMargin
+    )
+  }
+
+  test("ORDER BY and LIMIT can be used - edited, with negative examples") {
+    compileAndRunQuery(
+      """CREATE (:A {name: 'X'})-[:REL]->(), (:A {name: 'A'})-[:REL]->(), (:A {name: 'Y'})-[:REL]->()
+      """.stripMargin,
+      """MATCH (a:A)
+        |WITH a
+        |ORDER BY a.name
+        |LIMIT 1
+        |MATCH (a)-[:REL]->(b)
+        |RETURN a
+      """.stripMargin
+    )
+  }
+
+  ignore("ORDER BY and LIMIT can be used - get first element and computation in WITH and RETURN") {
+    compileAndRunQuery(
+      """CREATE ({name: 'c'}), ({name: 'd'}), ({name: 'a'}), ({name: 'b'})
+      """.stripMargin,
+      """MATCH (a)
+        |WITH a, a.name AS name, (1 + 1) AS sum2
+        |ORDER BY a.name
+        |LIMIT 1
+        |RETURN a, name, sum2, (1 + 2) AS sum3
       """.stripMargin
     )
   }
@@ -589,7 +616,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L101
-  ignore("Handle dependencies across WITH - CREATE edited") {
+  test("Handle dependencies across WITH - CREATE edited") {
     compileAndRunQuery(
       """CREATE (a:End {prop: 42, id: 0}),
         |       (:End {prop: 3}),
@@ -625,7 +652,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L146
-  ignore("WHERE after WITH should filter results") {
+  test("WHERE after WITH should filter results") {
     compileAndRunQuery(
       """CREATE ({name: 'A'}),
         |       ({name: 'B'}),

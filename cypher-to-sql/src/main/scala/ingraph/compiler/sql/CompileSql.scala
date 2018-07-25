@@ -231,6 +231,22 @@ class CompileSql(query: String) extends CompilerTest {
             s"""   -- noop
                |$childSql""".stripMargin
         }
+        case node: SortAndTop => {
+          val childSql = getSql(node.child)
+          val nnode = node.nnode
+
+          val orderByParts = nnode.order.map(order => getSql(order.child) + " " + order.direction.sql + " " + order.nullOrdering.sql)
+          val limitPart = nnode.limitExpr.map { case Literal(num: Long, _) => s"LIMIT $num" }.getOrElse("")
+          val offsetPart = nnode.skipExpr.map { case Literal(num: Long, _) => s"OFFSET $num" }.getOrElse("")
+
+          i"""SELECT * FROM
+             |  (
+             |    $childSql
+             |  ) subquery
+             |  ORDER BY ${orderByParts.mkString(", ")}
+             |  $limitPart
+             |  $offsetPart"""
+        }
         case node: Dual => "SELECT"
         case node: ReturnItem => getSql(node.child)
         case node: FNode => node.children.map(getSql).mkString("\n")
