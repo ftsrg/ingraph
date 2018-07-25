@@ -203,7 +203,7 @@ class CompileSql(query: String) extends CompilerTest {
           getProjectionSql(node, renamePairs)
         }
         case node: Projection => {
-          val renamePairs = node.nnode.projectList.map(proj => (getSql(proj.child), getQuotedColumnName(proj)))
+          val renamePairs = node.flatSchema.map(proj => (getSql(proj), getQuotedColumnName(proj)))
           getProjectionSql(node, renamePairs)
         }
         case node: Selection =>
@@ -232,6 +232,7 @@ class CompileSql(query: String) extends CompilerTest {
                |$childSql""".stripMargin
         }
         case node: Dual => "SELECT"
+        case node: ReturnItem => getSql(node.child)
         case node: FNode => node.children.map(getSql).mkString("\n")
         case node: BinaryOperator => s"""(${getSql(node.left)} ${node.sqlOperator} ${getSql(node.right)})"""
         case node: ResolvableName => getQuotedColumnName(node)
