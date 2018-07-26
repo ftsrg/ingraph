@@ -255,8 +255,23 @@ class CompileSql(query: String) extends CompilerTest {
              |    $childSql
              |  ) subquery"""
         }
+        case node: Grouping => {
+          val renamePairs = node.flatSchema.map(proj => (getSql(proj), getQuotedColumnName(proj)))
+          val projectionSql = getProjectionSql(node, renamePairs)
+          val groupByColumns = (node.nnode.aggregationCriteria ++ node.requiredProperties).map(getSql)
+
+          i"""$projectionSql
+             |GROUP BY ${groupByColumns.mkString(", ")}"""
+        }
         case node: Dual => "SELECT"
         case node: ReturnItem => getSql(node.child)
+        case node: FunctionInvocation => {
+          val functionName = node.functor.getPrettyName
+          val parametersString = node.children.map(getSql).mkString(", ")
+          val distinctPart = if (node.isDistinct) "DISTINCT " else ""
+
+          functionName + "(" + distinctPart + parametersString + ")"
+        }
         case node: FNode => node.children.map(getSql).mkString("\n")
         case node: BinaryOperator => s"""(${getSql(node.left)} ${node.sqlOperator} ${getSql(node.right)})"""
         case node: ResolvableName => getQuotedColumnName(node)

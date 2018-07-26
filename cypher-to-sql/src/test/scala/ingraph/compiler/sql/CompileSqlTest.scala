@@ -667,7 +667,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L166
-  ignore("WHERE after WITH can filter on top of an aggregation - edited") {
+  test("WHERE after WITH can filter on top of an aggregation - edited") {
     compileAndRunQuery(
       """CREATE (a {name: 'A'}),
         |       (b {name: 'B'})
