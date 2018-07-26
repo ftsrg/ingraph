@@ -39,7 +39,7 @@ class CompileSql(query: String) extends CompilerTest {
     sql
   }
 
-  private def getSqlForProperty(requiredPropety: Any): String = {
+  private def getSqlForProperty(requiredPropety: ResolvableName, nnode: nplan.GetEdges): String = {
     requiredPropety match {
       case prop: PropertyAttribute => {
         val propertyTableName =
@@ -47,7 +47,9 @@ class CompileSql(query: String) extends CompilerTest {
             case _: VertexAttribute => "vertex_property"
             case _: EdgeAttribute => "edge_property"
           }
-        val parentColumnName = getQuotedColumnName(prop.elementAttribute)
+        // prop.elementAttribute.resolvedName can be invalid in this context because of renaming,
+        //  since it has the name of the column as it is in the outermost part of the query.
+        val parentColumnName = getQuotedColumnName(nnode.output.find(_.name == prop.elementAttribute.name).get)
         val propertyName = getSingleQuotedString(prop.name)
         val newPropertyColumnName = getQuotedColumnName(prop)
 
@@ -71,8 +73,10 @@ class CompileSql(query: String) extends CompilerTest {
     }
 
     val columns = ("*" +:
-      node.requiredProperties.map(getSqlForProperty)
+      node.requiredProperties.map(getSqlForProperty(_, node.nnode))
       ).mkString(", ")
+
+    // TODO handle properties from edge lists
 
     val fromColumnName = getColumnName(forcedFromColumnName, _.src)
     val edgeColumnName = getColumnName(forcedEdgeColumnName, _.edge)

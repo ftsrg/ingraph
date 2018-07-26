@@ -6,7 +6,7 @@ import com.google.gson.JsonParser
 import ingraph.compiler.sql.Util.withResources
 import ingraph.driver.CypherDriverFactory
 import org.apache.log4j.{Level, LogManager}
-import org.neo4j.driver.internal.value.{IntegerValue, NodeValue, StringValue}
+import org.neo4j.driver.internal.value.{IntegerValue, NodeValue, RelationshipValue, StringValue}
 import org.neo4j.driver.v1.{AuthTokens, Transaction}
 import org.postgresql.util.PGobject
 import org.scalactic.source
@@ -38,6 +38,7 @@ class CompileSqlTest extends FunSuite {
     value match {
       case value: IntegerValue => value.asLong()
       case value: NodeValue => value.asNode().id()
+      case value: RelationshipValue => value.asRelationship().id()
       case value: StringValue => value.asString()
       case _ => value
     }
@@ -685,7 +686,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L251
-  ignore("A simple pattern with one bound endpoint - edited") {
+  test("A simple pattern with one bound endpoint - edited") {
     compileAndRunQuery(
       """CREATE (:A {x: 'x1'})-[:REL]->(:B {x: 'x2'})""",
       """MATCH (a:A)-[r:REL]->(b:B)
