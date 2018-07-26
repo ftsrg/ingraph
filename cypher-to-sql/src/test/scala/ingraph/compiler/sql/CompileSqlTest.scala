@@ -634,7 +634,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L123
-  ignore("Handle dependencies across WITH with SKIP - CREATE edited") {
+  test("Handle dependencies across WITH with SKIP - CREATE edited") {
     compileAndRunQuery(
       """CREATE ({prop: 'A', key: 0, id: 0}),
         |       ({prop: 'B', key: 0, id: 1}),

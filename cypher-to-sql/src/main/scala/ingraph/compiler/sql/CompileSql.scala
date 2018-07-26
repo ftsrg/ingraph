@@ -247,6 +247,14 @@ class CompileSql(query: String) extends CompilerTest {
              |  $limitPart
              |  $offsetPart"""
         }
+        case node: DuplicateElimination => {
+          val childSql = getSql(node.child)
+
+          i"""SELECT DISTINCT * FROM
+             |  (
+             |    $childSql
+             |  ) subquery"""
+        }
         case node: Dual => "SELECT"
         case node: ReturnItem => getSql(node.child)
         case node: FNode => node.children.map(getSql).mkString("\n")
