@@ -8,6 +8,7 @@ import ingraph.model.nplan
 import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal}
 import org.apache.spark.sql.types.StringType
 import IndentationPreservingStringInterpolation._
+import ingraph.model.misc.Function
 
 object CompileSql {
   def escapeQuotes(name: String, toBeDoubled: String = "\"") = name.replace(toBeDoubled, toBeDoubled + toBeDoubled)
@@ -263,14 +264,21 @@ class CompileSql(query: String) extends CompilerTest {
           val renamePairs = node.flatSchema.map(proj => (getSql(proj), getQuotedColumnName(proj)))
           val projectionSql = getProjectionSql(node, renamePairs)
           val groupByColumns = (node.nnode.aggregationCriteria ++ node.requiredProperties).map(getSql)
+          val groupByPart = if (groupByColumns.isEmpty)
+            ""
+          else
+            "GROUP BY " + groupByColumns.mkString(", ")
 
           i"""$projectionSql
-             |GROUP BY ${groupByColumns.mkString(", ")}"""
+             |$groupByPart"""
         }
         case node: Dual => "SELECT"
         case node: ReturnItem => getSql(node.child)
         case node: FunctionInvocation => {
-          val functionName = node.functor.getPrettyName
+          val functionName = node.functor match {
+            case Function.COLLECT => "array_agg"
+            case functor => functor.getPrettyName
+          }
           val parametersString = node.children.map(getSql).mkString(", ")
           val distinctPart = if (node.isDistinct) "DISTINCT " else ""
 

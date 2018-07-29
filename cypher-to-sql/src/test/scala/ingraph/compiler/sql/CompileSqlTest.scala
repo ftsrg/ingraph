@@ -6,8 +6,10 @@ import com.google.gson.JsonParser
 import ingraph.compiler.sql.Util.withResources
 import ingraph.driver.CypherDriverFactory
 import org.apache.log4j.{Level, LogManager}
-import org.neo4j.driver.internal.value.{IntegerValue, NodeValue, RelationshipValue, StringValue}
+import org.neo4j.driver.internal.InternalEntity
+import org.neo4j.driver.internal.value._
 import org.neo4j.driver.v1.{AuthTokens, Transaction}
+import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
 import org.scalactic.source
 import org.scalatest.exceptions.TestFailedException
@@ -38,8 +40,10 @@ class CompileSqlTest extends FunSuite {
     value match {
       case value: IntegerValue => value.asLong()
       case value: NodeValue => value.asNode().id()
+      case value: InternalEntity => value.id()
       case value: RelationshipValue => value.asRelationship().id()
       case value: StringValue => value.asString()
+      case value: ListValue => value.asList.asScala.map(convertCypherCell)
       case _ => value
     }
   }
@@ -56,6 +60,7 @@ class CompileSqlTest extends FunSuite {
         else if (jsonPrimitive.isString)
           jsonPrimitive.getAsString
       }
+      case value: PgArray => value.getArray.asInstanceOf[Array[_]].map(convertSqlCell)
       case default => default
     }
   }
@@ -94,8 +99,8 @@ class CompileSqlTest extends FunSuite {
           }
         }
         else {
-          val cypherResultSet = cypherResultList.map(row => row.map(convertCypherCell).toSeq).toSet
-          val sqlResultSet = sqlResultList.map(row => row.map(convertSqlCell).toSeq).toSet
+          val cypherResultSet = cypherResultList.map(row => row.map(convertCypherCell).deep).toSet
+          val sqlResultSet = sqlResultList.map(row => row.map(convertSqlCell).deep).toSet
           assert(cypherResultSet == sqlResultSet)
         }
       }))
@@ -700,7 +705,7 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
-  ignore("Simple collect") {
+  test("Simple collect") {
     compileAndRunQuery(
       """CREATE (), ()
       """.stripMargin,
@@ -756,7 +761,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // custom aggregation test
-  ignore("Count DISTINCT") {
+  test("Count DISTINCT") {
     compileAndRunQuery(
       """CREATE
         | (p1:Person),
@@ -772,7 +777,7 @@ class CompileSqlTest extends FunSuite {
   }
 
   // custom aggregation test
-  ignore("Count DISTINCT properties") {
+  test("Count DISTINCT properties") {
     compileAndRunQuery(
       """CREATE
         | (p1:Person {name: 'Alan'}),
@@ -795,7 +800,7 @@ class CompileSqlTest extends FunSuite {
     )
   }
 
-  ignore("count empty on MATCH") {
+  test("count empty on MATCH") {
     compileAndRunQuery("",
       """MATCH (n)
         |RETURN count(n) AS cn
