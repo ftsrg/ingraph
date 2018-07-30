@@ -103,7 +103,21 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
         else if (jsonPrimitive.isString)
           jsonPrimitive.getAsString
       }
-      case value: PgArray => value.getArray.asInstanceOf[Array[_]].map(convertSqlCell)
+      case value: PgArray => {
+        value.getArray.asInstanceOf[Array[_]]
+          .map { element =>
+            if (value.getBaseTypeName == "jsonb") {
+              val obj = new PGobject()
+              obj.setType(value.getBaseTypeName)
+              obj.setValue(element.asInstanceOf[String])
+
+              obj
+            }
+            else
+              element
+          }
+          .map(convertSqlCell)
+      }
       case default => default
     }
   }
@@ -766,7 +780,7 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
     )
   }
 
-  ignore("Property collect") {
+  test("Property collect") {
     compileAndRunQuery(
       """CREATE ({p: 1}), ({p: 2})
       """.stripMargin,
@@ -776,7 +790,7 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
     )
   }
 
-  ignore("Property collect on edge") {
+  test("Property collect on edge") {
     compileAndRunQuery(
       """CREATE
         |  (x:X {id: 99}),
