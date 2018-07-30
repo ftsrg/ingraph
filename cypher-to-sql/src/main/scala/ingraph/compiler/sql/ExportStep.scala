@@ -4,14 +4,14 @@ import java.sql.Connection
 
 import com.google.gson.Gson
 import ingraph.compiler.sql.Util.withResources
-import org.neo4j.driver.v1.Transaction
+import org.neo4j.driver.v1.Session
 
 import scala.collection.JavaConverters._
 
 class ExportStep(val exportCypherQuery: String, val tableName: String) {
 
-  def exportToTable(cypherTransaction: Transaction, sqlConnection: Connection): Unit = {
-    val cypherResult = cypherTransaction.run(exportCypherQuery)
+  def exportToTable(cypherSession: Session, sqlConnection: Connection): Unit = {
+    val cypherResult = cypherSession.run(exportCypherQuery)
 
     val keysInRecord = cypherResult.keys.size
     val valueParameters = cypherResult.keys.asScala

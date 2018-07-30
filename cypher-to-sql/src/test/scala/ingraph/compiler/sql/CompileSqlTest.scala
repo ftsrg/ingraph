@@ -3,17 +3,17 @@ package ingraph.compiler.sql
 import java.sql.{Connection, DriverManager, Statement}
 
 import com.google.gson.JsonParser
-import ingraph.compiler.sql.Util.withResources
-import ingraph.driver.CypherDriverFactory
+import ingraph.compiler.sql.Util._
+import ingraph.driver.{CypherDriver, CypherDriverFactory}
 import org.apache.log4j.{Level, LogManager}
 import org.neo4j.driver.internal.InternalEntity
 import org.neo4j.driver.internal.value._
-import org.neo4j.driver.v1.{AuthTokens, Transaction}
+import org.neo4j.driver.v1.{AuthTokens, Session}
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
 import org.scalactic.source
+import org.scalatest._
 import org.scalatest.exceptions.TestFailedException
-import org.scalatest.{FunSuite, Tag}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
@@ -22,9 +22,52 @@ object CompileSqlTest {
   private val jsonParser = new JsonParser
 }
 
-class CompileSqlTest extends FunSuite {
+trait Neo4jConnection extends BeforeAndAfterAll with BeforeAndAfterEach {
+  this: Suite =>
+
+  val driver: CypherDriver = CypherDriverFactory.createNeo4jDriver("bolt://localhost:7687",
+    AuthTokens.basic("neo4j", "admin"))
+  val cypherSession: Session = driver.session()
+
+  override def beforeEach(): Unit = {
+    cypherSession.run("MATCH (n) DETACH DELETE n")
+
+    super.beforeEach()
+  }
+
+  override def afterAll(): Unit = {
+    try super.afterAll()
+    finally {
+      cypherSession.close()
+      driver.close()
+    }
+  }
+}
+
+trait PostgresConnection extends BeforeAndAfterAll with BeforeAndAfterEach {
+  this: Suite =>
 
   LogManager.getRootLogger.setLevel(Level.OFF)
+
+  val postgres = new EmbeddedPostgresWrapper
+  val sqlConnection: Connection = DriverManager.getConnection(postgres.Url)
+
+  override def beforeEach(): Unit = {
+    withResources(sqlConnection.createStatement)(_.execute(SqlQueries.purge))
+
+    super.beforeEach()
+  }
+
+  override def afterAll(): Unit = {
+    try super.afterAll()
+    finally {
+      postgres.close()
+      sqlConnection.close()
+    }
+  }
+}
+
+class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnection {
 
   private def compileAndRunQuery(createCypherQuery: String, selectCypherQuery: String, orderedResults: Boolean = false): Unit = {
     println("Create query:")
@@ -65,10 +108,10 @@ class CompileSqlTest extends FunSuite {
     }
   }
 
-  def compareQueryResults(cypherTransaction: Transaction, selectCypherQuery: String, sqlConnection: Connection, selectSqlQuery: String, orderedResults: Boolean): Unit = {
+  def compareQueryResults(selectCypherQuery: String, sqlConnection: Connection, selectSqlQuery: String, orderedResults: Boolean): Unit = {
     withResources(sqlConnection.createStatement())(sqlStatement =>
       withResources(sqlStatement.executeQuery(selectSqlQuery))(sqlResultSet => {
-        val cypherResult = cypherTransaction.run(selectCypherQuery)
+        val cypherResult = cypherSession.run(selectCypherQuery)
 
         val cypherColumnNames = cypherResult.keys.asScala.toSeq
         val sqlColumnNames = (1 to sqlResultSet.getMetaData.getColumnCount).map(sqlResultSet.getMetaData.getColumnName(_)).toSeq
@@ -107,38 +150,28 @@ class CompileSqlTest extends FunSuite {
   }
 
   private def runGraphQuery(createCypherQuery: String, selectCypherQuery: String, selectSqlQuery: String, orderedResults: Boolean): Unit = {
-    withResources(CypherDriverFactory.createNeo4jDriver("bolt://localhost:7687",
-      AuthTokens.basic("neo4j", "admin")))(driver =>
-      withResources(driver.session())(cypherSession =>
-        withResources(cypherSession.beginTransaction)(cypherTransaction => {
-          if (createCypherQuery.nonEmpty)
-            cypherTransaction.run(createCypherQuery)
-          cypherTransaction.success()
+    if (createCypherQuery.nonEmpty)
+      cypherSession.run(createCypherQuery)
 
-          println("vvvvvvvv REFERENCE RESULT vvvvvvvv")
-          val result = cypherTransaction.run(selectCypherQuery)
-          for (record <- result.asScala) {
-            for ((key, value) <- record.asMap().asScala) {
-              println(s"""$key = $value""")
-            }
-            println("---")
-          }
-          println("----------------------------------")
+    println("vvvvvvvv REFERENCE RESULT vvvvvvvv")
+    val result = cypherSession.run(selectCypherQuery)
+    for (record <- result.asScala) {
+      for ((key, value) <- record.asMap().asScala) {
+        println(s"""$key = $value""")
+      }
+      println("---")
+    }
+    println("----------------------------------")
 
-          withResources(new EmbeddedPostgresWrapper) { postgres =>
-            withResources(DriverManager.getConnection(postgres.Url))(sqlConnection =>
-              withResources(sqlConnection.createStatement)(sqlStatement => {
-                sqlStatement.executeUpdate(SqlQueries.createTables)
+    withResources(sqlConnection.createStatement)(sqlStatement => {
+      sqlStatement.executeUpdate(SqlQueries.createTables)
 
-                ExportSteps.execute(cypherTransaction, sqlConnection)
+      ExportSteps.execute(cypherSession, sqlConnection)
 
-                dump(sqlStatement, selectSqlQuery)
+      dump(sqlStatement, selectSqlQuery)
 
-                compareQueryResults(cypherTransaction, selectCypherQuery, sqlConnection, selectSqlQuery, orderedResults)
-              })
-            )
-          }
-        })))
+      compareQueryResults(selectCypherQuery, sqlConnection, selectSqlQuery, orderedResults)
+    })
   }
 
   private def dumpTable(sqlStatement: Statement, tablename: String): Unit = {
@@ -174,7 +207,7 @@ class CompileSqlTest extends FunSuite {
     }(pos)
   }
 
-  test("Comparison") {
+  private def testsForComparison(): Unit = {
     val createCypherQuery = "CREATE ({value: 1}), ({value: 2}), ({value: 3})"
     val selectCypherQuery =
       """MATCH (n)
@@ -201,28 +234,44 @@ class CompileSqlTest extends FunSuite {
         |  (2),
         |  (1)""".stripMargin
 
-    // Ordered
-    runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery, true)
+    var testNamePrefix = "Comparison - ordered: "
 
-    assertThrows[TestFailedException] {
-      runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryReversed, true)
+    test(testNamePrefix + "same") {
+      runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery, true)
     }
 
-    assertThrows[TestFailedException] {
-      runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryShorter, true)
+    test(testNamePrefix + "reverse order") {
+      assertThrows[TestFailedException] {
+        runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryReversed, true)
+      }
     }
 
-    // Unordered
-    runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryReversed, false)
-
-    assertThrows[TestFailedException] {
-      runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryFaulty, false)
+    test(testNamePrefix + "shorter") {
+      assertThrows[TestFailedException] {
+        runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryShorter, true)
+      }
     }
 
-    assertThrows[TestFailedException] {
-      runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryShorter, false)
+    testNamePrefix = "Comparison - unordered: "
+
+    test(testNamePrefix + "reverse order") {
+      runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryReversed, false)
+    }
+
+    test(testNamePrefix + "different element") {
+      assertThrows[TestFailedException] {
+        runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryFaulty, false)
+      }
+    }
+
+    test(testNamePrefix + "shorter") {
+      assertThrows[TestFailedException] {
+        runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQueryShorter, false)
+      }
     }
   }
+
+  testsForComparison()
 
   ignore("Return literal and sum") {
     compileAndRunQuery("CREATE ()",
