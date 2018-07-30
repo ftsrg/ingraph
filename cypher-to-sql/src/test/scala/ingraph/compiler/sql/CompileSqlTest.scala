@@ -273,9 +273,11 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
 
   testsForComparison()
 
-  ignore("Return literal and sum") {
-    compileAndRunQuery("CREATE ()",
-      "RETURN 1 AS value, 1+1 AS sum")
+  ignore("Create, filter, return different types") {
+    compileAndRunQuery("CREATE ({str: 'abc', int: 1, float: 1.1, bool: false}), ({str: 'xyz', int: 2, float: 2.1, bool: true})",
+      """MATCH (n)
+        |WHERE n.int >= 2
+        |RETURN n.str, n.int, n.float, n.bool, 1 AS value, 1+1 AS sum""".stripMargin)
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L52
