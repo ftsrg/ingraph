@@ -813,6 +813,16 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
     )
   }
 
+  test("List selectors / with column name") {
+    compileAndRunQuery(
+      """CREATE (:X { list: ['a', 'b'] })
+      """.stripMargin,
+      """MATCH (x:X)
+        |RETURN x.list[1] AS element
+      """.stripMargin
+    )
+  }
+
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/OptionalMatchAcceptance.feature#L57
   ignore("Respect predicates on the OPTIONAL MATCH") {
     compileAndRunQuery(

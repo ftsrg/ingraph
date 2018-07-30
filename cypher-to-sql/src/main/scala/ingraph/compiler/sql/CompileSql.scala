@@ -287,6 +287,11 @@ class CompileSql(query: String) extends CompilerTest {
         case node: FNode => node.children.map(getSql).mkString("\n")
         case node: BinaryOperator => s"""(${getSql(node.left)} ${node.sqlOperator} ${getSql(node.right)})"""
         case node: ResolvableName => getQuotedColumnName(node)
+        case node: IndexLookupExpression => {
+          // TODO support indexing of SQL arrays too
+          // JSON indexing
+          getSql(node.collection) + "->" + node.index.toString
+        }
         case node: Literal => {
           val pojoValue = node.dataType match {
             // https://github.com/apache/spark/blob/b3d88ac02940eff4c867d3acb79fe5ff9d724e83/sql/catalyst/src/main/scala/org/apache/spark/sql/catalyst/expressions/literals.scala#L59
