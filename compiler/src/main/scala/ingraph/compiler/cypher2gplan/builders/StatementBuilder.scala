@@ -22,23 +22,7 @@ object StatementBuilder {
     * Transform a SinglePartQuery to a sequence of clauses.
     */
   def siglePartQuery2Clauses(spq: oc.SinglePartQuery): Seq[oc.Clause] = {
-    spq match {
-      case roe: oc.ReadOnlyEnd => roe.getReadPart.getReadingClause.asScala ++Seq(roe.getReturn)
-      case rue: oc.ReadUpdateEnd => rue.getReadingClauses.asScala ++ rue.getUpdatingClauses.asScala ++ Seq(Option(rue.getReturn)).flatten[oc.Clause]
-      case ue: oc.UpdatingEnd => Seq(ue.getUpdatingStartClause) ++ ue.getUpdatingClauses.asScala ++ Seq(Option(ue.getReturn)).flatten[oc.Clause]
-    }
-  }
-
-  /**
-    * Transform the first part of a MultiPartQuery to a sequence of clauses.
-    */
-  def multiPartQuery_FirstPart2Clauses(mpq: oc.MultiPartQuery): Seq[oc.Clause] = {
-    (
-      Option(mpq.getReadPart) match {
-        case Some(rp) => rp.getReadingClause.asScala
-        case None => Seq(mpq.getUpdatingStartClause) ++ mpq.getUpdatingPart.getUpdatingClauses.asScala
-      }
-    ) ++ Seq(mpq.getWithPart)
+    spq.getReadingClauses.asScala ++ spq.getUpdatingClauses.asScala :+ spq.getReturn
   }
 
   /**
@@ -48,7 +32,7 @@ object StatementBuilder {
     *      not present in the original openCypher grammar
     */
   def multiPartSubQuery2Clauses(mpsq: oc.MultiPartSubQuery): Seq[oc.Clause] = {
-      Seq(mpsq.getReadPart.getReadingClause.asScala, mpsq.getUpdatingPart.getUpdatingClauses.asScala).flatten[oc.Clause]
+      mpsq.getReadingClause.asScala ++ mpsq.getUpdatingClauses.asScala :+ mpsq.getWithPart
   }
 
   /** Builds the gplan for a single query built from several query parts.
@@ -69,8 +53,6 @@ object StatementBuilder {
         result = buildQueryPart(clauses, result)
       }
       case mpq: oc.MultiPartQuery => {
-        result = buildQueryPart(multiPartQuery_FirstPart2Clauses(mpq), result)
-
         for (queryPart <- mpq.getSubQueries.asScala) {
           result = buildQueryPart(multiPartSubQuery2Clauses(queryPart), result)
         }
