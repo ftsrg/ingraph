@@ -5,7 +5,7 @@ import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
 import ingraph.model.fplan._
 import ingraph.model.nplan
-import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal}
+import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal, Not}
 import org.apache.spark.sql.types.StringType
 import IndentationPreservingStringInterpolation._
 import ingraph.model.misc.Function
@@ -298,6 +298,7 @@ class CompileSql(query: String) extends CompilerTest {
 
           sqlStringLiteral.sql
         }
+        case node: Not => "NOT(" + getSql(node.child) + ")"
         case _ => ""
       }
 
