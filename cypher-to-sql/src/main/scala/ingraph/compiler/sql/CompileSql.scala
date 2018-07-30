@@ -131,18 +131,12 @@ class CompileSql(query: String) extends CompilerTest {
         }
         case node: Join => {
           val joinAttributeNames = node.flatCommon.map(getQuotedColumnName)
-          val usingPart = if (joinAttributeNames.isEmpty)
-            "ON TRUE"
+          val (joinType, conditionPart) = if (joinAttributeNames.isEmpty)
+            ("CROSS", "")
           else
-            "USING (" + joinAttributeNames.mkString(", ") + ")"
+            ("INNER", "USING (" + joinAttributeNames.mkString(", ") + ")")
 
-          i"""SELECT * FROM
-             |  (  ${getSql(node.left)}
-             |  ) left_query
-             |  INNER JOIN
-             |  (  ${getSql(node.right)}
-             |  ) right_query
-             |$usingPart"""
+          getJoinSql(node, joinType, conditionPart)
         }
         case node: TransitiveJoin => {
 
@@ -312,6 +306,16 @@ class CompileSql(query: String) extends CompilerTest {
          |$sqlString""".stripMargin
     else
       sqlString
+  }
+
+  private def getJoinSql(node: EquiJoinLike, joinType: String, conditionPart: String) = {
+    i"""SELECT * FROM
+       |  (  ${getSql(node.left)}
+       |  ) left_query
+       |  $joinType JOIN
+       |  (  ${getSql(node.right)}
+       |  ) right_query
+       |$conditionPart"""
   }
 
   def getNodes(plan: FNode): Seq[FNode] = {
