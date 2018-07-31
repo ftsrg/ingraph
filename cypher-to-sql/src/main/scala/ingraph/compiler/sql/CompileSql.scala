@@ -292,6 +292,9 @@ class CompileSql(query: String) extends CompilerTest {
         }
         case node: Dual => "SELECT"
         case node: ReturnItem => getSql(node.child)
+        case FunctionInvocation(Function.NODE_HAS_LABELS, (vertexColumn: VertexAttribute) :: (vertexLabelSet: VertexLabelSet) :: Nil, false) => {
+          getVertexLabelSqlCondition(vertexLabelSet, getQuotedColumnName(vertexColumn)).get
+        }
         case node: FunctionInvocation => {
           val functionName = node.functor match {
             case Function.COLLECT => "array_agg"
