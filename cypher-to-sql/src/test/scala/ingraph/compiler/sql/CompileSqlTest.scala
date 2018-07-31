@@ -943,7 +943,7 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
   ignore("Filter out based on node label in WHERE clause") {
     compileAndRunQuery("CREATE (:A {labels: 'A'}), (:A:B {labels: 'A-B'}), (:B {labels: 'B'}), (:C {labels: 'C'}), ({labels: ''})",
       """MATCH (a)
-        |WHERE a:A OR a:C
+        |WHERE a:A:B OR a:C
         |RETURN a, a.labels""".stripMargin)
   }
 }
