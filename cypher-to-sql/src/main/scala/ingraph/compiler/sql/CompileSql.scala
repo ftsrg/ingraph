@@ -114,15 +114,9 @@ class CompileSql(query: String) extends CompilerTest {
                 node.requiredProperties.map(prop =>s"""(SELECT value FROM vertex_property WHERE parent = vertex_id AND key = ${getSingleQuotedString(prop.name)}) AS ${getQuotedColumnName(prop)}"""))
               .mkString(",\n")
 
-          val vertexLabelsAsRowValues = node.nnode.v.labels.vertexLabels.map("(" + getSingleQuotedString(_) + ")")
-          val labelConstraint = if (vertexLabelsAsRowValues.isEmpty)
-            ""
-          else
-            s"""WHERE NOT EXISTS(VALUES ${vertexLabelsAsRowValues.mkString(", ")}
-               |                 EXCEPT ALL
-               |                 SELECT name
-               |                 FROM label
-               |                 WHERE parent = vertex_id)""".stripMargin
+          val labelConstraint = getVertexLabelSqlCondition(node.nnode.v.labels, "vertex_id")
+            .map("WHERE " + _)
+            .getOrElse("")
 
           i"""SELECT
              |  $columns
@@ -337,6 +331,20 @@ class CompileSql(query: String) extends CompilerTest {
          |$sqlString""".stripMargin
     else
       sqlString
+  }
+
+  private def getVertexLabelSqlCondition(labelSet: VertexLabelSet, columnName: String): Option[String] = {
+    val labelsAsRowValues = labelSet.vertexLabels.map("(" + getSingleQuotedString(_) + ")")
+
+    if (labelsAsRowValues.isEmpty)
+      None
+    else
+      Some(
+        s"""NOT EXISTS(VALUES ${labelsAsRowValues.mkString(", ")}
+           |           EXCEPT ALL
+           |           SELECT name
+           |           FROM label
+           |           WHERE parent = $columnName)""".stripMargin)
   }
 
   private def getJoinSql(node: EquiJoinLike, joinType: String, conditionPart: String, resultColumns: String = "*") = {
