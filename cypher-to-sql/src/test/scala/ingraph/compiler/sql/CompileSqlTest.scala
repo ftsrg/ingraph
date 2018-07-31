@@ -87,6 +87,7 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
       case value: RelationshipValue => value.asRelationship().id()
       case value: StringValue => value.asString()
       case value: ListValue => value.asList.asScala.map(convertCypherCell)
+      case value: NullValue => null
       case _ => value
     }
   }
