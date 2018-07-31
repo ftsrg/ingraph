@@ -138,6 +138,36 @@ class CompileSql(query: String) extends CompilerTest {
 
           getJoinSql(node, joinType, conditionPart)
         }
+        case node: LeftOuterJoin => {
+          val joinAttributeNames = node.flatCommon.map(getQuotedColumnName)
+          val conditionPart = if (joinAttributeNames.isEmpty)
+            "ON TRUE"
+          else
+            "USING (" + joinAttributeNames.mkString(", ") + ")"
+
+          getJoinSql(node, "LEFT OUTER", conditionPart)
+        }
+        case node: ThetaLeftOuterJoin => {
+          val leftColumns :: rightColumns :: Nil = Seq(node.left, node.right).map(_.flatSchema.map(getQuotedColumnName))
+          // prefer columns from  the left query, because in left outer join the right ones may contain NULL
+          val resultColumns =
+            (leftColumns.map("left_query." + _) ++
+              (rightColumns.toSet -- leftColumns).map("right_query." + _))
+              .mkString(", ")
+
+          val columnConditions = node.flatCommon
+            .map(getQuotedColumnName)
+            .map(name => s"left_query.$name = right_query.$name")
+          val thetaConditionPart = getSql(node.nnode.condition)
+          val joinConditions = columnConditions :+ thetaConditionPart
+
+          val joinConditionPart = if (joinConditions.isEmpty)
+            "ON TRUE"
+          else
+            i"ON ${joinConditions.mkString(" AND\n")}"
+
+          getJoinSql(node, "LEFT OUTER", joinConditionPart, resultColumns)
+        }
         case node: TransitiveJoin => {
 
           val leftNode = node.left
@@ -309,8 +339,8 @@ class CompileSql(query: String) extends CompilerTest {
       sqlString
   }
 
-  private def getJoinSql(node: EquiJoinLike, joinType: String, conditionPart: String) = {
-    i"""SELECT * FROM
+  private def getJoinSql(node: EquiJoinLike, joinType: String, conditionPart: String, resultColumns: String = "*") = {
+    i"""SELECT $resultColumns FROM
        |  (  ${getSql(node.left)}
        |  ) left_query
        |  $joinType JOIN

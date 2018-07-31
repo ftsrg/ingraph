@@ -825,13 +825,43 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/OptionalMatchAcceptance.feature#L57
-  ignore("Respect predicates on the OPTIONAL MATCH") {
+  test("Respect predicates on the OPTIONAL MATCH") {
+    compileAndRunQuery(
+      """CREATE (s:Single), (a:A {prop: 42}),
+        |       (b:B {prop: 46}), (c:C)
+        |CREATE (s)-[:REL]->(a),
+        |       (s)-[:REL]->(b),
+        |       (a)-[:REL]->(c),
+        |       (b)-[:LOOP]->(b)""".stripMargin,
+      """MATCH (n:Single)
+        |OPTIONAL MATCH (n)-[r:REL]-(m)
+        |WHERE m.prop = 42
+        |RETURN m
+      """.stripMargin
+    )
+  }
+  test("Respect predicates on the OPTIONAL MATCH / empty optional result") {
     compileAndRunQuery(
       """CREATE (s:Single)""",
       """MATCH (n:Single)
         |OPTIONAL MATCH (n)-[r:REL]-(m)
         |WHERE m.prop = 42
         |RETURN m
+      """.stripMargin
+    )
+  }
+  test("Respect predicates on the OPTIONAL MATCH / condition about existing and null vertices") {
+    compileAndRunQuery(
+      """CREATE (:Single {num: 1}),
+        |       (:Single {num: 2}),
+        |       (:Single {num: 3})-[:REL]->({prop: 42}),
+        |       (:Single {num: 1})-[:REL]->({prop: 42}),
+        |       (:Single {num: 1})-[:REL]->()
+      """.stripMargin,
+      """MATCH (n:Single)
+        |OPTIONAL MATCH (n)-[r:REL]-(m)
+        |WHERE m.prop = 42 AND n.num <> 1
+        |RETURN n, n.num, m, m.prop
       """.stripMargin
     )
   }
@@ -868,7 +898,15 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
     )
   }
 
-  ignore("count empty on OPTIONAL MATCH") {
+  test("Show null on OPTIONAL MATCH") {
+    compileAndRunQuery("",
+      """OPTIONAL MATCH (n)
+        |RETURN n
+      """.stripMargin
+    )
+  }
+
+  test("count empty on OPTIONAL MATCH") {
     compileAndRunQuery("",
       """OPTIONAL MATCH (n)
         |RETURN count(n) AS cn
