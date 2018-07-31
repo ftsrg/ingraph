@@ -303,7 +303,20 @@ class CompileSql(query: String) extends CompilerTest {
           functionName + "(" + distinctPart + parametersString + ")"
         }
         case node: FNode => node.children.map(getSql).mkString("\n")
-        case node: BinaryOperator => s"""(${getSql(node.left)} ${node.sqlOperator} ${getSql(node.right)})"""
+        case node: BinaryOperator => {
+          val leftSql = getSql(node.left)
+          val rightSql = getSql(node.right)
+          val operator = node.sqlOperator
+
+          if (Seq(leftSql, rightSql).exists(_.contains("\n")))
+            i"""(
+               |  $leftSql
+               |$operator
+               |  $rightSql
+               |)"""
+          else
+            s"($leftSql $operator $rightSql)"
+        }
         case node: ResolvableName => getQuotedColumnName(node)
         case node: IndexLookupExpression => {
           // TODO support indexing of SQL arrays too
