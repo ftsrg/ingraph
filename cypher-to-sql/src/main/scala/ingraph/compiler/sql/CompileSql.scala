@@ -123,47 +123,7 @@ class CompileSql(query: String) extends CompilerTest {
              |FROM vertex
              |$labelConstraint"""
         }
-        case node: Join => {
-          val joinAttributeNames = node.flatCommon.map(getQuotedColumnName)
-          val (joinType, conditionPart) = if (joinAttributeNames.isEmpty)
-            ("CROSS", "")
-          else
-            ("INNER", "USING (" + joinAttributeNames.mkString(", ") + ")")
-
-          getJoinSql(node, joinType, conditionPart)
-        }
-        case node: LeftOuterJoin => {
-          val joinAttributeNames = node.flatCommon.map(getQuotedColumnName)
-          val conditionPart = if (joinAttributeNames.isEmpty)
-            "ON TRUE"
-          else
-            "USING (" + joinAttributeNames.mkString(", ") + ")"
-
-          getJoinSql(node, "LEFT OUTER", conditionPart)
-        }
-        case node: ThetaLeftOuterJoin => {
-          val leftColumns :: rightColumns :: Nil = Seq(node.left, node.right).map(_.flatSchema.map(getQuotedColumnName))
-          // prefer columns from  the left query, because in left outer join the right ones may contain NULL
-          val resultColumns =
-            (leftColumns.map("left_query." + _) ++
-              (rightColumns.toSet -- leftColumns).map("right_query." + _))
-              .mkString(", ")
-
-          val columnConditions = node.flatCommon
-            .map(getQuotedColumnName)
-            .map(name => s"left_query.$name = right_query.$name")
-          val thetaConditionPart = getSql(node.nnode.condition)
-          val joinConditions = columnConditions :+ thetaConditionPart
-
-          val joinConditionPart = if (joinConditions.isEmpty)
-            "ON TRUE"
-          else
-            i"ON ${joinConditions.mkString(" AND\n")}"
-
-          getJoinSql(node, "LEFT OUTER", joinConditionPart, resultColumns)
-        }
         case node: TransitiveJoin => {
-
           val leftNode = node.left
           val edgesNode = node.right
 
@@ -220,6 +180,37 @@ class CompileSql(query: String) extends CompilerTest {
              |  $joinNodeColumnNames
              |FROM recursive_table
              |$lowerBoundConstraint"""
+        }
+        // EquiJoinLike nodes except TransitiveJoin
+        case node: EquiJoinLike => {
+          val leftColumns = node.left.flatSchema.map(getQuotedColumnName)
+          val rightColumns = node.right.flatSchema.map(getQuotedColumnName)
+          // prefer columns from  the left query, because in left outer join the right ones may contain NULL
+          val resultColumns =
+            (leftColumns.map("left_query." + _) ++
+              (rightColumns.toSet -- leftColumns).map("right_query." + _))
+              .mkString(", ")
+
+          val columnConditions = node.flatCommon
+            .map(getQuotedColumnName)
+            .map(name => s"left_query.$name = right_query.$name")
+          val joinConditions = node match {
+            case node: ThetaLeftOuterJoin => columnConditions :+ getSql(node.nnode.condition)
+            case _ => columnConditions
+          }
+
+          val joinConditionPart = if (joinConditions.isEmpty)
+            "ON TRUE"
+          else
+            i"ON ${joinConditions.mkString(" AND\n")}"
+
+          val joinType = node match {
+            case _: Join => "INNER"
+            case _: LeftOuterJoin => "LEFT OUTER"
+            case _: ThetaLeftOuterJoin => "LEFT OUTER"
+          }
+
+          getJoinSql(node, joinType, joinConditionPart, resultColumns)
         }
         case node: Production => {
           val renamePairs = node.output.zip(node.outputNames).map { case (attribute, outputName) => (getQuotedColumnName(attribute), getQuotedColumnName(outputName)) }
@@ -363,7 +354,7 @@ class CompileSql(query: String) extends CompilerTest {
            |           WHERE parent = $columnName)""".stripMargin)
   }
 
-  private def getJoinSql(node: EquiJoinLike, joinType: String, conditionPart: String, resultColumns: String = "*") = {
+  private def getJoinSql(node: EquiJoinLike, joinType: String, conditionPart: String, resultColumns: String) = {
     i"""SELECT $resultColumns FROM
        |  (  ${getSql(node.left)}
        |  ) left_query
