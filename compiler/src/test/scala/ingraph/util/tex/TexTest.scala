@@ -14,7 +14,7 @@ class TexTest extends FunSuite {
     val tc = new GraphTexConverter[T]
     val tex = tc.toTex(plan)
     tc.toFile(tex, ingraphDir, texFile, comment)
-    tc.compile(texFile)
+    //tc.compile(texFile)
   }
 
   def cypherTest(prefix: String, query: String): Unit = {
