@@ -171,7 +171,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN some.prop
       """.stripMargin
     )
-    findFirstByType(stages.fplan, classOf[Selection]).condition
+    findFirstByType(stages.fplan, classOf[Selection]).conditionTuple
   }
 
   ignore("Placeholder for debugging plans") {

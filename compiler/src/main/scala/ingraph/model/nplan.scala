@@ -19,8 +19,7 @@ abstract class UnaryNNode extends GenericUnaryNode[NNode] with NNode {
 abstract class BinaryNNode extends GenericBinaryNode[NNode] with NNode {}
 
 trait JoinLike extends BinaryNNode with TJoinLike {
-  def common: Seq[ResolvableName] = left.output.filter(x => right.output.map(_.resolvedName).contains(x.resolvedName))
-  val commonAttributes = common // TODO
+  def commonAttributes: Seq[ResolvableName] = left.output.filter(x => right.output.map(_.resolvedName).contains(x.resolvedName))
 
   /**
     * @return input side preference, used to determine which input node (left/right) should be preferred when

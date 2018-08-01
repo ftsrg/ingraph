@@ -22,8 +22,7 @@ abstract class UnaryFNode extends GenericUnaryNode[FNode] with FNode {
 abstract class BinaryFNode extends GenericBinaryNode[FNode] with FNode {}
 
 trait JoinLike extends BinaryFNode with TJoinLike {
-  def flatCommon: Seq[ResolvableName] = left.flatSchema.filter(x => right.flatSchema.map(_.resolvedName).contains(x.resolvedName))
-  override val commonAttributes = flatCommon // TODO
+  def commonAttributes: Seq[ResolvableName] = left.flatSchema.filter(x => right.flatSchema.map(_.resolvedName).contains(x.resolvedName))
   lazy val leftMask:  Seq[Int] = SchemaMapper.schemaToIndices(this, left)
   lazy val rightMask: Seq[Int] = SchemaMapper.schemaToIndices(this, right)
 }
@@ -84,21 +83,22 @@ case class Grouping(requiredProperties: Seq[ResolvableName],
                     child: FNode
                      ) extends UnaryFNode with TGrouping {
   override def flatSchema = nnode.projectList ++ requiredProperties
-  lazy val aggregationCriteria: Seq[Expression] =
+  lazy val aggregationCriteriaTuple: Seq[Expression] =
     nnode.aggregationCriteria.map(SchemaMapper.transformExpression(_, child.flatSchema)) ++
       requiredProperties.map(SchemaMapper.transformExpression(_, child.flatSchema))
   lazy val projectionTuple: Seq[Expression] =
     nnode.projectList.map(_.child).map(SchemaMapper.transformExpression(_, child.flatSchema)) ++
       requiredProperties.map(SchemaMapper.transformExpression(_, child.flatSchema))
   override val projectList: TProjectList = nnode.projectList
+  override val aggregationCriteria: Seq[Expression] = nnode.aggregationCriteria
 }
 
 case class Selection(nnode: nplan.Selection,
                      child: FNode
                     ) extends UnaryFNode with TSelection {
 
-  lazy val condition: Expression =  // TODO rename to tupleCondition
-   SchemaMapper.transformExpression(nnode.condition, child.flatSchema)
+  lazy val conditionTuple: Expression = SchemaMapper.transformExpression(nnode.condition, child.flatSchema)
+  val condition: Expression = nnode.condition
 }
 
 case class Unwind(nnode: nplan.Unwind,
@@ -118,7 +118,8 @@ case class SortAndTop(nnode: nplan.SortAndTop,
                      ) extends UnaryFNode with TSortAndTop {
   lazy val skipExpr:  Option[Expression] = nnode.skipExpr
   lazy val limitExpr: Option[Expression] = nnode.limitExpr
-  val order: Seq[SortOrder] = nnode.order.map(SchemaMapper.transformExpression(_, child.flatSchema).asInstanceOf[SortOrder])
+  override val order: Seq[SortOrder] = nnode.order
+  val orderTuple: Seq[SortOrder] = nnode.order.map(SchemaMapper.transformExpression(_, child.flatSchema).asInstanceOf[SortOrder])
 }
 
 // binary nodes
@@ -202,7 +203,7 @@ case class Remove(nnode: nplan.Remove,
 object SchemaMapper {
   def schemaToIndices(node: JoinLike, side: FNode): Seq[Int] = {
     val sideIndices = schemaToMapNames(side)
-    node.flatCommon.map(attr => sideIndices(attr.resolvedName.get.resolvedName))
+    node.commonAttributes.map(attr => sideIndices(attr.resolvedName.get.resolvedName))
   }
 
   def schemaToMapNames(n: FNode): Map[String, Int] = {
