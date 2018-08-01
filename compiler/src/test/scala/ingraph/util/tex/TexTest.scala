@@ -9,8 +9,9 @@ import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.scalatest.FunSuite
 
 class TexTest extends FunSuite {
-  def totex[T <: LogicalPlan](plan: LogicalPlan, texFile: String, comment: String, tc: TexConverter[T]): Unit = {
+  def totex[T <: LogicalPlan](plan: LogicalPlan, texFile: String, comment: String): Unit = {
     val ingraphDir = "./visualization"
+    val tc = new GraphTexConverter[T]
     val tex = tc.toTex(plan)
     tc.toFile(List(tex), ingraphDir, texFile, comment)
     tc.compile(texFile)
@@ -55,9 +56,11 @@ class TexTest extends FunSuite {
     val jp = GPlanToNPlan.transform(rqp)
     val fp = NPlanToFPlan.transform(jp)
 
-    totex[GNode](rqp, s"${prefix}g.tex", query, new GTexConverter)
-    totex[NNode](jp, s"${prefix}n.tex", query, new NTexConverter)
-    totex(fp, s"${prefix}fp.tex", query, new FTexConverter)
+
+
+    totex[GNode](rqp, s"${prefix}g.tex", query)
+    totex[NNode](jp, s"${prefix}n.tex", query)
+    totex(fp, s"${prefix}fp.tex", query)
   }
 
   test("cypher-1") {
@@ -126,5 +129,11 @@ class TexTest extends FunSuite {
       "MATCH (user:User {login:'heller.perry'})-[:KNOWS*2..3]->(foaf)\n " +
       "WHERE NOT((user)-[:KNOWS]->(foaf))\n " +
       "RETURN user, foaf")
+  }
+
+  test("cypher-10") {
+    cypherTest("cypher-10-",
+      "UNWIND [1, 2, 3, NULL ] AS x \n" +
+      "RETURN x, 'val' AS y")
   }
 }
