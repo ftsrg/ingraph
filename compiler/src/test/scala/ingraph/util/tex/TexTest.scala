@@ -9,11 +9,11 @@ import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.scalatest.FunSuite
 
 class TexTest extends FunSuite {
-  def totex[T <: LogicalPlan](plan: LogicalPlan, texFile: String, comment: String): Unit = {
+  def totex[T <: LogicalPlan](plan: LogicalPlan, texFile: String): Unit = {
     val ingraphDir = "./visualization"
     val tc = new GraphTexConverter[T]
     val tex = tc.toTex(plan)
-    tc.toFile(tex, ingraphDir, texFile, comment)
+    tc.toFile(tex, ingraphDir, texFile)
     //tc.compile(texFile)
   }
 
@@ -28,9 +28,9 @@ class TexTest extends FunSuite {
 
 
 
-    totex[GNode](rqp, s"${prefix}g.tex", query)
-    totex[NNode](jp, s"${prefix}n.tex", query)
-    totex(fp, s"${prefix}fp.tex", query)
+    totex[GNode](rqp, s"${prefix}g.tex")
+    totex[NNode](jp, s"${prefix}n.tex")
+    totex(fp, s"${prefix}fp.tex")
   }
 
   test("cypher-1") {

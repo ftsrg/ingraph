@@ -5,9 +5,9 @@ import ingraph.model.treenodes.GenericBinaryNode
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 class GraphTexConverter[T <: LogicalPlan] extends TexConverter[T] {
-  override def toStandaloneDoc(tex: String, ingraphDir: String, comment: String): String = {
+  override def toStandaloneDoc(tex: String, ingraphDir: String): String = {
     val texGraph = s"\\begin{forest} $tex \\end{forest}"
-    super.toStandaloneDoc(texGraph, ingraphDir, comment)
+    super.toStandaloneDoc(texGraph, ingraphDir)
   }
 
   override def toTex(p: LogicalPlan): String = {
