@@ -13,39 +13,9 @@ class TexTest extends FunSuite {
     val ingraphDir = "./visualization"
     val tc = new GraphTexConverter[T]
     val tex = tc.toTex(plan)
-    tc.toFile(List(tex), ingraphDir, texFile, comment)
+    tc.toFile(tex, ingraphDir, texFile, comment)
     tc.compile(texFile)
   }
-
-  /*test("query-1") {
-    val vls = VertexLabelSet(Set("Person"), NonEmpty)
-
-    val n = VertexAttribute("n", vls)
-    val name = PropertyAttribute("name", n)
-    val age = PropertyAttribute("age", n)
-
-    val projectList = Seq(ReturnItem(name))
-    val condition = GreaterThan(age, Literal(27))
-
-    val qp = gplan.UnresolvedProjection(
-      projectList,
-      gplan.Selection(
-        condition,
-        gplan.GetVertices(n)
-      )
-    )
-    val rqp = GPlanResolver.resolveGPlan(qp)
-    val jp = GPlanToNPlan.transform(rqp)
-    val fp = NPlanToFPlan.transform(jp)
-
-    assert(fp.flatSchema.size == 1)
-    assert(fp.children(0).flatSchema.size == 3)
-    assert(fp.children(0).children(0).flatSchema.size == 3)
-    println(rqp)
-    totex(rqp, "rqp.tex", "")
-    //totex(jp, "jp.tex")
-    //totex(fp, "fp.tex")
-  }*/
 
   def cypherTest(prefix: String, query: String): Unit = {
     println(s"${prefix} query: ${query}")

@@ -21,7 +21,7 @@ class TexConverter[T <: LogicalPlan] {
     * @param ingraphDir
     * @return
     */
-  def toStandaloneDoc(tex: List[String], ingraphDir: String, comment: String): String = {
+  def toStandaloneDoc(tex: String, ingraphDir: String, comment: String): String = {
     // FIXME comment only for debug puporses, remove it
     s"""\\documentclass[convert={density=120}]{standalone}
        |\\input{${ingraphDir}/inputs/relalg-packages}
@@ -31,13 +31,13 @@ class TexConverter[T <: LogicalPlan] {
        |\\begin{document}
        |\\begin{preview}
        |${comment.concat("\\\\").replace("\n", "\\\\")}
-       |${tex.mkString("\n\n")}
+       |${tex}
        |\\end{preview}
        |\\end{document}
        |""".stripMargin
   }
 
-  def toFile(tex: List[String], ingraphDir: String, filePath: String, comment: String): Unit = {
+  def toFile(tex: String, ingraphDir: String, filePath: String, comment: String): Unit = {
     val doc = toStandaloneDoc(tex, ingraphDir, comment)
     Files.asCharSink(new File(filePath), Charset.forName("UTF-8")).write(doc)
   }
