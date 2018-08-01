@@ -2,7 +2,6 @@ package ingraph.driver.tests;
 
 import ingraph.driver.CypherDriverFactory;
 import org.junit.Test;
-import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
@@ -15,8 +14,7 @@ public class Neo4jDriverTest {
 
 	@Test
 	public void test() throws Exception {
-		try (Driver driver = CypherDriverFactory.createNeo4jDriver("bolt://localhost:7687",
-				AuthTokens.basic("neo4j", "admin"))) {
+		try (Driver driver = CypherDriverFactory.createNeo4jDriver()) {
 			try (Session session = driver.session()) {
 				try (Transaction tx = session.beginTransaction()) {
 					tx.run("CREATE (a:Person {name: $name, title: $title})",
