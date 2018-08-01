@@ -25,8 +25,7 @@ object CompileSqlTest {
 trait Neo4jConnection extends BeforeAndAfterAll with BeforeAndAfterEach {
   this: Suite =>
 
-  val driver: CypherDriver = CypherDriverFactory.createNeo4jDriver("bolt://localhost:7687",
-    AuthTokens.basic("neo4j", "admin"))
+  val driver: CypherDriver = CypherDriverFactory.createNeo4jDriver()
   val cypherSession: Session = driver.session()
 
   override def beforeEach(): Unit = {
