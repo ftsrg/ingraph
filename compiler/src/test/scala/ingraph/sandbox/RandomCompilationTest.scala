@@ -399,7 +399,7 @@ class RandomCompilationTest extends CompilerTest {
         |""".stripMargin)
   }
 
-  test("should compile vertices COLLECT'ed then UNWIND as a vertex") {
+  ignore("should compile vertices COLLECT'ed then UNWIND as a vertex") {
     compile(
       """MATCH (n:Person)
         |WITH collect(n) as persons
