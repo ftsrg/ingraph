@@ -362,6 +362,20 @@ class RandomCompilationTest extends CompilerTest {
         |""".stripMargin)
   }
 
+  test("should compile index range expression missing lower bound") {
+    compile(
+      """MATCH (n)
+        |RETURN n.languages[..5] AS someLanguages
+        |""".stripMargin)
+  }
+
+  test("should compile index range expression missing upper bound") {
+    compile(
+      """MATCH (n)
+        |RETURN n.languages[2..] AS someLanguages
+        |""".stripMargin)
+  }
+
   test("should resolve index expressions referenced in patterns") {
     compile(
       """MATCH (n:Person)
@@ -385,7 +399,7 @@ class RandomCompilationTest extends CompilerTest {
         |""".stripMargin)
   }
 
-  test("should compile vertices COLLECT'ed then UNWIND as a vertex") {
+  ignore("should compile vertices COLLECT'ed then UNWIND as a vertex") {
     compile(
       """MATCH (n:Person)
         |WITH collect(n) as persons
