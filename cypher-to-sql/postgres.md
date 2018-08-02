@@ -22,3 +22,22 @@ pgsql/bin/pg_dump --file=~/dump.sql --clean --create --if-exists --username=post
 ### Load
 1. [purge](#purge-postgresql-database)
 2. `pgsql/bin/psql --file=~/dump.sql --username=postgres --host=localhost --port=5432`
+
+## Show graph
+```sql
+SELECT vertex_id,
+       (SELECT coalesce(array_agg(name), ARRAY[] :: text []) FROM label WHERE parent = vertex_id) AS labels,
+       (SELECT coalesce(array_agg(key || ': ' || value), ARRAY[] :: text [])
+        FROM vertex_property
+        WHERE parent = vertex_id)                                                                 AS properties
+FROM vertex;
+
+SELECT edge_id,
+       type,
+       "from",
+       "to",
+       (SELECT coalesce(array_agg(key || ': ' || value), ARRAY[] :: text [])
+        FROM edge_property
+        WHERE parent = edge_id) AS properties
+FROM edge;
+```
