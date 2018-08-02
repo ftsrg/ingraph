@@ -19,7 +19,7 @@ ext {
   scalaTestVersion = '3.0.5'
   scalaVersion = '2.11.12'
   sparkVersion = '2.3.0'
-  slizaaVersion = '1.0.0-SNAPSHOT'
+  slizaaVersion = '1.0.10.0'
   xtextVersion = '2.10.0'
 }
 

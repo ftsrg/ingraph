@@ -32,7 +32,7 @@ object StatementBuilder {
     *      not present in the original openCypher grammar
     */
   def multiPartSubQuery2Clauses(mpsq: oc.MultiPartSubQuery): Seq[oc.Clause] = {
-      mpsq.getReadingClause.asScala ++ mpsq.getUpdatingClauses.asScala :+ mpsq.getWithPart
+      mpsq.getReadingClauses.asScala ++ mpsq.getUpdatingClauses.asScala :+ mpsq.getWithPart
   }
 
   /** Builds the gplan for a single query built from several query parts.
