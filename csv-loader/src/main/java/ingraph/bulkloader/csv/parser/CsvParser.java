@@ -33,7 +33,7 @@ public class CsvParser {
 			final LinkedHashMap<String, ColumnDescriptor> columnDescriptors = new LinkedHashMap<>();
 			for (String column : header) {
 				final ColumnNameParser cnp = new ColumnNameParser(column);
-				columnDescriptors.put(cnp.getName(), new ColumnDescriptor(cnp.getType(), cnp.getIdSpaceName()));
+				columnDescriptors.put(cnp.getName(), new ColumnDescriptor(cnp.getType()));
 			}
 
 			if (columnDescriptors.keySet().stream() //
