@@ -28,6 +28,13 @@ public class ColumnNameParserTest {
 	}
 
 	@Test
+	public void testStringArray() {
+		ColumnNameParser cnp = new ColumnNameParser("hello:STRING[]");
+		assertEquals("hello", cnp.getName());
+		assertEquals(ColumnType.STRING_ARRAY, cnp.getType());
+	}
+
+	@Test
 	public void testInt() {
 		ColumnNameParser cnp = new ColumnNameParser("hello:INT");
 		assertEquals("hello", cnp.getName());
@@ -51,5 +58,6 @@ public class ColumnNameParserTest {
 		ColumnNameParser cnp = new ColumnNameParser(":LABEL");
 		assertEquals(ColumnType.LABEL, cnp.getType());
 	}
+
 
 }

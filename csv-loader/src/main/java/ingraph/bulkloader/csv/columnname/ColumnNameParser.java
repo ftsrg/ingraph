@@ -16,15 +16,20 @@ public class ColumnNameParser {
 		if (splitted.length > 1) {
 			final String typeInfo = splitted[1];
 
-			Pattern idSpaceRegex = Pattern.compile("(ID|START_ID|END_ID)\\((.*)\\)", Pattern.CASE_INSENSITIVE);
-			Matcher matcher = idSpaceRegex.matcher(typeInfo);
-
-			if (matcher.matches()) {
-				type = ColumnType.valueOf(matcher.group(1).toUpperCase());
-				idSpaceName = Optional.of(matcher.group(2));
-			} else {
-				type = ColumnType.valueOf(typeInfo);
+			if (typeInfo.toLowerCase().equals("string[]")) {
+				type = ColumnType.STRING_ARRAY;
 				idSpaceName = Optional.empty();
+			} else {
+				Pattern idSpaceRegex = Pattern.compile("(ID|START_ID|END_ID)\\((.*)\\)", Pattern.CASE_INSENSITIVE);
+				Matcher matcher = idSpaceRegex.matcher(typeInfo);
+
+				if (matcher.matches()) {
+					type = ColumnType.valueOf(matcher.group(1).toUpperCase());
+					idSpaceName = Optional.of(matcher.group(2));
+				} else {
+					type = ColumnType.valueOf(typeInfo);
+					idSpaceName = Optional.empty();
+				}
 			}
 		} else {
 			type = ColumnType.STRING;

@@ -7,6 +7,8 @@ import ingraph.bulkloader.csv.data.CsvVertex;
 import ingraph.bulkloader.csv.idspaces.IdSpaces;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,8 +29,9 @@ public class VertexRowParser extends EntityRowParser<CsvVertex> {
 		// id
 		final long id = getId(row, columnDescriptors, INTERNAL_ID);
 		// labels
-		final Set<String> additionalLabels = (Set<String>) row.getOrDefault(INTERNAL_LABEL, Collections.emptySet());
-		final SetView<String> allLabels = Sets.union(labels, additionalLabels);
+		final List<String> additionalLabels = (List<String>) row.getOrDefault(INTERNAL_LABEL, Collections.emptyList());
+		final Set<String> additionalLabelsSet = new HashSet<>(additionalLabels);
+		final SetView<String> allLabels = Sets.union(labels, additionalLabelsSet);
 		// properties
 		final Map<String, Object> properties = PropertyExtractor.extractProperties(row);
 
