@@ -32,8 +32,8 @@ abstract class AbstractIngraphAdapter extends AutoCloseable {
     for (node <- loader.getVertices.asScala) {
       indexer.addVertex(node)
     }
-    for (relationship <- loader.getEdges.asScala) {
-      indexer.addEdge(relationship)
+    for (edge <- loader.getEdges.asScala) {
+      indexer.addEdge(edge)
     }
   }
 
