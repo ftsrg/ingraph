@@ -6,20 +6,27 @@ import java.util.Map;
 
 public class CsvVertex extends CsvEntity {
 
-	private final Collection<String> labels;
+	private final Collection<String> customLabels;
 
-	public CsvVertex(final Long id, final Collection<String> labels) {
-		super(id, Collections.emptyMap());
-		this.labels = labels;
+	public CsvVertex(final Long id) {
+		this(id, Collections.emptyList(), Collections.emptyMap());
 	}
 
-	public CsvVertex(final Long id, final Collection<String> labels, final Map<String, ?> properties) {
+	public CsvVertex(final Long id, final Collection<String> customLabels) {
+		this(id, customLabels, Collections.emptyMap());
+	}
+
+	public CsvVertex(final Long id, final Map<String, ?> properties) {
+		this(id, Collections.emptyList(), properties);
+	}
+
+	public CsvVertex(final Long id, final Collection<String> customLabels, final Map<String, ?> properties) {
 		super(id, properties);
-		this.labels = labels;
+		this.customLabels = customLabels;
 	}
 
-	public Collection<String> getLabels() {
-		return labels;
+	public Collection<String> getCustomLabels() {
+		return customLabels;
 	}
 
 }
