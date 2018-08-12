@@ -29,6 +29,7 @@ public enum Function {
   TYPE          ("type",           FunctionCategory.META,          CypherType.STRING,      1, l(CypherType.RELATIONSHIP)             ), // type( relationship )
   STARTNODE     ("startNode",      FunctionCategory.META,          CypherType.NODE,        1, l(CypherType.RELATIONSHIP)             ), // startNode( relationship )
   ENDNODE       ("endNode",        FunctionCategory.META,          CypherType.NODE,        1, l(CypherType.RELATIONSHIP)             ), // endNode( relationship )
+	NODE_HAS_LABELS("node_has_labels", FunctionCategory.META,        CypherType.BOOLEAN,     2, l(CypherType.ANY, CypherType.LIST_TYPE)), // n:Label1:Label2
 
   // list functions
   TAIL          ("tail",           FunctionCategory.LIST,          CypherType.LIST_TYPE,   1, l(CypherType.LIST_TYPE)                ), // tail( expression )
@@ -44,7 +45,6 @@ public enum Function {
 
   // predicate functions
   EXISTS        ("exists",         FunctionCategory.PREDICATE,     CypherType.BOOLEAN,     1, l(CypherType.ANY)                      ),
-  NODE_HAS_LABELS("node_has_labels",FunctionCategory.PREDICATE,    CypherType.BOOLEAN,     2, l(CypherType.ANY, CypherType.LIST_TYPE)           ),
   IN_COLLECTION ("in_collection",  FunctionCategory.PREDICATE,     CypherType.BOOLEAN,     2, l(CypherType.ANY, CypherType.LIST_TYPE)           ),
 
   // scalar functions
