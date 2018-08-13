@@ -255,6 +255,7 @@ case class EdgeListAttribute(override val name: String, override val labels: Edg
 
 // formerly AttributeVariable
 case class PropertyAttribute(override val name: String, elementAttribute: ElementAttribute, override val resolvedName: TResolvedName = None) extends GraphAttribute(name) with ResolvableName
+case class NodeHasLabelsAttribute(override val name: String, labels: Set[String], override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName
 
 
 /*

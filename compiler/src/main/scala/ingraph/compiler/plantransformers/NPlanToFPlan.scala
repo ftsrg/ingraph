@@ -123,14 +123,19 @@ object NPlanToFPlan {
 
   def extractProperties(expression: Expression): Seq[ResolvableName] = {
     (expression match {
+      case FunctionInvocation(
+        ingraph.model.misc.Function.NODE_HAS_LABELS,
+        List(VertexAttribute(name, _, _, _, resolvedName), VertexLabelSet(labels, _)),
+        _
+      ) => Seq(NodeHasLabelsAttribute(s"${name}_has_label", labels))
       case a: ReturnItem => extractProperties(a.child)
       case a: PropertyAttribute => Seq(a)
       case _ => Seq()
-    }) ++ expression.children.flatMap(a => extractProperties(a))
+    }) ++ expression.children.flatMap(extractProperties)
   }
 
   def extractProperties(projectList: TProjectList): Seq[ResolvableName] = {
-    projectList.flatMap(extractProperties(_))
+    projectList.flatMap(extractProperties)
   }
 
   def extractPropertiesFromInsertion(attribute: ResolvableName): Seq[ResolvableName] = {

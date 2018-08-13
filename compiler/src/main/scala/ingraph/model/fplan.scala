@@ -212,7 +212,15 @@ object SchemaMapper {
 
   def transformExpression(expression: Expression, flatSchema: Seq[ResolvableName]): Expression = {
     expression.transform {
-      case a: ResolvableName => TupleIndexLiteralAttribute(flatSchema.map(_.resolvedName).indexOf(a.resolvedName), isVertex = a.isInstanceOf[VertexAttribute])
+      case a: ResolvableName => TupleIndexLiteralAttribute(
+        flatSchema.map(_.resolvedName).indexOf(a.resolvedName),
+        isVertex = a.isInstanceOf[VertexAttribute]
+      )
+      case FunctionInvocation(
+        ingraph.model.misc.Function.NODE_HAS_LABELS,
+        List(VertexAttribute(name, _, _, _, resolvedName), VertexLabelSet(labels, _)),
+        _
+      ) => TupleIndexLiteralAttribute(flatSchema.map(_.name).indexOf(s"${name}_has_label"), isVertex = false)
       case e: Expression => e
     }
   }

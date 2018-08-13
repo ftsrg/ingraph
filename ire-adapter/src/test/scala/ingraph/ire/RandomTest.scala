@@ -8,6 +8,15 @@ import org.scalatest.FunSuite
 import scala.collection.JavaConverters._
 
 class RandomTest extends FunSuite {
+
+  test("Support 'node has labels' function") {
+    val query =
+      """MATCH (te:TrackElement)
+        |RETURN te:Segment""".stripMargin
+    val adapter = new IngraphIncrementalAdapter(query)
+    assert(adapter.engine.getResults() == List())
+  }
+
   test("Optional match returns Vector(null) on empty input") {
     val query = "OPTIONAL MATCH (n) RETURN n"
     val adapter = new IngraphIncrementalAdapter(query)
