@@ -12,7 +12,7 @@ trait Transaction extends AutoCloseable {
   def remove(pred: String, tuple: Tuple)
 }
 
-class TransactionFactory(val messageSize: Int = 16) {
+class TransactionFactory {
   val subscribers = new mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]
   val usedIDs = new mutable.HashSet[Long]
   val idGenerator = new scala.util.Random
@@ -26,16 +26,7 @@ class TransactionFactory(val messageSize: Int = 16) {
     new BatchTransaction()
   }
 
-  def newKey(): Long = {
-    var newId: Long = 0L
-    do {
-      newId = idGenerator.nextLong()
-    } while (usedIDs.contains(newId))
-
-    newId
-  }
-
-  class BatchTransaction() extends Transaction {
+  class BatchTransaction extends Transaction {
     val positiveChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
     val negativeChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
 

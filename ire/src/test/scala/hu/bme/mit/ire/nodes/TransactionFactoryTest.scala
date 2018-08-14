@@ -18,7 +18,7 @@ class TransactionFactoryTest(_system: ActorSystem) extends TestKit(_system) with
   "TransactionFactory" must {
 
     "send incoming data after subscription" in {
-      val input = new TransactionFactory(messageSize = 4)
+      val input = new TransactionFactory
       val echoActor = system.actorOf(TestActors.echoActorProps)
       input.subscribe(Map("test" -> (echoActor ! _)))
       val tran = input.newBatchTransaction()
@@ -29,7 +29,7 @@ class TransactionFactoryTest(_system: ActorSystem) extends TestKit(_system) with
     }
 
     "do no splitting in batch" in {
-      val input = new TransactionFactory(messageSize = 2)
+      val input = new TransactionFactory
       val echoActor = system.actorOf(TestActors.echoActorProps)
       input.subscribe(Map("test" -> (echoActor ! _)))
       val tran = input.newBatchTransaction()

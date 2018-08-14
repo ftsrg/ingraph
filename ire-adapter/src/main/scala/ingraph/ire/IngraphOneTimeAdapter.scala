@@ -13,7 +13,7 @@ class IngraphOneTimeAdapter (
   val plan = FPlanParser.parse(querySpecification)
   val engine = EngineFactory.createQueryEngine(plan, indexer)
 
-  val transactionFactory = new TransactionFactory(16)
+  val transactionFactory = new TransactionFactory
   transactionFactory.subscribe(engine.inputLookup)
   val transaction = transactionFactory.newBatchTransaction()
   new PullTupleCreator(

@@ -45,7 +45,7 @@ class SizingTest extends WordSpec with TimeLimits {
     }
 
     "measure size" in {
-      val input = new TransactionFactory(10)
+      val input = new TransactionFactory
       val query = new TestQuery1
       input.subscribe(query.inputLookup)
       val tran0 = input.newBatchTransaction()

@@ -37,7 +37,7 @@ object TrainbenchmarkUtils {
 
   def readModelAndGetResults(querySpec: String, size: Int): Iterable[Tuple] = {
     val adapter = new IngraphIncrementalAdapter(querySpec, "")
-    val tf = new TransactionFactory(16)
+    val tf = new TransactionFactory
     tf.subscribe(adapter.engine.inputLookup)
     val tran = tf.newBatchTransaction()
     adapter.readCsv(nodeFilenames(size), relationshipFilenames(size), tran)

@@ -42,7 +42,7 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
 
   "multiple queries" should "work" in {
     for (i <- 1 to 1000) {
-      val input = new TransactionFactory(10)
+      val input = new TransactionFactory
       val query = new TestQuery1
       val query2 = new TestQuery2
       input.subscribe(query.inputLookup)
@@ -60,7 +60,7 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   }
 
   "integration" should "work" in {
-    val input = new TransactionFactory(10)
+    val input = new TransactionFactory
     val query = new TestQuery1
     input.subscribe(query.inputLookup)
     val tran0 = input.newBatchTransaction()
@@ -99,7 +99,7 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   "listeners" should "listen" in {
     (1 to 1000).foreach(i => {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val input = new TransactionFactory(10)
+      val input = new TransactionFactory
       val query = new TestQuery1
       input.subscribe(query.inputLookup)
       val tran0 = input.newBatchTransaction()
