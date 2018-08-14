@@ -33,7 +33,6 @@ object ExpressionBuilder {
       case e: oc.UnaryAddOrSubtractExpression => buildExpressionArithmetic(e, joins)
       case e: oc.MultiplyDivideModuloExpression => buildExpressionArithmetic(e, joins)
       case e: oc.PowerOfExpression => buildExpressionArithmetic(e, joins)
-      //FIXME#206: this should pass function name unresolved
       case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
       case _: oc.Count => UnresolvedFunction(Function.COUNT_ALL.getPrettyName, Seq[cExpr.Expression](), false)
       case e: oc.IndexRangeExpression => buildExpressionIndexRange(e) // foo[a..b], should return list, even for foo[1..2]
