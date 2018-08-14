@@ -10,7 +10,7 @@ class TckEngineTest extends FunSuite {
   def run(createQuery: String, readQuery: String): Iterable[Tuple] = {
     val indexer = new Indexer()
 
-    if (createQuery != "") {
+    if (createQuery.nonEmpty) {
       val createAdapter = new OneTimeQueryAdapter(createQuery, "create", indexer)
       createAdapter.results()
     }
