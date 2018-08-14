@@ -43,7 +43,7 @@ class TransactionFactoryTest(_system: ActorSystem) extends TestKit(_system) with
       val input = new TransactionFactory(messageSize = 2)
       val echoActor = system.actorOf(TestActors.echoActorProps)
       input.subscribe(Map("test" -> (echoActor ! _)))
-      val tran = input.newContinousTransaction()
+      val tran = input.newContinuousTransaction()
       for (i <- 1 to 3) {
         tran.add("test", tuple(6, i))
       }

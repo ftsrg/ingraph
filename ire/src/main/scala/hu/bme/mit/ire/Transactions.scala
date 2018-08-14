@@ -8,14 +8,13 @@ import scala.collection.mutable
 trait Transaction extends AutoCloseable {
   override def close(): Unit
 
-  def add(pred: String, node: Tuple)
-
-  def remove(pred: String, node: Tuple)
+  def add(pred: String, tuple: Tuple)
+  def remove(pred: String, tuple: Tuple)
 }
 
 class TransactionFactory(val messageSize: Int = 16) {
   val subscribers = new mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]
-  val usedIDs = new mutable.HashSet[Long]()
+  val usedIDs = new mutable.HashSet[Long]
   val idGenerator = new scala.util.Random
 
   def subscribe(subscriber: Map[String, (ChangeSet) => Unit]) = {
@@ -27,7 +26,7 @@ class TransactionFactory(val messageSize: Int = 16) {
     new BatchTransaction()
   }
 
-  def newContinousTransaction(): ContinuousTransaction = {
+  def newContinuousTransaction(): ContinuousTransaction = {
     new ContinuousTransaction(messageSize)
   }
 
@@ -51,37 +50,37 @@ class TransactionFactory(val messageSize: Int = 16) {
       negativeChangeSets.clear()
     }
 
-    def add(pred: String, node: Tuple): Unit = {
+    def add(pred: String, tuple: Tuple): Unit = {
       if (subscribers.contains(pred)) {
         if (!positiveChangeSets.contains(pred))
           positiveChangeSets(pred) = Vector.empty[Tuple]
-        positiveChangeSets(pred) +:= node
+        positiveChangeSets(pred) +:= tuple
       }
     }
 
-    def remove(pred: String, node: Tuple): Unit = {
+    def remove(pred: String, tuple: Tuple): Unit = {
       // DO NOT usedIDs.remove(subj), there are enough long values to go around, that having to deal with transient IDs
       // is not worth it
       if (subscribers.contains(pred)) {
         if (!negativeChangeSets.contains(pred))
           negativeChangeSets(pred) = Vector.empty[Tuple]
-        negativeChangeSets(pred) +:= node
+        negativeChangeSets(pred) +:= tuple
       }
     }
   }
 
   class ContinuousTransaction(messageSize: Int) extends BatchTransaction() {
 
-    override def add(pred: String, node: Tuple) = {
-      super.add(pred, node)
+    override def add(pred: String, tuple: Tuple) = {
+      super.add(pred, tuple)
       if (subscribers.contains(pred) && positiveChangeSets(pred).size == messageSize) {
         subscribers(pred).foreach(sub => sub(ChangeSet(positive = positiveChangeSets(pred))))
         positiveChangeSets(pred) = Vector.empty[Tuple]
       }
     }
 
-    override def remove(pred: String, node: Tuple) = {
-      super.remove(pred, node)
+    override def remove(pred: String, tuple: Tuple) = {
+      super.remove(pred, tuple)
       if (subscribers.contains(pred) && negativeChangeSets(pred).size == messageSize) {
         subscribers(pred).foreach(sub => sub(ChangeSet(negative = negativeChangeSets(pred))))
         negativeChangeSets(pred) = Vector.empty[Tuple]
