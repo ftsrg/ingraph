@@ -8,8 +8,8 @@ abstract class EngineTest extends FunSuite {
 
   def run(readQuery: String): Unit = {
     val indexer = new Indexer()
-    val readAdapter = new IngraphIncrementalAdapter(readQuery, "read", indexer)
-    val result = readAdapter.result()
+    val readAdapter = new IncrementalQueryAdapter(readQuery, "read", indexer)
+    val result = readAdapter.results()
   }
 
   def runFromFile(fileBaseName: String): Unit = {

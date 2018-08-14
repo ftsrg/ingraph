@@ -5,7 +5,7 @@ import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.compiler.FPlanParser
 import ingraph.ire.adapters.tuplecreators.PullTupleCreator
 
-class IngraphOneTimeAdapter (
+class OneTimeQueryAdapter(
     val querySpecification: String,
     val queryName: String,
     val indexer: Indexer = new Indexer()

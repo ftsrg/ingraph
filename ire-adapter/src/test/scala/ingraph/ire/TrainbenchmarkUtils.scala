@@ -1,6 +1,5 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.DataSourceFactory
 import hu.bme.mit.ire.datatypes.Tuple
 
 import scala.io.Source
@@ -36,12 +35,8 @@ object TrainbenchmarkUtils {
   )
 
   def readModelAndGetResults(querySpec: String, size: Int): Iterable[Tuple] = {
-    val adapter = new IngraphIncrementalAdapter(querySpec, "")
-    val tf = new DataSourceFactory
-    tf.subscribe(adapter.engine.inputLookup)
-    val dataSource = tf.newDataSource
-    adapter.readCsv(nodeFilenames(size), relationshipFilenames(size), dataSource)
-    dataSource.close()
-    adapter.engine.getResults()
+    val adapter = new IncrementalQueryAdapter(querySpec, "")
+    adapter.readCsv2(nodeFilenames(size), relationshipFilenames(size))
+    adapter.results()
   }
 }

@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit
 import com.google.common.base.Stopwatch
 import ingraph.driver.CypherDriverFactory
 import ingraph.driver.data.{IngraphQueryHandler, ResultCollectingChangeListener}
-import ingraph.ire.{Indexer, IngraphOneTimeAdapter}
+import ingraph.ire.{Indexer, OneTimeQueryAdapter}
 import ingraph.tests.LdbcSnbTestCase
 import org.supercsv.prefs.CsvPreference
 
@@ -40,7 +40,7 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
   }
 
   def update(querySpecification: String, queryName: String, indexer: Indexer, queryHandler: IngraphQueryHandler): List[Map[String, Any]] = {
-    val onetime = new IngraphOneTimeAdapter(querySpecification, "del", indexer)
+    val onetime = new OneTimeQueryAdapter(querySpecification, "del", indexer)
     onetime.terminate()
     onetime.close()
     queryHandler.result

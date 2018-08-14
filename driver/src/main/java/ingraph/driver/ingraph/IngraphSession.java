@@ -2,8 +2,8 @@ package ingraph.driver.ingraph;
 
 import ingraph.driver.data.IngraphQueryHandler;
 import ingraph.ire.Indexer;
-import ingraph.ire.IngraphIncrementalAdapter;
-import ingraph.ire.IngraphOneTimeAdapter;
+import ingraph.ire.IncrementalQueryAdapter;
+import ingraph.ire.OneTimeQueryAdapter;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.Statement;
@@ -34,7 +34,7 @@ public class IngraphSession implements Session {
 
 	@Override
 	public StatementResult run(String statementTemplate, Map<String, Object> statementParameters) {
-		final IngraphOneTimeAdapter adapter = new IngraphOneTimeAdapter(statementTemplate, "onetime" + oneTimeQueryIndex, indexer);
+		final OneTimeQueryAdapter adapter = new OneTimeQueryAdapter(statementTemplate, "onetime" + oneTimeQueryIndex, indexer);
 		oneTimeQueryIndex++;
 		adapter.terminate();
 		return null;
@@ -92,15 +92,15 @@ public class IngraphSession implements Session {
 
 	@Override
 	public void close() {
-		for (IngraphIncrementalAdapter adapter : adapters) {
+		for (IncrementalQueryAdapter adapter : adapters) {
 			adapter.engine().shutdown();
 		}
 	}
 
-	private ArrayList<IngraphIncrementalAdapter> adapters = new ArrayList<>();
+	private ArrayList<IncrementalQueryAdapter> adapters = new ArrayList<>();
 
 	public IngraphQueryHandler registerQuery(String queryName, String querySpecification, Map<String, Object> statementParameters) {
-		final IngraphIncrementalAdapter adapter = new IngraphIncrementalAdapter(querySpecification, queryName, indexer);
+		final IncrementalQueryAdapter adapter = new IncrementalQueryAdapter(querySpecification, queryName, indexer);
 		adapters.add(adapter);
 		return new IngraphQueryHandler(adapter);
 	}

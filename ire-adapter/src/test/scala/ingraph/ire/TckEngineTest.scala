@@ -11,12 +11,12 @@ class TckEngineTest extends FunSuite {
     val indexer = new Indexer()
 
     if (createQuery != "") {
-      val createAdapter = new IngraphOneTimeAdapter(createQuery, "create", indexer)
+      val createAdapter = new OneTimeQueryAdapter(createQuery, "create", indexer)
       createAdapter.terminate()
     }
 
-    val readAdapter = new IngraphIncrementalAdapter(readQuery, "read", indexer)
-    readAdapter.result()
+    val readAdapter = new IncrementalQueryAdapter(readQuery, "read", indexer)
+    readAdapter.results()
   }
 
   // MatchAcceptance.feature
