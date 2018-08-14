@@ -4,7 +4,7 @@ import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
 import hu.bme.mit.ire.util.TestUtil._
-import hu.bme.mit.ire.util.Utils
+import hu.bme.mit.ire.util.{TestUtil, Utils}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
@@ -58,7 +58,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       )
 
       joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(7, 8))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(
           tuple(5, 6, 7, 8),
           tuple(10, 11, 7, 8)
@@ -101,7 +101,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
 
       joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
 
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
       joiner ! Primary(ChangeSet(negative = tupleBag(tuple(3, 4))))
       expectMsg(ChangeSet(negative = tupleBag(tuple(3, 4, 5))))
@@ -110,10 +110,10 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       expectMsg(ChangeSet(positive = tupleBag(tuple(3, 4, 5))))
 
       joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 5))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(negative = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
       joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
     }
 
     "have bag behavior" in {
@@ -128,7 +128,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
 
       joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
 
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(positive = tupleBag(
         tuple(2, 4, 5), tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
       joiner ! Primary(ChangeSet(negative = tupleBag(tuple(2, 4))))
