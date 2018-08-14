@@ -1,5 +1,6 @@
 package ingraph.driver.data
 
+import ingraph.csv.EdgeMetaData
 import ingraph.ire.IncrementalQueryAdapter
 import org.supercsv.prefs.CsvPreference
 
@@ -12,7 +13,7 @@ class IngraphQueryHandler(val adapter: IncrementalQueryAdapter) extends AutoClos
   }
 
   def readCsv(vertexFilenames: Map[String, List[String]],
-              edgeFilenames: Map[String, (String, String, String)],
+              edgeFilenames: Map[String, EdgeMetaData],
               csvPreference: CsvPreference) {
     adapter.readCsv(vertexFilenames, edgeFilenames, csvPreference)
     adapter.results()

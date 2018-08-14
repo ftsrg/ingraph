@@ -1,6 +1,7 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
+import ingraph.csv.EdgeMetaData
 import org.supercsv.prefs.CsvPreference
 
 import scala.io.Source
@@ -25,14 +26,14 @@ object TrainBenchmarkUtils {
     modelPath(size, "SwitchPosition") -> List("SwitchPosition")
   )
 
-  def relationshipFilenames(size: Int): Map[String, (String, String, String)] = Map(
-    modelPath(size, "connectsTo") -> ("TrackElement", "connectsTo", "TrackElement"),
-    modelPath(size, "entry") -> ("Route", "entry", "Semaphore"),
-    modelPath(size, "exit") -> ("Route", "exit", "Semaphore"),
-    modelPath(size, "follows") -> ("Route", "follows", "SwitchPosition"),
-    modelPath(size, "monitoredBy") -> ("TrackElement", "monitoredBy", "Sensor"),
-    modelPath(size, "requires") -> ("Route", "requires", "Sensor"),
-    modelPath(size, "target") -> ("SwitchPosition", "target", "Switch")
+  def relationshipFilenames(size: Int): Map[String, EdgeMetaData] = Map(
+    modelPath(size, "connectsTo") -> EdgeMetaData("TrackElement", "connectsTo", "TrackElement"),
+    modelPath(size, "entry") -> EdgeMetaData("Route", "entry", "Semaphore"),
+    modelPath(size, "exit") -> EdgeMetaData("Route", "exit", "Semaphore"),
+    modelPath(size, "follows") -> EdgeMetaData("Route", "follows", "SwitchPosition"),
+    modelPath(size, "monitoredBy") -> EdgeMetaData("TrackElement", "monitoredBy", "Sensor"),
+    modelPath(size, "requires") -> EdgeMetaData("Route", "requires", "Sensor"),
+    modelPath(size, "target") -> EdgeMetaData("SwitchPosition", "target", "Switch")
   )
 
   def readModelAndGetResults(querySpec: String, size: Int): Iterable[Tuple] = {

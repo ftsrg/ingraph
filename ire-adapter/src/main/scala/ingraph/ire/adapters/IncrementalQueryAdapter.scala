@@ -4,6 +4,7 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.inputs.InputMultiplexerFactory
 import hu.bme.mit.ire.listeners.ChangeListener
 import ingraph.bulkloader.csv.loader.MassCsvLoader
+import ingraph.csv.EdgeMetaData
 import ingraph.ire.adapters.tuplecreators.TupleCreator
 import org.supercsv.prefs.CsvPreference
 
@@ -34,7 +35,7 @@ class IncrementalQueryAdapter(
   }
 
   def readCsv(vertexFileNames: Map[String, List[String]],
-              edgeFilenames: Map[String, (String, String, String)],
+              edgeFilenames: Map[String, EdgeMetaData],
               csvPreference: CsvPreference) {
     import scala.collection.JavaConverters._
 
@@ -49,9 +50,9 @@ class IncrementalQueryAdapter(
     }
     for (edge <- edgeFilenames) {
       val fileName = edge._1
-      val sourceVertexLabel: String = edge._2._1
-      val edgeType         : String = edge._2._2
-      val targetVertexLabel: String = edge._2._3
+      val sourceVertexLabel: String = edge._2.sourceVertexLabel
+      val edgeType         : String = edge._2.edgeType
+      val targetVertexLabel: String = edge._2.targetVertexLabel
       for (csvEdge <- loader.loadEdges(fileName).asScala) {
         indexer.addEdge(csvEdge, sourceVertexLabel, edgeType, targetVertexLabel)
       }
