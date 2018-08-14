@@ -36,7 +36,7 @@ object TrainbenchmarkUtils {
 
   def readModelAndGetResults(querySpec: String, size: Int): Iterable[Tuple] = {
     val adapter = new IncrementalQueryAdapter(querySpec, "")
-    adapter.readCsv2(nodeFilenames(size), relationshipFilenames(size))
+    adapter.readCsv(nodeFilenames(size), relationshipFilenames(size))
     adapter.results()
   }
 }
