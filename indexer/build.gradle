@@ -5,5 +5,4 @@ plugins {
 dependencies {
   compile project(':csv-loader')
   compile project(':ire')
-  compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
 }
