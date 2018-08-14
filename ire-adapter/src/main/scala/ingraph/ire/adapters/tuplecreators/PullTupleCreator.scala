@@ -1,7 +1,7 @@
 package ingraph.ire.adapters.tuplecreators
 
 import hu.bme.mit.ire.DataSource
-import ingraph.ire.{IdParser, Indexer, IngraphEdge, PlainIdParser}
+import ingraph.ire.{IdParser, Indexer, IngraphEdge}
 import ingraph.model.fplan.{GetEdges, GetVertices}
 import org.apache.spark.sql.catalyst.expressions.Literal
 
@@ -9,7 +9,7 @@ class PullTupleCreator(vertexOps: Seq[GetVertices],
                        edgeOps: Seq[GetEdges],
                        indexer: Indexer,
                        dataSource: DataSource,
-                       idParser: IdParser = PlainIdParser
+                       idParser: IdParser
                       ) {
   for (op <- vertexOps) {
     val v = op.nnode.v

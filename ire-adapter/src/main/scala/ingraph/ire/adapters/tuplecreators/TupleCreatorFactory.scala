@@ -49,7 +49,7 @@ object EdgeTransformer {
 
 class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
                    edgeConverters: Map[String, Set[GetEdges]],
-                   idParser: IdParser = PlainIdParser
+                   idParser: IdParser
                   ) extends GraphElementToTupleMapper {
   val edgeOpString = edgeConverters.values.flatten.map(op => op -> op.toString()).toMap
   var dataSource: DataSource = _
