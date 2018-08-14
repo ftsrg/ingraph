@@ -6,7 +6,7 @@ import ingraph.ire.Indexer
 
 import scala.collection.JavaConverters._
 
-class LdbcUpdateToIngraphLoader(val indexer: Indexer, val csvDir: String) {
+class LdbcUpdateLoader(val indexer: Indexer, val csvDir: String) {
 
   implicit def longs(x: Any): Long = x.asInstanceOf[Long]
 
