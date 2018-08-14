@@ -28,7 +28,6 @@ abstract class AnnotatedRelationalEngine extends RelationalEngine {
 object EngineFactory {
 
   case class ForwardConnection(parent: FNode, child: (ReteMessage) => Unit)
-  case class EdgeTransformer(nick: String, source:String, target: String)
 
   def createQueryEngine(plan: FNode, indexer: Indexer): AnnotatedRelationalEngine =
     new AnnotatedRelationalEngine {
