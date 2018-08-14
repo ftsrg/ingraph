@@ -51,7 +51,7 @@ class TupleCreator(val vertexConverters: Map[Set[String], Set[GetVertices]],
                    val edgeConverters: Map[String, Set[GetEdges]],
                    val idParser: IdParser,
                    val inputMultiplexer: InputMultiplexer
-                  ) extends GraphElementToTupleMapper {
+                  ) extends TTupleCreator {
   val edgeOpString = edgeConverters.values.flatten.map(op => op -> op.toString()).toMap
 
   def addEdge(edge: IngraphEdge): Unit = {

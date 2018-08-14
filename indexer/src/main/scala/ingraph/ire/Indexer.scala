@@ -31,7 +31,7 @@ case class IngraphEdge(id: Long,
 
 class Indexer {
 
-  val mappers = mutable.Buffer[GraphElementToTupleMapper]()
+  val mappers = mutable.Buffer[TTupleCreator]()
 
   val vertexLookup = mutable.HashMap[Long, IngraphVertex]()
   val vertexLabelLookup = new BufferMultimap[String, IngraphVertex]()
@@ -41,7 +41,7 @@ class Indexer {
   val edgeTypeLookup = new BufferMultimap[String, IngraphEdge]()
   val edgeSrcTgtTypeLookup = new BufferMultimap[((Long, Long), String), IngraphEdge]
 
-  def fill(tupleMapper: GraphElementToTupleMapper): Unit = {
+  def fill(tupleMapper: TTupleCreator): Unit = {
     for (vertex <- vertexLookup.values) {
       tupleMapper.addVertex(vertex)
     }
@@ -50,7 +50,7 @@ class Indexer {
     }
   }
 
-  def subscribe(tupleMapper: GraphElementToTupleMapper): Unit = {
+  def subscribe(tupleMapper: TTupleCreator): Unit = {
     mappers += tupleMapper
     fill(tupleMapper)
   }
