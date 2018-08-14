@@ -5,7 +5,7 @@ import org.supercsv.prefs.CsvPreference
 
 import scala.io.Source
 
-object TrainbenchmarkUtils {
+object TrainBenchmarkUtils {
   def modelPath(size: Int, entityName: String): String = {
     getClass.getResource(s"/trainbenchmark/railway-repair-$size-$entityName.csv").getPath
   }

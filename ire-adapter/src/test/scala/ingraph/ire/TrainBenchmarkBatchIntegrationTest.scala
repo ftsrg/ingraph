@@ -2,7 +2,7 @@ package ingraph.ire
 
 import org.scalatest.FunSuite
 
-class TrainbenchmarkBatchIntegrationTest extends FunSuite {
+class TrainBenchmarkBatchIntegrationTest extends FunSuite {
 
   case class TestCase(name: String, size: Int, expectedResultSize: Int)
 
@@ -23,28 +23,28 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
     null
   ).filter(_ != null).foreach(
     t => test(s"${t.name}-size-${t.size}") {
-      val querySpec = TrainbenchmarkUtils.readQueryFromResources(t.name)
-      assert(TrainbenchmarkUtils.readModelAndGetResults(querySpec, t.size).size == t.expectedResultSize)
+      val querySpec = TrainBenchmarkUtils.readQueryFromResources(t.name)
+      assert(TrainBenchmarkUtils.readModelAndGetResults(querySpec, t.size).size == t.expectedResultSize)
     }
   )
 
   test("Sort with Limit works") {
     val query = "MATCH (n: Segment) RETURN n ORDER BY n DESC SKIP 5 LIMIT 10"
-    val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
+    val results = TrainBenchmarkUtils.readModelAndGetResults(query, 1)
     val expected = ((1400 to 1410).toSet - 1405).toList.sorted.reverse.map(n => Vector(n.toLong))
     assert(results == expected)
   }
 
   test("Sort without Limit works") {
     val query = "MATCH (n: Segment) RETURN n ORDER BY n DESC SKIP 1100"
-    val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
+    val results = TrainBenchmarkUtils.readModelAndGetResults(query, 1)
     val expected = (7 to 9).reverse.map(n => Vector(n.toLong))
     assert(results == expected)
   }
 
   test("basic aggregations") {
     val query = "MATCH (s: Switch) RETURN count(s)"
-    val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
+    val results = TrainBenchmarkUtils.readModelAndGetResults(query, 1)
     assert(results == List(Vector(40)))
   }
 }
