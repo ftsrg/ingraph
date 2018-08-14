@@ -1,6 +1,7 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
+import org.supercsv.prefs.CsvPreference
 
 import scala.io.Source
 
@@ -36,7 +37,7 @@ object TrainbenchmarkUtils {
 
   def readModelAndGetResults(querySpec: String, size: Int): Iterable[Tuple] = {
     val adapter = new IncrementalQueryAdapter(querySpec, "")
-    adapter.readCsv(nodeFilenames(size), relationshipFilenames(size))
+    adapter.readCsv(nodeFilenames(size), relationshipFilenames(size), CsvPreference.STANDARD_PREFERENCE)
     adapter.results()
   }
 }

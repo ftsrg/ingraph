@@ -43,7 +43,7 @@ class IncrementalQueryAdapter(
 
   def readCsv(vertexFileNames: Map[String, List[String]],
               edgeFilenames: Map[String, (String, String, String)],
-              csvPreference: CsvPreference = CsvPreference.STANDARD_PREFERENCE) {
+              csvPreference: CsvPreference) {
     import scala.collection.JavaConverters._
     // sorry :-)
     tupleCreator.dataSource = newDataSource()
