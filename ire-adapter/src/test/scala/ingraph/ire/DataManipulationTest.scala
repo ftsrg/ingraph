@@ -26,8 +26,8 @@ class DataManipulationTest extends FunSuite {
     val indexer = new Indexer()
     val q = "CREATE ({value: 1})"
     new OneTimeQueryAdapter(q, "", indexer).results()
-    println(new IncrementalQueryAdapter("MATCH (n) return n","", indexer).results())
-
+    val adapter = new IncrementalQueryAdapter("MATCH (n) return n","", indexer)
+    assert(!adapter.results().isEmpty)
   }
 
   test("delete and create edge work") {
