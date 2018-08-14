@@ -26,10 +26,6 @@ class TransactionFactory(val messageSize: Int = 16) {
     new BatchTransaction()
   }
 
-  def newContinuousTransaction(): ContinuousTransaction = {
-    new ContinuousTransaction(messageSize)
-  }
-
   def newKey(): Long = {
     var newId: Long = 0L
     do {
@@ -69,22 +65,4 @@ class TransactionFactory(val messageSize: Int = 16) {
     }
   }
 
-  class ContinuousTransaction(messageSize: Int) extends BatchTransaction() {
-
-    override def add(pred: String, tuple: Tuple) = {
-      super.add(pred, tuple)
-      if (subscribers.contains(pred) && positiveChangeSets(pred).size == messageSize) {
-        subscribers(pred).foreach(sub => sub(ChangeSet(positive = positiveChangeSets(pred))))
-        positiveChangeSets(pred) = Vector.empty[Tuple]
-      }
-    }
-
-    override def remove(pred: String, tuple: Tuple) = {
-      super.remove(pred, tuple)
-      if (subscribers.contains(pred) && negativeChangeSets(pred).size == messageSize) {
-        subscribers(pred).foreach(sub => sub(ChangeSet(negative = negativeChangeSets(pred))))
-        negativeChangeSets(pred) = Vector.empty[Tuple]
-      }
-    }
-  }
 }

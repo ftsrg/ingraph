@@ -9,7 +9,7 @@ import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class TransactionFactoryTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
-  def this() = this(ActorSystem("MySpec"))
+  def this() = this(ActorSystem())
 
   override def afterAll {
     TestKit.shutdownActorSystem(system)
@@ -39,17 +39,7 @@ class TransactionFactoryTest(_system: ActorSystem) extends TestKit(_system) with
       tran.close()
       expectMsg(ChangeSet(positive = tupleBag(tuple(6, 3), tuple(6, 2), tuple(6, 1))))
     }
-    "send messageSize sized messages when using continuous transactions" in {
-      val input = new TransactionFactory(messageSize = 2)
-      val echoActor = system.actorOf(TestActors.echoActorProps)
-      input.subscribe(Map("test" -> (echoActor ! _)))
-      val tran = input.newContinuousTransaction()
-      for (i <- 1 to 3) {
-        tran.add("test", tuple(6, i))
-      }
-      tran.close()
-      expectMsg(ChangeSet(positive = tupleBag(tuple(6, 2), tuple(6, 1))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(6, 3))))
-    }
+
   }
+
 }
