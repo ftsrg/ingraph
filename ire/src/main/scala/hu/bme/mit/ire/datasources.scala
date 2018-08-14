@@ -5,8 +5,8 @@ import hu.bme.mit.ire.messages.ChangeSet
 
 import scala.collection.mutable
 
-trait DataSource extends AutoCloseable {
-  override def close(): Unit
+trait DataSource {
+  def close(): Unit
   def add(pred: String, tuple: Tuple)
   def remove(pred: String, tuple: Tuple)
 }
