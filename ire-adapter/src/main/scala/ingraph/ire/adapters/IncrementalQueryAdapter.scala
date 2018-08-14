@@ -18,17 +18,11 @@ class IncrementalQueryAdapter(
 
   val tupleCreator = new TupleCreator(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
-    engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap, LongIdParser)
-
-  tupleCreator.dataSource = dataSourceFactory.newDataSource
+    engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap,
+    LongIdParser,
+    dataSourceFactory.newDataSource
+  )
   indexer.subscribe(tupleCreator)
-
-
-  def newDataSource(): DataSource = {
-    val dataSource = dataSourceFactory.newDataSource
-    tupleCreator.dataSource = dataSource
-    dataSource
-  }
 
   override def results(): Iterable[Tuple] = {
     tupleCreator.dataSource.close()
@@ -43,8 +37,6 @@ class IncrementalQueryAdapter(
               edgeFilenames: Map[String, (String, String, String)],
               csvPreference: CsvPreference) {
     import scala.collection.JavaConverters._
-    // sorry :-)
-    newDataSource()
 
     val loader = new MassCsvLoader(csvPreference)
 
