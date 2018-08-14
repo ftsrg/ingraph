@@ -1,8 +1,9 @@
-package hu.bme.mit.ire.util
+package hu.bme.mit.ire.collections
 
 import scala.collection.mutable
 
-class SetMultimap[K, V] extends mutable.HashMap[K, mutable.HashSet[V]] {
+class CounterMultimap[K, V] extends mutable.HashMap[K, mutable.HashMap[V, Int]] {
+
   /** Assigns the specified `value` to a specified `key`.  If the key
     *  already has a binding to equal to `value`, nothing is changed;
     *  otherwise a new binding is added for that `key`.
@@ -14,11 +15,14 @@ class SetMultimap[K, V] extends mutable.HashMap[K, mutable.HashSet[V]] {
   def addBinding(key: K, value: V): this.type = {
     get(key) match {
       case None =>
-        val set = mutable.HashSet[V]()
-        set += value
-        this(key) = set
-      case Some(set) =>
-        set += value
+        this(key) = mutable.HashMap[V, Int](value -> 1)
+      case Some(map) =>
+        map.get(value) match {
+          case None =>
+            map += value -> 1
+          case Some(counter) =>
+            map(value) = counter + 1
+        }
     }
     this
   }
@@ -37,28 +41,38 @@ class SetMultimap[K, V] extends mutable.HashMap[K, mutable.HashSet[V]] {
   def removeBinding(key: K, value: V): this.type = {
     get(key) match {
       case None =>
-      case Some(set) =>
-        set -= value
-        if (set.isEmpty) this -= key
+      case Some(map) =>
+        map.get(value) match {
+          case None =>
+          case Some(counter) =>
+            counter match {
+              case 1 => map -= value
+              case _ => map(value) = counter - 1
+            }
+        }
+        if (map.isEmpty) this -= key
     }
     this
   }
 
+  def getCount(key: K, value: V): Int = {
+    get(key) match {
+      case None => 0
+      case Some(map) =>
+        map.get(value) match {
+          case None => 0
+          case Some(counter) => counter
+        }
+    }
+  }
 
-
-  /** Checks if there exists a binding to `key` such that it satisfies the predicate `p`.
-    *
-    *  @param key   The key for which the predicate is checked.
-    *  @param p     The predicate which a value assigned to the key must satisfy.
-    *  @return      A boolean if such a binding exists
-    */
-  def entryExists(key: K, p: V => Boolean): Boolean = get(key) match {
-    case None => false
-    case Some(set) => set exists p
+  def values(key: K) = {
+    getOrElse(key, mutable.HashMap.empty[V, Int]).keysIterator
   }
 
   def containsEntry(key: K, p: V): Boolean = get(key) match {
     case None => false
-    case Some(set) => set contains p
+    case Some(map) => map contains p
   }
+
 }

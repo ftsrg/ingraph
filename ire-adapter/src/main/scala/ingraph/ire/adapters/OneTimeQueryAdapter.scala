@@ -1,7 +1,7 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.InputMultiplexerFactory
 import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.inputs.InputMultiplexerFactory
 import ingraph.ire.adapters.tuplecreators.PullTupleCreator
 
 class OneTimeQueryAdapter(
@@ -20,7 +20,7 @@ class OneTimeQueryAdapter(
   )
 
   override def results(): Iterable[Tuple] = {
-    inputMultiplexer.close()
+    inputMultiplexer.sendAll()
     engine.getResults()
   }
 

@@ -1,7 +1,6 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.messages
 
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, TerminatorMessage}
 
 trait ForkingForwarder extends Forwarder {
   val children: Vector[ReteMessage => Unit]

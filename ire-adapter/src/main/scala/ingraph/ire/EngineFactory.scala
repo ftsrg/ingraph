@@ -2,13 +2,13 @@ package ingraph.ire
 
 import akka.actor.{ActorRef, Props}
 import hu.bme.mit.ire._
+import hu.bme.mit.ire.collections.BufferMultimap
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, Terminator}
 import hu.bme.mit.ire.nodes.binary._
 import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulAggregate}
-import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.ire.adapters.tuplecreators.TupleConstants
 import ingraph.model.expr._

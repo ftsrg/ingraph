@@ -1,5 +1,6 @@
-package hu.bme.mit.ire.util
+package hu.bme.mit.ire.nodes.collections
 
+import hu.bme.mit.ire.util.IterableMultiMap
 import org.scalatest.WordSpec
 
 import scala.collection.mutable

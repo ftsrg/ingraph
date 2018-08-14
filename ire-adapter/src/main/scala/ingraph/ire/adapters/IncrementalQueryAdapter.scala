@@ -1,8 +1,8 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.inputs.InputMultiplexerFactory
 import hu.bme.mit.ire.listeners.ChangeListener
-import hu.bme.mit.ire.{InputMultiplexer, InputMultiplexerFactory}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.ire.adapters.tuplecreators.TupleCreator
 import org.supercsv.prefs.CsvPreference
@@ -25,7 +25,7 @@ class IncrementalQueryAdapter(
   indexer.subscribe(tupleCreator)
 
   override def results(): Iterable[Tuple] = {
-    tupleCreator.inputMultiplexer.close()
+    tupleCreator.inputMultiplexer.sendAll()
     engine.getResults()
   }
 

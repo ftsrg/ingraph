@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.util
+package hu.bme.mit.ire.collections
 
 import scala.collection.mutable
 

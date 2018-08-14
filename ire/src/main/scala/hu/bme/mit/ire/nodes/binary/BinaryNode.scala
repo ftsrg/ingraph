@@ -1,7 +1,6 @@
 package hu.bme.mit.ire.nodes.binary
 
 import akka.actor.{Actor, Stash}
-import hu.bme.mit.ire._
 import hu.bme.mit.ire.messages._
 
 abstract class BinaryNode(val expectedTerminatorCount: Int = 2) extends Actor with Forwarder with Stash with TerminatorHandler {

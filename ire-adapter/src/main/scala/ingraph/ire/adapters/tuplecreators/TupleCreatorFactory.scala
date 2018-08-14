@@ -1,7 +1,7 @@
 package ingraph.ire.adapters.tuplecreators
 
-import hu.bme.mit.ire.InputMultiplexer
 import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.inputs.InputMultiplexer
 import ingraph.ire._
 import ingraph.model.expr.{EdgeAttribute, NodeHasLabelsAttribute, PropertyAttribute, VertexAttribute}
 import ingraph.model.fplan.{GetEdges, GetVertices}

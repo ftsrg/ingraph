@@ -1,4 +1,4 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.inputs
 
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
@@ -6,7 +6,7 @@ import hu.bme.mit.ire.messages.ChangeSet
 import scala.collection.mutable
 
 trait InputMultiplexer {
-  def close(): Unit
+  def sendAll(): Unit
   def add(pred: String, tuple: Tuple)
   def remove(pred: String, tuple: Tuple)
 }
@@ -27,7 +27,7 @@ class InputMultiplexerFactory {
     val positiveChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
     val negativeChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
 
-    override def close(): Unit = {
+    override def sendAll(): Unit = {
       positiveChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(ChangeSet(positive = kv._2))))
       negativeChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(ChangeSet(negative = kv._2))))
       positiveChangeSets.clear()

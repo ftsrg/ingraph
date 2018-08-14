@@ -1,10 +1,9 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.messages
 
 import java.io.{IOException, ObjectInputStream, ObjectOutputStream}
 
 import akka.actor.ActorRef
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages._
 import hu.bme.mit.ire.util.AtomicUniqueCounter
 
 import scala.collection.mutable

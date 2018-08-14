@@ -2,10 +2,10 @@ package hu.bme.mit.ire.nodes.unary
 
 import java.util.Comparator
 
-import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.util.{GenericMath, SizeCounter}
+import hu.bme.mit.ire.math.GenericMath
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, SingleForwarder}
+import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.immutable.VectorBuilder
 

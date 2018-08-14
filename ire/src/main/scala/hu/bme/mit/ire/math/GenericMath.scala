@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.util
+package hu.bme.mit.ire.math
 
 // see the TypeSafeMathSupport class of Neo4j:
 // https://github.com/neo4j/neo4j/blob/3.1/community/cypher/cypher-compiler-3.1/src/main/scala/org/neo4j/cypher/internal/compiler/v3_1/helpers/TypeSafeMathSupport.scala

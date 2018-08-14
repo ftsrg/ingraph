@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes
 
 import akka.actor.{ActorSystem, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.InputMultiplexerFactory
+import hu.bme.mit.ire.inputs.InputMultiplexerFactory
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -24,7 +24,7 @@ class InputMultiplexerFactoryTest(_system: ActorSystem) extends TestKit(_system)
       val inputMultiplexer = input.newInputMultiplexer
       inputMultiplexer.add("test", tuple(6, 1L))
       inputMultiplexer.add("test", tuple(6, 2L))
-      inputMultiplexer.close
+      inputMultiplexer.sendAll
       expectMsg(ChangeSet(positive = tupleBag(tuple(6, 2), tuple(6, 1))))
     }
 
@@ -36,7 +36,7 @@ class InputMultiplexerFactoryTest(_system: ActorSystem) extends TestKit(_system)
       for (i <- 1 to 3) {
         inputMultiplexer.add("test", tuple(6, i))
       }
-      inputMultiplexer.close
+      inputMultiplexer.sendAll
       expectMsg(ChangeSet(positive = tupleBag(tuple(6, 3), tuple(6, 2), tuple(6, 1))))
     }
 
