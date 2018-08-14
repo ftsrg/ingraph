@@ -19,7 +19,7 @@ class DataSourceFactory {
       subscribers.getOrElseUpdate(attribute, mutable.MutableList()) += func
   }
 
-  def newDataSource: BatchDataSource = {
+  def newDataSource(): BatchDataSource = {
     new BatchDataSource
   }
 

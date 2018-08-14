@@ -20,7 +20,7 @@ class IncrementalQueryAdapter(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
     engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap,
     LongIdParser,
-    dataSourceFactory.newDataSource
+    dataSourceFactory.newDataSource()
   )
   indexer.subscribe(tupleCreator)
 
