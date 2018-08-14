@@ -102,9 +102,9 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
       val input = new DataSourceFactory
       val query = new TestQuery1
       input.subscribe(query.inputLookup)
-      val dataSource = input.newDataSource
-      dataSource.add("testval", tuple(5, 5))
-      dataSource.close()
+      val dataSource1 = input.newDataSource
+      dataSource1.add("testval", tuple(5, 5))
+      dataSource1.close()
       query.getResults()
       query.addListener(new ConsistentChangeListener {
         override def listener(positive: Vector[Tuple], negative: Vector[Tuple]): Unit = {
@@ -112,10 +112,10 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
         }
       })
       expectMsg(ChangeSet(positive = Vector(tuple(5, 5))))
-      val tran1 = input.newDataSource
-      tran1.remove("testval", tuple(5, 5))
-      tran1.add("testval", tuple(6, 6))
-      tran1.close()
+      val dataSource2 = input.newDataSource
+      dataSource2.remove("testval", tuple(5, 5))
+      dataSource2.add("testval", tuple(6, 6))
+      dataSource2.close()
       query.getResults()
       expectMsg(ChangeSet(positive = Vector(tuple(6, 6)), negative = Vector(tuple(5, 5))))
     })
