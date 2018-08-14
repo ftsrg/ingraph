@@ -13,8 +13,6 @@ trait DataSource extends AutoCloseable {
 
 class DataSourceFactory {
   val subscribers = new mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]
-  //val usedIDs = new mutable.HashSet[Long]
-  val idGenerator = new scala.util.Random
 
   def subscribe(subscriber: Map[String, (ChangeSet) => Unit]) = {
     for ((attribute, func) <- subscriber)
@@ -45,8 +43,6 @@ class DataSourceFactory {
     }
 
     def remove(pred: String, tuple: Tuple): Unit = {
-      // DO NOT call usedIDs.remove(subj), there are enough long values to go around,
-      // having to deal with transient IDs is not worth it
       if (subscribers.contains(pred)) {
         if (!negativeChangeSets.contains(pred))
           negativeChangeSets(pred) = Vector.empty[Tuple]
