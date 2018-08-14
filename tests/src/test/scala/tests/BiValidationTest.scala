@@ -55,7 +55,7 @@ class BiValidationTest extends FunSuite {
         ntr.close
 
         println("ingraph results: " + ingraphResults.map(x => x.toSeq.sortBy(_._1)))
-        println("neo4j results: " + neo4jResults.map(x => x.toSeq.sortBy(_._1)))
+        println("neo4j   results: " + neo4jResults.map(x => x.toSeq.sortBy(_._1)))
         assert(ingraphResults == neo4jResults)
       }
   }
