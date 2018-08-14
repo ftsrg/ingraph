@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes
 
 import akka.actor.{ActorRef, ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.{DataSourceFactory, _}
+import hu.bme.mit.ire.{InputMultiplexerFactory, _}
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
 import hu.bme.mit.ire.listeners.{ChangeListener, ConsistentChangeListener}
@@ -42,16 +42,16 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
 
   "multiple queries" should "work" in {
     for (i <- 1 to 1000) {
-      val input = new DataSourceFactory
+      val input = new InputMultiplexerFactory
       val query1 = new TestQuery1
       val query2 = new TestQuery2
       input.subscribe(query1.inputLookup)
       input.subscribe(query2.inputLookup)
-      val dataSource1 = input.newDataSource
-      dataSource1.add("testval", tuple(5, 5))
-      dataSource1.add("testval", tuple(5, 6))
-      dataSource1.add("testval2", tuple(5, 7))
-      dataSource1.close()
+      val inputMultiplexer1 = input.newInputMultiplexer
+      inputMultiplexer1.add("testval", tuple(5, 5))
+      inputMultiplexer1.add("testval", tuple(5, 6))
+      inputMultiplexer1.add("testval2", tuple(5, 7))
+      inputMultiplexer1.close()
       val res1 = query1.getResults()
       assert(res1.toSet == Set(tuple(5, 5), tuple(5, 6)))
       val res2 = query2.getResults()
@@ -60,37 +60,37 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   }
 
   "integration" should "work" in {
-    val input = new DataSourceFactory
+    val input = new InputMultiplexerFactory
     val query = new TestQuery1
     input.subscribe(query.inputLookup)
-    val dataSource1 = input.newDataSource
-    dataSource1.add("testval", tuple(5, 5))
-    dataSource1.add("testval", tuple(5, 6))
-    dataSource1.add("testval", tuple(5, 7))
-    dataSource1.close()
+    val inputMultiplexer1 = input.newInputMultiplexer
+    inputMultiplexer1.add("testval", tuple(5, 5))
+    inputMultiplexer1.add("testval", tuple(5, 6))
+    inputMultiplexer1.add("testval", tuple(5, 7))
+    inputMultiplexer1.close()
     val res0 = query.getResults()
     assert(res0.toSet == Set(tuple(5, 5), tuple(5, 6), tuple(5, 7)))
-    val dataSource2 = input.newDataSource
-    dataSource2.remove("testval", tuple(5, 5))
-    dataSource2.remove("testval", tuple(5, 6))
-    dataSource2.add("tesval2", tuple(3, 2))
-    dataSource2.add("testval", tuple(5, 8))
-    dataSource2.close()
+    val inputMultiplexer2 = input.newInputMultiplexer
+    inputMultiplexer2.remove("testval", tuple(5, 5))
+    inputMultiplexer2.remove("testval", tuple(5, 6))
+    inputMultiplexer2.add("tesval2", tuple(3, 2))
+    inputMultiplexer2.add("testval", tuple(5, 8))
+    inputMultiplexer2.close()
     assert(query.getResults().toSet == Set(tuple(5, 7), tuple(5, 8)))
     val beginTime: Long = System.nanoTime()
     (1 to 5000).foreach(i => {
-      val dataSourceRemove7 = input.newDataSource
-      dataSourceRemove7.remove("testval", tuple(5, 7))
-      dataSourceRemove7.close()
+      val inputMultiplexerRemove7 = input.newInputMultiplexer
+      inputMultiplexerRemove7.remove("testval", tuple(5, 7))
+      inputMultiplexerRemove7.close()
       assert(query.getResults().toSet == Set(tuple(5, 8)))
-      val dataSourceRemove8 = input.newDataSource
-      dataSourceRemove8.remove("testval", tuple(5, 8))
-      dataSourceRemove8.close()
+      val inputMultiplexerRemove8 = input.newInputMultiplexer
+      inputMultiplexerRemove8.remove("testval", tuple(5, 8))
+      inputMultiplexerRemove8.close()
       assert(query.getResults().toSet == Set())
-      val dataSourceAdd78 = input.newDataSource
-      dataSourceAdd78.add("testval", tuple(5, 7))
-      dataSourceAdd78.add("testval", tuple(5, 8))
-      dataSourceAdd78.close()
+      val inputMultiplexerAdd78 = input.newInputMultiplexer
+      inputMultiplexerAdd78.add("testval", tuple(5, 7))
+      inputMultiplexerAdd78.add("testval", tuple(5, 8))
+      inputMultiplexerAdd78.close()
     })
     val endTime: Long = System.nanoTime() - beginTime
     val avg = endTime / 500 / 3
@@ -99,12 +99,12 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   "listeners" should "listen" in {
     (1 to 1000).foreach(i => {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val input = new DataSourceFactory
+      val input = new InputMultiplexerFactory
       val query = new TestQuery1
       input.subscribe(query.inputLookup)
-      val dataSource1 = input.newDataSource
-      dataSource1.add("testval", tuple(5, 5))
-      dataSource1.close()
+      val inputMultiplexer1 = input.newInputMultiplexer
+      inputMultiplexer1.add("testval", tuple(5, 5))
+      inputMultiplexer1.close()
       query.getResults()
       query.addListener(new ConsistentChangeListener {
         override def listener(positive: Vector[Tuple], negative: Vector[Tuple]): Unit = {
@@ -112,10 +112,10 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
         }
       })
       expectMsg(ChangeSet(positive = Vector(tuple(5, 5))))
-      val dataSource2 = input.newDataSource
-      dataSource2.remove("testval", tuple(5, 5))
-      dataSource2.add("testval", tuple(6, 6))
-      dataSource2.close()
+      val inputMultiplexer2 = input.newInputMultiplexer
+      inputMultiplexer2.remove("testval", tuple(5, 5))
+      inputMultiplexer2.add("testval", tuple(6, 6))
+      inputMultiplexer2.close()
       query.getResults()
       expectMsg(ChangeSet(positive = Vector(tuple(6, 6)), negative = Vector(tuple(5, 5))))
     })

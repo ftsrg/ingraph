@@ -1,6 +1,6 @@
 package ingraph.ire.adapters.tuplecreators
 
-import hu.bme.mit.ire.DataSource
+import hu.bme.mit.ire.InputMultiplexer
 import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.ire._
 import ingraph.model.expr.{EdgeAttribute, NodeHasLabelsAttribute, PropertyAttribute, VertexAttribute}
@@ -50,7 +50,7 @@ object EdgeTransformer {
 class TupleCreator(val vertexConverters: Map[Set[String], Set[GetVertices]],
                    val edgeConverters: Map[String, Set[GetEdges]],
                    val idParser: IdParser,
-                   val dataSource: DataSource
+                   val inputMultiplexer: InputMultiplexer
                   ) extends GraphElementToTupleMapper {
   val edgeOpString = edgeConverters.values.flatten.map(op => op -> op.toString()).toMap
 
@@ -61,11 +61,11 @@ class TupleCreator(val vertexConverters: Map[Set[String], Set[GetVertices]],
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = EdgeTransformer(edge, operator, idParser)
-        dataSource.add(edgeOpString(operator), tuple)
+        inputMultiplexer.add(edgeOpString(operator), tuple)
         if (!operator.nnode.directed) {
           val reverseEdgeTuple = EdgeTransformer(
             edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
-          dataSource.add(edgeOpString(operator), reverseEdgeTuple)
+          inputMultiplexer.add(edgeOpString(operator), reverseEdgeTuple)
         }
       }
     }
@@ -78,11 +78,11 @@ class TupleCreator(val vertexConverters: Map[Set[String], Set[GetVertices]],
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = EdgeTransformer(edge, operator, idParser)
-        dataSource.remove(edgeOpString(operator), tuple)
+        inputMultiplexer.remove(edgeOpString(operator), tuple)
         if (!operator.nnode.directed) {
           val reverseEdgeTuple = EdgeTransformer(
             edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
-          dataSource.remove(edgeOpString(operator), reverseEdgeTuple)
+          inputMultiplexer.remove(edgeOpString(operator), reverseEdgeTuple)
         }
       }
     }
@@ -93,7 +93,7 @@ class TupleCreator(val vertexConverters: Map[Set[String], Set[GetVertices]],
       f =>
         for (operator <- f._2) {
           val tuple = VertexTransformer(vertex, operator, idParser)
-          dataSource.add(operator.nnode.v.name, tuple)
+          inputMultiplexer.add(operator.nnode.v.name, tuple)
         }
     }
   }
@@ -103,7 +103,7 @@ class TupleCreator(val vertexConverters: Map[Set[String], Set[GetVertices]],
       f =>
         for (operator <- f._2) {
           val tuple = VertexTransformer(vertex, operator, idParser)
-          dataSource.remove(operator.nnode.v.name, tuple)
+          inputMultiplexer.remove(operator.nnode.v.name, tuple)
         }
     }
   }

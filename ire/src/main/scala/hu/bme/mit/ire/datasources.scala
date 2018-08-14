@@ -5,13 +5,13 @@ import hu.bme.mit.ire.messages.ChangeSet
 
 import scala.collection.mutable
 
-trait DataSource {
+trait InputMultiplexer {
   def close(): Unit
   def add(pred: String, tuple: Tuple)
   def remove(pred: String, tuple: Tuple)
 }
 
-class DataSourceFactory {
+class InputMultiplexerFactory {
   val subscribers = new mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]
 
   def subscribe(subscriber: Map[String, (ChangeSet) => Unit]) = {
@@ -19,22 +19,22 @@ class DataSourceFactory {
       subscribers.getOrElseUpdate(attribute, mutable.MutableList()) += func
   }
 
-  def newDataSource(): BatchDataSource = {
-    new BatchDataSource
+  def newInputMultiplexer(): BatchInputMultiplexer = {
+    new BatchInputMultiplexer
   }
 
-  class BatchDataSource extends DataSource {
+  class BatchInputMultiplexer extends InputMultiplexer {
     val positiveChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
     val negativeChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
 
-    def close(): Unit = {
+    override def close(): Unit = {
       positiveChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(ChangeSet(positive = kv._2))))
       negativeChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(ChangeSet(negative = kv._2))))
       positiveChangeSets.clear()
       negativeChangeSets.clear()
     }
 
-    def add(pred: String, tuple: Tuple): Unit = {
+    override def add(pred: String, tuple: Tuple): Unit = {
       if (subscribers.contains(pred)) {
         if (!positiveChangeSets.contains(pred))
           positiveChangeSets(pred) = Vector.empty[Tuple]
@@ -42,7 +42,7 @@ class DataSourceFactory {
       }
     }
 
-    def remove(pred: String, tuple: Tuple): Unit = {
+    override def remove(pred: String, tuple: Tuple): Unit = {
       if (subscribers.contains(pred)) {
         if (!negativeChangeSets.contains(pred))
           negativeChangeSets(pred) = Vector.empty[Tuple]

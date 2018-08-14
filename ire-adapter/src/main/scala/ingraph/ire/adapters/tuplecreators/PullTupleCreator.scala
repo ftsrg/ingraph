@@ -1,6 +1,6 @@
 package ingraph.ire.adapters.tuplecreators
 
-import hu.bme.mit.ire.DataSource
+import hu.bme.mit.ire.InputMultiplexer
 import ingraph.ire.{IdParser, Indexer, IngraphEdge}
 import ingraph.model.fplan.{GetEdges, GetVertices}
 import org.apache.spark.sql.catalyst.expressions.Literal
@@ -8,7 +8,7 @@ import org.apache.spark.sql.catalyst.expressions.Literal
 class PullTupleCreator(vertexOps: Seq[GetVertices],
                        edgeOps: Seq[GetEdges],
                        indexer: Indexer,
-                       dataSource: DataSource,
+                       inputMultiplexer: InputMultiplexer,
                        idParser: IdParser
                       ) {
   for (op <- vertexOps) {
@@ -29,7 +29,7 @@ class PullTupleCreator(vertexOps: Seq[GetVertices],
     }
     for (vertex <- vertices) {
       val tuple = VertexTransformer(vertex, op, idParser)
-      dataSource.add(v.name, tuple)
+      inputMultiplexer.add(v.name, tuple)
     }
   }
 
@@ -54,11 +54,11 @@ class PullTupleCreator(vertexOps: Seq[GetVertices],
 
     for (edge <- edges) {
       val tuple = EdgeTransformer(edge, operator, idParser)
-      dataSource.add(operator.toString(), tuple)
+      inputMultiplexer.add(operator.toString(), tuple)
       if (!operator.nnode.directed) {
         val rTuple = EdgeTransformer(
           edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
-        dataSource.add(operator.toString(), rTuple)
+        inputMultiplexer.add(operator.toString(), rTuple)
       }
     }
   }

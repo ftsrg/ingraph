@@ -2,7 +2,7 @@ package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.ChangeListener
-import hu.bme.mit.ire.{DataSource, DataSourceFactory}
+import hu.bme.mit.ire.{InputMultiplexer, InputMultiplexerFactory}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.ire.adapters.tuplecreators.TupleCreator
 import org.supercsv.prefs.CsvPreference
@@ -13,19 +13,19 @@ class IncrementalQueryAdapter(
     override val indexer: Indexer = new Indexer()
   ) extends AbstractQueryAdapter {
 
-  val dataSourceFactory = new DataSourceFactory
-  dataSourceFactory.subscribe(engine.inputLookup)
+  val inputMultiplexerFactory = new InputMultiplexerFactory
+  inputMultiplexerFactory.subscribe(engine.inputLookup)
 
   val tupleCreator = new TupleCreator(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
     engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap,
     LongIdParser,
-    dataSourceFactory.newDataSource()
+    inputMultiplexerFactory.newInputMultiplexer()
   )
   indexer.subscribe(tupleCreator)
 
   override def results(): Iterable[Tuple] = {
-    tupleCreator.dataSource.close()
+    tupleCreator.inputMultiplexer.close()
     engine.getResults()
   }
 
