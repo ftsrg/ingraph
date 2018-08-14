@@ -5,16 +5,15 @@ import hu.bme.mit.ire.messages.ChangeSet
 
 import scala.collection.mutable
 
-trait Transaction extends AutoCloseable {
+trait DataSource extends AutoCloseable {
   override def close(): Unit
-
   def add(pred: String, tuple: Tuple)
   def remove(pred: String, tuple: Tuple)
 }
 
-class TransactionFactory {
+class DataSourceFactory {
   val subscribers = new mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]
-  val usedIDs = new mutable.HashSet[Long]
+  //val usedIDs = new mutable.HashSet[Long]
   val idGenerator = new scala.util.Random
 
   def subscribe(subscriber: Map[String, (ChangeSet) => Unit]) = {
@@ -22,11 +21,11 @@ class TransactionFactory {
       subscribers.getOrElseUpdate(attribute, mutable.MutableList()) += func
   }
 
-  def newBatchTransaction(): BatchTransaction = {
-    new BatchTransaction()
+  def newDataSource: BatchDataSource = {
+    new BatchDataSource
   }
 
-  class BatchTransaction extends Transaction {
+  class BatchDataSource extends DataSource {
     val positiveChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
     val negativeChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
 
@@ -46,8 +45,8 @@ class TransactionFactory {
     }
 
     def remove(pred: String, tuple: Tuple): Unit = {
-      // DO NOT usedIDs.remove(subj), there are enough long values to go around, that having to deal with transient IDs
-      // is not worth it
+      // DO NOT call usedIDs.remove(subj), there are enough long values to go around,
+      // having to deal with transient IDs is not worth it
       if (subscribers.contains(pred)) {
         if (!negativeChangeSets.contains(pred))
           negativeChangeSets(pred) = Vector.empty[Tuple]

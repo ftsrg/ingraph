@@ -51,7 +51,7 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
                    edgeConverters: Map[String, Set[GetEdges]],
                    idParser: IdParser = PlainIdParser) extends GraphElementToTupleMapper {
   val edgeOpString = edgeConverters.values.flatten.map(op => op -> op.toString()).toMap
-  var transaction: Transaction = _
+  var dataSource: DataSource = _
 
   def addEdge(edge: IngraphEdge): Unit = {
     for (operators <- edgeConverters.get(edge.`type`); operator <- operators) {
@@ -60,11 +60,11 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = EdgeTransformer(edge, operator, idParser)
-        transaction.add(edgeOpString(operator), tuple)
+        dataSource.add(edgeOpString(operator), tuple)
         if (!operator.nnode.directed) {
           val rTuple = EdgeTransformer(
             edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
-          transaction.add(edgeOpString(operator), rTuple)
+          dataSource.add(edgeOpString(operator), rTuple)
         }
       }
     }
@@ -77,11 +77,11 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = EdgeTransformer(edge, operator, idParser)
-        transaction.remove(edgeOpString(operator), tuple)
+        dataSource.remove(edgeOpString(operator), tuple)
         if (!operator.nnode.directed) {
           val rTuple = EdgeTransformer(
             edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
-          transaction.remove(edgeOpString(operator), rTuple)
+          dataSource.remove(edgeOpString(operator), rTuple)
         }
       }
     }
@@ -92,7 +92,7 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
       f =>
         for (operator <- f._2) {
           val tuple = VertexTransformer(vertex, operator, idParser)
-          transaction.add(operator.nnode.v.name, tuple)
+          dataSource.add(operator.nnode.v.name, tuple)
         }
     }
   }
@@ -102,14 +102,14 @@ class TupleCreator(vertexConverters: Map[Set[String], Set[GetVertices]],
       f =>
         for (operator <- f._2) {
           val tuple = VertexTransformer(vertex, operator, idParser)
-          transaction.remove(operator.nnode.v.name, tuple)
+          dataSource.remove(operator.nnode.v.name, tuple)
         }
     }
   }
 }
 
 class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
-                       indexer: Indexer, transaction: Transaction, idParser: IdParser = PlainIdParser) {
+                       indexer: Indexer, dataSource: DataSource, idParser: IdParser = PlainIdParser) {
   for (op <- vertexOps) {
     val v = op.nnode.v
     val opLabels = v.labels.vertexLabels
@@ -128,7 +128,7 @@ class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
     }
     for (vertex <- vertices) {
       val tuple = VertexTransformer(vertex, op, idParser)
-      transaction.add(v.name, tuple)
+      dataSource.add(v.name, tuple)
     }
   }
 
@@ -153,11 +153,11 @@ class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
 
     for (edge <- edges) {
       val tuple = EdgeTransformer(edge, operator, idParser)
-      transaction.add(operator.toString(), tuple)
+      dataSource.add(operator.toString(), tuple)
       if (!operator.nnode.directed) {
         val rTuple = EdgeTransformer(
           edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
-        transaction.add(operator.toString(), rTuple)
+        dataSource.add(operator.toString(), rTuple)
       }
     }
   }

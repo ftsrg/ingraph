@@ -1,9 +1,8 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.{Transaction, TupleCreator}
+import hu.bme.mit.ire.{DataSource, TupleCreator}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.model.fplan.FNode
-import org.apache.commons.lang3.tuple.ImmutableTriple
 import org.supercsv.prefs.CsvPreference
 
 abstract class AbstractIngraphAdapter extends AutoCloseable {
@@ -18,11 +17,11 @@ abstract class AbstractIngraphAdapter extends AutoCloseable {
 
   def readCsv(vertexFileNames: Map[String, List[String]],
               edgeFilenames: Map[String, (String, String, String)],
-              transaction: Transaction,
+              dataSource: DataSource,
               csvPreference: CsvPreference = CsvPreference.STANDARD_PREFERENCE) {
     import scala.collection.JavaConverters._
     // sorry :-)
-    tupleCreator.transaction = transaction
+    tupleCreator.dataSource = dataSource
 
     val loader = new MassCsvLoader(csvPreference)
 

@@ -2,7 +2,7 @@ package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.ChangeListener
-import hu.bme.mit.ire.{TupleCreator, Transaction, TransactionFactory}
+import hu.bme.mit.ire.{TupleCreator, DataSource, DataSourceFactory}
 import ingraph.compiler.FPlanParser
 
 class IngraphIncrementalAdapter(
@@ -15,32 +15,30 @@ class IngraphIncrementalAdapter(
   override val plan = FPlanParser.parse(querySpecification)
   override val engine = EngineFactory.createQueryEngine(plan, indexer)
 
-  val transactionFactory = new TransactionFactory
-  transactionFactory.subscribe(engine.inputLookup)
+  val dataSourceFactory = new DataSourceFactory
+  dataSourceFactory.subscribe(engine.inputLookup)
 
   override val tupleCreator = new TupleCreator(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
     engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap, LongIdParser)
 
-  tupleCreator.transaction = transactionFactory.newBatchTransaction()
+  tupleCreator.dataSource = dataSourceFactory.newDataSource
   indexer.subscribe(tupleCreator)
 
 
-  def newTransaction(): Transaction = {
-    val tran = transactionFactory.newBatchTransaction()
-    tupleCreator.transaction = tran
-    tran
+  def newDataSource(): DataSource = {
+    val dataSource = dataSourceFactory.newDataSource
+    tupleCreator.dataSource = dataSource
+    dataSource
   }
 
   def result(): Iterable[Tuple] = {
-    tupleCreator.transaction.close()
+    tupleCreator.dataSource.close()
     engine.getResults()
   }
 
   def addListener(listener: ChangeListener): Unit = {
     engine.addListener(listener)
   }
-
-
 
 }

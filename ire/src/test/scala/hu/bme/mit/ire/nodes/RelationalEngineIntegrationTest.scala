@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes
 
 import akka.actor.{ActorRef, ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.{TransactionFactory, _}
+import hu.bme.mit.ire.{DataSourceFactory, _}
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
 import hu.bme.mit.ire.listeners.{ChangeListener, ConsistentChangeListener}
@@ -21,7 +21,7 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   }
 
   class TestQuery1 extends RelationalEngine {
-    override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))
+    override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery1")))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
       "testval" -> ((cs: ChangeSet) => forwarder ! cs)
     )
@@ -30,7 +30,7 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   }
 
   class TestQuery2 extends RelationalEngine {
-    override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery", 2)))
+    override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery2", 2)))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
       "testval" -> ((cs: ChangeSet) => forwarder ! cs),
       "testval2" -> ((cs: ChangeSet) => forwarder2 ! cs)
@@ -42,17 +42,17 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
 
   "multiple queries" should "work" in {
     for (i <- 1 to 1000) {
-      val input = new TransactionFactory
-      val query = new TestQuery1
+      val input = new DataSourceFactory
+      val query1 = new TestQuery1
       val query2 = new TestQuery2
-      input.subscribe(query.inputLookup)
+      input.subscribe(query1.inputLookup)
       input.subscribe(query2.inputLookup)
-      val tran0 = input.newBatchTransaction()
-      tran0.add("testval", tuple(5, 5))
-      tran0.add("testval", tuple(5, 6))
-      tran0.add("testval2", tuple(5, 7))
-      tran0.close()
-      val res1 = query.getResults()
+      val dataSource1 = input.newDataSource
+      dataSource1.add("testval", tuple(5, 5))
+      dataSource1.add("testval", tuple(5, 6))
+      dataSource1.add("testval2", tuple(5, 7))
+      dataSource1.close()
+      val res1 = query1.getResults()
       assert(res1.toSet == Set(tuple(5, 5), tuple(5, 6)))
       val res2 = query2.getResults()
       assert(res2.toSet == Set(tuple(5, 5), tuple(5, 6), tuple(5, 7)))
@@ -60,37 +60,37 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   }
 
   "integration" should "work" in {
-    val input = new TransactionFactory
+    val input = new DataSourceFactory
     val query = new TestQuery1
     input.subscribe(query.inputLookup)
-    val tran0 = input.newBatchTransaction()
-    tran0.add("testval", tuple(5, 5))
-    tran0.add("testval", tuple(5, 6))
-    tran0.add("testval", tuple(5, 7))
-    tran0.close()
+    val dataSource1 = input.newDataSource
+    dataSource1.add("testval", tuple(5, 5))
+    dataSource1.add("testval", tuple(5, 6))
+    dataSource1.add("testval", tuple(5, 7))
+    dataSource1.close()
     val res0 = query.getResults()
     assert(res0.toSet == Set(tuple(5, 5), tuple(5, 6), tuple(5, 7)))
-    val tran1 = input.newBatchTransaction()
-    tran1.remove("testval", tuple(5, 5))
-    tran1.remove("testval", tuple(5, 6))
-    tran1.add("tesval2", tuple(3, 2))
-    tran1.add("testval", tuple(5, 8))
-    tran1.close()
+    val dataSource2 = input.newDataSource
+    dataSource2.remove("testval", tuple(5, 5))
+    dataSource2.remove("testval", tuple(5, 6))
+    dataSource2.add("tesval2", tuple(3, 2))
+    dataSource2.add("testval", tuple(5, 8))
+    dataSource2.close()
     assert(query.getResults().toSet == Set(tuple(5, 7), tuple(5, 8)))
     val beginTime: Long = System.nanoTime()
     (1 to 5000).foreach(i => {
-      val tranRemove7 = input.newBatchTransaction()
-      tranRemove7.remove("testval", tuple(5, 7))
-      tranRemove7.close()
+      val dataSourceRemove7 = input.newDataSource
+      dataSourceRemove7.remove("testval", tuple(5, 7))
+      dataSourceRemove7.close()
       assert(query.getResults().toSet == Set(tuple(5, 8)))
-      val tranRemove8 = input.newBatchTransaction()
-      tranRemove8.remove("testval", tuple(5, 8))
-      tranRemove8.close()
+      val dataSourceRemove8 = input.newDataSource
+      dataSourceRemove8.remove("testval", tuple(5, 8))
+      dataSourceRemove8.close()
       assert(query.getResults().toSet == Set())
-      val tranAdd78 = input.newBatchTransaction()
-      tranAdd78.add("testval", tuple(5, 7))
-      tranAdd78.add("testval", tuple(5, 8))
-      tranAdd78.close()
+      val dataSourceAdd78 = input.newDataSource
+      dataSourceAdd78.add("testval", tuple(5, 7))
+      dataSourceAdd78.add("testval", tuple(5, 8))
+      dataSourceAdd78.close()
     })
     val endTime: Long = System.nanoTime() - beginTime
     val avg = endTime / 500 / 3
@@ -99,12 +99,12 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   "listeners" should "listen" in {
     (1 to 1000).foreach(i => {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val input = new TransactionFactory
+      val input = new DataSourceFactory
       val query = new TestQuery1
       input.subscribe(query.inputLookup)
-      val tran0 = input.newBatchTransaction()
-      tran0.add("testval", tuple(5, 5))
-      tran0.close()
+      val dataSource = input.newDataSource
+      dataSource.add("testval", tuple(5, 5))
+      dataSource.close()
       query.getResults()
       query.addListener(new ConsistentChangeListener {
         override def listener(positive: Vector[Tuple], negative: Vector[Tuple]): Unit = {
@@ -112,7 +112,7 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
         }
       })
       expectMsg(ChangeSet(positive = Vector(tuple(5, 5))))
-      val tran1 = input.newBatchTransaction()
+      val tran1 = input.newDataSource
       tran1.remove("testval", tuple(5, 5))
       tran1.add("testval", tuple(6, 6))
       tran1.close()

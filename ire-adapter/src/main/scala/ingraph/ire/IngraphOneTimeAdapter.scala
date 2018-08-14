@@ -1,7 +1,7 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.{PullTupleCreator, TransactionFactory, TupleCreator}
+import hu.bme.mit.ire.{PullTupleCreator, DataSourceFactory, TupleCreator}
 import ingraph.compiler.FPlanParser
 
 class IngraphOneTimeAdapter (
@@ -13,19 +13,20 @@ class IngraphOneTimeAdapter (
   val plan = FPlanParser.parse(querySpecification)
   val engine = EngineFactory.createQueryEngine(plan, indexer)
 
-  val transactionFactory = new TransactionFactory
-  transactionFactory.subscribe(engine.inputLookup)
-  val transaction = transactionFactory.newBatchTransaction()
+  val dataSourceFactory = new DataSourceFactory
+  dataSourceFactory.subscribe(engine.inputLookup)
+  val dataSource = dataSourceFactory.newDataSource
   new PullTupleCreator(
     engine.vertexConverters.values.flatten.toVector.distinct,
     engine.edgeConverters.values.flatten.toVector.distinct,
-    indexer, transaction, LongIdParser)
+    indexer, dataSource, LongIdParser
+  )
 
   /**
     * Terminate execution and return results
     */
   def terminate(): Iterable[Tuple] = {
-    transaction.close()
+    dataSource.close()
     engine.getResults()
   }
 

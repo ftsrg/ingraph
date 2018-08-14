@@ -1,7 +1,7 @@
 package hu.bme.mit.ire.nodes
 
 import akka.actor.{ActorRef, Props, actorRef2Scala}
-import hu.bme.mit.ire.{Terminator, TransactionFactory}
+import hu.bme.mit.ire.{Terminator, DataSourceFactory}
 import hu.bme.mit.ire.datatypes.{JoinCache, Tuple}
 import hu.bme.mit.ire.engine.RelationalEngine
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
@@ -45,14 +45,14 @@ class SizingTest extends WordSpec with TimeLimits {
     }
 
     "measure size" in {
-      val input = new TransactionFactory
+      val input = new DataSourceFactory
       val query = new TestQuery1
       input.subscribe(query.inputLookup)
-      val tran0 = input.newBatchTransaction()
-      tran0.add("testval", tuple(5, 5))
-      tran0.add("testval", tuple(5, 6))
-      tran0.add("testval", tuple(5, 7))
-      tran0.close()
+      val dataSource = input.newDataSource
+      dataSource.add("testval", tuple(5, 5))
+      dataSource.add("testval", tuple(5, 6))
+      dataSource.add("testval", tuple(5, 7))
+      dataSource.close()
       assert(query.getCounts == 12)
     }
   }

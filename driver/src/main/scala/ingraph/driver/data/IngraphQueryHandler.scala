@@ -1,6 +1,6 @@
 package ingraph.driver.data
 
-import hu.bme.mit.ire.Transaction
+import hu.bme.mit.ire.DataSource
 import ingraph.ire.IngraphIncrementalAdapter
 import ingraph.model.fplan.Production
 import org.supercsv.prefs.CsvPreference
@@ -16,9 +16,9 @@ class IngraphQueryHandler(val adapter: IngraphIncrementalAdapter) extends AutoCl
   def readCsv(vertexFilenames: Map[String, List[String]],
               edgeFilenames: Map[String, (String, String, String)],
               csvPreference: CsvPreference) {
-    val transaction: Transaction = adapter.newTransaction
-    adapter.readCsv(vertexFilenames, edgeFilenames, transaction, csvPreference)
-    transaction.close()
+    val dataSource: DataSource = adapter.newDataSource
+    adapter.readCsv(vertexFilenames, edgeFilenames, dataSource, csvPreference)
+    dataSource.close()
     adapter.engine.getResults()
   }
 
