@@ -25,7 +25,7 @@ class DataManipulationTest extends FunSuite {
   test("create unlabeled vertices") {
     val indexer = new Indexer()
     val q = "CREATE ({value: 1})"
-    new OneTimeQueryAdapter(q, "", indexer).terminate()
+    new OneTimeQueryAdapter(q, "", indexer).results()
     println(new IncrementalQueryAdapter("MATCH (n) return n","", indexer).results())
 
   }
@@ -42,9 +42,9 @@ class DataManipulationTest extends FunSuite {
 
     for (i <- 1 to 10 ) {
       assert(whereIsAdapter.results() == List(Vector(2)))
-      new OneTimeQueryAdapter(oneOff, "remove", indexer).terminate()
+      new OneTimeQueryAdapter(oneOff, "remove", indexer).results()
       assert(whereIsAdapter.results() == List(Vector(3)))
-      new OneTimeQueryAdapter(oneOff, "remove", indexer).terminate()
+      new OneTimeQueryAdapter(oneOff, "remove", indexer).results()
     }
   }
 
@@ -52,7 +52,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
 
     val oneOff = "MATCH (t:Train) DETACH DELETE t"
-    new OneTimeQueryAdapter(oneOff, "remove", indexer).terminate()
+    new OneTimeQueryAdapter(oneOff, "remove", indexer).results()
 
     val whereIsTrain = "MATCH (t:Train) RETURN t"
     val whereIsAdapter = new IncrementalQueryAdapter(whereIsTrain, "something", indexer)
@@ -67,7 +67,7 @@ class DataManipulationTest extends FunSuite {
     val whereIsAdapter = new IncrementalQueryAdapter(whereIsTrain, "something", indexer)
 
     val oneOff = "MATCH (t:Train) DETACH DELETE t"
-    new OneTimeQueryAdapter(oneOff, "remove", indexer).terminate()
+    new OneTimeQueryAdapter(oneOff, "remove", indexer).results()
 
     assert(whereIsAdapter.results().isEmpty)
   }
@@ -79,7 +79,7 @@ class DataManipulationTest extends FunSuite {
     val whereIsAdapter = new IncrementalQueryAdapter(whereIsTrain, "something", indexer)
 
     val oneOff = "CREATE (t:Train)"
-    new OneTimeQueryAdapter(oneOff, "create", indexer).terminate()
+    new OneTimeQueryAdapter(oneOff, "create", indexer).results()
 
     assert(whereIsAdapter.results().size == 2)
   }
@@ -88,7 +88,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
 
     val oneOff = "CREATE (e: Engine {power: 'poweeeer'})"// CREATE (e:Engine {power: t.power + '^2'})"
-    new OneTimeQueryAdapter(oneOff, "create", indexer).terminate()
+    new OneTimeQueryAdapter(oneOff, "create", indexer).results()
     val whereIsTrain = "MATCH (e: Engine) RETURN e, e.power"// WHERE e.power != 1 RETURN e, e.power"
     val whereIsAdapter = new IncrementalQueryAdapter(whereIsTrain, "", indexer)
 
@@ -99,7 +99,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
 
     val oneOff = "MATCH (t: Train) CREATE (e: Engine {power: t.power})"
-    new OneTimeQueryAdapter(oneOff, "create", indexer).terminate()
+    new OneTimeQueryAdapter(oneOff, "create", indexer).results()
     val whereIsTrain = "MATCH (e: Engine) RETURN e, e.power"// WHERE e.power != 1 RETURN e, e.power"
     val whereIsAdapter = new IncrementalQueryAdapter(whereIsTrain, "", indexer)
 
@@ -111,7 +111,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = new Indexer()
 
     val oneOff = "CREATE (t:Train)-[r:ON {track: 'bomb'}]->(seg1:Segment)"
-    new OneTimeQueryAdapter(oneOff, "create", indexer).terminate()
+    new OneTimeQueryAdapter(oneOff, "create", indexer).results()
     val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment) RETURN r, r.track"
     val whereIsAdapter = new IncrementalQueryAdapter(whereIsTrain, "", indexer)
     assert(whereIsAdapter.results() == Seq(Vector(3831662765844904176L, "bomb")))
@@ -121,7 +121,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
 
     val create = "MATCH (seg:Segment) CREATE (seg)-[m:MonitoredBy]->(s:Sensor)"
-    new OneTimeQueryAdapter(create, "create", indexer).terminate()
+    new OneTimeQueryAdapter(create, "create", indexer).results()
     val query = "MATCH (seg:Segment)-[m:MonitoredBy]->(s:Sensor) RETURN seg, m, s"
     val whereIsAdapter = new IncrementalQueryAdapter(query, "", indexer)
     assert(whereIsAdapter.results() == Seq(
@@ -133,7 +133,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = new Indexer()
 
     val oneOff = "CREATE (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment)"
-    new OneTimeQueryAdapter(oneOff, "create", indexer).terminate()
+    new OneTimeQueryAdapter(oneOff, "create", indexer).results()
     val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment) RETURN t, seg1, seg2"
     val whereIsAdapter = new IncrementalQueryAdapter(whereIsTrain, "", indexer)
 
@@ -144,7 +144,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
     val oneOff = "MATCH (t:Train {id: 1}) DETACH DELETE t"
     assert(indexer.verticesById(1L).nonEmpty)
-    new OneTimeQueryAdapter(oneOff, "del", indexer).terminate()
+    new OneTimeQueryAdapter(oneOff, "del", indexer).results()
     assert(indexer.verticesById(1L).isEmpty)
   }
 
@@ -153,7 +153,7 @@ class DataManipulationTest extends FunSuite {
     val indexer = initializeIndexer()
     val oneOff = "match (:Train)-[r:ON {id: 4}]->(:Segment) DELETE r"
     assert(indexer.edgeById(4L).nonEmpty)
-    new OneTimeQueryAdapter(oneOff, "del", indexer).terminate()
+    new OneTimeQueryAdapter(oneOff, "del", indexer).results()
     assert(indexer.edgeById(4L).isEmpty)
   }
 }

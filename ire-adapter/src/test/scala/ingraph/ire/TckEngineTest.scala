@@ -12,7 +12,7 @@ class TckEngineTest extends FunSuite {
 
     if (createQuery != "") {
       val createAdapter = new OneTimeQueryAdapter(createQuery, "create", indexer)
-      createAdapter.terminate()
+      createAdapter.results()
     }
 
     val readAdapter = new IncrementalQueryAdapter(readQuery, "read", indexer)

@@ -40,9 +40,9 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
   }
 
   def update(querySpecification: String, queryName: String, indexer: Indexer, queryHandler: IngraphQueryHandler): List[Map[String, Any]] = {
-    val onetime = new OneTimeQueryAdapter(querySpecification, "del", indexer)
-    onetime.terminate()
-    onetime.close()
+    val adapter = new OneTimeQueryAdapter(querySpecification, "del", indexer)
+    adapter.results()
+    adapter.close()
     queryHandler.result
   }
 

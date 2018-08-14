@@ -2,17 +2,13 @@ package ingraph.ire
 
 import hu.bme.mit.ire.DataSourceFactory
 import hu.bme.mit.ire.datatypes.Tuple
-import ingraph.compiler.FPlanParser
 import ingraph.ire.adapters.tuplecreators.PullTupleCreator
 
 class OneTimeQueryAdapter(
     val querySpecification: String,
     val queryName: String,
-    val indexer: Indexer = new Indexer()
-  ) extends AutoCloseable {
-
-  val plan = FPlanParser.parse(querySpecification)
-  val engine = EngineFactory.createQueryEngine(plan, indexer)
+    override val indexer: Indexer = new Indexer()
+  ) extends AbstractQueryAdapter {
 
   val dataSourceFactory = new DataSourceFactory
   dataSourceFactory.subscribe(engine.inputLookup)
@@ -23,16 +19,13 @@ class OneTimeQueryAdapter(
     indexer, dataSource, LongIdParser
   )
 
-  /**
-    * Terminate execution and return results
-    */
-  def terminate(): Iterable[Tuple] = {
-    dataSource.close()
-    engine.getResults()
+  override def results(): Iterable[Tuple] = {
+    dataSource.close
+    engine.getResults
   }
 
-  override def close() {
-    engine.shutdown()
+  override def close {
+    engine.shutdown
   }
 
 }

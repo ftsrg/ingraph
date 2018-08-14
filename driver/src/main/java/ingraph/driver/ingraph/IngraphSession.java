@@ -36,7 +36,7 @@ public class IngraphSession implements Session {
 	public StatementResult run(String statementTemplate, Map<String, Object> statementParameters) {
 		final OneTimeQueryAdapter adapter = new OneTimeQueryAdapter(statementTemplate, "onetime" + oneTimeQueryIndex, indexer);
 		oneTimeQueryIndex++;
-		adapter.terminate();
+		adapter.results();
 		return null;
 	}
 

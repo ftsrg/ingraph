@@ -6,6 +6,7 @@ import hu.bme.mit.ire.{DataSource, DataSourceFactory}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.compiler.FPlanParser
 import ingraph.ire.adapters.tuplecreators.TupleCreator
+import ingraph.model.fplan.Production
 import org.supercsv.prefs.CsvPreference
 
 class IncrementalQueryAdapter(
@@ -14,13 +15,10 @@ class IncrementalQueryAdapter(
     override val indexer: Indexer = new Indexer()
   ) extends AbstractQueryAdapter {
 
-  override val plan = FPlanParser.parse(querySpecification)
-  override protected val engine = EngineFactory.createQueryEngine(plan, indexer)
-
   val dataSourceFactory = new DataSourceFactory
   dataSourceFactory.subscribe(engine.inputLookup)
 
-  override val tupleCreator = new TupleCreator(
+  val tupleCreator = new TupleCreator(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
     engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap, LongIdParser)
 
@@ -34,9 +32,9 @@ class IncrementalQueryAdapter(
     dataSource
   }
 
-  def results(): Iterable[Tuple] = {
+  override def results(): Iterable[Tuple] = {
     tupleCreator.dataSource.close()
-    engine.getResults()
+    engine.getResults
   }
 
   def addListener(listener: ChangeListener): Unit = {

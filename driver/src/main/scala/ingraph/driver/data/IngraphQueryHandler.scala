@@ -1,13 +1,11 @@
 package ingraph.driver.data
 
-import hu.bme.mit.ire.DataSource
 import ingraph.ire.IncrementalQueryAdapter
-import ingraph.model.fplan.Production
 import org.supercsv.prefs.CsvPreference
 
 class IngraphQueryHandler(val adapter: IncrementalQueryAdapter) extends AutoCloseable {
 
-  val productionNode = adapter.plan.asInstanceOf[Production]
+  val productionNode = adapter.getProductionNode
 
   def registerDeltaHandler(listener: IngraphDeltaHandler) {
     adapter.addListener(listener)

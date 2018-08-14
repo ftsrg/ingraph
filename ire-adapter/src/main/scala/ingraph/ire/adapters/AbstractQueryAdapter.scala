@@ -1,7 +1,8 @@
 package ingraph.ire
 
-import ingraph.ire.adapters.tuplecreators.TupleCreator
-import ingraph.model.fplan.FNode
+import hu.bme.mit.ire.datatypes.Tuple
+import ingraph.compiler.FPlanParser
+import ingraph.model.fplan.{FNode, Production}
 
 abstract class AbstractQueryAdapter extends AutoCloseable {
 
@@ -9,9 +10,12 @@ abstract class AbstractQueryAdapter extends AutoCloseable {
   val queryName: String
   val indexer: Indexer = new Indexer()
 
-  val plan: FNode
-  protected val tupleCreator: TupleCreator
-  protected val engine: AnnotatedRelationalEngine
+  protected val plan = FPlanParser.parse(querySpecification)
+  protected val engine = EngineFactory.createQueryEngine(plan, indexer)
+
+  def getProductionNode = plan.asInstanceOf[Production]
+
+  def results(): Iterable[Tuple]
 
   override def close(): Unit = {
     engine.shutdown()
