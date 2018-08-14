@@ -1,4 +1,0 @@
-dependencies {
-  compile group: 'com.google.guava', name: 'guava', version: guavaVersion
-  compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
-}
