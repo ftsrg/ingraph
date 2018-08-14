@@ -2,8 +2,9 @@ package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.ChangeListener
-import hu.bme.mit.ire.{TupleCreator, DataSource, DataSourceFactory}
+import hu.bme.mit.ire.{DataSource, DataSourceFactory}
 import ingraph.compiler.FPlanParser
+import ingraph.ire.adapters.tuplecreators.TupleCreator
 
 class IngraphIncrementalAdapter(
     override val querySpecification: String,

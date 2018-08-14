@@ -1,8 +1,9 @@
 package ingraph.ire
 
+import hu.bme.mit.ire.DataSourceFactory
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.{PullTupleCreator, DataSourceFactory, TupleCreator}
 import ingraph.compiler.FPlanParser
+import ingraph.ire.adapters.tuplecreators.PullTupleCreator
 
 class IngraphOneTimeAdapter (
     val querySpecification: String,

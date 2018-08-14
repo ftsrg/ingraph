@@ -10,13 +10,12 @@ import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulAggregate}
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
+import ingraph.ire.adapters.tuplecreators.TupleConstants
 import ingraph.model.expr._
 import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
-import ingraph.model.fplan
 import ingraph.model.fplan._
-import ingraph.model.nplan
 import ingraph.parse.ExpressionParser
-import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression, Literal}
+import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression, Literal}
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer

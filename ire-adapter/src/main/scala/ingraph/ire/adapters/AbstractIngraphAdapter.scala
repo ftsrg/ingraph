@@ -1,7 +1,8 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.{DataSource, TupleCreator}
+import hu.bme.mit.ire.DataSource
 import ingraph.bulkloader.csv.loader.MassCsvLoader
+import ingraph.ire.adapters.tuplecreators.TupleCreator
 import ingraph.model.fplan.FNode
 import org.supercsv.prefs.CsvPreference
 
