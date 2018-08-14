@@ -15,7 +15,7 @@ class IngraphQueryHandler(val adapter: IncrementalQueryAdapter) extends AutoClos
               edgeFilenames: Map[String, (String, String, String)],
               csvPreference: CsvPreference) {
     adapter.readCsv(vertexFilenames, edgeFilenames, csvPreference)
-    adapter.results
+    adapter.results()
   }
 
   def result(): List[Map[String, Any]] = {

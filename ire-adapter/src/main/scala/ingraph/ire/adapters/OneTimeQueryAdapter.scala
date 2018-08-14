@@ -20,12 +20,12 @@ class OneTimeQueryAdapter(
   )
 
   override def results(): Iterable[Tuple] = {
-    dataSource.close
-    engine.getResults
+    dataSource.close()
+    engine.getResults()
   }
 
   override def close {
-    engine.shutdown
+    engine.shutdown()
   }
 
 }

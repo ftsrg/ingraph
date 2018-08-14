@@ -2,7 +2,7 @@ package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.compiler.FPlanParser
-import ingraph.model.fplan.{FNode, Production}
+import ingraph.model.fplan.Production
 
 abstract class AbstractQueryAdapter extends AutoCloseable {
 

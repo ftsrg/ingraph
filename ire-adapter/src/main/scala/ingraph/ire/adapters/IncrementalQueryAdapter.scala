@@ -4,9 +4,7 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.ChangeListener
 import hu.bme.mit.ire.{DataSource, DataSourceFactory}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
-import ingraph.compiler.FPlanParser
 import ingraph.ire.adapters.tuplecreators.TupleCreator
-import ingraph.model.fplan.Production
 import org.supercsv.prefs.CsvPreference
 
 class IncrementalQueryAdapter(
@@ -34,7 +32,7 @@ class IncrementalQueryAdapter(
 
   override def results(): Iterable[Tuple] = {
     tupleCreator.dataSource.close()
-    engine.getResults
+    engine.getResults()
   }
 
   def addListener(listener: ChangeListener): Unit = {
@@ -46,7 +44,7 @@ class IncrementalQueryAdapter(
               csvPreference: CsvPreference) {
     import scala.collection.JavaConverters._
     // sorry :-)
-    tupleCreator.dataSource = newDataSource()
+    newDataSource()
 
     val loader = new MassCsvLoader(csvPreference)
 

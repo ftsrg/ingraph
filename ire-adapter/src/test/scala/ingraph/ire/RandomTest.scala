@@ -1,11 +1,7 @@
 package ingraph.ire
 
 import ingraph.bulkloader.csv.data.{CsvEdge, CsvVertex}
-import org.neo4j.driver.internal.{InternalNode, InternalRelationship}
-import org.neo4j.driver.v1.Value
 import org.scalatest.FunSuite
-
-import scala.collection.JavaConverters._
 
 class RandomTest extends FunSuite {
 
