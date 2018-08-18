@@ -30,7 +30,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-04")
   }
 
-  ignore("bi-05 from file: Top posters in a country") {
+  test("bi-05 from file: Top posters in a country") {
     val stages=compileFromFile("bi-05")
   }
 
@@ -97,7 +97,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-20")
   }
 
-  ignore("bi-21 from file: Zombies in a country") {
+  test("bi-21 from file: Zombies in a country") {
     val stages=compileFromFile("bi-21")
   }
 
