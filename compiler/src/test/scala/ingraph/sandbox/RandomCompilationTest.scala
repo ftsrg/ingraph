@@ -437,6 +437,17 @@ class RandomCompilationTest extends CompilerTest {
     assert(stages.gplan.find(p => p.isInstanceOf[gplan.Delete] ).get.asInstanceOf[gplan.Delete].attributes(0).resolvedName.isDefined)
   }
 
+  test("should retain ORDER BY attributes in projection") {
+    val stages = compile(
+      """WITH 1 AS x, 2 AS y
+        |RETURN x
+        |ORDER BY y
+        |LIMIT 1
+        |""".stripMargin)
+
+    assert(stages.gplan.find(p => p.isInstanceOf[gplan.Sort] ).get.asInstanceOf[gplan.Sort].child.asInstanceOf[gplan.Projection]
+      .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("y#0")))
+  }
 }
 
 /** Random compiler tests that must stop after GPlan compilation.
