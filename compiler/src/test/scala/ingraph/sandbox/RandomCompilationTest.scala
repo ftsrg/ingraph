@@ -446,7 +446,19 @@ class RandomCompilationTest extends CompilerTest {
         |""".stripMargin)
 
     assert(stages.gplan.find(p => p.isInstanceOf[gplan.Sort] ).get.asInstanceOf[gplan.Sort].child.asInstanceOf[gplan.Projection]
-      .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("y#0")))
+      .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("y#0"))) //FIXME: y#0 has no stable number
+  }
+
+  test("should retain base attribute for ORDER BY properties in projection") {
+    val stages = compile(
+      """MATCH (a:A)-[r:REL]->(wxx:B)
+        |RETURN a
+        |ORDER BY wxx.foo
+        |LIMIT 1
+        |""".stripMargin)
+
+    assert(stages.gplan.find(p => p.isInstanceOf[gplan.Sort] ).get.asInstanceOf[gplan.Sort].child.asInstanceOf[gplan.Projection]
+      .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("wxx#0"))) //FIXME: wxx#0 has no stable number
   }
 }
 

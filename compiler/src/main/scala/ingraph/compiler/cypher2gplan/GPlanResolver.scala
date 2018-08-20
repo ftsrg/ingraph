@@ -4,8 +4,8 @@ import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.compiler.cypher2gplan.util.TransformUtil
 import ingraph.compiler.exceptions._
-import ingraph.model.expr.ResolvableName
-import ingraph.model.expr.types.TSortOrder
+import ingraph.model.expr.{PropertyAttribute, ResolvableName}
+import ingraph.model.expr.types.{TResolvedName, TSortOrder}
 import ingraph.model.gplan.{GNode, Grouping, Projection, UnaryGNode}
 import ingraph.model.{expr, gplan, misc}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction, UnresolvedStar}
@@ -336,9 +336,14 @@ object GPlanResolver {
           sortOrder.fold[gplan.GNode](afterDistinct)( (so) => {
             val newSortOp = sortResolveHelper(so, afterDistinct)
             // find resolved names that the sort involves but the projection hides
-            val additionalSortItems = newSortOp.order.filterNot(so => so.child match {
-              case rn: ResolvableName => p.projectList.foldLeft(false)((acc, ri) => acc || ri.resolvedName == rn.resolvedName)
-              case _ => true
+            val additionalSortItems: TSortOrder = newSortOp.order.flatMap( so => so.child match {
+              case PropertyAttribute(_, elementAttribute, _) => p.projectList.foldLeft[ Option[SortOrder] ]( Some(SortOrder(elementAttribute, cExpr.Ascending)) )(
+                (acc, ri) => if (ri.resolvedName == elementAttribute.resolvedName) None else acc
+              )
+              case rn: ResolvableName => p.projectList.foldLeft[ Option[SortOrder] ]( Some(so) )(
+                (acc, ri) => if (ri.resolvedName == rn.resolvedName) None else acc
+              )
+              case _ => None
             })
             if (additionalSortItems.isEmpty) {
               // no resolved names needed for the sorting were hidden by the projection,
