@@ -115,7 +115,7 @@ abstract class CompilerTest extends FunSuite {
     val itn = IngraphTreeNode(q)
     IngraphTreeNode.find( (n) => n match {
       case GPlanTreeNode(UnresolvedDelete(_, _, _)) => true
-      case GPlanTreeNode(UnresolvedProjection(_, _)) => true
+      case GPlanTreeNode(UnresolvedProjection(_, _, _, _, _, _, _)) => true
       case ExpressionTreeNode(etn) => etn match {
         case UnresolvedAttribute(_) => true
         case UnresolvedFunction(_, _, _) => true
