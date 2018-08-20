@@ -94,7 +94,7 @@ abstract class AbstractProjection(projectList: TProjectList, child: GNode) exten
   * An UnresolvedProjection will either be resolved to a Projection or to a Grouping based on its projectList,
   * followed by DuplicateElimination, Sort, Top, Selection
   */
-case class UnresolvedProjection(override val projectList: TProjectList, override val child: GNode, distinct: Boolean, sortOrder: TSortOrder = Seq(), skipExpr: Option[Expression] = None, limitExpr: Option[Expression] = None, selectionCondition: Option[Expression] = None) extends AbstractProjection(projectList, child)
+case class UnresolvedProjection(override val projectList: TProjectList, override val child: GNode, distinct: Boolean = false, sortOrder: Option[TSortOrder] = None, skipExpr: Option[Expression] = None, limitExpr: Option[Expression] = None, selectionCondition: Option[Expression] = None) extends AbstractProjection(projectList, child)
 case class Projection(override val projectList: TProjectList, override val child: GNode) extends AbstractProjection(projectList, child)
 
 /**

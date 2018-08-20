@@ -48,7 +48,7 @@ object ReturnBuilder {
       Option(returnItem.getAlias).fold(elements += expr.ReturnItem(e))( (alias) => elements += expr.ReturnItem(e, Some(alias.getName)) )
     }
 
-    val sortOrder: TSortOrder = Option(returnBody.getOrder).fold(Seq[cExpr.SortOrder]())(
+    val sortOrder: Option[TSortOrder] = Option(returnBody.getOrder).map(
       (order) => {
         order.getOrderBy.asScala.map(oe => {
           val sortExpression = ExpressionBuilder.buildExpressionNoJoinAllowed(oe.getExpression)

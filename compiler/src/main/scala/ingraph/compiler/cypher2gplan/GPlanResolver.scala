@@ -3,8 +3,9 @@ package ingraph.compiler.cypher2gplan
 import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.compiler.cypher2gplan.util.TransformUtil
-import ingraph.compiler.exceptions.{CompilerException, IllegalAggregationException, NameResolutionException, UnexpectedTypeException}
+import ingraph.compiler.exceptions._
 import ingraph.model.expr.ResolvableName
+import ingraph.model.expr.types.TSortOrder
 import ingraph.model.gplan.{GNode, Grouping, Projection, UnaryGNode}
 import ingraph.model.{expr, gplan, misc}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction, UnresolvedStar}
@@ -129,7 +130,7 @@ object GPlanResolver {
             // resolve names in listexpression, then resolve the unwindattribute itself
             case gplan.Unwind(ua, _) => gplan.Unwind(r(expr.UnwindAttribute(r(ua.list), ua.name, ua.resolvedName)), child)
             case gplan.Production(_) => gplan.Production(child)
-            case gplan.UnresolvedProjection(projectList, _) => {
+            case gplan.UnresolvedProjection(projectList, _, distinct, sortOrder, skipExpr, limitExpr, selectionCondition) => {
               // initialize new namespace applicable after the projection operator
               val nextQueryPartNameResolverCache = new TNameResolverCache
               val nextSnr = new SNR(nextQueryPartNameResolverCache)
@@ -159,19 +160,25 @@ object GPlanResolver {
               // retain old name resolver scope
               oldNameResolverScope = Some(nameResolverCache)
               nameResolverCache = nextQueryPartNameResolverCache
-              gplan.UnresolvedProjection(resolvedProjectList, child)
+
+              val resolvedSortOrder: Option[TSortOrder] = sortOrder.map( (so) => so.map( _ match {
+                case cExpr.SortOrder(sortExpr, dir, no, se) => try {
+                  cExpr.SortOrder(r(sortExpr), dir, no, se)
+                } catch {
+                  // in case of name resolution problem, we fall back to the last name resolution scope, if available. If again can't resolve, we throw the exception
+                  case nre: NameResolutionException => cExpr.SortOrder(r2(sortExpr, oldNameResolverScope.getOrElse(throw nre)), dir, no, se)
+                }
+              }))
+
+              // PLACEHOLDER: when we will allow expressions in skip/limit, it should be resolved here
+
+              val resolvedSelectionCondition: Option[Expression] = selectionCondition.flatMap( (cond) => Some(r(cond)))
+
+              gplan.UnresolvedProjection(resolvedProjectList, child, distinct, resolvedSortOrder, skipExpr, limitExpr, resolvedSelectionCondition)
             }
-            // case {Projection, Grouping} skipped because it is introduced in a later resolution stage
+            // case {Projection, Grouping, Sort, Top} skipped because it is introduced in a later resolution stage when resolving UnresolvedProjection
+            // however, resolution for the sort keys and the possible selection condition is done
             case gplan.Selection(condition, _) => gplan.Selection(r(condition), child)
-            case gplan.Sort(order, _) => gplan.Sort(order.map( _ match {
-              case cExpr.SortOrder(sortExpr, dir, no, se) => try {
-                cExpr.SortOrder(r(sortExpr), dir, no, se)
-              } catch {
-                // in case of name resolution problem, we fall back to the last name resolution scope, if available. If again can't resolve, we throw the exception
-                case nre: NameResolutionException => cExpr.SortOrder(r2(sortExpr, oldNameResolverScope.getOrElse(throw nre)), dir, no, se)
-              }
-            }), child)
-            case gplan.Top(skipExpr, limitExpr, _) => gplan.Top(skipExpr, limitExpr, child)
             case gplan.Create(attributes, _) => gplan.Create(attributes.map(r(_)), child)
             case gplan.UnresolvedDelete(attributes, detach, _) => gplan.UnresolvedDelete(attributes, detach, child)
             case gplan.Merge(attributes, _) => gplan.Merge(attributes.map(r(_)), child)
@@ -303,19 +310,73 @@ object GPlanResolver {
     * There are some nodes that do not need resolution: GetVertices, DuplicateElimination, Expand, Join, Union, etc.
     */
   val gplanResolver: PartialFunction[LogicalPlan, LogicalPlan] = {
-    // Unary, compound
-    case gplan.Top(skipExpr, limitExpr, gplan.Sort(order, gplan.UnresolvedProjection(projectList, child))) =>
-      sortProjectResolveHelper(order, projectList, child, Some(topResolveHelper(skipExpr, limitExpr, gplan.GStub())))
-    case gplan.Sort(order, gplan.UnresolvedProjection(projectList, child)) => sortProjectResolveHelper(order, projectList, child, None)
     // Unary
-    case gplan.UnresolvedProjection(projectList, child) => {
+    case gplan.UnresolvedProjection(projectList, child, distinct, sortOrder, skipExpr, limitExpr, selectionCondition) => {
+      val resolvedSkipExpr =  TransformUtil.transformOption(skipExpr, expressionResolver)
+      val resolvedLimitExpr =  TransformUtil.transformOption(limitExpr, expressionResolver)
+
+      if (sortOrder.isEmpty && (resolvedSkipExpr.isDefined || resolvedLimitExpr.isDefined))
+        throw new IllegalSkipLimitUsageException
+
+      // private def sortProjectResolveHelper(order: Seq[SortOrder], projectList: expr.types.TProjectList, child: GNode, topOp: Option[gplan.Top]) = {
       val resolvedProjectList = projectList.map( pi => expr.ReturnItem(pi.child.transform(expressionResolver), pi.alias, pi.resolvedName) )
-      projectionResolveHelper(resolvedProjectList, child)
+
+      val afterTopSortProjectOp: gplan.GNode = projectionResolveHelper(resolvedProjectList, child) match {
+        case g: Grouping => {
+          // DISTINCT is by definition useless when grouping
+
+          // TODO: check if ORDER BY refers only to the result of grouping
+          val afterSortOp = sortOrder.fold[GNode](g)( sortResolveHelper(_, g) )
+
+          wrapInTopOperatorHelper(resolvedSkipExpr, resolvedLimitExpr, afterSortOp)
+        }
+        case p: Projection => {
+          val afterDistinct = if (distinct) gplan.DuplicateElimination(p) else p
+
+          sortOrder.fold[gplan.GNode](afterDistinct)( (so) => {
+            val newSortOp = sortResolveHelper(so, afterDistinct)
+            // find resolved names that the sort involves but the projection hides
+            val additionalSortItems = newSortOp.order.filterNot(so => so.child match {
+              case rn: ResolvableName => p.projectList.foldLeft(false)((acc, ri) => acc || ri.resolvedName == rn.resolvedName)
+              case _ => true
+            })
+            if (additionalSortItems.isEmpty) {
+              // no resolved names needed for the sorting were hidden by the projection,
+              // so we pack that in a Top operator if needed, and return that
+              wrapInTopOperatorHelper(resolvedSkipExpr, resolvedLimitExpr, newSortOp)
+            } else {
+              // extra variables needed for the sorting, but DISTINCT was in place
+              if (distinct) throw new IllegalSortingAfterDistinctException(additionalSortItems.map( _.child.toString() ).toString())
+
+              // we build a more loose projection, then sort, then fall back to the projection originally requested.
+              val innerSortOp = gplan.Sort(newSortOp.order,
+                gplan.Projection(p.projectList ++ additionalSortItems.map(so => {
+                  so.child match {
+                    case rn: ResolvableName => expr.ReturnItem(so.child, None, rn.resolvedName)
+                    case x => throw new UnexpectedTypeException(x, "we were filtering for resolvedNames in sort list")
+                  }
+                }),
+                  afterDistinct.child
+                )
+              )
+
+              val afterTopOp = wrapInTopOperatorHelper(resolvedSkipExpr, resolvedLimitExpr, innerSortOp)
+
+              gplan.Projection(p.projectList, afterTopOp)
+            }
+          })
+        }
+      }
+
+      selectionCondition.fold[gplan.GNode](afterTopSortProjectOp)( (c) => gplan.Selection( c.transform(expressionResolver), afterTopSortProjectOp) )
     }
     case gplan.Selection(condition, child) => gplan.Selection(condition.transform(expressionResolver), child)
     case gplan.Sort(order, child) => sortResolveHelper(order, child)
     case gplan.ThetaLeftOuterJoin(left, right, condition) => gplan.ThetaLeftOuterJoin(left, right, condition.transform(expressionResolver))
-    case gplan.Top(skipExpr, limitExpr, child) => topResolveHelper(skipExpr, limitExpr, child)
+    case gplan.Top(skipExpr, limitExpr, child) => gplan.Top(
+      TransformUtil.transformOption(skipExpr, expressionResolver)
+      , TransformUtil.transformOption(limitExpr, expressionResolver)
+      , child)
     case gplan.Unwind(expr.UnwindAttribute(collection, alias, resolvedName), child) => gplan.Unwind(expr.UnwindAttribute(collection.transform(expressionResolver), alias, resolvedName), child)
     // DML
     case gplan.UnresolvedDelete(attributes, detach, child) => gplan.Delete(resolveAttributes(attributes, child), detach, child)
@@ -354,53 +415,6 @@ object GPlanResolver {
     attributes.flatMap( a => if ( invert.^(child.output.exists( co => co.name == a.name )) ) Some(a) else None )
   }
 
-
-  private def topResolveHelper(skipExpr: Option[Expression], limitExpr: Option[Expression], child: GNode) = {
-    gplan.Top(
-      TransformUtil.transformOption(skipExpr, expressionResolver)
-      , TransformUtil.transformOption(limitExpr, expressionResolver)
-      , child)
-  }
-
-  private def sortProjectResolveHelper(order: Seq[SortOrder], projectList: expr.types.TProjectList, child: GNode, topOp: Option[gplan.Top]) = {
-    val resolvedProjectList = projectList.map(pi => expr.ReturnItem(pi.child.transform(expressionResolver), pi.alias, pi.resolvedName))
-    projectionResolveHelper(resolvedProjectList, child) match {
-      case g: Grouping => {
-        val newSortOp = sortResolveHelper(order, g)
-        // TODO: check if order by refers only to the result of grouping
-        newSortOp
-      }
-      case p: Projection => {
-        val newSortOp = sortResolveHelper(order, p)
-        // find resolved names that the sort involves but the projection hides
-        val additionalSortItems = newSortOp.order.filterNot(so => so.child match {
-          case rn: ResolvableName => p.projectList.foldLeft(false)((acc, ri) => acc || ri.resolvedName == rn.resolvedName)
-          case _ => true
-        })
-        if (additionalSortItems.isEmpty) {
-          // no resolved names needed for the sorting were hidden by the projection, so we return that unmodified
-          newSortOp
-        } else {
-          // we build a more loose projection, then sort, then fall back to the projection originally requested.
-          val innerSortOp = gplan.Sort(newSortOp.order,
-            gplan.Projection(p.projectList ++ additionalSortItems.map(so => {
-              so.child match {
-                case rn: ResolvableName => expr.ReturnItem(so.child, None, rn.resolvedName)
-                case x => throw new UnexpectedTypeException(x, "we were filtering for resolvedNames in sort list")
-              }
-            }),
-              p.child
-            )
-          )
-
-          gplan.Projection(p.projectList,
-            topOp.fold[GNode](innerSortOp)( (top) => gplan.Top(top.skipExpr, top.limitExpr, innerSortOp))
-          )
-        }
-      }
-    }
-  }
-
   private def sortResolveHelper(order: Seq[SortOrder], child: GNode) = {
     gplan.Sort(
       order.map(_.transform(expressionResolver) match {
@@ -408,6 +422,13 @@ object GPlanResolver {
         case x => throw new UnexpectedTypeException(x, "sort items after resolution")
       })
       , child)
+  }
+
+  private def wrapInTopOperatorHelper(resolvedSkipExpr: Option[Expression], resolvedLimitExpr: Option[Expression], content: GNode): GNode = {
+    if (resolvedSkipExpr.isDefined || resolvedLimitExpr.isDefined)
+      gplan.Top(resolvedSkipExpr, resolvedLimitExpr, content)
+    else
+      content
   }
 
   /**
