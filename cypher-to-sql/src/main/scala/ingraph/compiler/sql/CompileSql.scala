@@ -25,17 +25,23 @@ object CompileSql {
     getQuotedColumnName(resolvableName.resolvedName.get.resolvedName)
 
   private val gson = new Gson()
+
+  def getNodes(plan: FNode): Seq[FNode] = {
+    if (plan.isInstanceOf[LeafFNode]) plan :: Nil
+    else plan.children.flatMap(x => getNodes(x)) :+ plan
+  }
 }
 
-class CompileSql(query: String) extends CompilerTest {
+class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map()) extends CompilerTest {
 
   import CompileSql._
 
-  def run(): String = {
-    val stages = compile(query)
+  val stages = compile(cypherQuery)
 
-    val fplan = stages.fplan
-    val sql = getSql(fplan)
+  val fplan = stages.fplan
+  val sql = getSql(fplan)
+
+  def run(): String = {
     println(sql)
     sql
   }
@@ -344,12 +350,14 @@ class CompileSql(query: String) extends CompilerTest {
             case _: StringType => node.value.toString
             case _ => node.value
           }
-          val jsonString = CompileSql.gson.toJson(pojoValue)
-          val sqlStringLiteral = Literal(jsonString)
 
-          sqlStringLiteral.sql
+          getSqlForPojoValue(pojoValue)
         }
         case node: Not => "NOT(" + getSql(node.child) + ")"
+        case node: Parameter => {
+          val value = parameters(node.name)
+          getSqlForPojoValue(value)
+        }
         case _ => ""
       }
 
@@ -358,6 +366,13 @@ class CompileSql(query: String) extends CompilerTest {
          |$sqlString""".stripMargin
     else
       sqlString
+  }
+
+  private def getSqlForPojoValue(pojoValue: Any): String = {
+    val jsonString = CompileSql.gson.toJson(pojoValue)
+    val sqlStringLiteral = Literal(jsonString)
+
+    sqlStringLiteral.sql
   }
 
   private def getVertexLabelSqlCondition(labelSet: VertexLabelSet, columnName: String): Option[String] = {
@@ -382,10 +397,5 @@ class CompileSql(query: String) extends CompilerTest {
        |  ( ${getSql(node.right)}
        |  ) right_query
        |$conditionPart"""
-  }
-
-  def getNodes(plan: FNode): Seq[FNode] = {
-    if (plan.isInstanceOf[LeafFNode]) return plan :: Nil
-    return plan.children.flatMap(x => getNodes(x)) :+ plan
   }
 }

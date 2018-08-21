@@ -73,7 +73,7 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
     println(createCypherQuery)
     println()
 
-    val selectSqlQuery = new CompileSql(selectCypherQuery).run
+    val selectSqlQuery = new CompileSql(selectCypherQuery).run()
 
     runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery, orderedResults)
   }
@@ -182,29 +182,9 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
 
       ExportSteps.execute(cypherSession, sqlConnection)
 
-      dump(sqlStatement, selectSqlQuery)
+      SqlDriver.dump(sqlStatement, selectSqlQuery)
 
       compareQueryResults(selectCypherQuery, sqlConnection, selectSqlQuery, orderedResults)
-    })
-  }
-
-  private def dumpTable(sqlStatement: Statement, tablename: String): Unit = {
-    dump(sqlStatement, "SELECT * FROM " + tablename)
-  }
-
-  private def dump(sqlStatement: Statement, query: String): Unit = {
-    withResources(sqlStatement.executeQuery(query))(rs => {
-      println("vvvvvvvvvvv SQL RESULT vvvvvvvvvvv")
-
-      val columnIndices = 1 to rs.getMetaData.getColumnCount
-      columnIndices.foreach(i => println(rs.getMetaData.getColumnName(i) + ": " + rs.getMetaData.getColumnTypeName(i)))
-
-      while (rs.next()) {
-        println("---")
-        columnIndices.foreach(i => println(rs.getMetaData.getColumnName(i) + " = " + rs.getObject(i)))
-      }
-
-      println("----------------------------------")
     })
   }
 
