@@ -945,4 +945,11 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
         |WHERE a:A:B OR a:C
         |RETURN a, a.labels""".stripMargin)
   }
+
+  test("Filter out based on WHERE NOT clause") {
+    compileAndRunQuery("CREATE (:A {label: 'ok'}), (:A {label: 'nok'})-[:CONNECTED]->(:Exclude)",
+      """MATCH (n:A)
+        |WHERE NOT (n)-[]-(:Exclude)
+        |RETURN n""".stripMargin)
+  }
 }

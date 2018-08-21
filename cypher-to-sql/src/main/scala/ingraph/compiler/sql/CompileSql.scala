@@ -212,6 +212,26 @@ class CompileSql(query: String) extends CompilerTest {
 
           getJoinSql(node, joinType, joinConditionPart, resultColumns)
         }
+        case node: AntiJoin => {
+          val columnConditions = node.flatCommon
+            .map(getQuotedColumnName)
+            .map(name => s"left_query.$name = right_query.$name")
+
+          val conditionPart = if (columnConditions.isEmpty)
+            "TRUE"
+          else
+            columnConditions.mkString(" AND\n")
+
+          i"""SELECT * FROM
+             |  ( ${getSql(node.left)}
+             |  ) left_query
+             |WHERE NOT EXISTS(
+             |  SELECT * FROM
+             |    ( ${getSql(node.right)}
+             |    ) right_query
+             |  WHERE $conditionPart
+             |  )"""
+        }
         case node: Production => {
           val renamePairs = node.output.zip(node.outputNames).map { case (attribute, outputName) => (getQuotedColumnName(attribute), getQuotedColumnName(outputName)) }
           getProjectionSql(node, renamePairs)
@@ -356,10 +376,10 @@ class CompileSql(query: String) extends CompilerTest {
 
   private def getJoinSql(node: EquiJoinLike, joinType: String, conditionPart: String, resultColumns: String) = {
     i"""SELECT $resultColumns FROM
-       |  (  ${getSql(node.left)}
+       |  ( ${getSql(node.left)}
        |  ) left_query
        |  $joinType JOIN
-       |  (  ${getSql(node.right)}
+       |  ( ${getSql(node.right)}
        |  ) right_query
        |$conditionPart"""
   }
