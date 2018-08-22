@@ -13,6 +13,5 @@ dependencies {
 
   testCompile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
   testCompile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'
-  testCompile group: 'org.opencypher', name: 'tck', version: opencypherVersion
-  testCompile group: 'org.opencypher', name: 'tck-api', version: opencypherVersion
+  testCompile project(':tests')
 }

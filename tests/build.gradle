@@ -17,4 +17,6 @@ dependencies {
   // and not just the testCompile/testRuntime scopes
   compile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
   runtime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
+  compile group: 'org.opencypher', name: 'tck', version: opencypherVersion
+  compile group: 'org.opencypher', name: 'tck-api', version: opencypherVersion
 }

@@ -1,15 +1,10 @@
 package ingraph.ire
 
-import java.io.File
-
-import org.opencypher.tools.tck.api.CypherTCK
+import ingraph.tck.TckTestRunner
 import org.scalatest.FunSuite
 
-class TckEngineExtendedTest extends FunSuite {
+class TckEngineExtendedTest extends FunSuite with TckTestRunner {
 
-  val scenarios = (CypherTCK.parseFilesystemFeatures(new File(getClass.getResource("/local-features").getFile))
-    ++ CypherTCK.parseClasspathFeatures("/features"))
-    .flatMap(_.scenarios)
   val selectedFeatures = Set("MatchAcceptance", "MatchAcceptance2", "OptionalMatchAcceptance", "WithAcceptance", "Local")
   val selectedScenarios = Set[String](
     // original tests used in TckEngineTest
@@ -54,34 +49,5 @@ class TckEngineExtendedTest extends FunSuite {
     ""
   )
 
-  def runTests() = {
-    val nonExistingFeatures = selectedScenarios --
-      scenarios
-        .filter(sc => selectedFeatures.contains(sc.featureName))
-        .groupBy(_.toString).map(_._2.head.name)
-
-    test("All selected features are found") {
-      assert(nonExistingFeatures.isEmpty)
-    }
-
-    scenarios
-      .filter(sc => selectedFeatures.contains(sc.featureName))
-      .groupBy(_.toString).map(_._2.head)
-      .foreach(sc => {
-        val testName = sc.toString
-
-        if ((selectedScenarios.contains(sc.name) || selectedScenarios.isEmpty) && !ignoredScenarios.contains(sc.name))
-          test(testName) {
-            println(testName)
-            println()
-
-            sc(new TckEngineAdapter).execute()
-          }
-        else
-          ignore(testName) {}
-      }
-      )
-  }
-
-  runTests()
+  runTckTests(() => new TckEngineAdapter, selectedFeatures, ignoredScenarios, selectedScenarios)
 }
