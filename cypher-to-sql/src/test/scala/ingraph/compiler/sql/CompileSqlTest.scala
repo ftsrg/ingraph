@@ -4,6 +4,7 @@ import java.sql.{Connection, DriverManager, Statement}
 
 import com.google.gson.JsonParser
 import ingraph.compiler.sql.Util._
+import ingraph.compiler.sql.driver.SqlDriver
 import ingraph.driver.{CypherDriver, CypherDriverFactory}
 import org.apache.log4j.{Level, LogManager}
 import org.neo4j.driver.internal.InternalEntity
