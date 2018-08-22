@@ -1,7 +1,6 @@
-package ingraph.compiler.sql
+package ingraph.compiler.sql.driver
 
 import ingraph.compiler.sql.Util._
-import ingraph.compiler.sql.driver.SqlDriver
 import org.neo4j.driver.v1.Statement
 import org.neo4j.driver.v1.Values.parameters
 import org.scalatest.FunSuite
