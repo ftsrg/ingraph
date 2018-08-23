@@ -1,14 +1,14 @@
 package ingraph.compiler.sql
 
 import com.google.gson.Gson
+import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
 import ingraph.model.fplan._
+import ingraph.model.misc.Function
 import ingraph.model.nplan
 import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal, Not}
 import org.apache.spark.sql.types.StringType
-import IndentationPreservingStringInterpolation._
-import ingraph.model.misc.Function
 
 object CompileSql {
   def escapeQuotes(name: String, toBeDoubled: String = "\"") = name.replace(toBeDoubled, toBeDoubled + toBeDoubled)
@@ -315,6 +315,8 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
         case node: FunctionInvocation => {
           val functionName = node.functor match {
             case Function.COLLECT => "array_agg"
+            // ignore ID function since the column already contains the ID
+            case functor@Function.ID => "/*" + functor.getPrettyName + "*/"
             case functor => functor.getPrettyName
           }
           val parametersString = node.children.map(getSql).mkString(", ")
