@@ -15,4 +15,5 @@ dependencies {
   compile group: 'org.opencypher', name: 'tck-api', version: opencypherVersion
 
   testCompile group: 'junit', name: 'junit', version: junitVersion
+  testCompile project(':tests')
 }
