@@ -7,7 +7,7 @@ class TckTest extends FunSuite with TckTestRunner {
 
   val selectedFeatures = Set("MatchAcceptance")
   val selectedScenarios = Set(
-    "Use multiple MATCH clauses to do a Cartesian product",
+    "Handle comparison between node properties",
 
     // placeholder
     ""

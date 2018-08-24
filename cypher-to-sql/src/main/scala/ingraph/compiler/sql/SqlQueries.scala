@@ -52,6 +52,31 @@ object SqlQueries {
       |LANGUAGE SQL AS
       |'SELECT coalesce(array_length($1, 1), 0) AS array_length;';
       |
+      |CREATE FUNCTION labels(INTEGER)
+      |  RETURNS TEXT []
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'SELECT coalesce(array_agg(name), ARRAY[] :: text [])
+      | FROM label
+      | WHERE parent = $1';
+      |
+      |CREATE FUNCTION vertex_properties(INTEGER)
+      |  RETURNS jsonb
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'SELECT coalesce(jsonb_object_agg(key, value), ''[]'')
+      | FROM vertex_property
+      | WHERE parent = $1';
+      |
+      |CREATE FUNCTION to_vertex(INTEGER)
+      |  RETURNS jsonb
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'SELECT jsonb_build_object(''type'', ''vertex'', ''id'', $1, ''labels'', labels($1), ''properties'', vertex_properties($1))';
+      |
       |CREATE EXTENSION intarray;
       |
       |-- if needed for other types, check https://stackoverflow.com/q/3994556

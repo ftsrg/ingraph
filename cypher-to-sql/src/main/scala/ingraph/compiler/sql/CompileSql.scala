@@ -7,7 +7,7 @@ import ingraph.model.expr._
 import ingraph.model.fplan._
 import ingraph.model.misc.Function
 import ingraph.model.nplan
-import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal, Not}
+import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Expression, Literal, Not}
 import org.apache.spark.sql.types.StringType
 
 object CompileSql {
@@ -239,7 +239,11 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
              |  )"""
         }
         case node: Production => {
-          val renamePairs = node.output.zip(node.outputNames).map { case (attribute, outputName) => (getQuotedColumnName(attribute), getQuotedColumnName(outputName)) }
+          val renamePairs = node.output.zip(node.outputNames)
+            .map {
+              case (attribute, outputName) =>
+                convertAttributeAtProductionNode(attribute) -> getQuotedColumnName(outputName)
+            }
           getProjectionSql(node, renamePairs)
         }
         case node: Projection => {
@@ -368,6 +372,14 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
          |$sqlString""".stripMargin
     else
       sqlString
+  }
+
+  private def convertAttributeAtProductionNode(attribute: Expression): String = {
+    attribute match {
+      case returnItem: ReturnItem => convertAttributeAtProductionNode(returnItem.child)
+      case vertexAttribute: VertexAttribute => "to_vertex(" + getSql(vertexAttribute) + ")"
+      case default => getSql(default)
+    }
   }
 
   private def getSqlForPojoValue(pojoValue: Any): String = {
