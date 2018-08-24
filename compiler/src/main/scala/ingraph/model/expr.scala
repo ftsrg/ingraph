@@ -121,8 +121,8 @@ abstract class AttributeBase extends Attribute {
   override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
 }
 
-case class TupleIndexLiteralAttribute(index: Int, side: Option[Side] = None, isVertex: Boolean = false) extends AttributeBase {
-  assert(index >= 0, s"Cannot index an array with $index")
+case class TupleIndexLiteralAttribute(index: Int, side: Option[Side] = None, isVertex: Boolean = false, debugInfo: String = "") extends AttributeBase {
+  assert(index >= 0, s"Cannot index an array with $index, debugInfo: $debugInfo")
   override def name: String = ???
 }
 abstract class Side

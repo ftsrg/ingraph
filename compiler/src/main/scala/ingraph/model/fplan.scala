@@ -214,7 +214,8 @@ object SchemaMapper {
     expression.transform {
       case a: ResolvableName => TupleIndexLiteralAttribute(
         flatSchema.map(_.resolvedName).indexOf(a.resolvedName),
-        isVertex = a.isInstanceOf[VertexAttribute]
+        isVertex = a.isInstanceOf[VertexAttribute],
+        debugInfo = s"resolved name to lookup was: ${a.resolvedName}"
       )
       case FunctionInvocation(
         ingraph.model.misc.Function.NODE_HAS_LABELS,
