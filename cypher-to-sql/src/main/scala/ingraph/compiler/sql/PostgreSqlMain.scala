@@ -1,12 +1,9 @@
 package ingraph.compiler.sql
 
-import java.nio.file.Paths
 import java.sql.DriverManager
 
 import ingraph.compiler.sql.Util.withResources
 import org.apache.commons.lang3.StringUtils
-import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
-import ru.yandex.qatools.embed.postgresql.distribution.Version
 
 object PostgreSqlMain extends App {
 

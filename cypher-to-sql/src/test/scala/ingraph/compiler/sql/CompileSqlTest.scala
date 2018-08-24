@@ -1,6 +1,6 @@
 package ingraph.compiler.sql
 
-import java.sql.{Connection, DriverManager, Statement}
+import java.sql.{Connection, DriverManager}
 
 import com.google.gson.JsonParser
 import ingraph.compiler.sql.Util._
@@ -9,7 +9,7 @@ import ingraph.driver.{CypherDriver, CypherDriverFactory}
 import org.apache.log4j.{Level, LogManager}
 import org.neo4j.driver.internal.InternalEntity
 import org.neo4j.driver.internal.value._
-import org.neo4j.driver.v1.{AuthTokens, Session}
+import org.neo4j.driver.v1.Session
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
 import org.scalactic.source
