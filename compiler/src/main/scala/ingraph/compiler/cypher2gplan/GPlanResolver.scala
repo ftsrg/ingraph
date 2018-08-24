@@ -298,6 +298,10 @@ object GPlanResolver {
     // always use .getAndIncrement on this object
     private val generatedNameCounterMap = mutable.Map[String, AtomicLong]()
 
+    def resetResolverNameCounters_IKnowWhatImDoing = {
+      generatedNameCounterMap.clear()
+    }
+
     def generateUniqueName(baseName: String): String = {
       s"${baseName}#${generatedNameCounterMap.getOrElseUpdate(baseName, new AtomicLong).getAndIncrement}"
     }

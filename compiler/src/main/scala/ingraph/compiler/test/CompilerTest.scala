@@ -1,19 +1,19 @@
 package ingraph.compiler.test
 
 import ingraph.compiler.CypherToGPlan
-import ingraph.compiler.cypher2gplan.CypherParser
+import ingraph.compiler.cypher2gplan.{CypherParser, GPlanResolver}
 import ingraph.compiler.exceptions.{CompilerConfigurationException, IncompleteCompilationException, IncompleteResolutionException}
-import ingraph.compiler.plantransformers.{NPlanToFPlan, GPlanToNPlan}
+import ingraph.compiler.plantransformers.{GPlanToNPlan, NPlanToFPlan}
 import ingraph.compiler.util.FormatterUtil
 import ingraph.emf.util.PrettyPrinter
 import ingraph.model.expr.{EStub, ResolvableName}
 import ingraph.model.fplan.{FNode, LeafFNode}
 import ingraph.model.nplan.NNode
 import ingraph.model.gplan.{GNode, GStub, UnresolvedDelete, UnresolvedProjection}
-import ingraph.model.treenodes.{ExpressionTreeNode, IngraphTreeNode, GPlanTreeNode}
+import ingraph.model.treenodes.{ExpressionTreeNode, GPlanTreeNode, IngraphTreeNode}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.scalatest.FunSuite
+import org.scalatest.{BeforeAndAfter, FunSuite}
 
 case class CompilerTestConfig(querySuitePath: Option[String] = None
                               , skipGPlanResolve: Boolean = false
@@ -25,6 +25,7 @@ case class CompilerTestConfig(querySuitePath: Option[String] = None
                               , printNPlan: Boolean = true
                               , printFPlan: Boolean = true
                               , printTPlan: Boolean = true
+                              , resetResolverNameCounters: Boolean = true
                              ) {
   /**
     * Did we request anything to be printed?
@@ -32,12 +33,16 @@ case class CompilerTestConfig(querySuitePath: Option[String] = None
   def printAny: Boolean = printQuery || printCypher || printGPlan || printNPlan || printFPlan || printTPlan
 }
 
-abstract class CompilerTest extends FunSuite {
+abstract class CompilerTest extends FunSuite with BeforeAndAfter {
   val config = CompilerTestConfig()
   val separatorLength = FormatterUtil.separatorLength
   val printlnSuppressIfIngraph = FormatterUtil.printlnSuppressIfIngraph
   def formatPlan(stuff: Any, heading: Option[String] = None, out: String => Unit = printlnSuppressIfIngraph): Unit = FormatterUtil.formatPlan(stuff, heading, out)
 
+  before {
+    if (config.resetResolverNameCounters)
+      GPlanResolver.SNR.resetResolverNameCounters_IKnowWhatImDoing
+  }
 
   def constructQueryFilePath(fileBaseName: String): String = {
     if (config.querySuitePath.isEmpty) {
