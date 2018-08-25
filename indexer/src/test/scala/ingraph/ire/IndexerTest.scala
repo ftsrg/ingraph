@@ -6,15 +6,15 @@ import org.scalatest.WordSpec
 import scala.collection.JavaConverters._
 class IndexerTest extends WordSpec {
   val indexer = new Indexer()
-  indexer.addVertex(new CsvVertex(1L, Seq("dog").asJava,    Map("age" -> 5).asJava))
-  indexer.addVertex(new CsvVertex(2L, Seq("person").asJava, Map("age" -> 25).asJava))
-  indexer.addVertex(new CsvVertex(3L, Seq("cat").asJava,    Map("age" -> 7).asJava))
-  indexer.addEdge(new CsvEdge(4L, "owns",  2L, "person", 1L, "dog"))
-  indexer.addEdge(new CsvEdge(5L, "owns",  3L, "cat",    2L, "person"))
-  indexer.addEdge(new CsvEdge(6L, "hates", 1L, "dog",    3L, "cat"))
-  indexer.addEdge(new CsvEdge(7L, "hates", 3L, "cat",    1L, "dog"))
-  indexer.addEdge(new CsvEdge(8L, "eats",  1L, "dog",    1L, "dog"))
-  indexer.addEdge(new CsvEdge(9L, "hates", 3L, "cat",    2L, "person"))
+  indexer.addVertex(new CsvVertex(1L, Map("age" -> 5).asJava),  Set("dog"))
+  indexer.addVertex(new CsvVertex(2L, Map("age" -> 25).asJava), Set("person"))
+  indexer.addVertex(new CsvVertex(3L, Map("age" -> 7).asJava),  Set("cat"))
+  indexer.addEdge(new CsvEdge(2L, 4L, 1L), "person", "owns",  "dog"   )
+  indexer.addEdge(new CsvEdge(3L, 5L, 2L), "cat",    "owns",  "person")
+  indexer.addEdge(new CsvEdge(1L, 6L, 3L), "dog",    "hates", "cat"   )
+  indexer.addEdge(new CsvEdge(3L, 7L, 1L), "cat",    "hates", "dog"   )
+  indexer.addEdge(new CsvEdge(1L, 8L, 1L), "dog",    "eats",  "dog"   )
+  indexer.addEdge(new CsvEdge(3L, 9L, 2L), "cat",    "hates", "person")
 
   "IngraphEdge" should {
     "reverse itself" in {

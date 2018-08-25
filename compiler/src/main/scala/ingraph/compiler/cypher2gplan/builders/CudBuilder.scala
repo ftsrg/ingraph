@@ -177,7 +177,7 @@ object CudBuilder {
         case r: SetItem => {
           val vertex = AttributeBuilder.buildAttribute(r.getVariable).asInstanceOf[VertexAttribute] // here come the
           // ClassCastException
-          val labels: Set[VertexLabel] = r.getNodeLabels.getNodeLabels.asScala.map(_.getLabelName).toSet
+          val labels: Set[VertexLabel] = r.getNodeLabels.asScala.map(_.getLabelName).toSet
           VertexLabelUpdate(vertex, labels)
         }
       }
@@ -195,7 +195,7 @@ object CudBuilder {
         case r: oc.RemoveItemLabel => {
           val vertex = AttributeBuilder.buildAttribute(r.getVariable).asInstanceOf[VertexAttribute] // here come the
           // ClassCastException
-          val labels: Set[VertexLabel] = r.getNodeLabels.getNodeLabels.asScala.map(_.getLabelName).toSet
+          val labels: Set[VertexLabel] = r.getNodeLabels.asScala.map(_.getLabelName).toSet
           VertexLabelUpdate(vertex, labels)
         }
       }

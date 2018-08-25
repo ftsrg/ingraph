@@ -197,7 +197,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
               (rightColumns.toSet -- leftColumns).map("right_query." + _))
               .mkString(", ")
 
-          val columnConditions = node.flatCommon
+          val columnConditions = node.commonAttributes
             .map(getQuotedColumnName)
             .map(name => s"left_query.$name = right_query.$name")
           val joinConditions = node match {
@@ -219,7 +219,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
           getJoinSql(node, joinType, joinConditionPart, resultColumns)
         }
         case node: AntiJoin => {
-          val columnConditions = node.flatCommon
+          val columnConditions = node.commonAttributes
             .map(getQuotedColumnName)
             .map(name => s"left_query.$name = right_query.$name")
 

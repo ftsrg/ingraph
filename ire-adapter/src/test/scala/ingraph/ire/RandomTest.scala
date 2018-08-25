@@ -8,6 +8,15 @@ import org.scalatest.FunSuite
 import scala.collection.JavaConverters._
 
 class RandomTest extends FunSuite {
+
+  test("Support 'node has labels' function") {
+    val query =
+      """MATCH (te:TrackElement)
+        |RETURN te:Segment""".stripMargin
+    val adapter = new IngraphIncrementalAdapter(query)
+    assert(adapter.engine.getResults() == List())
+  }
+
   test("Optional match returns Vector(null) on empty input") {
     val query = "OPTIONAL MATCH (n) RETURN n"
     val adapter = new IngraphIncrementalAdapter(query)
@@ -25,12 +34,12 @@ class RandomTest extends FunSuite {
     val query = "MATCH (n:Person) RETURN n"
     val adapter = new IngraphIncrementalAdapter(query, "remove", indexer)
 
-    indexer.addVertex(new CsvVertex(1L, List("Person").asJava, Map[String, AnyRef]().asJava))
-    indexer.addVertex(new CsvVertex(2L, List("Person").asJava, Map[String, AnyRef]().asJava))
+    indexer.addVertex(new CsvVertex(1L), List("Person"))
+    indexer.addVertex(new CsvVertex(2L), List("Person"))
     assert(adapter.result().toSet == Set(Vector(2), Vector(1)))
     indexer.removeVertexById(1L)
     assert(adapter.result().toSet == Set(Vector(2)))
-    indexer.addVertex(new CsvVertex(1L, List("Person").asJava, Map[String, AnyRef]().asJava))
+    indexer.addVertex(new CsvVertex(1L), List("Person"))
     assert(adapter.result().toSet == Set(Vector(2), Vector(1)))
   }
 
@@ -38,13 +47,13 @@ class RandomTest extends FunSuite {
     val indexer = new Indexer()
     val query = "MATCH (n:Person)-[:KNOWS]->(m:Person) RETURN m"
     val adapter = new IngraphIncrementalAdapter(query, "remove", indexer)
-    indexer.addVertex(new CsvVertex(1L, List("Person").asJava, Map[String, AnyRef]().asJava))
-    indexer.addVertex(new CsvVertex(2L, List("Person").asJava, Map[String, AnyRef]().asJava))
-    indexer.addEdge(new CsvEdge(3L, "KNOWS", 1L, "Person", 2L, "Person"))
+    indexer.addVertex(new CsvVertex(1L), List("Person"))
+    indexer.addVertex(new CsvVertex(2L), List("Person"))
+    indexer.addEdge(new CsvEdge(1L, 3L, 2L), "Person", "KNOWS", "Person")
     assert(adapter.result().toSet == Set(Vector(2)))
     indexer.removeEdgeById(3L)
     assert(adapter.result().toSet == Set())
-    indexer.addEdge(new CsvEdge(3L, "KNOWS", 1L, "Person", 2L, "Person"))
+    indexer.addEdge(new CsvEdge(1L, 3L, 2L), "Person", "KNOWS", "Person")
     assert(adapter.result().toSet == Set(Vector(2)))
   }
 

@@ -1,8 +1,9 @@
 package ingraph.sandbox
 
 import ingraph.compiler.test.CompilerTest
-import ingraph.model.fplan.{FNode, LeafFNode, Selection}
-import ingraph.model.{nplan, fplan}
+import ingraph.model.expr.{IndexLookupExpression, IndexRangeExpression}
+import ingraph.model.fplan.{FNode, LeafFNode, Selection, TransitiveJoin}
+import ingraph.model.{fplan, gplan, nplan}
 
 class TckCompilerTest extends CompilerTest {
 
@@ -148,7 +149,7 @@ class TckCompilerTest extends CompilerTest {
         """.stripMargin
       )
       val edgeListAttribute = getNodes(stages.fplan)
-        .collectFirst { case node: fplan.TransitiveJoin => node }
+        .collectFirst { case node: TransitiveJoin => node }
         .get.nnode.edgeList
 
       assert(edgeListAttribute.minHops == lowerBound)
@@ -164,6 +165,45 @@ class TckCompilerTest extends CompilerTest {
   variableLengthPatternTest("Variable-length pattern: same lower and upper bounds", "2..2", Some(2), Some(2))
   variableLengthPatternTest("Variable-length pattern: zero as lower bound", "0..", Some(0), None)
 
+  test("Index expression") {
+    val stages = compile(
+      "RETURN range(0,10)[2]"
+    )
+
+    val actualIndex = stages.gplan.asInstanceOf[gplan.Production]
+      .child.asInstanceOf[gplan.Projection]
+      .projectList
+      .head
+      .child.asInstanceOf[IndexLookupExpression]
+      .index
+
+    assert(2 == actualIndex)
+  }
+
+  def indexRangeExpressionTest(testName: String, lowerBound: Option[Int], upperBound: Option[Int]): Unit = {
+    test(testName) {
+      val lowerBoundString = lowerBound.getOrElse("")
+      val upperBoundString = upperBound.getOrElse("")
+
+      val stages = compile(
+        s"RETURN range(0,10)[$lowerBoundString..$upperBoundString]"
+      )
+
+      val indexRangeExpression = stages.gplan.asInstanceOf[gplan.Production]
+        .child.asInstanceOf[gplan.Projection]
+        .projectList
+        .head
+        .child.asInstanceOf[IndexRangeExpression]
+
+      assert(lowerBound == indexRangeExpression.lower)
+      assert(upperBound == indexRangeExpression.upper)
+    }
+  }
+
+  indexRangeExpressionTest("Index range expression: both bound", Some(2), Some(5))
+  indexRangeExpressionTest("Index range expression: lower bound", Some(2), None)
+  indexRangeExpressionTest("Index range expression: upper bound", None, Some(5))
+
   ignore("Start with WITH") {
     val stages = compile(
       """WITH 1 AS x
@@ -171,7 +211,7 @@ class TckCompilerTest extends CompilerTest {
         |RETURN some.prop
       """.stripMargin
     )
-    findFirstByType(stages.fplan, classOf[Selection]).condition
+    findFirstByType(stages.fplan, classOf[Selection]).conditionTuple
   }
 
   ignore("Placeholder for debugging plans") {

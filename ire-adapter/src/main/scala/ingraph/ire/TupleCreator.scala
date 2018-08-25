@@ -2,7 +2,7 @@ package hu.bme.mit.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.ire._
-import ingraph.model.expr.{EdgeAttribute, PropertyAttribute, VertexAttribute}
+import ingraph.model.expr.{EdgeAttribute, NodeHasLabelsAttribute, PropertyAttribute, VertexAttribute}
 import ingraph.model.fplan.{GetEdges, GetVertices}
 import org.apache.spark.sql.catalyst.expressions.Literal
 
@@ -11,7 +11,7 @@ object TupleConstants {
 }
 
 object PropertyTransformer {
-  def apply(properties: Map[String, Any], key: String, id: Long): Any = {
+  def apply(properties: Map[String, Any], key: String, id: Long, labels: Set[String] = Set()): Any = {
     if (key == TupleConstants.ID_KEY)
       id
     else
@@ -22,7 +22,10 @@ object PropertyTransformer {
 object VertexTransformer {
   def apply(element: IngraphVertex, operator: GetVertices, idParser: IdParser): Tuple = {
     Vector(idParser(element.id)) ++
-      operator.flatSchema.map(_.name).drop(1).map(key => PropertyTransformer(element.properties, key, element.id))
+      operator.flatSchema.drop(1).map{
+        case a: PropertyAttribute => PropertyTransformer(element.properties, a.name, element.id, element.labels)
+        case NodeHasLabelsAttribute(_, labels, _) => element.labels.subsetOf(labels)
+      }
   }
 }
 
@@ -32,12 +35,14 @@ object EdgeTransformer {
       operator.flatSchema.drop(3)
         .map {
           case PropertyAttribute(name, elementAttribute, _) => elementAttribute match {
-            case _: EdgeAttribute => PropertyTransformer(edge.properties, name, edge.id)
-            case v: VertexAttribute if v.name == operator.nnode.trg.name =>
-              PropertyTransformer(edge.targetVertex.properties, name, edge.targetVertex.id)
+            case _: EdgeAttribute =>
+              PropertyTransformer(edge.properties, name, edge.id)
             case v: VertexAttribute if v.name == operator.nnode.src.name =>
-              PropertyTransformer(edge.sourceVertex.properties, name, edge.sourceVertex.id)
+              PropertyTransformer(edge.sourceVertex.properties, name, edge.sourceVertex.id, edge.sourceVertex.labels)
+            case v: VertexAttribute if v.name == operator.nnode.trg.name =>
+              PropertyTransformer(edge.targetVertex.properties, name, edge.targetVertex.id, edge.targetVertex.labels)
           }
+          case NodeHasLabelsAttribute(_, _, _) => ???
         }
   }
 }
