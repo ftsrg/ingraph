@@ -70,12 +70,39 @@ object SqlQueries {
       | FROM vertex_property
       | WHERE parent = $1';
       |
+      |CREATE FUNCTION edge_properties(INTEGER)
+      |  RETURNS jsonb
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'SELECT coalesce(jsonb_object_agg(key, value), ''[]'')
+      | FROM edge_property
+      | WHERE parent = $1';
+      |
       |CREATE FUNCTION to_vertex(INTEGER)
       |  RETURNS jsonb
       |STRICT
       |IMMUTABLE
       |LANGUAGE SQL AS
       |'SELECT jsonb_build_object(''type'', ''vertex'', ''id'', $1, ''labels'', labels($1), ''properties'', vertex_properties($1))';
+      |
+      |CREATE OR REPLACE FUNCTION startNode(INTEGER)
+      |  RETURNS INTEGER
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'SELECT "from"
+      | FROM edge
+      | WHERE edge_id = $1';
+      |
+      |CREATE OR REPLACE FUNCTION endNode(INTEGER)
+      |  RETURNS INTEGER
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'SELECT "to"
+      | FROM edge
+      | WHERE edge_id = $1';
       |
       |CREATE FUNCTION type(INTEGER)
       |  RETURNS jsonb
@@ -85,6 +112,14 @@ object SqlQueries {
       |'SELECT to_jsonb(type)
       | FROM edge
       | WHERE edge_id = $1';
+      |
+      |CREATE OR REPLACE FUNCTION to_edge(INTEGER)
+      |  RETURNS jsonb
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'SELECT jsonb_build_object(''type'', ''edge'', ''id'', $1, ''startNode'', startNode($1), ''endNode'', endNode($1),
+      |                           ''edgeType'', type($1), ''properties'', edge_properties($1))';
       |
       |CREATE EXTENSION intarray;
       |

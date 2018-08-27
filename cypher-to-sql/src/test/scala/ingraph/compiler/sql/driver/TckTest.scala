@@ -5,10 +5,11 @@ import org.scalatest.FunSuite
 
 class TckTest extends FunSuite with TckTestRunner {
 
-  val selectedFeatures = Set("MatchAcceptance")
+  val selectedFeatures = Set("MatchAcceptance", "Local")
   val selectedScenarios = Set(
     "Handle comparison between node properties",
-//    "Walk alternative relationships",
+    "Walk alternative relationships",
+    "Return vertices and edges",
 
     // placeholder
     ""

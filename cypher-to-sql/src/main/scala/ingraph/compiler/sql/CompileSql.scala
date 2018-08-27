@@ -378,6 +378,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
     attribute match {
       case returnItem: ReturnItem => convertAttributeAtProductionNode(returnItem.child)
       case vertexAttribute: VertexAttribute => "to_vertex(" + getSql(vertexAttribute) + ")"
+      case edgeAttribute: EdgeAttribute => "to_edge(" + getSql(edgeAttribute) + ")"
       case default => getSql(default)
     }
   }

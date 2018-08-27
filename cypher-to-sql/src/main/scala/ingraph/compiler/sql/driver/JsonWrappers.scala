@@ -24,8 +24,8 @@ class JsonVertex extends JsonGraphElement {
 class JsonEdge extends JsonGraphElement {
   var startNode: Long = _
   var endNode: Long = _
-  var `type`: String = _
+  var edgeType: String = _
 
   override def asValue(): RelationshipValue =
-    new RelationshipValue(new InternalRelationship(id, startNode, endNode, `type`, propertiesMap))
+    new RelationshipValue(new InternalRelationship(id, startNode, endNode, edgeType, propertiesMap))
 }
