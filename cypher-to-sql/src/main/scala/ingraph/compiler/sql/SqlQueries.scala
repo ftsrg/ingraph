@@ -77,6 +77,15 @@ object SqlQueries {
       |LANGUAGE SQL AS
       |'SELECT jsonb_build_object(''type'', ''vertex'', ''id'', $1, ''labels'', labels($1), ''properties'', vertex_properties($1))';
       |
+      |CREATE FUNCTION type(INTEGER)
+      |  RETURNS jsonb
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'SELECT to_jsonb(type)
+      | FROM edge
+      | WHERE edge_id = $1';
+      |
       |CREATE EXTENSION intarray;
       |
       |-- if needed for other types, check https://stackoverflow.com/q/3994556

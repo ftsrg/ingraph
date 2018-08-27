@@ -8,6 +8,7 @@ class TckTest extends FunSuite with TckTestRunner {
   val selectedFeatures = Set("MatchAcceptance")
   val selectedScenarios = Set(
     "Handle comparison between node properties",
+//    "Walk alternative relationships",
 
     // placeholder
     ""
