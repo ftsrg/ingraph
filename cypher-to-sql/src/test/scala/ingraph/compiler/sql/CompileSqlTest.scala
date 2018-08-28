@@ -95,14 +95,20 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
   def convertSqlCell(value: Any): Any = {
     value match {
       case value: PGobject if value.getType == "jsonb" => {
-        val jsonPrimitive = CompileSqlTest.jsonParser.parse(value.getValue).getAsJsonPrimitive
+        val jsonElement = CompileSqlTest.jsonParser.parse(value.getValue)
 
-        if (jsonPrimitive.isBoolean)
-          jsonPrimitive.getAsBoolean
-        else if (jsonPrimitive.isNumber)
-          jsonPrimitive.getAsLong
-        else if (jsonPrimitive.isString)
-          jsonPrimitive.getAsString
+        if (jsonElement.isJsonPrimitive) {
+          val jsonPrimitive = jsonElement.getAsJsonPrimitive
+
+          if (jsonPrimitive.isBoolean)
+            jsonPrimitive.getAsBoolean
+          else if (jsonPrimitive.isNumber)
+            jsonPrimitive.getAsLong
+          else if (jsonPrimitive.isString)
+            jsonPrimitive.getAsString
+        }
+        else
+          jsonElement.getAsJsonObject.get("id").getAsLong
       }
       case value: PgArray => {
         value.getArray.asInstanceOf[Array[_]]
