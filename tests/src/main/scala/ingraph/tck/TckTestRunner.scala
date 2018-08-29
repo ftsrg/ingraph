@@ -14,7 +14,9 @@ trait TckTestRunner {
 
   def localFeatures: Seq[Feature] = {
     Option(getClass.getResource(localFeaturePath))
-      .map(url => CypherTCK.parseFilesystemFeatures(new File(url.getFile)))
+      .map(url => new File(url.getFile))
+      .flatMap(dir => if (dir.exists()) Some(dir) else None)
+      .map(dir => CypherTCK.parseFilesystemFeatures(dir))
       .getOrElse(Seq())
   }
 
