@@ -10,7 +10,7 @@ object TrainbenchmarkUtils {
     getClass.getResource(s"/trainbenchmark/railway-repair-$size-$entityName.csv").getPath
   }
 
-  def readQueryFromReources(query: String): String = {
+  def readQueryFromResources(query: String): String = {
     val stream = getClass.getResourceAsStream(s"/trainbenchmark-simple/$query.cypher")
     Source.fromInputStream(stream).getLines().mkString("\n")
   }

@@ -1,33 +1,33 @@
 package ingraph.bulkloader.csv.columnname;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 import org.supercsv.cellprocessor.CellProcessorAdaptor;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.cellprocessor.ift.StringCellProcessor;
 import org.supercsv.exception.SuperCsvCellProcessorException;
 import org.supercsv.util.CsvContext;
 
-import java.util.Set;
+import java.util.List;
 
-public class ParseLabels extends CellProcessorAdaptor implements StringCellProcessor {
+public class ParseStringArray extends CellProcessorAdaptor implements StringCellProcessor {
 
 	/**
-	 * Constructs a new <tt>ParseLabels</tt> processor, which converts a String
+	 * Constructs a new <tt>ParseStringArray</tt> processor, which converts a String
 	 * to labels.
 	 *
 	 */
-	public ParseLabels() {
+	public ParseStringArray() {
 		super();
 	}
 
 	/**
-	 * Constructs a new <tt>ParseLabels</tt> processor, which converts a String to
+	 * Constructs a new <tt>ParseStringArray</tt> processor, which converts a String to
 	 * labels, then calls the next processor in the chain.
 	 *
 	 * @param next
 	 *          the next processor in the chain
 	 */
-	public ParseLabels(final CellProcessor next) {
+	public ParseStringArray(final CellProcessor next) {
 		super(next);
 	}
 
@@ -38,12 +38,12 @@ public class ParseLabels extends CellProcessorAdaptor implements StringCellProce
 	 *           if value is null or can't be parsed
 	 */
 	@Override
-	public Set<String> execute(final Object value, final CsvContext context) {
+	public List<String> execute(final Object value, final CsvContext context) {
 		validateInputNotNull(value, context);
 
 		final String inputString = value.toString();
 
-		Set<String> labels = Sets.newHashSet(inputString.split(";"));
+		List<String> labels = Lists.newArrayList(inputString.split(";"));
 		return labels;
 	}
 }
