@@ -117,7 +117,11 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
           val columns =
             (
               s"""vertex_id AS ${getQuotedColumnName(node.nnode.v)}""" +:
-                node.requiredProperties.map(prop =>s"""(SELECT value FROM vertex_property WHERE parent = vertex_id AND key = ${getSingleQuotedString(prop.name)}) AS ${getQuotedColumnName(prop)}"""))
+                node.requiredProperties
+                  // skip NodeHasLabelsAttribute since it has no resolvedName to use as column name
+                  // TODO use NodeHasLabelsAttribute
+                  .filterNot(_.isInstanceOf[NodeHasLabelsAttribute])
+                  .map(prop =>s"""(SELECT value FROM vertex_property WHERE parent = vertex_id AND key = ${getSingleQuotedString(prop.name)}) AS ${getQuotedColumnName(prop)}"""))
               .mkString(",\n")
 
           val labelConstraint = getVertexLabelSqlCondition(node.nnode.v.labels, "vertex_id")
