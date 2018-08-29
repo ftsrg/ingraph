@@ -7,7 +7,7 @@ import ingraph.model.expr._
 import ingraph.model.fplan._
 import ingraph.model.misc.Function
 import ingraph.model.nplan
-import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Expression, Literal, Not}
+import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal, Not}
 import org.apache.spark.sql.types.StringType
 
 object CompileSql {
@@ -374,12 +374,13 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
       sqlString
   }
 
-  private def convertAttributeAtProductionNode(attribute: Expression): String = {
+  private def convertAttributeAtProductionNode(attribute: ResolvableName): String = {
+    val columnName = getQuotedColumnName(attribute)
+
     attribute match {
-      case returnItem: ReturnItem => convertAttributeAtProductionNode(returnItem.child)
-      case vertexAttribute: VertexAttribute => "to_vertex(" + getSql(vertexAttribute) + ")"
-      case edgeAttribute: EdgeAttribute => "to_edge(" + getSql(edgeAttribute) + ")"
-      case default => getSql(default)
+      case ReturnItem(VertexAttribute(_, _, _, _, _), _, _) => "to_vertex(" + columnName + ")"
+      case ReturnItem(EdgeAttribute(_, _, _, _, _), _, _) => "to_edge(" + columnName + ")"
+      case _ => columnName
     }
   }
 
