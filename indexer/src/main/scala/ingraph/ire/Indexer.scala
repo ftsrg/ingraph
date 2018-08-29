@@ -2,7 +2,6 @@ package ingraph.ire
 
 import hu.bme.mit.ire.util.BufferMultimap
 import ingraph.bulkloader.csv.data.{CsvEdge, CsvVertex}
-import org.neo4j.driver.v1.types.{Node, Relationship}
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
@@ -56,11 +55,11 @@ class Indexer {
     fill(tupleMapper)
   }
 
-  def addVertex(vertex: CsvVertex): IngraphVertex = {
+  def addVertex(vertex: CsvVertex, labels: Traversable[String]): IngraphVertex = {
     val id: Long = vertex.getId
     val properties: Map[String, Any] = vertex.getProperties.toMap
-    val labels = vertex.getLabels.toSet
-    addVertex(IngraphVertex(id, labels, properties))
+    val allLabels = labels.toSet ++ vertex.getCustomLabels.toSet
+    addVertex(IngraphVertex(id, allLabels, properties))
   }
 
   def addVertex(vertex: IngraphVertex): IngraphVertex = {
@@ -81,21 +80,20 @@ class Indexer {
       throw new IllegalArgumentException("Won't remove connected vertex without DETACH")
     else if (detach)
       for { edge <- edges } removeEdgeById(edge.id)
-    vertex.labels.foreach(label => {
+    for (label <- vertex.labels) {
       vertexLabelLookup.removeBinding(label, vertex)
       vertexIdLabelLookup.remove((vertex.id, label))
-    })
+    }
     vertexLookup.remove(id)
     mappers.foreach(_.removeVertex(vertex))
   }
 
-  def addEdge(edge: CsvEdge): IngraphEdge = {
+  def addEdge(edge: CsvEdge, sourceVertexLabel: String, edgeType: String, targetVertexLabel: String): IngraphEdge = {
     val id: Long = edge.getId
     val properties: Map[String, Any] = edge.getProperties.toMap
-    val sourceVertex: IngraphVertex = vertexIdLabelLookup((edge.getSourceVertexId, edge.getSourceVertexLabel))
-    val targetVertex: IngraphVertex = vertexIdLabelLookup((edge.getTargetVertexId, edge.getTargetVertexLabel))
-    val `type`: String = edge.getType
-    addEdge(IngraphEdge(id, sourceVertex, targetVertex, `type`, properties))
+    val sourceVertex: IngraphVertex = vertexIdLabelLookup((edge.getSourceVertexId, sourceVertexLabel))
+    val targetVertex: IngraphVertex = vertexIdLabelLookup((edge.getTargetVertexId, targetVertexLabel))
+    addEdge(IngraphEdge(id, sourceVertex, targetVertex, edgeType, properties))
   }
 
   def addEdge(edge: IngraphEdge): IngraphEdge = {

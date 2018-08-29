@@ -13,8 +13,8 @@ class ExpressionParserTest extends WordSpec {
       .asInstanceOf[Production].child
       .asInstanceOf[Projection].child
       .asInstanceOf[Selection]
-    println(selection.condition)
-    ExpressionParser(selection.condition)
+    println(selection.conditionTuple)
+    ExpressionParser(selection.conditionTuple)
   }
 
   val rocks = "emfrocks"

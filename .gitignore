@@ -50,3 +50,7 @@ hs_err_pid*.log
 *.xtendbin
 *.swp
 lib/
+*.tex
+*.pdf
+*.log
+*.aux

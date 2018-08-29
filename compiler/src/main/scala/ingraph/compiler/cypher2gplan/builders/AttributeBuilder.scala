@@ -32,7 +32,7 @@ object AttributeBuilder {
           case Some(ev) => (ev.getName, false)
           case None => (generateUniqueName, true)
         }
-        val els = BuilderUtil.parseToEdgeLabelSet(elDetail.getTypes)
+        val els = BuilderUtil.parseToEdgeLabelSet(elDetail.getRelTypeNames)
         val props = LiteralBuilder.buildProperties(elDetail.getProperties)
 
         Option(elDetail.getRange) match {
@@ -52,7 +52,7 @@ object AttributeBuilder {
     }
   }
 
-  def buildAttribute(e: oc.ExpressionPropertyLookup): UnresolvedAttribute = {
+  def buildAttribute(e: oc.PropertyLookupExpression): UnresolvedAttribute = {
     UnresolvedAttribute(Seq(e.getLeft.asInstanceOf[oc.VariableRef].getVariableRef.getName, e.getPropertyLookups.get(0).getPropertyKeyName))
   }
 

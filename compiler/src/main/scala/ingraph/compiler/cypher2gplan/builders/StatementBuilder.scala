@@ -18,11 +18,26 @@ object StatementBuilder {
     }
   }
 
+  /**
+    * Transform a SinglePartQuery to a sequence of clauses.
+    */
+  def siglePartQuery2Clauses(spq: oc.SinglePartQuery): Seq[oc.Clause] = {
+    spq.getReadingClauses.asScala ++ spq.getUpdatingClauses.asScala ++ Option(spq.getReturn)
+  }
+
+  /**
+    * Transform a MultiPartSubQuery(*) to a sequence of clauses.
+    *
+    * (*): MultiPartSubQuery is a structural sugar in the openCypher Xtext grammar
+    *      not present in the original openCypher grammar
+    */
+  def multiPartSubQuery2Clauses(mpsq: oc.MultiPartSubQuery): Seq[oc.Clause] = {
+      mpsq.getReadingClauses.asScala ++ mpsq.getUpdatingClauses.asScala :+ mpsq.getWithPart
+  }
+
   /** Builds the gplan for a single query built from several query parts.
     */
   def buildStatement(q: oc.SingleQuery): gplan.GNode = {
-    val clauses = q.getClauses.asScala.toVector // we are to use indexed access
-
     // Compiled form of the query is the chain of the query parts.
     // The first query part will receive a dual object source there.
     // Accumulate tree built from successive query parts in result
@@ -30,33 +45,19 @@ object StatementBuilder {
 
     // Do some checks on the clauses of the single query
     //FIXME: Validator.checkSingleQueryClauseSequence(clauses, ce.l)
+    // A query part should have the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
 
-    /* Process each query part.
-     *
-     * A query part has the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
-     *
-     * Note: GrammarUtil.isCudClause is currently limited to CREATE and DELETE clauses.
-     */
-    var from = 0
-    for (i <- clauses.indices) {
-      val current = clauses(i)
-      val next = if (i + 1 < clauses.length) {
-        clauses(i + 1)
-      } else {
-        null
+    q match {
+      case spq: oc.SinglePartQuery => {
+        val clauses: Seq[oc.Clause] = siglePartQuery2Clauses(spq)
+        result = buildQueryPart(clauses, result)
       }
-      if (GrammarUtil.isCudClause(current) && ! GrammarUtil.isCudClause(next) && ! next.isInstanceOf[oc.Return]
-        || current.isInstanceOf[oc.With] && ! next.isInstanceOf[oc.Unwind]
-        || current.isInstanceOf[oc.Unwind]
-        || current.isInstanceOf[oc.Return]
-      ) {
-        // [fromX, toX) is the range of clauses that form a query part
-        val fromX = from
-        val toX = i + 1
+      case mpq: oc.MultiPartQuery => {
+        for (queryPart <- mpq.getSubQueries.asScala) {
+          result = buildQueryPart(multiPartSubQuery2Clauses(queryPart), result)
+        }
 
-        result = buildQueryPart(clauses.slice(fromX, toX), result)
-
-        from = i + 1
+        result = buildQueryPart(siglePartQuery2Clauses(mpq.getSinglePartQuery), result)
       }
     }
 
@@ -88,8 +89,12 @@ object StatementBuilder {
 //    // FIXME: do some checks on the clause sequence of this subquery
 //    Validator.checkSubQueryClauseSequence(clauses, ce.l)
 
-    /* We compile all MATCH clauses and chain them together using different join operations.
+    /* We compile all clauses and chain them together. In case of MATCH caluses, we use different join operations.
      * We start from what was passed in as chain, i.e. the tree built from query parts so far.
+     *
+     * Note: we don't care about possible repetition of WITH/RETURN and UNWIND clauses or any other invalid sequences
+     * as it does not affect compilation.
+     * Clause order is already enforced by the M10+ grammar.
      */
     val content: GNode = clauses.foldLeft(chain)(
       (prev, clause) => clause match {
@@ -99,42 +104,22 @@ object StatementBuilder {
           case MatchDescriptor(false, opTree, Some(condition)) => gplan.Selection(condition, gplan.Join(prev, opTree))
           case MatchDescriptor(false, opTree, None           ) => gplan.Join(prev, opTree)
         }
-        case _ => prev
-      }
-    )
-
-    /* Process WITH/RETURN and UNWIND clauses if any.
-     *
-     * Each query part has 0 or 1 WITH/RETURN clause, and also 0 or 1 UNWIND.
-     * Note: we don't care about possible repetition of WITH/RETURN and UNWIND clauses as it does not affect compilation.
-     * Clause order is already checked when query was split to query parts.
-     */
-    val afterReturnAndUnwind: GNode = clauses.foldLeft(content)(
-      (prev, clause) => clause match {
         case w: oc.With   => ReturnBuilder.dispatchBuildReturn(w, prev)
         case r: oc.Return => ReturnBuilder.dispatchBuildReturn(r, prev)
         case u: oc.Unwind => {
           val expression = ExpressionBuilder.buildExpressionNoJoinAllowed(u.getExpression)
           gplan.Unwind(expr.UnwindAttribute(expression, u.getVariable.getName), prev)
         }
-        case _ => prev
-      }
-    )
-
-    // process CUD operations
-    val afterCud: GNode = clauses.foldLeft(afterReturnAndUnwind)(
-      (prev, clause) => clause match {
         case c: oc.Create => CudBuilder.buildCreateOperator(c, prev)
         case c: oc.Delete => CudBuilder.buildDeleteOperator(c, prev)
         case c: oc.Merge  => CudBuilder.buildMergeOperator (c, prev)
         case c: oc.Remove => CudBuilder.buildRemoveOperator(c, prev)
         case c: oc.Set    => CudBuilder.buildSetOperator   (c, prev)
-        case _ => prev
       }
     )
 
     // return the result of query part compilation
-    afterCud
+    content
   }
 
   /**

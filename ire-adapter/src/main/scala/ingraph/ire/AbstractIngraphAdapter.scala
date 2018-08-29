@@ -16,7 +16,7 @@ abstract class AbstractIngraphAdapter extends AutoCloseable {
   val tupleCreator: TupleCreator
   val engine: AnnotatedRelationalEngine
 
-  def readCsv(vertexFileName: Map[String, List[String]],
+  def readCsv(vertexFileNames: Map[String, List[String]],
               edgeFilenames: Map[String, (String, String, String)],
               transaction: Transaction,
               csvPreference: CsvPreference = CsvPreference.STANDARD_PREFERENCE) {
@@ -24,16 +24,23 @@ abstract class AbstractIngraphAdapter extends AutoCloseable {
     // sorry :-)
     tupleCreator.transaction = transaction
 
-    val vertexFilenamesJava = vertexFileName.map(kv => kv._1 -> java.util.Arrays.asList(kv._2: _*))
-      .asJava.asInstanceOf[java.util.Map[String, java.util.Collection[String]]]
-    val edgeFilenamesJava = edgeFilenames.map { case (k, v) => (k, ImmutableTriple.of(v._1, v._2, v._3)) }.asJava
+    val loader = new MassCsvLoader(csvPreference)
 
-    val loader = new MassCsvLoader(vertexFilenamesJava, edgeFilenamesJava, csvPreference)
-    for (node <- loader.getVertices.asScala) {
-      indexer.addVertex(node)
+    for (vertex <- vertexFileNames) {
+      val fileName = vertex._1
+      val labels = vertex._2
+      for (csvVertex <- loader.loadVertices(fileName).asScala) {
+        indexer.addVertex(csvVertex, labels)
+      }
     }
-    for (relationship <- loader.getEdges.asScala) {
-      indexer.addEdge(relationship)
+    for (edge <- edgeFilenames) {
+      val fileName = edge._1
+      val sourceVertexLabel: String = edge._2._1
+      val edgeType         : String = edge._2._2
+      val targetVertexLabel: String = edge._2._3
+      for (csvEdge <- loader.loadEdges(fileName).asScala) {
+        indexer.addEdge(csvEdge, sourceVertexLabel, edgeType, targetVertexLabel)
+      }
     }
   }
 

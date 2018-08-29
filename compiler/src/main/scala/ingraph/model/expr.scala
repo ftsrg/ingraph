@@ -101,8 +101,6 @@ abstract class AbstractReturnItem(child: Expression, alias: Option[String] = Non
     case a: Attribute => a
     case e => ExpressionAttribute(e, "_expr", None)
   }
-
-  //override def children: Seq[ResolvableName] = ???
 }
 
 abstract class AttributeBase extends Attribute {
@@ -179,7 +177,6 @@ case class IndexRangeExpression(collection: Expression, lower: Option[Int], uppe
   */
 case class IndexLookupExpression(collection: Expression, index: Int) extends AbstractIndexExpression(collection, Some(index), Some(index+1))
 
-// formerly GraphElementVariable
 abstract class GraphAttribute(override val name: String) extends AttributeBase
 
 abstract class LabelSet(status: LabelSetStatus = Empty) extends ExpressionBase {
@@ -214,7 +211,6 @@ case class VertexLabelSet(vertexLabels: Set[VertexLabel] = Set(), status: LabelS
  */
 case class EdgeLabelSet(edgeLabels: Set[EdgeLabel] = Set(), status: LabelSetStatus = Empty) extends LabelSet(status)
 
-// formerly GraphElementVariable
 abstract class ElementAttribute(name: String, val properties: TPropertyMap, isAnonymous: Boolean, override val resolvedName: TResolvedName) extends GraphAttribute(name) with ResolvableName
 
 abstract class AbstractVertexAttribute(
@@ -253,8 +249,8 @@ case class EdgeAttribute(override val name: String, override val labels: EdgeLab
 case class EdgeListAttribute(override val name: String, override val labels: EdgeLabelSet = EdgeLabelSet(), override val properties: TPropertyMap = Map(), override val isAnonymous: Boolean = false, minHops: Option[Int], maxHops: Option[Int], override val resolvedName: TResolvedName = None) extends AbstractEdgeAttribute(name, labels, properties, isAnonymous, resolvedName)
 
 
-// formerly AttributeVariable
 case class PropertyAttribute(override val name: String, elementAttribute: ElementAttribute, override val resolvedName: TResolvedName = None) extends GraphAttribute(name) with ResolvableName
+case class NodeHasLabelsAttribute(override val name: String, labels: Set[String], override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName
 
 
 /*

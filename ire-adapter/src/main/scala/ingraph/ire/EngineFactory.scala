@@ -134,20 +134,20 @@ object EngineFactory {
       val aggregates = op.projectionTuple.map(e => ExpressionParser.parseAggregate(e))
       val creators = aggregates.flatten.map(_._2).toVector
       val factories: () => Vector[StatefulAggregate] = () => creators.map(_())
-      val nonAggregates = op.projectionTuple.filter(op.aggregationCriteria.contains)
+      val nonAggregates = op.projectionTuple.filter(op.aggregationCriteriaTuple.contains)
       var normalIndex = 0
       var aggregateIndex = nonAggregates.size
       val projections = aggregates.map {
         case None => normalIndex += 1; normalIndex - 1
         case Some(_) => aggregateIndex += 1; aggregateIndex - 1
       }
-      val aggregationMask = op.aggregationCriteria.map(e => ExpressionParser[Any](e)).toVector
+      val aggregationMask = op.aggregationCriteriaTuple.map(e => ExpressionParser[Any](e)).toVector
 
       newLocal(Props(new AggregationNode(expr.child, aggregationMask, factories, projections.toVector)))
     }
 
     private def selection(op: Selection, expr: ForwardConnection) = {
-      val condition = ExpressionParser[Boolean](op.condition)
+      val condition = ExpressionParser[Boolean](op.conditionTuple)
       newLocal(Props(new SelectionNode(expr.child, condition)))
     }
 
@@ -162,7 +162,7 @@ object EngineFactory {
 
       val skip: Option[Long] = op.skipExpr.map(getInt)
       val limit: Option[Long] = op.limitExpr.map(getInt)
-      val sortKeys = op.order.map(
+      val sortKeys = op.orderTuple.map(
         e => ExpressionParser[Any](e.child)).toVector
       newLocal(Props(new SortAndTopNode(
         expr.child,

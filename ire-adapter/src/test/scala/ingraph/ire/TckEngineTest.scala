@@ -345,9 +345,9 @@ class TckEngineTest extends FunSuite {
   }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/WithAcceptance.feature#L38
-  test("ORDER BY and LIMIT can be used - edited") {
+  test("ORDER BY and LIMIT can be used") {
     val results = run(
-      """CREATE (a:A {name: 'X'}),
+      """CREATE (a:A), (), (), (),
         |(a)-[:REL]->()
       """.stripMargin,
       """MATCH (a:A)
