@@ -333,8 +333,13 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
         }
         case node: FNode => node.children.map(getSql(_, unwrapJson)).mkString("\n")
         case node: BinaryOperator => {
-          // convert Literals to JSON only if they are compared to PropertyAttributes
-          val localUnwrapJson = node.isInstanceOf[BinaryComparison] && !node.children.exists(_.isInstanceOf[PropertyAttribute])
+          // convert Literals to JSON only if they are compared to JSON results
+          val localUnwrapJson = node.isInstanceOf[BinaryComparison] &&
+            node.children.forall {
+              case _: PropertyAttribute => false
+              case FunctionInvocation(Function.TYPE, _, _) => false
+              case _ => true
+            }
 
           val leftSql = getSql(node.left, localUnwrapJson)
           val rightSql = getSql(node.right, localUnwrapJson)
