@@ -1,6 +1,5 @@
 package ingraph.compiler.sql
 
-import com.google.gson.Gson
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.driver.ValueJsonConversion
 import ingraph.compiler.test.CompilerTest
@@ -8,8 +7,8 @@ import ingraph.model.expr._
 import ingraph.model.fplan._
 import ingraph.model.misc.Function
 import ingraph.model.nplan
-import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal, Not}
-import org.apache.spark.sql.types.StringType
+import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, Literal, Not}
+import org.apache.spark.sql.types.{LongType, StringType}
 import org.neo4j.driver.v1.{Value, Values}
 
 object CompileSql {
@@ -39,7 +38,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
   val stages = compile(cypherQuery)
 
   val fplan = stages.fplan
-  val sql = getSql(fplan)
+  val sql = getSql(fplan, false)
 
   def run(): String = {
     println(sql)
@@ -66,11 +65,11 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
     }
   }
 
-  private def getProjectionSql(node: UnaryFNode, renamePairs: Traversable[(String, String)]): String = {
+  private def getProjectionSql(node: UnaryFNode, renamePairs: Traversable[(String, String)], unwrapJson: Boolean): String = {
     val columns = renamePairs.map(pair => s"""${pair._1} AS ${pair._2}""").mkString(", ")
     i"""SELECT $columns FROM
        |  (
-       |    ${getSql(node.child)}
+       |    ${getSql(node.child, unwrapJson)}
        |  ) subquery"""
   }
 
@@ -110,7 +109,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
        |  ) subquery"""
   }
 
-  private def getSql(node: Any): String = {
+  private def getSql(node: Any, unwrapJson: Boolean): String = {
     val sqlString =
       node match {
         case node: GetVertices => {
@@ -137,7 +136,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
           val leftNode = node.left
           val edgesNode = node.right
 
-          val leftSql = getSql(leftNode)
+          val leftSql = getSql(leftNode, unwrapJson)
           val edgesSql = getGetEdgesSql(edgesNode, Some("current_from"), Some("edge_id"))
 
           val edgeListAttribute = node.nnode.edgeList
@@ -205,7 +204,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
             .map(getQuotedColumnName)
             .map(name => s"left_query.$name = right_query.$name")
           val joinConditions = node match {
-            case node: ThetaLeftOuterJoin => columnConditions :+ getSql(node.nnode.condition)
+            case node: ThetaLeftOuterJoin => columnConditions :+ getSql(node.nnode.condition, unwrapJson)
             case _ => columnConditions
           }
 
@@ -220,7 +219,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
             case _: ThetaLeftOuterJoin => "LEFT OUTER"
           }
 
-          getJoinSql(node, joinType, joinConditionPart, resultColumns)
+          getJoinSql(node, joinType, joinConditionPart, resultColumns, unwrapJson)
         }
         case node: AntiJoin => {
           val columnConditions = node.commonAttributes
@@ -233,11 +232,11 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
             columnConditions.mkString(" AND\n")
 
           i"""SELECT * FROM
-             |  ( ${getSql(node.left)}
+             |  ( ${getSql(node.left, unwrapJson)}
              |  ) left_query
              |WHERE NOT EXISTS(
              |  SELECT * FROM
-             |    ( ${getSql(node.right)}
+             |    ( ${getSql(node.right, unwrapJson)}
              |    ) right_query
              |  WHERE $conditionPart
              |  )"""
@@ -248,23 +247,23 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
               case (attribute, outputName) =>
                 convertAttributeAtProductionNode(attribute) -> getQuotedColumnName(outputName)
             }
-          getProjectionSql(node, renamePairs)
+          getProjectionSql(node, renamePairs, unwrapJson)
         }
         case node: Projection => {
-          val renamePairs = node.flatSchema.map(proj => (getSql(proj), getQuotedColumnName(proj)))
-          getProjectionSql(node, renamePairs)
+          val renamePairs = node.flatSchema.map(proj => (getSql(proj, unwrapJson), getQuotedColumnName(proj)))
+          getProjectionSql(node, renamePairs, unwrapJson)
         }
         case node: Selection =>
-          val condition = getSql(node.nnode.condition)
+          val condition = getSql(node.nnode.condition, unwrapJson)
           i"""SELECT * FROM
              |  (
-             |    ${getSql(node.child)}
+             |    ${getSql(node.child, unwrapJson)}
              |  ) subquery
              |WHERE $condition"""
         case node: GetEdges =>
           getGetEdgesSql(node)
         case node: AllDifferent => {
-          val childSql = getSql(node.child)
+          val childSql = getSql(node.child, unwrapJson)
           val edgeIdsArray = ("ARRAY[]::INTEGER[]" +: node.nnode.edges.map(getQuotedColumnName)).mkString(" || ")
           // only more than 1 node must be checked for uniqueness (edge list can contain more edges)
           val allDifferentNeeded = node.nnode.edges.size > 1 || node.nnode.edges.exists(_.isInstanceOf[EdgeListAttribute])
@@ -280,10 +279,10 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
                |$childSql""".stripMargin
         }
         case node: SortAndTop => {
-          val childSql = getSql(node.child)
+          val childSql = getSql(node.child, unwrapJson)
           val nnode = node.nnode
 
-          val orderByParts = nnode.order.map(order => getSql(order.child) + " " + order.direction.sql + " " + order.nullOrdering.sql)
+          val orderByParts = nnode.order.map(order => getSql(order.child, unwrapJson) + " " + order.direction.sql + " " + order.nullOrdering.sql)
           val limitPart = nnode.limitExpr.map { case Literal(num: Long, _) => s"LIMIT $num" }.getOrElse("")
           val offsetPart = nnode.skipExpr.map { case Literal(num: Long, _) => s"OFFSET $num" }.getOrElse("")
 
@@ -296,7 +295,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
              |  $offsetPart"""
         }
         case node: DuplicateElimination => {
-          val childSql = getSql(node.child)
+          val childSql = getSql(node.child, unwrapJson)
 
           i"""SELECT DISTINCT * FROM
              |  (
@@ -304,9 +303,9 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
              |  ) subquery"""
         }
         case node: Grouping => {
-          val renamePairs = node.flatSchema.map(proj => (getSql(proj), getQuotedColumnName(proj)))
-          val projectionSql = getProjectionSql(node, renamePairs)
-          val groupByColumns = (node.nnode.aggregationCriteria ++ node.requiredProperties).map(getSql)
+          val renamePairs = node.flatSchema.map(proj => (getSql(proj, unwrapJson), getQuotedColumnName(proj)))
+          val projectionSql = getProjectionSql(node, renamePairs, unwrapJson)
+          val groupByColumns = (node.nnode.aggregationCriteria ++ node.requiredProperties).map(getSql(_, unwrapJson))
           val groupByPart = if (groupByColumns.isEmpty)
             ""
           else
@@ -316,7 +315,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
              |$groupByPart"""
         }
         case node: Dual => "SELECT"
-        case node: ReturnItem => getSql(node.child)
+        case node: ReturnItem => getSql(node.child, unwrapJson)
         case FunctionInvocation(Function.NODE_HAS_LABELS, (vertexColumn: VertexAttribute) :: (vertexLabelSet: VertexLabelSet) :: Nil, false) => {
           getVertexLabelSqlCondition(vertexLabelSet, getQuotedColumnName(vertexColumn)).get
         }
@@ -327,15 +326,18 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
             case functor@Function.ID => "/*" + functor.getPrettyName + "*/"
             case functor => functor.getPrettyName
           }
-          val parametersString = node.children.map(getSql).mkString(", ")
+          val parametersString = node.children.map(getSql(_, unwrapJson)).mkString(", ")
           val distinctPart = if (node.isDistinct) "DISTINCT " else ""
 
           functionName + "(" + distinctPart + parametersString + ")"
         }
-        case node: FNode => node.children.map(getSql).mkString("\n")
+        case node: FNode => node.children.map(getSql(_, unwrapJson)).mkString("\n")
         case node: BinaryOperator => {
-          val leftSql = getSql(node.left)
-          val rightSql = getSql(node.right)
+          // convert Literals to JSON only if they are compared to PropertyAttributes
+          val localUnwrapJson = node.isInstanceOf[BinaryComparison] && !node.children.exists(_.isInstanceOf[PropertyAttribute])
+
+          val leftSql = getSql(node.left, localUnwrapJson)
+          val rightSql = getSql(node.right, localUnwrapJson)
           val operator = node.sqlOperator
 
           if (Seq(leftSql, rightSql).exists(_.contains("\n")))
@@ -352,22 +354,13 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
           // TODO support indexing of SQL arrays too
           // JSON indexing
           // {"type": "ListValue", "value": {"values": [{"type": "StringValue", "value": {"val": "a"}}, {"type": "StringValue", "value": {"val": "b"}}]}}
-          getSql(node.collection) + "->'value'->'values'->" + node.index.toString
+          getSql(node.collection, unwrapJson) + "->'value'->'values'->" + node.index.toString
         }
-        case node: Literal => {
-          val pojoValue = node.dataType match {
-            // https://github.com/apache/spark/blob/b3d88ac02940eff4c867d3acb79fe5ff9d724e83/sql/catalyst/src/main/scala/org/apache/spark/sql/catalyst/expressions/literals.scala#L59
-            // String is stored in other type, needs conversion before JSON serialization
-            case _: StringType => node.value.toString
-            case _ => node.value
-          }
-
-          getSqlForPojoValue(pojoValue)
-        }
-        case node: Not => "NOT(" + getSql(node.child) + ")"
+        case node: Literal => getSqlForLiteral(node, unwrapJson)
+        case node: Not => "NOT(" + getSql(node.child, unwrapJson) + ")"
         case node: Parameter => {
           val value = parameters(node.name)
-          getSqlForPojoValue(value)
+          getSqlForLiteral(Literal(value), unwrapJson)
         }
         case _ => ""
       }
@@ -389,12 +382,30 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
     }
   }
 
-  private def getSqlForPojoValue(pojoValue: Any): String = {
-    val value = Values.value(pojoValue)
-    val jsonString = ValueJsonConversion.gson.toJson(value, classOf[Value])
-    val sqlStringLiteral = Literal(jsonString)
+  private def getSqlForLiteral(literal: Literal, unwrapJson: Boolean): String = {
+    if (unwrapJson) {
+      val sqlString = literal.dataType match {
+        // SQL database cannot parse literal suffix (e.g. 42L)
+        case _: LongType => literal.value.toString
+        case _ => literal.sql
+      }
 
-    sqlStringLiteral.sql
+      sqlString
+    }
+    else {
+      val pojoValue = literal.dataType match {
+        // https://github.com/apache/spark/blob/b3d88ac02940eff4c867d3acb79fe5ff9d724e83/sql/catalyst/src/main/scala/org/apache/spark/sql/catalyst/expressions/literals.scala#L59
+        // String is stored in other type, needs conversion before JSON serialization
+        case _: StringType => literal.value.toString
+        case _ => literal.value
+      }
+
+      val value = Values.value(pojoValue)
+      val jsonString = ValueJsonConversion.gson.toJson(value, classOf[Value])
+      val sqlStringLiteral = Literal(jsonString)
+
+      sqlStringLiteral.sql
+    }
   }
 
   private def getVertexLabelSqlCondition(labelSet: VertexLabelSet, columnName: String): Option[String] = {
@@ -411,12 +422,12 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
            |           WHERE parent = $columnName)""".stripMargin)
   }
 
-  private def getJoinSql(node: EquiJoinLike, joinType: String, conditionPart: String, resultColumns: String) = {
+  private def getJoinSql(node: EquiJoinLike, joinType: String, conditionPart: String, resultColumns: String, unwrapJson: Boolean) = {
     i"""SELECT $resultColumns FROM
-       |  ( ${getSql(node.left)}
+       |  ( ${getSql(node.left, unwrapJson)}
        |  ) left_query
        |  $joinType JOIN
-       |  ( ${getSql(node.right)}
+       |  ( ${getSql(node.right, unwrapJson)}
        |  ) right_query
        |$conditionPart"""
   }
