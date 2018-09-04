@@ -11,5 +11,7 @@ class EmbeddedPostgresWrapper extends EmbeddedPostgres(Version.V10_3) with AutoC
 
   val Url: String = this.start(EmbeddedPostgres.cachedRuntimeConfig(executablePath))
 
+  println(Url)
+
   override def close(): Unit = this.stop()
 }
