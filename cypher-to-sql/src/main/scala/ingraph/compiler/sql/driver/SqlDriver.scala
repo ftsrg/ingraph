@@ -3,12 +3,10 @@ package ingraph.compiler.sql.driver
 import java.lang
 import java.sql.{Statement => sqlStatement}
 
-import com.google.gson.{Gson, JsonParser}
 import ingraph.compiler.sql.Util.withResources
 import ingraph.compiler.sql._
 import ingraph.driver.{CypherDriver, CypherDriverFactory}
 import org.apache.log4j.{Level, LogManager}
-import org.neo4j.driver.internal.AsValue
 import org.neo4j.driver.v1._
 import org.neo4j.driver.v1.exceptions.NoSuchRecordException
 import org.postgresql.jdbc.PgArray
@@ -68,37 +66,8 @@ object SqlDriver {
     })
   }
 
-  private val jsonParser = new JsonParser
-  private val gson = new Gson
-
-  def jsonToObject(jsonString: String): Any = {
-    val jsonElement = jsonParser.parse(jsonString)
-
-    if (jsonElement.isJsonPrimitive) {
-      val jsonPrimitive = jsonElement.getAsJsonPrimitive
-
-      val pojoValue =
-        if (jsonPrimitive.isBoolean)
-          jsonPrimitive.getAsBoolean
-        else if (jsonPrimitive.isNumber)
-          jsonPrimitive.getAsLong
-        else if (jsonPrimitive.isString)
-          jsonPrimitive.getAsString
-
-      pojoValue
-    }
-    else {
-      val jsonObj = jsonElement.getAsJsonObject
-      val typeName = jsonObj.get("type").getAsString
-
-      val clazz: Class[_ <: AsValue] = typeName match {
-        case "vertex" => classOf[JsonVertex]
-        case "edge" => classOf[JsonEdge]
-      }
-      val obj = gson.fromJson(jsonObj, clazz)
-
-      obj
-    }
+  def jsonToObject(jsonString: String): Value = {
+    ValueJsonConversion.gson.fromJson(jsonString, classOf[Value])
   }
 
   def toValue(value: Any): Value = {

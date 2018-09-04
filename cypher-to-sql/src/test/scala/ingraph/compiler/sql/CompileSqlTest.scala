@@ -2,14 +2,13 @@ package ingraph.compiler.sql
 
 import java.sql.{Connection, DriverManager}
 
-import com.google.gson.JsonParser
 import ingraph.compiler.sql.Util._
-import ingraph.compiler.sql.driver.SqlDriver
+import ingraph.compiler.sql.driver.{SqlDriver, ValueJsonConversion}
 import ingraph.driver.{CypherDriver, CypherDriverFactory}
 import org.apache.log4j.{Level, LogManager}
 import org.neo4j.driver.internal.InternalEntity
 import org.neo4j.driver.internal.value._
-import org.neo4j.driver.v1.Session
+import org.neo4j.driver.v1.{Session, Value}
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
 import org.scalactic.source
@@ -18,10 +17,6 @@ import org.scalatest.exceptions.TestFailedException
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
-
-object CompileSqlTest {
-  private val jsonParser = new JsonParser
-}
 
 trait Neo4jConnection extends BeforeAndAfterAll with BeforeAndAfterEach {
   this: Suite =>
@@ -95,20 +90,13 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
   def convertSqlCell(value: Any): Any = {
     value match {
       case value: PGobject if value.getType == "jsonb" => {
-        val jsonElement = CompileSqlTest.jsonParser.parse(value.getValue)
 
-        if (jsonElement.isJsonPrimitive) {
-          val jsonPrimitive = jsonElement.getAsJsonPrimitive
+        val cypherValue = ValueJsonConversion.gson.fromJson(value.getValue, classOf[Value])
 
-          if (jsonPrimitive.isBoolean)
-            jsonPrimitive.getAsBoolean
-          else if (jsonPrimitive.isNumber)
-            jsonPrimitive.getAsLong
-          else if (jsonPrimitive.isString)
-            jsonPrimitive.getAsString
+        cypherValue match {
+          case entity: EntityValueAdapter[_] => entity.asEntity().id()
+          case _ => cypherValue.asObject()
         }
-        else
-          jsonElement.getAsJsonObject.get("id").getAsLong
       }
       case value: PgArray => {
         value.getArray.asInstanceOf[Array[_]]

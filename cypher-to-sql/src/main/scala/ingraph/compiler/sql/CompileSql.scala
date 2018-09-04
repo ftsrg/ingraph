@@ -2,6 +2,7 @@ package ingraph.compiler.sql
 
 import com.google.gson.Gson
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
+import ingraph.compiler.sql.driver.ValueJsonConversion
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
 import ingraph.model.fplan._
@@ -9,6 +10,7 @@ import ingraph.model.misc.Function
 import ingraph.model.nplan
 import org.apache.spark.sql.catalyst.expressions.{BinaryOperator, Literal, Not}
 import org.apache.spark.sql.types.StringType
+import org.neo4j.driver.v1.{Value, Values}
 
 object CompileSql {
   def escapeQuotes(name: String, toBeDoubled: String = "\"") = name.replace(toBeDoubled, toBeDoubled + toBeDoubled)
@@ -23,8 +25,6 @@ object CompileSql {
 
   private def getQuotedColumnName(resolvableName: ResolvableName): String =
     getQuotedColumnName(resolvableName.resolvedName.get.resolvedName)
-
-  private val gson = new Gson()
 
   def getNodes(plan: FNode): Seq[FNode] = {
     if (plan.isInstanceOf[LeafFNode]) plan :: Nil
@@ -351,7 +351,8 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
         case node: IndexLookupExpression => {
           // TODO support indexing of SQL arrays too
           // JSON indexing
-          getSql(node.collection) + "->" + node.index.toString
+          // {"type": "ListValue", "value": {"values": [{"type": "StringValue", "value": {"val": "a"}}, {"type": "StringValue", "value": {"val": "b"}}]}}
+          getSql(node.collection) + "->'value'->'values'->" + node.index.toString
         }
         case node: Literal => {
           val pojoValue = node.dataType match {
@@ -389,7 +390,8 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
   }
 
   private def getSqlForPojoValue(pojoValue: Any): String = {
-    val jsonString = CompileSql.gson.toJson(pojoValue)
+    val value = Values.value(pojoValue)
+    val jsonString = ValueJsonConversion.gson.toJson(value, classOf[Value])
     val sqlStringLiteral = Literal(jsonString)
 
     sqlStringLiteral.sql
