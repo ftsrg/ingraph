@@ -20,7 +20,14 @@ trait TckTestRunner {
       .getOrElse(Seq())
   }
 
-  def scenarios: Seq[Scenario] = (localFeatures ++ tckFeatures).flatMap(_.scenarios)
+  def scenarios: Seq[Scenario] = (localFeatures ++ tckFeatures)
+    .flatMap(_.scenarios)
+    .groupBy(scenario => scenario.featureName -> scenario.name)
+    .map(_._2.head)
+    .toSeq
+
+  // scenarios have globally unique names
+  assert(scenarios.groupBy(_.name).forall(_._2.size == 1))
 
   def runTckTests(tckAdapterProvider: () => Graph, selectedFeatures: Set[String] = Set(), ignoredScenarios: Set[String] = Set(), selectedScenarios: Set[String] = Set()): Unit = {
     val scenariosInSelectedFeatures =
@@ -30,19 +37,16 @@ trait TckTestRunner {
         scenarios
           .filter(sc => selectedFeatures.contains(sc.featureName))
 
-    val uniqueScenarios = scenariosInSelectedFeatures
-      .groupBy(scenario => scenario.featureName -> scenario.name).map(_._2.head)
-
     if (scenariosInSelectedFeatures.nonEmpty) {
       val nonExistingFeatures = selectedScenarios --
-        uniqueScenarios.map(_.name)
+        scenariosInSelectedFeatures.map(_.name)
 
       test("All selected features are found") {
         assert(nonExistingFeatures.isEmpty)
       }
     }
 
-    uniqueScenarios
+    scenariosInSelectedFeatures
       .foreach(scenario => {
         val testName = scenario.toString
 
