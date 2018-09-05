@@ -3,6 +3,7 @@ package ingraph.tck
 import java.io.File
 
 import org.opencypher.tools.tck.api.{CypherTCK, Feature, Graph, Scenario}
+import org.scalactic.source
 import org.scalatest.FunSuiteLike
 
 trait TckTestRunner {
@@ -29,7 +30,11 @@ trait TckTestRunner {
   // scenarios have globally unique names
   assert(scenarios.groupBy(_.name).forall(_._2.size == 1))
 
-  def runTckTests(tckAdapterProvider: () => Graph, selectedFeatures: Set[String] = Set(), ignoredScenarios: Set[String] = Set(), selectedScenarios: Set[String] = Set()): Unit = {
+  def runTckTests(tckAdapterProvider: () => Graph,
+                  selectedFeatures: Set[String] = Set(),
+                  ignoredScenarios: Set[String] = Set(),
+                  selectedScenarios: Set[String] = Set())
+                 (implicit pos: source.Position): Unit = {
     val scenariosInSelectedFeatures =
       if (selectedFeatures.isEmpty)
         scenarios
@@ -43,7 +48,7 @@ trait TckTestRunner {
 
       test("All selected features are found") {
         assert(nonExistingFeatures.isEmpty)
-      }
+      }(pos)
     }
 
     scenariosInSelectedFeatures
@@ -52,13 +57,13 @@ trait TckTestRunner {
 
         if ((selectedScenarios.isEmpty || selectedScenarios.contains(scenario.name)) && !ignoredScenarios.contains(scenario.name))
           test(testName) {
-            println(testName)
+            println(s"vvvvvvvvvvvvvvvv $testName vvvvvvvvvvvvvvvv")
             println()
 
             scenario(tckAdapterProvider()).execute()
-          }
+          }(pos)
         else
-          ignore(testName) {}
+          ignore(testName) {}(pos)
       }
       )
   }
