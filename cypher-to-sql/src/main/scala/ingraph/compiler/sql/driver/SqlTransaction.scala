@@ -54,8 +54,6 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
 
         cypherSession.run(cypherQuery, statement.parameters)
 
-        sqlStatement.executeUpdate(SqlQueries.createTables)
-
         ExportSteps.execute(cypherSession, sqlConnection)
 
         EmptySqlStatementResult

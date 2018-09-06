@@ -1,7 +1,7 @@
 package ingraph.compiler.sql.driver
 
 import java.lang
-import java.sql.{Statement => sqlStatement}
+import java.sql.{DriverManager, Statement => sqlStatement}
 
 import ingraph.compiler.sql.Util.withResources
 import ingraph.compiler.sql._
@@ -21,6 +21,12 @@ class SqlDriver extends CypherDriver {
   LogManager.getRootLogger.setLevel(Level.OFF)
   val postgres = new EmbeddedPostgresWrapper
   val url = postgres.Url
+
+  withResources(DriverManager.getConnection(url)) { sqlConnection =>
+    withResources(sqlConnection.createStatement) {
+      _.executeUpdate(SqlQueries.createTables)
+    }
+  }
 
   override def session: Session = new SqlSession(this)
 
