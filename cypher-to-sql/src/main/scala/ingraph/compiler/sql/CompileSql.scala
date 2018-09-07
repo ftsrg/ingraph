@@ -101,12 +101,21 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
          |SELECT "to", edge_id, "from" FROM edge
          |$typeConstraintPart"""
 
+    val vertexLabelConstraints = Map(fromColumnName -> node.src, toColumnName -> node.trg)
+      .mapValues(_.labels)
+      .flatMap { case (columnName, labelSet) => getVertexLabelSqlCondition(labelSet, columnName) }
+      .toSeq
+    val vertexLabelConstraintPart =
+      if (vertexLabelConstraints.isEmpty) ""
+      else i"WHERE ${vertexLabelConstraints.mkString(" AND\n")}"
+
     i"""SELECT $columns FROM
        |  (
        |    SELECT "from" AS $fromColumnName, edge_id AS $edgeColumnName, "to" AS $toColumnName FROM edge
        |    $typeConstraintPart
        |    $undirectedSelectPart
-       |  ) subquery"""
+       |  ) subquery
+       |$vertexLabelConstraintPart"""
   }
 
   private def getSql(node: Any, unwrapJson: Boolean): String = {

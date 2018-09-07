@@ -928,7 +928,7 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
         |RETURN n""".stripMargin)
   }
 
-  ignore("Filter out based on vertex label constraint on both vertices of GetEdges") {
+  test("Filter out based on vertex label constraint on both vertices of GetEdges") {
     compileAndRunQuery(
       """CREATE (:A)-[:E {id: 1}]->(:Exclude),
         |       (:A)-[:E {id: 2}]->(:Include),
@@ -939,7 +939,7 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
       """.stripMargin)
   }
 
-  ignore("Filter out based on vertex label constraint on one vertex of GetEdges") {
+  test("Filter out based on vertex label constraint on one vertex of GetEdges") {
     compileAndRunQuery(
       """CREATE (:A)-[:E {id: 1}]->(:Exclude),
         |       (:A)-[:E {id: 2}]->(:Include),
