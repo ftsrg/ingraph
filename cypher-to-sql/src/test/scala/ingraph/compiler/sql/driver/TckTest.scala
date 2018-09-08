@@ -10,6 +10,7 @@ class TckTest extends FunSuite with TckTestRunner {
     // Local
     "Return vertices and edges with integer properties",
     "Return vertices and edges",
+    "Unnamed columns",
 
     // MatchAcceptance
     "Cope with shadowed variables",
@@ -55,13 +56,16 @@ class TckTest extends FunSuite with TckTestRunner {
     "Returning a node property value",
     "Returning a relationship property value",
     "Returning bound nodes that are not part of the pattern",
+    "Returning label predicate expression",
     "Returning multiple node property values",
     "Simple node property predicate",
     "Simple variable length pattern",
     "Three bound nodes pointing to the same node with extra connections",
     "Three bound nodes pointing to the same node",
     "Two bound nodes pointing to the same node",
+    "Variable length pattern with label predicate on both sides",
     "Zero-length variable length pattern in the middle of the pattern",
+    "ORDER BY with LIMIT",
 
     // placeholder
     ""

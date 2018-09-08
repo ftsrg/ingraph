@@ -35,3 +35,19 @@ Feature: Local
       | a                        | r                     | b         |
       | (:LabelA:Label1 {id: 1}) | [:KNOWS {name: 'ab'}] | ({id: 2}) |
     And no side effects
+
+  Scenario: Unnamed columns
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Label {id: 42})
+      """
+    When executing query:
+      """
+      MATCH (n)
+      RETURN n, (n :Label), n. /**/ id, count(n)
+      """
+    Then the result should be:
+      | n                 | (n :Label) | n. /**/ id | count(n) |
+      | (:Label {id: 42}) | true       | 42         | 1        |
+    And no side effects

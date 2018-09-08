@@ -328,6 +328,9 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
         case FunctionInvocation(Function.NODE_HAS_LABELS, (vertexColumn: VertexAttribute) :: (vertexLabelSet: VertexLabelSet) :: Nil, false) => {
           getVertexLabelSqlCondition(vertexLabelSet, getQuotedColumnName(vertexColumn)).get
         }
+        case FunctionInvocation(functor@Function.COUNT_ALL, Nil, false) => {
+          functor.getPrettyName
+        }
         case node: FunctionInvocation => {
           val functionName = node.functor match {
             case Function.COLLECT => "array_agg"
