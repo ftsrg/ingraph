@@ -2,6 +2,7 @@ package ingraph.compiler.cypher2gplan.util
 
 
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 /**
@@ -23,4 +24,17 @@ object GrammarUtil {
 			case _ => false
 		}
 	}
+
+  implicit class EObjectExtensions(val obj: EObject) extends AnyVal {
+    def parsedText: String = {
+      val node = NodeModelUtils.findActualNodeFor(obj)
+
+      // not using INode.getText(), because that includes hidden tokens too
+      val beginIndex = node.getOffset
+      val endIndex = node.getEndOffset
+      val rootText = node.getRootNode.getText
+
+      rootText.substring(beginIndex, endIndex)
+    }
+  }
 }
