@@ -2,6 +2,7 @@ package ingraph.sandbox
 
 import ingraph.compiler.test.{CompilerTest, CompilerTestConfig}
 import ingraph.model.expr
+import ingraph.model.fplan.{AllDifferent, GetVertices, Production, Projection}
 import ingraph.model.gplan
 
 class RandomCompilationTest extends CompilerTest {
@@ -15,6 +16,12 @@ class RandomCompilationTest extends CompilerTest {
     , printNPlan = true
     , printFPlan = true
   )
+
+  test("Random test for label check") {
+    val stages = compile(
+      """MATCH (te:TrackElement)
+        |RETURN te:Segment""".stripMargin)
+  }
 
   test("Random test from cypher string") {
     compile(
@@ -359,6 +366,20 @@ class RandomCompilationTest extends CompilerTest {
     compile(
       """MATCH (n)
         |RETURN n.languages[2..5] AS someLanguages
+        |""".stripMargin)
+  }
+
+  test("should compile index range expression missing lower bound") {
+    compile(
+      """MATCH (n)
+        |RETURN n.languages[..5] AS someLanguages
+        |""".stripMargin)
+  }
+
+  test("should compile index range expression missing upper bound") {
+    compile(
+      """MATCH (n)
+        |RETURN n.languages[2..] AS someLanguages
         |""".stripMargin)
   }
 

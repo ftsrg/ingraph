@@ -23,7 +23,7 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
     null
   ).filter(_ != null).foreach(
     t => test(s"${t.name}-size-${t.size}") {
-      val querySpec = TrainbenchmarkUtils.readQueryFromReources(t.name)
+      val querySpec = TrainbenchmarkUtils.readQueryFromResources(t.name)
       assert(TrainbenchmarkUtils.readModelAndGetResults(querySpec, t.size).size == t.expectedResultSize)
     }
   )

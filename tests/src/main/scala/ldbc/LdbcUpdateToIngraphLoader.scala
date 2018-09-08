@@ -37,17 +37,18 @@ class LdbcUpdateToIngraphLoader(val indexer: Indexer, val csvDir: String) {
       up match {
         case up: Update1AddPerson          => update(up)
         case up: Update2_3AddMessageLike   => update(up)
-        case up: Update4AddForum           => update(up)
-        case up: Update5AddForumMembership => update(up)
-        case up: Update6AddPost            => update(up)
-        case up: Update7AddComment         => update(up)
-        case up: Update8AddFriendship      => update(up)
+//        case up: Update4AddForum           => update(up)
+//        case up: Update5AddForumMembership => update(up)
+//        case up: Update6AddPost            => update(up)
+//        case up: Update7AddComment         => update(up)
+//        case up: Update8AddFriendship      => update(up)
       }
     }
   }
 
   def update(person: Update1AddPerson): Unit = {
-    val v = new CsvVertex(person.personId, Set("Person").asJava,
+    val v = new CsvVertex(person.personId,
+      Set("Person").asJava,
       Map("firstName" -> person.personFirstName,
         "lastName" -> person.personLastName,
         "gender" -> person.gender,
@@ -59,12 +60,12 @@ class LdbcUpdateToIngraphLoader(val indexer: Indexer, val csvDir: String) {
         "email" -> person.emails
       ).asJava
     )
-    val ili = new CsvEdge(indexer.newId(), "IS_LOCATED_IN", person.personId, "Person", person.cityId, "Place")
-    indexer.addVertex(v)
-    indexer.addEdge(ili)
+    val ili = new CsvEdge(person.personId, indexer.newId(),  person.cityId)
+    indexer.addVertex(v, Seq())
+    indexer.addEdge(ili, "Person", "IS_LOCATED_IN", "Place")
     for (tag <- person.tagIds) {
-      val hi = new CsvEdge(indexer.newId(), "HAS_INTEREST", person.personId, "Person", tag, "Tag")
-      indexer.addEdge(hi)
+      val hi = new CsvEdge(indexer.newId(), person.personId, tag)
+      indexer.addEdge(hi, "Person", "HAS_INTEREST", "Tag")
     }
     //    These are nulls in the data
     //    for (org <- person.studyAt)
@@ -74,81 +75,79 @@ class LdbcUpdateToIngraphLoader(val indexer: Indexer, val csvDir: String) {
   }
 
   def update(like: Update2_3AddMessageLike): Unit = {
-    indexer.addEdge(new CsvEdge(
-      indexer.newId(), "LIKES",
-      like.personId, "Person",
-      like.postId, "Message",
-      Map("creationDate" -> like.creationDate).asJava
-    ))
+    indexer.addEdge(
+      new CsvEdge(like.personId, indexer.newId(), like.postId, Map("creationDate" -> like.creationDate).asJava),
+      "Person", "LIKES", "Message"
+    )
   }
 
-  def update(forum: Update4AddForum): Unit = {
-    indexer.addVertex(new CsvVertex(forum.forumId, Set("Forum").asJava, Map("creationDate" -> forum.creationDate).asJava))
-    indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_MODERATOR", forum.forumId, "Forum", forum.moderatorPersonId, "Person"))
-    for (tag <- forum.tagIds) {
-      indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_TAG", forum.forumId, "Forum", tag, "Tag"))
-    }
-  }
-
-  def update(member: Update5AddForumMembership): Unit = {
-    indexer.addEdge(new CsvEdge(
-      indexer.newId(), "HAS_MEMBER",
-      member.personId, "Person",
-      member.forumId, "Forum",
-      Map("joinDate" -> member.joinDate).asJava
-    ))
-  }
-
-  def update(post: Update6AddPost): Unit = {
-    indexer.addVertex(new CsvVertex(post.postId, Set("Post").asJava,
-      Map("imageFile" -> post.imageFile,
-        "creationDate" -> post.creationDate,
-        "locationIp" -> post.locationIp,
-        "browserUsed" -> post.browserUsed,
-        "language" -> post.language,
-        "content" -> post.content,
-        "length" -> post.length).asJava))
-    indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_CREATOR",   post.postId,  "Message", post.authorPersonId, "Person" ))
-    indexer.addEdge(new CsvEdge(indexer.newId(), "CONTAINER_OF",  post.forumId, "Forum",   post.postId,         "Message"))
-    indexer.addEdge(new CsvEdge(indexer.newId(), "IS_LOCATED_IN", post.postId,  "Message", post.countryId,      "Country"))
-    for (tag <- post.tagIds) {
-      indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_TAG", post.postId, "", tag, "Tag"))
-    }
-  }
-
-  def update(comment: Update7AddComment): Unit = {
-    indexer.addVertex(new CsvVertex(comment.commentId, Set("Comment").asJava,
-      Map("creationDate" -> comment.creationDate,
-        "locationIp" -> comment.locationIp,
-        "browserUsed" -> comment.browserUsed,
-        "content" -> comment.content,
-        "length" -> comment.length).asJava))
-    indexer.addEdge(new CsvEdge(
-      indexer.newId(), "HAS_CREATOR",
-      comment.commentId, "Message",
-      comment.authorPersonId, "Person"
-    ))
-    indexer.addEdge(new CsvEdge(
-      indexer.newId(), "REPLY_OF",
-      comment.commentId, "Comment",
-      Math.max(comment.replyToCommentId, comment.replyToPostId), "Message"
-    ))
-    for (tag <- comment.tagIds) {
-      indexer.addEdge(new CsvEdge(
-        indexer.newId(), "HAS_TAG",
-        comment.commentId, "Message",
-        tag, "Tag"
-      ))
-    }
-  }
-
-  def update(friend: Update8AddFriendship): Unit = {
-    indexer.addEdge(new CsvEdge(
-      indexer.newId(), "KNOWS",
-      friend.person1Id, "Person",
-      friend.person2Id, "Person",
-      Map("creationDate" -> friend.creationDate).asJava
-    ))
-  }
+//  def update(forum: Update4AddForum): Unit = {
+//    indexer.addVertex(new CsvVertex(forum.forumId, Set("Forum").asJava, Map("creationDate" -> forum.creationDate).asJava))
+//    indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_MODERATOR", forum.forumId, "Forum", forum.moderatorPersonId, "Person"))
+//    for (tag <- forum.tagIds) {
+//      indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_TAG", forum.forumId, "Forum", tag, "Tag"))
+//    }
+//  }
+//
+//  def update(member: Update5AddForumMembership): Unit = {
+//    indexer.addEdge(new CsvEdge(
+//      indexer.newId(), "HAS_MEMBER",
+//      member.personId, "Person",
+//      member.forumId, "Forum",
+//      Map("joinDate" -> member.joinDate).asJava
+//    ))
+//  }
+//
+//  def update(post: Update6AddPost): Unit = {
+//    indexer.addVertex(new CsvVertex(post.postId, Set("Post").asJava,
+//      Map("imageFile" -> post.imageFile,
+//        "creationDate" -> post.creationDate,
+//        "locationIp" -> post.locationIp,
+//        "browserUsed" -> post.browserUsed,
+//        "language" -> post.language,
+//        "content" -> post.content,
+//        "length" -> post.length).asJava))
+//    indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_CREATOR",   post.postId,  "Message", post.authorPersonId, "Person" ))
+//    indexer.addEdge(new CsvEdge(indexer.newId(), "CONTAINER_OF",  post.forumId, "Forum",   post.postId,         "Message"))
+//    indexer.addEdge(new CsvEdge(indexer.newId(), "IS_LOCATED_IN", post.postId,  "Message", post.countryId,      "Country"))
+//    for (tag <- post.tagIds) {
+//      indexer.addEdge(new CsvEdge(indexer.newId(), "HAS_TAG", post.postId, "", tag, "Tag"))
+//    }
+//  }
+//
+//  def update(comment: Update7AddComment): Unit = {
+//    indexer.addVertex(new CsvVertex(comment.commentId, Set("Comment").asJava,
+//      Map("creationDate" -> comment.creationDate,
+//        "locationIp" -> comment.locationIp,
+//        "browserUsed" -> comment.browserUsed,
+//        "content" -> comment.content,
+//        "length" -> comment.length).asJava))
+//    indexer.addEdge(new CsvEdge(
+//      indexer.newId(), "HAS_CREATOR",
+//      comment.commentId, "Message",
+//      comment.authorPersonId, "Person"
+//    ))
+//    indexer.addEdge(new CsvEdge(
+//      indexer.newId(), "REPLY_OF",
+//      comment.commentId, "Comment",
+//      Math.max(comment.replyToCommentId, comment.replyToPostId), "Message"
+//    ))
+//    for (tag <- comment.tagIds) {
+//      indexer.addEdge(new CsvEdge(
+//        indexer.newId(), "HAS_TAG",
+//        comment.commentId, "Message",
+//        tag, "Tag"
+//      ))
+//    }
+//  }
+//
+//  def update(friend: Update8AddFriendship): Unit = {
+//    indexer.addEdge(new CsvEdge(
+//      indexer.newId(), "KNOWS",
+//      friend.person1Id, "Person",
+//      friend.person2Id, "Person",
+//      Map("creationDate" -> friend.creationDate).asJava
+//    ))
+//  }
 
 }

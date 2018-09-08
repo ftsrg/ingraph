@@ -9,6 +9,7 @@ import ingraph.model.{expr, gplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
+import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.mutable.ListBuffer
@@ -31,11 +32,19 @@ object AttributeBuilder {
           case Some(ev) => (ev.getName, false)
           case None => (generateUniqueName, true)
         }
-        val els = BuilderUtil.parseToEdgeLabelSet(elDetail.getTypes)
+        val els = BuilderUtil.parseToEdgeLabelSet(elDetail.getRelTypeNames)
         val props = LiteralBuilder.buildProperties(elDetail.getProperties)
 
         Option(elDetail.getRange) match {
-          case Some(r) => expr.EdgeListAttribute(name, els, props, isAnonymous = isAnon, StringUtil.toOptionInt(r.getLower), StringUtil.toOptionInt(r.getUpper))
+          case Some(r) => {
+            val minHops = StringUtil.toOptionInt(r.getLower)
+            val maxHops = if (r.isVariableLength) {
+              StringUtil.toOptionInt(r.getUpper)
+            } else {
+              minHops
+            }
+            expr.EdgeListAttribute(name, els, props, isAnonymous = isAnon, minHops, maxHops)
+          }
           case None => expr.EdgeAttribute(name, els, props, isAnonymous = isAnon)
         }
       }
@@ -43,7 +52,7 @@ object AttributeBuilder {
     }
   }
 
-  def buildAttribute(e: oc.ExpressionPropertyLookup): UnresolvedAttribute = {
+  def buildAttribute(e: oc.PropertyLookupExpression): UnresolvedAttribute = {
     UnresolvedAttribute(Seq(e.getLeft.asInstanceOf[oc.VariableRef].getVariableRef.getName, e.getPropertyLookups.get(0).getPropertyKeyName))
   }
 

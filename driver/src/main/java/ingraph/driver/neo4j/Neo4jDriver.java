@@ -15,7 +15,7 @@ public class Neo4jDriver extends CypherDriver {
 	final Driver driver;
 	final GraphDatabaseService graphDb;
 
-	public Neo4jDriver(final String uri, final AuthToken authToken) {
+	public Neo4jDriver() {
 		GraphDatabaseSettings.BoltConnector bolt = GraphDatabaseSettings.boltConnector("0");
 
 		String host = "localhost";
