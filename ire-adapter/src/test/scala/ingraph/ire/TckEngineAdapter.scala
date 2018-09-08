@@ -32,6 +32,7 @@ class TckEngineAdapter extends Graph {
 
     value match {
       case null => CypherNull
+      case value: java.lang.Boolean => CypherBoolean(value)
       case value: String => CypherString(value)
       case value: Long if !isVertex => CypherInteger(value)
       case value: Long if isVertex => {

@@ -39,6 +39,7 @@ class TckEngineExtendedTest extends FunSuite {
 
     // local tests
     "Get integer property",
+    "Unnamed columns",
 
     // placeholder
     ""
