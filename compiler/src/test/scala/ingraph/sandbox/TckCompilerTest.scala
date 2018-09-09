@@ -2,8 +2,8 @@ package ingraph.sandbox
 
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr.{IndexLookupExpression, IndexRangeExpression}
-import ingraph.model.fplan.{FNode, LeafFNode, Selection, TransitiveJoin}
-import ingraph.model.{fplan, gplan, nplan}
+import ingraph.model.fplan._
+import ingraph.model.gplan
 
 class TckCompilerTest extends CompilerTest {
 
@@ -212,6 +212,17 @@ class TckCompilerTest extends CompilerTest {
       """.stripMargin
     )
     findFirstByType(stages.fplan, classOf[Selection]).conditionTuple
+  }
+
+  test("Unnamed columns") {
+    val stages = compile(
+      """MATCH (n)
+        |RETURN n, (n :Label), n. /**/ id, count(n)
+      """.stripMargin
+    )
+    val expectedColumnNames = Array("n", "(n :Label)", "n. /**/ id", "count(n)")
+    val actualColumnNames = stages.fplan.asInstanceOf[Production].outputNames.toArray
+    assert(expectedColumnNames sameElements actualColumnNames)
   }
 
   ignore("Placeholder for debugging plans") {
