@@ -341,9 +341,6 @@ object GPlanResolver {
             val newSortOp = sortResolveHelper(so, afterDistinct)
             // find resolved names that the sort involves but the projection hides
             val additionalSortItems: TSortOrder = newSortOp.order.flatMap( so => so.child match {
-              case PropertyAttribute(_, elementAttribute, _) => p.projectList.foldLeft[ Option[SortOrder] ]( Some(SortOrder(elementAttribute, cExpr.Ascending)) )(
-                (acc, ri) => if (ri.resolvedName == elementAttribute.resolvedName) None else acc
-              )
               case rn: ResolvableName => p.projectList.foldLeft[ Option[SortOrder] ]( Some(so) )(
                 (acc, ri) => if (ri.resolvedName == rn.resolvedName) None else acc
               )
@@ -365,7 +362,7 @@ object GPlanResolver {
                     case x => throw new UnexpectedTypeException(x, "we were filtering for resolvedNames in sort list")
                   }
                 }),
-                  afterDistinct.child
+                  p.child // note: we checked above not to have distinct
                 )
               )
 

@@ -449,7 +449,7 @@ class RandomCompilationTest extends CompilerTest {
       .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("y#0")))
   }
 
-  test("should retain base attribute for ORDER BY properties in projection") {
+  test("should retain the property itself for ORDER BY properties in projection") {
     val stages = compile(
       """MATCH (a:A)-[r:REL]->(x:B)
         |RETURN a
@@ -458,8 +458,31 @@ class RandomCompilationTest extends CompilerTest {
         |""".stripMargin)
 
     assert(stages.gplan.find(p => p.isInstanceOf[gplan.Sort] ).get.asInstanceOf[gplan.Sort].child.asInstanceOf[gplan.Projection]
-      .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("x#0")))
+      .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("x$foo#0")))
   }
+
+  test("should not introduce additional projection for ORDER BY on attribute already present in the projection") {
+    val stages = compile(
+      """MATCH   (tag:Tag)
+        |WITH     tag.name AS tagName
+        |RETURN   tagName
+        |ORDER BY tagName ASC
+        |""".stripMargin)
+
+    // get the gplan tree and cast to the desired types
+    val productionOp = stages.gplan.asInstanceOf[gplan.Production]
+    val sortOp = productionOp.child.asInstanceOf[gplan.Sort]
+    val returnProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
+    val withProjectionOp = returnProjectionOp.child.asInstanceOf[gplan.Projection]
+    val alldifferentOp = withProjectionOp.child.asInstanceOf[gplan.AllDifferent]
+    assert( Option(alldifferentOp).isDefined )
+    // last projection and the sorting has a single item...
+    assert( returnProjectionOp.projectList.length == 1)
+    assert( sortOp.order.length == 1)
+    // ... and they are the same
+    assert( returnProjectionOp.projectList(0).child.asInstanceOf[expr.ResolvableName].resolvedName == sortOp.order(0).child.asInstanceOf[expr.ResolvableName].resolvedName)
+  }
+
 }
 
 /** Random compiler tests that must stop after GPlan compilation.
