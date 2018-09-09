@@ -45,7 +45,7 @@ class TckScenarioSet(selectedFeatures: Set[String] = Set(),
       .filterNot(sc => ignoredScenarios.contains(sc.name))
 
   val missingScenarios: Option[Set[String]] =
-    if (allScenariosInSelectedFeatures.isEmpty)
+    if (selectedScenarios.isEmpty)
       None
     else
       Some(selectedScenarios -- allScenariosInSelectedFeatures.map(_.name))
