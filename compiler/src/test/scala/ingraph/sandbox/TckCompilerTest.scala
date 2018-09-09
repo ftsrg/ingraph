@@ -217,12 +217,12 @@ class TckCompilerTest extends CompilerTest {
   test("Unnamed columns") {
     val stages = compile(
       """MATCH (n)
-        |RETURN n, (n :Label), n. /**/ id, count(n)
+        |RETURN `n`, (n :Label), n. /**/ `id`, count(n), 1 + 1, $`param`
       """.stripMargin
     )
-    val expectedColumnNames = Array("n", "(n :Label)", "n. /**/ id", "count(n)")
-    val actualColumnNames = stages.fplan.asInstanceOf[Production].outputNames.toArray
-    assert(expectedColumnNames sameElements actualColumnNames)
+    val expectedColumnNames = Seq("n", "(n :Label)", "n. /**/ `id`", "count(n)", "1 + 1", "$`param`")
+    val actualColumnNames = stages.fplan.asInstanceOf[Production].outputNames.toSeq
+    assert(expectedColumnNames == actualColumnNames)
   }
 
   ignore("Placeholder for debugging plans") {
