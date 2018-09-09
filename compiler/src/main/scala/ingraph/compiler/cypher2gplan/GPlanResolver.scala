@@ -207,7 +207,7 @@ object GPlanResolver {
         case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name,
           // see "scoped name resolver shorthand" above
           elementAttribute.transform(expressionNameResolver(snr)).asInstanceOf[expr.ElementAttribute],
-          snr.resolve(s"${elementAttribute.name}$$${name}", rn))
+          snr.resolve(s"${elementAttribute.name}.${name}", rn))
         case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, snr.resolve(name, rn))
       }
     case UnresolvedAttribute(nameParts) => nameParts.length match {
@@ -240,7 +240,7 @@ object GPlanResolver {
           elementAttribute match {
             // if nameParts.length == 2, base should always be an ElementAttribute
             case ea: expr.ElementAttribute =>
-              expr.PropertyAttribute(propertyName, ea, snr.resolve(s"${ea.name}$$${propertyName}",
+              expr.PropertyAttribute(propertyName, ea, snr.resolve(s"${ea.name}.${propertyName}",
                 expr.PropertyAttribute(propertyName, ea)) // this is a dirty hack to tell the resolver that we are about to resolve a PropertyAttribute instance
               )
             case x => throw new UnexpectedTypeException(x, "basis position of property dereferencing")

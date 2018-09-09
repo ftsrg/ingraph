@@ -5,6 +5,7 @@ import ingraph.compiler.cypher2gplan.util.GrammarUtil._
 import ingraph.model.{expr, gplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedStar
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
+import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -49,9 +50,10 @@ object ReturnBuilder {
     for (returnItem <- returnItems.getItems.asScala) {
       val e = ExpressionBuilder.buildExpressionNoJoinAllowed(returnItem.getExpression)
 
-      // use parsed text from query as alias if no name is available in a RETURN clause
+      // use parsed text from query as alias if no column name is available in a RETURN clause
+      // for VariableRef there's no need to override the name of the variable
       val parsedText =
-        if (isReturnClause) Some(returnItem.parsedText)
+        if (isReturnClause && !returnItem.getExpression.isInstanceOf[VariableRef]) Some(returnItem.parsedText)
         else None
       val alias = Option(returnItem.getAlias)
         .map(_.getName)

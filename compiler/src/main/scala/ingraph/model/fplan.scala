@@ -64,7 +64,7 @@ case class Production(nnode: nplan.Production,
                       child: FNode
                      ) extends UnaryFNode with TProduction {
   override def output = nnode.output
-  def outputNames: Iterable[String] = output.map(_.resolvedName.get.resolvedName.replaceAll("#\\d+$", "").replace('$', '.'))
+  def outputNames: Iterable[String] = output.map(_.resolvedName.get.resolvedName.replaceAll("#\\d+$", ""))
 }
 
 case class Projection(requiredProperties: Seq[ResolvableName],
