@@ -1,12 +1,15 @@
 package ingraph.compiler.sql.driver
 
-import ingraph.tck.TckTestRunner
+import ingraph.tck.{TckScenarioSet, TckTestRunner}
 import org.scalatest.FunSuite
 
 class TckTest extends FunSuite with TckTestRunner {
+  runTckTests(() => new TckAdapter, TckTest.scenarioSet)
+}
 
+object TckTest {
   val selectedFeatures = Set("MatchAcceptance", "MatchAcceptance2", "Local")
-  val selectedScenarios = Set(
+  val selectedScenarios: Set[String] = Set(
     // Local
     "Return vertices and edges with integer properties",
     "Return vertices and edges",
@@ -71,5 +74,5 @@ class TckTest extends FunSuite with TckTestRunner {
     ""
   ).filter(!_.isEmpty)
 
-  runTckTests(() => new TckAdapter, selectedFeatures, ignoredScenarios = Set(), selectedScenarios = selectedScenarios)
+  val scenarioSet = new TckScenarioSet(selectedFeatures, ignoredScenarios = Set(), selectedScenarios = selectedScenarios)
 }

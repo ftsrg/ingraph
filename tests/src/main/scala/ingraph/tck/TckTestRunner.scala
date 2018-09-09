@@ -6,14 +6,12 @@ import org.opencypher.tools.tck.api.{CypherTCK, Feature, Graph, Scenario}
 import org.scalactic.source
 import org.scalatest.FunSuiteLike
 
-trait TckTestRunner {
-  this: FunSuiteLike =>
+class TckScenarioSet(selectedFeatures: Set[String] = Set(),
+                     ignoredScenarios: Set[String] = Set(),
+                     selectedScenarios: Set[String] = Set()) {
+  val localFeaturePath = "/local-features"
 
-  val tckFeatures: Seq[Feature] = CypherTCK.parseClasspathFeatures("/features")
-
-  def localFeaturePath = "/local-features"
-
-  def localFeatures: Seq[Feature] = {
+  val localFeatures: Seq[Feature] = {
     Option(getClass.getResource(localFeaturePath))
       .map(url => new File(url.getFile))
       .flatMap(dir => if (dir.exists()) Some(dir) else None)
@@ -21,41 +19,71 @@ trait TckTestRunner {
       .getOrElse(Seq())
   }
 
-  def scenarios: Seq[Scenario] = (localFeatures ++ tckFeatures)
+  def allScenarios: Seq[Scenario] = (TckScenarioSet.tckFeatures ++ localFeatures)
     .flatMap(_.scenarios)
     .groupBy(scenario => scenario.featureName -> scenario.name)
     .map(_._2.head)
     .toSeq
 
   // scenarios have globally unique names
-  assert(scenarios.groupBy(_.name).forall(_._2.size == 1))
+  assert(allScenarios.groupBy(_.name).forall(_._2.size == 1))
+
+  val allScenariosInSelectedFeatures: Seq[Scenario] =
+    if (selectedFeatures.isEmpty)
+      allScenarios
+    else
+      allScenarios
+        .filter(sc => selectedFeatures.contains(sc.featureName))
+
+  val scenarios: Seq[Scenario] =
+    (if (selectedScenarios.isEmpty)
+      allScenariosInSelectedFeatures
+    else
+      allScenariosInSelectedFeatures
+        .filter(sc => selectedScenarios.contains(sc.name))
+      )
+      .filterNot(sc => ignoredScenarios.contains(sc.name))
+
+  val missingScenarios: Option[Set[String]] =
+    if (allScenariosInSelectedFeatures.isEmpty)
+      None
+    else
+      Some(selectedScenarios -- allScenariosInSelectedFeatures.map(_.name))
+}
+
+object TckScenarioSet {
+  val tckFeatures: Seq[Feature] = CypherTCK.parseClasspathFeatures("/features")
+
+  val defaultSet: TckScenarioSet = new TckScenarioSet
+}
+
+trait TckTestRunner {
+  this: FunSuiteLike =>
 
   def runTckTests(tckAdapterProvider: () => Graph,
                   selectedFeatures: Set[String] = Set(),
                   ignoredScenarios: Set[String] = Set(),
                   selectedScenarios: Set[String] = Set())
                  (implicit pos: source.Position): Unit = {
-    val scenariosInSelectedFeatures =
-      if (selectedFeatures.isEmpty)
-        scenarios
-      else
-        scenarios
-          .filter(sc => selectedFeatures.contains(sc.featureName))
+    val scenarioSet = new TckScenarioSet(selectedFeatures, ignoredScenarios, selectedScenarios)
+    runTckTests(tckAdapterProvider, scenarioSet)(pos)
+  }
 
-    if (scenariosInSelectedFeatures.nonEmpty) {
-      val nonExistingFeatures = selectedScenarios --
-        scenariosInSelectedFeatures.map(_.name)
+  def runTckTests(tckAdapterProvider: () => Graph,
+                  scenarioSet: TckScenarioSet)
+                 (implicit pos: source.Position): Unit = {
 
-      test("All selected features are found") {
-        assert(nonExistingFeatures.isEmpty)
+    scenarioSet.missingScenarios.fold(/* no scenario is selected */) { missingScenarioNames =>
+      test("All selected scenarios are found") {
+        assert(missingScenarioNames.isEmpty)
       }(pos)
     }
 
-    scenariosInSelectedFeatures
+    scenarioSet.allScenariosInSelectedFeatures
       .foreach(scenario => {
         val testName = scenario.toString
 
-        if ((selectedScenarios.isEmpty || selectedScenarios.contains(scenario.name)) && !ignoredScenarios.contains(scenario.name))
+        if (scenarioSet.scenarios.contains(scenario))
           test(testName) {
             println(s"vvvvvvvvvvvvvvvv $testName vvvvvvvvvvvvvvvv")
             println()
