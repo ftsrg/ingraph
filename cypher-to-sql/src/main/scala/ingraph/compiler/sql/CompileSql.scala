@@ -4,9 +4,9 @@ import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.driver.ValueJsonConversion
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
-import ingraph.model.fplan
+import ingraph.model.fplan.FNode
 import ingraph.model.misc.Function
-import ingraph.model.nplan
+import ingraph.model.{fplan, nplan}
 import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, Literal, Not}
 import org.apache.spark.sql.types.{LongType, StringType}
 import org.neo4j.driver.v1.{Value, Values}
@@ -103,212 +103,16 @@ object CompileSql {
        |$vertexLabelConstraintPart"""
   }
 
+  def getSql(node: FNode, options: CompilerOptions): String = {
+    val sqlString = SqlNode(node).sql
+
+    s"""-- ${node.getClass.getSimpleName}
+       |$sqlString""".stripMargin
+  }
+
   def getSql(node: Any, options: CompilerOptions): String = {
     val sqlString =
       node match {
-        case node: fplan.GetVertices => {
-          val columns =
-            (
-              s"""vertex_id AS ${getQuotedColumnName(node.nnode.v)}""" +:
-                node.requiredProperties
-                  // skip NodeHasLabelsAttribute since it has no resolvedName to use as column name
-                  // TODO use NodeHasLabelsAttribute
-                  .filterNot(_.isInstanceOf[NodeHasLabelsAttribute])
-                  .map(prop =>s"""(SELECT value FROM vertex_property WHERE parent = vertex_id AND key = ${getSingleQuotedString(prop.name)}) AS ${getQuotedColumnName(prop)}"""))
-              .mkString(",\n")
-
-          val labelConstraint = getVertexLabelSqlCondition(node.nnode.v.labels, "vertex_id")
-            .map("WHERE " + _)
-            .getOrElse("")
-
-          i"""SELECT
-             |  $columns
-             |FROM vertex
-             |$labelConstraint"""
-        }
-        case node: fplan.TransitiveJoin => {
-          val leftNode = node.left
-          val edgesNode = node.right
-
-          val leftSql = getSql(leftNode, options)
-          val edgesSql = getGetEdgesSql(edgesNode, Some("current_from"), Some("edge_id"))
-
-          val edgeListAttribute = node.nnode.edgeList
-          val edgeListName = getQuotedColumnName(edgesNode.nnode.edge)
-          val edgesFromVertexName = getQuotedColumnName(edgesNode.nnode.src)
-          val edgesToVertexName = getQuotedColumnName(edgesNode.nnode.trg)
-          val leftNodeColumnNames = leftNode.flatSchema.map(getQuotedColumnName).mkString(", ")
-          val joinNodeColumnNames = node.flatSchema.map(getQuotedColumnName).mkString(",\n")
-
-          val lowerBound = edgeListAttribute.minHops.getOrElse(1)
-          val lowerBoundConstraint =
-            if (lowerBound != 0)
-              s"WHERE array_length($edgeListName) >= $lowerBound"
-            else
-              ""
-
-          val upperBoundConstraint =
-            if (edgeListAttribute.maxHops.isDefined)
-              s"AND array_length($edgeListName) < ${edgeListAttribute.maxHops.get}"
-            else
-              ""
-
-          i"""WITH RECURSIVE recursive_table AS (
-             |  (
-             |    WITH left_query AS (
-             |      $leftSql
-             |    )
-             |    SELECT
-             |      *,
-             |      ARRAY [] :: integer [] AS $edgeListName,
-             |      $edgesFromVertexName AS next_from,
-             |      $edgesFromVertexName AS $edgesToVertexName
-             |    FROM left_query
-             |  )
-             |  UNION ALL
-             |  SELECT
-             |    $leftNodeColumnNames,
-             |    ($edgeListName|| edge_id) AS $edgeListName,
-             |    edges.$edgesToVertexName AS nextFrom,
-             |    edges.$edgesToVertexName
-             |  FROM
-             |    ( $edgesSql
-             |    ) edges
-             |    INNER JOIN recursive_table
-             |      ON edge_id <> ALL ($edgeListName) -- edge uniqueness
-             |         AND next_from = current_from
-             |         $upperBoundConstraint
-             |)
-             |SELECT
-             |  $joinNodeColumnNames
-             |FROM recursive_table
-             |$lowerBoundConstraint"""
-        }
-        // EquiJoinLike nodes except TransitiveJoin
-        case node: fplan.EquiJoinLike => {
-          val leftColumns = node.left.flatSchema.map(getQuotedColumnName)
-          val rightColumns = node.right.flatSchema.map(getQuotedColumnName)
-          // prefer columns from  the left query, because in left outer join the right ones may contain NULL
-          val resultColumns =
-            (leftColumns.map("left_query." + _) ++
-              (rightColumns.toSet -- leftColumns).map("right_query." + _))
-              .mkString(", ")
-
-          val columnConditions = node.commonAttributes
-            .map(getQuotedColumnName)
-            .map(name => s"left_query.$name = right_query.$name")
-          val joinConditions = node match {
-            case node: fplan.ThetaLeftOuterJoin => columnConditions :+ getSql(node.nnode.condition, options)
-            case _ => columnConditions
-          }
-
-          val joinConditionPart = if (joinConditions.isEmpty)
-            "ON TRUE"
-          else
-            i"ON ${joinConditions.mkString(" AND\n")}"
-
-          val joinType = node match {
-            case _: fplan.Join => "INNER"
-            case _: fplan.LeftOuterJoin => "LEFT OUTER"
-            case _: fplan.ThetaLeftOuterJoin => "LEFT OUTER"
-          }
-
-          getJoinSql(node, joinType, joinConditionPart, resultColumns, options)
-        }
-        case node: fplan.AntiJoin => {
-          val columnConditions = node.commonAttributes
-            .map(getQuotedColumnName)
-            .map(name => s"left_query.$name = right_query.$name")
-
-          val conditionPart = if (columnConditions.isEmpty)
-            "TRUE"
-          else
-            columnConditions.mkString(" AND\n")
-
-          i"""SELECT * FROM
-             |  ( ${getSql(node.left, options)}
-             |  ) left_query
-             |WHERE NOT EXISTS(
-             |  SELECT * FROM
-             |    ( ${getSql(node.right, options)}
-             |    ) right_query
-             |  WHERE $conditionPart
-             |  )"""
-        }
-        case node: fplan.Production => {
-          val renamePairs = node.output.zip(node.outputNames)
-            .map {
-              case (attribute, outputName) =>
-                convertAttributeAtProductionNode(attribute) -> getQuotedColumnName(outputName)
-            }
-          getProjectionSql(node, renamePairs, options)
-        }
-        case node: fplan.Projection => {
-          val renamePairs = node.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
-          getProjectionSql(node, renamePairs, options)
-        }
-        case node: fplan.Selection =>
-          val condition = getSql(node.nnode.condition, options)
-          i"""SELECT * FROM
-             |  (
-             |    ${getSql(node.child, options)}
-             |  ) subquery
-             |WHERE $condition"""
-        case node: fplan.GetEdges =>
-          getGetEdgesSql(node)
-        case node: fplan.AllDifferent => {
-          val childSql = getSql(node.child, options)
-          val edgeIdsArray = ("ARRAY[]::INTEGER[]" +: node.nnode.edges.map(getQuotedColumnName)).mkString(" || ")
-          // only more than 1 node must be checked for uniqueness (edge list can contain more edges)
-          val allDifferentNeeded = node.nnode.edges.size > 1 || node.nnode.edges.exists(_.isInstanceOf[EdgeListAttribute])
-
-          if (allDifferentNeeded)
-            i"""SELECT * FROM
-               |  (
-               |    $childSql
-               |  ) subquery
-               |  WHERE is_unique($edgeIdsArray)"""
-          else
-            s"""   -- noop
-               |$childSql""".stripMargin
-        }
-        case node: fplan.SortAndTop => {
-          val childSql = getSql(node.child, options)
-          val nnode = node.nnode
-
-          val orderByParts = nnode.order.map(order => getSql(order.child, options) + " " + order.direction.sql + " " + order.nullOrdering.sql)
-          val limitPart = nnode.limitExpr.map { case Literal(num: Long, _) => s"LIMIT $num" }.getOrElse("")
-          val offsetPart = nnode.skipExpr.map { case Literal(num: Long, _) => s"OFFSET $num" }.getOrElse("")
-
-          i"""SELECT * FROM
-             |  (
-             |    $childSql
-             |  ) subquery
-             |  ORDER BY ${orderByParts.mkString(", ")}
-             |  $limitPart
-             |  $offsetPart"""
-        }
-        case node: fplan.DuplicateElimination => {
-          val childSql = getSql(node.child, options)
-
-          i"""SELECT DISTINCT * FROM
-             |  (
-             |    $childSql
-             |  ) subquery"""
-        }
-        case node: fplan.Grouping => {
-          val renamePairs = node.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
-          val projectionSql = getProjectionSql(node, renamePairs, options)
-          val groupByColumns = (node.nnode.aggregationCriteria ++ node.requiredProperties).map(getSql(_, options))
-          val groupByPart = if (groupByColumns.isEmpty)
-            ""
-          else
-            "GROUP BY " + groupByColumns.mkString(", ")
-
-          i"""$projectionSql
-             |$groupByPart"""
-        }
-        case node: fplan.Dual => "SELECT"
         case node: ReturnItem => getSql(node.child, options)
         case FunctionInvocation(Function.NODE_HAS_LABELS, (vertexColumn: VertexAttribute) :: (vertexLabelSet: VertexLabelSet) :: Nil, false) => {
           getVertexLabelSqlCondition(vertexLabelSet, getQuotedColumnName(vertexColumn)).get
@@ -328,7 +132,6 @@ object CompileSql {
 
           functionName + "(" + distinctPart + parametersString + ")"
         }
-        case node: fplan.FNode => node.children.map(getSql(_, options)).mkString("\n")
         case node: BinaryOperator => {
           // convert Literals to JSON only if they are compared to JSON results
           val localUnwrapJson = node.isInstanceOf[BinaryComparison] &&
@@ -364,14 +167,9 @@ object CompileSql {
           val value = options.parameters(node.name)
           getSqlForLiteral(Literal(value), options)
         }
-        case _ => ""
       }
 
-    if (node.isInstanceOf[fplan.FNode])
-      s"""-- ${node.getClass.getSimpleName}
-         |$sqlString""".stripMargin
-    else
-      sqlString
+    sqlString
   }
 
   def convertAttributeAtProductionNode(attribute: ResolvableName): String = {
