@@ -50,11 +50,11 @@ object CompileSql {
     }
   }
 
-  def getProjectionSql(node: fplan.UnaryFNode, renamePairs: Traversable[(String, String)], options: CompilerOptions): String = {
+  def getProjectionSql(node: fplan.UnaryFNode, renamePairs: Traversable[(String, String)], childSql: String, options: CompilerOptions): String = {
     val columns = renamePairs.map(pair => s"""${pair._1} AS ${pair._2}""").mkString(", ")
     i"""SELECT $columns FROM
        |  (
-       |    ${getSql(node.child, options)}
+       |    $childSql
        |  ) subquery"""
   }
 
@@ -101,13 +101,6 @@ object CompileSql {
        |    $undirectedSelectPart
        |  ) subquery
        |$vertexLabelConstraintPart"""
-  }
-
-  def getSql(node: FNode, options: CompilerOptions): String = {
-    val sqlString = SqlNode(node).sql
-
-    s"""-- ${node.getClass.getSimpleName}
-       |$sqlString""".stripMargin
   }
 
   def getSql(node: Any, options: CompilerOptions): String = {
@@ -221,26 +214,15 @@ object CompileSql {
            |           FROM label
            |           WHERE parent = $columnName)""".stripMargin)
   }
-
-  def getJoinSql(node: fplan.EquiJoinLike, joinType: String, conditionPart: String, resultColumns: String, options: CompilerOptions) = {
-    i"""SELECT $resultColumns FROM
-       |  ( ${getSql(node.left, options)}
-       |  ) left_query
-       |  $joinType JOIN
-       |  ( ${getSql(node.right, options)}
-       |  ) right_query
-       |$conditionPart"""
-  }
 }
 
 class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map()) extends CompilerTest {
 
-  import CompileSql._
-
   val stages = compile(cypherQuery)
 
   val fplan = stages.fplan
-  val sql = getSql(fplan, CompilerOptions())
+  val sqlNode: SqlNode = SqlNode(fplan)
+  val sql = sqlNode.sql
 
   def run(): String = {
     println(sql)

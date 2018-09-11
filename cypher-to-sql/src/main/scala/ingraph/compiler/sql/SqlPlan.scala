@@ -52,16 +52,18 @@ trait WithFNodeOrigin[+T <: FNode] {
 abstract class LeafSqlNode[+T <: LeafFNode] extends GenericLeafNode[SqlNode] with SqlNode with WithFNodeOrigin[T] {}
 
 abstract class UnarySqlNode[+T <: UnaryFNode] extends GenericUnaryNode[SqlNode] with SqlNode with WithFNodeOrigin[T] {
-  override val child: SqlNode with WithFNodeOrigin[_] = SqlNode(fNode.child)
+  override val child: SqlNode with WithFNodeOrigin[FNode] = SqlNode(fNode.child)
 
   val childSql = child.sql
 }
 
 abstract class BinarySqlNode[+T <: BinaryFNode] extends GenericBinaryNode[SqlNode] with SqlNode with WithFNodeOrigin[T] {
   override def left: SqlNode with WithFNodeOrigin[FNode] = SqlNode(fNode.left)
+
   override def right: SqlNode with WithFNodeOrigin[FNode] = SqlNode(fNode.right)
 
   def leftSql = left.sql
+
   def rightSql = right.sql
 }
 
@@ -181,7 +183,13 @@ case class EquiJoinLike(fNode: fplan.EquiJoinLike) extends BinarySqlNode[fplan.E
   }
 
   override def sql: String =
-    getJoinSql(fNode, joinType, joinConditionPart, resultColumns, options)
+    i"""SELECT $resultColumns FROM
+       |  ( $leftSql
+       |  ) left_query
+       |  $joinType JOIN
+       |  ( $rightSql
+       |  ) right_query
+       |$joinConditionPart"""
 }
 
 case class AntiJoin(fNode: fplan.AntiJoin) extends BinarySqlNode[fplan.AntiJoin] {
@@ -214,14 +222,14 @@ case class Production(fNode: fplan.Production) extends UnarySqlNode[fplan.Produc
     }
 
   override def sql: String =
-    getProjectionSql(fNode, renamePairs, options)
+    getProjectionSql(fNode, renamePairs, childSql, options)
 }
 
 case class Projection(fNode: fplan.Projection) extends UnarySqlNode[fplan.Projection] {
   val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
 
   override def sql: String =
-    getProjectionSql(fNode, renamePairs, options)
+    getProjectionSql(fNode, renamePairs, childSql, options)
 }
 
 case class Selection(fNode: fplan.Selection) extends UnarySqlNode[fplan.Selection] {
@@ -279,7 +287,7 @@ case class DuplicateElimination(fNode: fplan.DuplicateElimination) extends Unary
 
 case class Grouping(fNode: fplan.Grouping) extends UnarySqlNode[fplan.Grouping] {
   val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
-  val projectionSql = getProjectionSql(fNode, renamePairs, options)
+  val projectionSql = getProjectionSql(fNode, renamePairs, childSql, options)
   val groupByColumns = (fNode.nnode.aggregationCriteria ++ fNode.requiredProperties).map(getSql(_, options))
   val groupByPart = if (groupByColumns.isEmpty)
     ""
