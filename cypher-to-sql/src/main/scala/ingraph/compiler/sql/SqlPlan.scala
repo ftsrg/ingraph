@@ -16,7 +16,14 @@ trait SqlNode extends LogicalPlan {
 
   override def output: Seq[Attribute] = ???
 
-  def sql: String
+  protected def innerSql: String
+
+  def sql: String = {
+    val nodeType = getClass.getSimpleName
+
+    i"""-- $nodeType
+       |$innerSql"""
+  }
 }
 
 abstract class SqlNodeCreator[+SqlType <: SqlNode, -FPlanType <: FNode](implicit sqlTag: ClassTag[SqlType], fPlanTag: ClassTag[FPlanType]) {
@@ -142,7 +149,7 @@ abstract class BinarySqlNode[+T <: BinaryFNode](val left: SqlNode with WithFNode
 
 class GetEdges(val fNode: fplan.GetEdges,
                options: CompilerOptions) extends LeafSqlNode[fplan.GetEdges] {
-  override def sql: String = getGetEdgesSql(fNode)
+  override def innerSql: String = getGetEdgesSql(fNode)
 }
 
 object GetEdges extends SqlNodeCreator0[GetEdges, fplan.GetEdges] {
@@ -168,7 +175,7 @@ class GetVertices(val fNode: fplan.GetVertices,
     .map("WHERE " + _)
     .getOrElse("")
 
-  override def sql: String =
+  override def innerSql: String =
     i"""SELECT
        |  $columns
        |FROM vertex
@@ -213,7 +220,7 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
     else
       ""
 
-  override def sql: String =
+  override def innerSql: String =
     i"""WITH RECURSIVE recursive_table AS (
        |  (
        |    WITH left_query AS (
@@ -289,7 +296,7 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
     case _: fplan.ThetaLeftOuterJoin => "LEFT OUTER"
   }
 
-  override def sql: String =
+  override def innerSql: String =
     i"""SELECT $resultColumns FROM
        |  ( $leftSql
        |  ) left_query
@@ -322,7 +329,7 @@ class AntiJoin(val fNode: fplan.AntiJoin,
   else
     columnConditions.mkString(" AND\n")
 
-  override def sql: String =
+  override def innerSql: String =
     i"""SELECT * FROM
        |  ( $leftSql
        |  ) left_query
@@ -353,7 +360,7 @@ class Production(val fNode: fplan.Production,
         convertAttributeAtProductionNode(attribute) -> getQuotedColumnName(outputName)
     }
 
-  override def sql: String =
+  override def innerSql: String =
     getProjectionSql(fNode, renamePairs, childSql, options)
 }
 
@@ -370,7 +377,7 @@ class Projection(val fNode: fplan.Projection,
   extends UnarySqlNode[fplan.Projection](child) {
   val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
 
-  override def sql: String =
+  override def innerSql: String =
     getProjectionSql(fNode, renamePairs, childSql, options)
 }
 
@@ -388,7 +395,7 @@ class Selection(val fNode: fplan.Selection,
   extends UnarySqlNode[fplan.Selection](child) {
   val condition = getSql(fNode.nnode.condition, options)
 
-  override def sql: String =
+  override def innerSql: String =
     i"""SELECT * FROM
        |  (
        |    $childSql
@@ -412,7 +419,7 @@ class AllDifferent(val fNode: fplan.AllDifferent,
   // only more than 1 node must be checked for uniqueness (edge list can contain more edges)
   val allDifferentNeeded = fNode.nnode.edges.size > 1 || fNode.nnode.edges.exists(_.isInstanceOf[EdgeListAttribute])
 
-  override def sql: String =
+  override def innerSql: String =
     if (allDifferentNeeded)
       i"""SELECT * FROM
          |  (
@@ -442,7 +449,7 @@ class SortAndTop(val fNode: fplan.SortAndTop,
   val limitPart = nnode.limitExpr.map { case Literal(num: Long, _) => s"LIMIT $num" }.getOrElse("")
   val offsetPart = nnode.skipExpr.map { case Literal(num: Long, _) => s"OFFSET $num" }.getOrElse("")
 
-  override def sql: String =
+  override def innerSql: String =
     i"""SELECT * FROM
        |  (
        |    $childSql
@@ -464,7 +471,7 @@ class DuplicateElimination(val fNode: fplan.DuplicateElimination,
                            override val child: SqlNode with WithFNodeOrigin[FNode],
                            options: CompilerOptions)
   extends UnarySqlNode[fplan.DuplicateElimination](child) {
-  override def sql: String =
+  override def innerSql: String =
     i"""SELECT DISTINCT * FROM
        |  (
        |    $childSql
@@ -492,7 +499,7 @@ class Grouping(val fNode: fplan.Grouping,
   else
     "GROUP BY " + groupByColumns.mkString(", ")
 
-  override def sql: String =
+  override def innerSql: String =
     i"""$projectionSql
        |$groupByPart"""
 }
@@ -509,7 +516,7 @@ class Dual(val fNode: fplan.Dual,
            options: CompilerOptions)
   extends LeafSqlNode[fplan.Dual] {
 
-  override def sql: String = "SELECT"
+  override def innerSql: String = "SELECT"
 }
 
 object Dual extends SqlNodeCreator0[Dual, fplan.Dual] {
