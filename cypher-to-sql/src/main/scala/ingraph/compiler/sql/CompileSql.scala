@@ -133,8 +133,8 @@ object CompileSql {
               case _ => true
             }
 
-          val leftSql = getSql(node.left, CompilerOptions(options.parameters, localUnwrapJson))
-          val rightSql = getSql(node.right, CompilerOptions(options.parameters, localUnwrapJson))
+          val leftSql = getSql(node.left, CompilerOptions(options.parameters, options.nodeId, localUnwrapJson))
+          val rightSql = getSql(node.right, CompilerOptions(options.parameters, options.nodeId, localUnwrapJson))
           val operator = node.sqlOperator
 
           if (Seq(leftSql, rightSql).exists(_.contains("\n")))
@@ -233,4 +233,4 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
 
 }
 
-case class CompilerOptions(parameters: Map[String, Any] = Map(), unwrapJson: Boolean = false) {}
+case class CompilerOptions(parameters: Map[String, Any] = Map(), nodeId: Int = 0, unwrapJson: Boolean = false) {}
