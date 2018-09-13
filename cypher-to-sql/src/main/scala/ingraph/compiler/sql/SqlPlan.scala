@@ -26,22 +26,39 @@ object SqlNode {
 
   def apply(fNode: FNode): SqlNode with WithFNodeOrigin[FNode] =
     fNode match {
-      case fNode: fplan.AntiJoin => AntiJoin(fNode)
-      case fNode: fplan.TransitiveJoin => TransitiveJoin(fNode)
-      // EquiJoinLike nodes except TransitiveJoin
-      case fNode: fplan.EquiJoinLike => EquiJoinLike(fNode)
+      case fNode: BinaryFNode => {
+        val left = SqlNode(fNode.left)
+        val right = SqlNode(fNode.right)
 
-      case fNode: fplan.SortAndTop => SortAndTop(fNode)
-      case fNode: fplan.Selection => Selection(fNode)
-      case fNode: fplan.Production => Production(fNode)
-      case fNode: fplan.Projection => Projection(fNode)
-      case fNode: fplan.DuplicateElimination => DuplicateElimination(fNode)
-      case fNode: fplan.Grouping => Grouping(fNode)
-      case fNode: fplan.AllDifferent => AllDifferent(fNode)
+        fNode match {
+          case fNode: fplan.AntiJoin => AntiJoin(fNode, left, right)
+          // transform right child here to keep type information
+          case fNode: fplan.TransitiveJoin => TransitiveJoin(fNode, left, apply(fNode.right))
+          // EquiJoinLike nodes except TransitiveJoin
+          case fNode: fplan.EquiJoinLike => EquiJoinLike(fNode, left, right)
+        }
+      }
+      case fNode: UnaryFNode => {
+        val child = SqlNode(fNode.child)
 
-      case fNode: fplan.Dual => Dual(fNode)
-      case fNode: fplan.GetVertices => GetVertices(fNode)
-      case fNode: fplan.GetEdges => apply(fNode)
+        fNode match {
+          case fNode: fplan.SortAndTop => SortAndTop(fNode, child)
+          case fNode: fplan.Selection => Selection(fNode, child)
+          case fNode: fplan.Production => Production(fNode, child)
+          case fNode: fplan.Projection => Projection(fNode, child)
+          case fNode: fplan.DuplicateElimination => DuplicateElimination(fNode, child)
+          case fNode: fplan.Grouping => Grouping(fNode, child)
+          case fNode: fplan.AllDifferent => AllDifferent(fNode, child)
+        }
+      }
+
+      case fNode: LeafFNode => {
+        fNode match {
+          case fNode: fplan.Dual => Dual(fNode)
+          case fNode: fplan.GetVertices => GetVertices(fNode)
+          case fNode: fplan.GetEdges => apply(fNode)
+        }
+      }
     }
 }
 
@@ -51,16 +68,16 @@ trait WithFNodeOrigin[+T <: FNode] {
 
 abstract class LeafSqlNode[+T <: LeafFNode] extends GenericLeafNode[SqlNode] with SqlNode with WithFNodeOrigin[T] {}
 
-abstract class UnarySqlNode[+T <: UnaryFNode] extends GenericUnaryNode[SqlNode] with SqlNode with WithFNodeOrigin[T] {
-  override val child: SqlNode with WithFNodeOrigin[FNode] = SqlNode(fNode.child)
+abstract class UnarySqlNode[+T <: UnaryFNode](
+                                               val child: SqlNode with WithFNodeOrigin[FNode])
+  extends GenericUnaryNode[SqlNode] with SqlNode with WithFNodeOrigin[T] {
 
   val childSql = child.sql
 }
 
-abstract class BinarySqlNode[+T <: BinaryFNode] extends GenericBinaryNode[SqlNode] with SqlNode with WithFNodeOrigin[T] {
-  override def left: SqlNode with WithFNodeOrigin[FNode] = SqlNode(fNode.left)
-
-  override def right: SqlNode with WithFNodeOrigin[FNode] = SqlNode(fNode.right)
+abstract class BinarySqlNode[+T <: BinaryFNode](val left: SqlNode with WithFNodeOrigin[FNode],
+                                                val right: SqlNode with WithFNodeOrigin[FNode])
+  extends GenericBinaryNode[SqlNode] with SqlNode with WithFNodeOrigin[T] {
 
   def leftSql = left.sql
 
@@ -93,10 +110,13 @@ case class GetVertices(fNode: fplan.GetVertices) extends LeafSqlNode[fplan.GetVe
        |$labelConstraint"""
 }
 
-case class TransitiveJoin(fNode: fplan.TransitiveJoin) extends BinarySqlNode[fplan.TransitiveJoin] {
-  override val right: GetEdges = GetEdges(fNode.right) // TODO override column names as in rightSql
+case class TransitiveJoin(fNode: fplan.TransitiveJoin,
+                          override val left: SqlNode with WithFNodeOrigin[FNode],
+                          override val right: GetEdges)
+  extends BinarySqlNode[fplan.TransitiveJoin](left, right) {
   val edgesNode = right.fNode
 
+  // TODO override column names in right
   override val rightSql: String = getGetEdgesSql(edgesNode, Some("current_from"), Some("edge_id"))
   val edgesSql = rightSql
 
@@ -154,7 +174,11 @@ case class TransitiveJoin(fNode: fplan.TransitiveJoin) extends BinarySqlNode[fpl
 }
 
 // EquiJoinLike nodes except TransitiveJoin
-case class EquiJoinLike(fNode: fplan.EquiJoinLike) extends BinarySqlNode[fplan.EquiJoinLike] {
+case class EquiJoinLike(fNode: fplan.EquiJoinLike,
+                        override val left: SqlNode with WithFNodeOrigin[FNode],
+                        override val right: SqlNode with WithFNodeOrigin[FNode])
+  extends BinarySqlNode[fplan.EquiJoinLike](left, right) {
+
   val leftColumns = fNode.left.flatSchema.map(getQuotedColumnName)
   val rightColumns = fNode.right.flatSchema.map(getQuotedColumnName)
   // prefer columns from  the left query, because in left outer join the right ones may contain NULL
@@ -192,7 +216,10 @@ case class EquiJoinLike(fNode: fplan.EquiJoinLike) extends BinarySqlNode[fplan.E
        |$joinConditionPart"""
 }
 
-case class AntiJoin(fNode: fplan.AntiJoin) extends BinarySqlNode[fplan.AntiJoin] {
+case class AntiJoin(fNode: fplan.AntiJoin,
+                    override val left: SqlNode with WithFNodeOrigin[FNode],
+                    override val right: SqlNode with WithFNodeOrigin[FNode])
+  extends BinarySqlNode[fplan.AntiJoin](left, right) {
   val columnConditions = fNode.commonAttributes
     .map(getQuotedColumnName)
     .map(name => s"left_query.$name = right_query.$name")
@@ -214,7 +241,9 @@ case class AntiJoin(fNode: fplan.AntiJoin) extends BinarySqlNode[fplan.AntiJoin]
        |  )"""
 }
 
-case class Production(fNode: fplan.Production) extends UnarySqlNode[fplan.Production] {
+case class Production(fNode: fplan.Production,
+                      override val child: SqlNode with WithFNodeOrigin[FNode])
+  extends UnarySqlNode[fplan.Production](child) {
   val renamePairs = fNode.output.zip(fNode.outputNames)
     .map {
       case (attribute, outputName) =>
@@ -225,14 +254,18 @@ case class Production(fNode: fplan.Production) extends UnarySqlNode[fplan.Produc
     getProjectionSql(fNode, renamePairs, childSql, options)
 }
 
-case class Projection(fNode: fplan.Projection) extends UnarySqlNode[fplan.Projection] {
+case class Projection(fNode: fplan.Projection,
+                      override val child: SqlNode with WithFNodeOrigin[FNode])
+  extends UnarySqlNode[fplan.Projection](child) {
   val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
 
   override def sql: String =
     getProjectionSql(fNode, renamePairs, childSql, options)
 }
 
-case class Selection(fNode: fplan.Selection) extends UnarySqlNode[fplan.Selection] {
+case class Selection(fNode: fplan.Selection,
+                     override val child: SqlNode with WithFNodeOrigin[FNode])
+  extends UnarySqlNode[fplan.Selection](child) {
   val condition = getSql(fNode.nnode.condition, options)
 
   override def sql: String =
@@ -243,7 +276,9 @@ case class Selection(fNode: fplan.Selection) extends UnarySqlNode[fplan.Selectio
        |WHERE $condition"""
 }
 
-case class AllDifferent(fNode: fplan.AllDifferent) extends UnarySqlNode[fplan.AllDifferent] {
+case class AllDifferent(fNode: fplan.AllDifferent,
+                        override val child: SqlNode with WithFNodeOrigin[FNode])
+  extends UnarySqlNode[fplan.AllDifferent](child) {
   val edgeIdsArray = ("ARRAY[]::INTEGER[]" +: fNode.nnode.edges.map(getQuotedColumnName)).mkString(" || ")
   // only more than 1 node must be checked for uniqueness (edge list can contain more edges)
   val allDifferentNeeded = fNode.nnode.edges.size > 1 || fNode.nnode.edges.exists(_.isInstanceOf[EdgeListAttribute])
@@ -260,7 +295,9 @@ case class AllDifferent(fNode: fplan.AllDifferent) extends UnarySqlNode[fplan.Al
          |$childSql""".stripMargin
 }
 
-case class SortAndTop(fNode: fplan.SortAndTop) extends UnarySqlNode[fplan.SortAndTop] {
+case class SortAndTop(fNode: fplan.SortAndTop,
+                      override val child: SqlNode with WithFNodeOrigin[FNode])
+  extends UnarySqlNode[fplan.SortAndTop](child) {
   val nnode = fNode.nnode
 
   val orderByParts = nnode.order.map(order => getSql(order.child, options) + " " + order.direction.sql + " " + order.nullOrdering.sql)
@@ -277,7 +314,9 @@ case class SortAndTop(fNode: fplan.SortAndTop) extends UnarySqlNode[fplan.SortAn
        |  $offsetPart"""
 }
 
-case class DuplicateElimination(fNode: fplan.DuplicateElimination) extends UnarySqlNode[fplan.DuplicateElimination] {
+case class DuplicateElimination(fNode: fplan.DuplicateElimination,
+                                override val child: SqlNode with WithFNodeOrigin[FNode])
+  extends UnarySqlNode[fplan.DuplicateElimination](child) {
   override def sql: String =
     i"""SELECT DISTINCT * FROM
        |  (
@@ -285,7 +324,9 @@ case class DuplicateElimination(fNode: fplan.DuplicateElimination) extends Unary
        |  ) subquery"""
 }
 
-case class Grouping(fNode: fplan.Grouping) extends UnarySqlNode[fplan.Grouping] {
+case class Grouping(fNode: fplan.Grouping,
+                    override val child: SqlNode with WithFNodeOrigin[FNode])
+  extends UnarySqlNode[fplan.Grouping](child) {
   val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
   val projectionSql = getProjectionSql(fNode, renamePairs, childSql, options)
   val groupByColumns = (fNode.nnode.aggregationCriteria ++ fNode.requiredProperties).map(getSql(_, options))
