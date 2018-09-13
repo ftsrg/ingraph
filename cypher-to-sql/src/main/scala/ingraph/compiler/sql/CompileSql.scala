@@ -4,7 +4,6 @@ import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.driver.ValueJsonConversion
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
-import ingraph.model.fplan.FNode
 import ingraph.model.misc.Function
 import ingraph.model.{fplan, nplan}
 import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, Literal, Not}
@@ -221,7 +220,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
   val stages = compile(cypherQuery)
 
   val fplan = stages.fplan
-  val sqlNode: SqlNode = SqlNode(fplan)
+  val (sqlNode, _) = SqlNode(fplan, CompilerOptions())
   val sql = sqlNode.sql
 
   def run(): String = {
