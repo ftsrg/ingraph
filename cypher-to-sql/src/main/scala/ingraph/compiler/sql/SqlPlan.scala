@@ -236,9 +236,7 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
   override def innerSql: String =
     i"""WITH RECURSIVE recursive_table AS (
        |  (
-       |    WITH left_query AS (
-       |      $leftSql
-       |    )
+       |    WITH left_query AS (SELECT * FROM $leftSql)
        |    SELECT
        |      *,
        |      ARRAY [] :: integer [] AS $edgeListName,
@@ -311,11 +309,9 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
 
   override def innerSql: String =
     i"""SELECT $resultColumns FROM
-       |  ( $leftSql
-       |  ) left_query
+       |  $leftSql AS left_query
        |  $joinType JOIN
-       |  ( $rightSql
-       |  ) right_query
+       |  $rightSql AS right_query
        |$joinConditionPart"""
 }
 
@@ -344,12 +340,10 @@ class AntiJoin(val fNode: fplan.AntiJoin,
 
   override def innerSql: String =
     i"""SELECT * FROM
-       |  ( $leftSql
-       |  ) left_query
+       |  $leftSql AS left_query
        |WHERE NOT EXISTS(
        |  SELECT * FROM
-       |    ( $rightSql
-       |    ) right_query
+       |    $rightSql AS right_query
        |  WHERE $conditionPart
        |  )"""
 }
@@ -425,10 +419,7 @@ class Selection(val fNode: fplan.Selection,
   val condition = getSql(fNode.nnode.condition, options)
 
   override def innerSql: String =
-    i"""SELECT * FROM
-       |  (
-       |    $childSql
-       |  ) subquery
+    i"""SELECT * FROM $childSql AS subquery
        |WHERE $condition"""
 }
 
@@ -476,10 +467,7 @@ class SortAndTop(val fNode: fplan.SortAndTop,
   val offsetPart = nnode.skipExpr.map { case Literal(num: Long, _) => s"OFFSET $num" }.getOrElse("")
 
   override def innerSql: String =
-    i"""SELECT * FROM
-       |  (
-       |    $childSql
-       |  ) subquery
+    i"""SELECT * FROM $childSql AS subquery
        |  ORDER BY ${orderByParts.mkString(", ")}
        |  $limitPart
        |  $offsetPart"""
@@ -498,10 +486,7 @@ class DuplicateElimination(val fNode: fplan.DuplicateElimination,
                            val options: CompilerOptions)
   extends UnarySqlNode[fplan.DuplicateElimination](child) {
   override def innerSql: String =
-    i"""SELECT DISTINCT * FROM
-       |  (
-       |    $childSql
-       |  ) subquery"""
+    i"""SELECT DISTINCT * FROM $childSql AS subquery"""
 }
 
 object DuplicateElimination extends SqlNodeCreator1[DuplicateElimination, fplan.DuplicateElimination] {
