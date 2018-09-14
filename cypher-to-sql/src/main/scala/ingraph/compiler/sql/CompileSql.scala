@@ -51,10 +51,8 @@ object CompileSql {
 
   def getProjectionSql(node: fplan.UnaryFNode, renamePairs: Traversable[(String, String)], childSql: String, options: CompilerOptions): String = {
     val columns = renamePairs.map(pair => s"""${pair._1} AS ${pair._2}""").mkString(", ")
-    i"""SELECT $columns FROM
-       |  (
-       |    $childSql
-       |  ) subquery"""
+    i"""SELECT $columns
+       |  FROM $childSql AS subquery"""
   }
 
   def getGetEdgesSql(node: fplan.GetEdges, forcedFromColumnName: Option[String] = None, forcedEdgeColumnName: Option[String] = None, forcedToColumnName: Option[String] = None) = {

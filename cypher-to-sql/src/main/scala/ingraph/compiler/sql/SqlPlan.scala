@@ -2,6 +2,7 @@ package ingraph.compiler.sql
 
 import ingraph.compiler.sql.CompileSql.{getQuotedColumnName, getSingleQuotedString, _}
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
+import ingraph.compiler.sql.Production.{getSqlRecursively, withQueryNamePrefix}
 import ingraph.model.expr.{EdgeListAttribute, NodeHasLabelsAttribute}
 import ingraph.model.fplan
 import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
@@ -19,6 +20,8 @@ trait SqlNode extends LogicalPlan {
   override def output: Seq[Attribute] = ???
 
   protected def innerSql: String
+
+  def sqlQueryName: String = withQueryNamePrefix + options.nodeId
 
   def sql: String = {
     val nodeType = getClass.getSimpleName
@@ -143,16 +146,16 @@ abstract class UnarySqlNode[+T <: UnaryFNode](
                                                val child: SqlNode with WithFNodeOrigin[FNode])
   extends GenericUnaryNode[SqlNode] with SqlNode with WithFNodeOrigin[T] {
 
-  val childSql = child.sql
+  val childSql = child.sqlQueryName
 }
 
 abstract class BinarySqlNode[+T <: BinaryFNode](val left: SqlNode with WithFNodeOrigin[FNode],
                                                 val right: SqlNode with WithFNodeOrigin[FNode])
   extends GenericBinaryNode[SqlNode] with SqlNode with WithFNodeOrigin[T] {
 
-  def leftSql = left.sql
+  def leftSql = left.sqlQueryName
 
-  def rightSql = right.sql
+  def rightSql = right.sqlQueryName
 }
 
 class GetEdges(val fNode: fplan.GetEdges,
@@ -370,11 +373,27 @@ class Production(val fNode: fplan.Production,
         convertAttributeAtProductionNode(attribute) -> getQuotedColumnName(outputName)
     }
 
-  override def innerSql: String =
-    getProjectionSql(fNode, renamePairs, childSql, options)
+  override def innerSql: String = {
+    val withQueries =
+      getSqlRecursively(child)
+        .map { case (nodeId, sql) =>
+          i"""  $withQueryNamePrefix$nodeId AS ($sql)"""
+        }.mkString(",\n")
+
+    "WITH\n" + withQueries +
+      getProjectionSql(fNode, renamePairs, childSql, options)
+  }
 }
 
 object Production extends SqlNodeCreator1[Production, fplan.Production] {
+
+  val withQueryNamePrefix = "q"
+
+  def getSqlRecursively(sqlNode: SqlNode): Seq[(Int, String)] = {
+    sqlNode.children.flatMap(getSqlRecursively) :+
+      (sqlNode.options.nodeId, sqlNode.sql)
+  }
+
   override def create(fNode: fplan.Production,
                       child: SqlNode with WithFNodeOrigin[FNode],
                       options: CompilerOptions): (Production, CompilerOptions) =
@@ -429,16 +448,13 @@ class AllDifferent(val fNode: fplan.AllDifferent,
   // only more than 1 node must be checked for uniqueness (edge list can contain more edges)
   val allDifferentNeeded = fNode.nnode.edges.size > 1 || fNode.nnode.edges.exists(_.isInstanceOf[EdgeListAttribute])
 
+  val wherePart = if (allDifferentNeeded)
+    i"""WHERE is_unique($edgeIdsArray)"""
+  else ""
+
   override def innerSql: String =
-    if (allDifferentNeeded)
-      i"""SELECT * FROM
-         |  (
-         |    $childSql
-         |  ) subquery
-         |  WHERE is_unique($edgeIdsArray)"""
-    else
-      s"""   -- noop
-         |$childSql""".stripMargin
+    i"""SELECT * FROM $childSql AS subquery
+       |  $wherePart"""
 }
 
 object AllDifferent extends SqlNodeCreator1[AllDifferent, fplan.AllDifferent] {
