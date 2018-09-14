@@ -1,13 +1,13 @@
 package ingraph.compiler.sql.driver
 
+import ingraph.driver.CypherDriver
 import org.opencypher.tools.tck.api.{CypherValueRecords, Graph, QueryType, SideEffectQuery}
 import org.opencypher.tools.tck.values.CypherValue
 
 import scala.collection.JavaConverters._
 
-class TckAdapter extends Graph {
-  private val sqlDriver = new SqlDriver()
-  private val session = sqlDriver.session
+class TckAdapter(cypherDriver: CypherDriver = new SqlDriver()) extends Graph {
+  private val session = cypherDriver.session
   private val transaction = session.beginTransaction()
 
   override def cypher(query: String, params: Map[String, CypherValue], meta: QueryType): Result = {
@@ -33,6 +33,6 @@ class TckAdapter extends Graph {
   override def close(): Unit = {
     transaction.close()
     session.close()
-    sqlDriver.close()
+    cypherDriver.close()
   }
 }

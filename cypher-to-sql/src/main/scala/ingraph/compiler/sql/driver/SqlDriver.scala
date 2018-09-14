@@ -12,7 +12,7 @@ import org.neo4j.driver.v1.exceptions.NoSuchRecordException
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
 
-class SqlDriver extends CypherDriver {
+class SqlDriver(val translateCreateQueries: Boolean = false) extends CypherDriver {
 
   // TODO implement CREATE command instead of using Neo4j
   val backendDriver: CypherDriver = CypherDriverFactory.createNeo4jDriver()

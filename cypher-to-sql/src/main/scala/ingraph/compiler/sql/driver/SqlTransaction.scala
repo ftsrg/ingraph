@@ -4,7 +4,7 @@ import java.sql.{Connection, DriverManager}
 import java.util.{Map => javaMap}
 
 import ingraph.compiler.sql.Util.withResources
-import ingraph.compiler.sql.{CompileSql, ExportSteps, SqlQueries}
+import ingraph.compiler.sql.{CompileSql, ExportSteps}
 import ingraph.model.fplan.Create
 import org.neo4j.driver.v1._
 import org.neo4j.driver.v1.types.TypeSystem
@@ -48,7 +48,8 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
     val sqlCompiler = new CompileSql(cypherQuery, statement.parameters().asMap.asScala.toMap)
 
     withResources(sqlConnection.createStatement)(sqlStatement => {
-      if (CompileSql.getNodes(sqlCompiler.fplan).exists(_.isInstanceOf[Create])) {
+      val translateCreateQueries = sqlSession.sqlDriver.translateCreateQueries
+      if (!translateCreateQueries && CompileSql.getNodes(sqlCompiler.fplan).exists(_.isInstanceOf[Create])) {
         val cypherSession = sqlSession.sqlDriver.backendSession
         cypherSession.run("MATCH (n) DETACH DELETE n")
 
