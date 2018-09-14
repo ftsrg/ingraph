@@ -26,8 +26,8 @@ trait SqlNode extends LogicalPlan {
   def sql: String = {
     val nodeType = getClass.getSimpleName
 
-    i"""-- ${options.nodeId}: $nodeType
-       |$innerSql"""
+    s"""-- $nodeType
+       |$innerSql""".stripMargin
   }
 }
 
@@ -371,11 +371,14 @@ class Production(val fNode: fplan.Production,
     val withQueries =
       getSqlRecursively(child)
         .map { case (nodeId, sql) =>
-          i"""  $withQueryNamePrefix$nodeId AS ($sql)"""
+          i"""$withQueryNamePrefix$nodeId AS
+             | ($sql)"""
         }.mkString(",\n")
 
-    "WITH\n" + withQueries +
-      getProjectionSql(fNode, renamePairs, childSql, options)
+    val projectionSql = getProjectionSql(fNode, renamePairs, childSql, options)
+    s"""WITH
+       |$withQueries
+       |$projectionSql""".stripMargin
   }
 }
 
