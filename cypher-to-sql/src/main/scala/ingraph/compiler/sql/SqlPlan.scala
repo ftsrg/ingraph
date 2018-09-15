@@ -3,7 +3,8 @@ package ingraph.compiler.sql
 import ingraph.compiler.sql.CompileSql.{getQuotedColumnName, getSingleQuotedString, _}
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.Production.{getSqlRecursively, withQueryNamePrefix}
-import ingraph.model.expr.{EdgeListAttribute, NodeHasLabelsAttribute}
+import ingraph.compiler.sql.SqlNodeCreator._
+import ingraph.model.expr.{EdgeListAttribute, NodeHasLabelsAttribute, VertexAttribute}
 import ingraph.model.fplan
 import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
@@ -15,13 +16,17 @@ import scala.reflect.ClassTag
 trait SqlNode extends LogicalPlan {
   def options: CompilerOptions
 
+  def lastOptions: CompilerOptions = options
+
+  def nextOptions: CompilerOptions = transformOptions(lastOptions)
+
   override def children: Seq[SqlNode]
 
   override def output: Seq[Attribute] = ???
 
   protected def innerSql: String
 
-  def sqlQueryName: String = withQueryNamePrefix + options.nodeId
+  def sqlQueryName: String = withQueryNamePrefix + lastOptions.nodeId
 
   def sql: String = {
     val nodeType = getClass.getSimpleName
@@ -39,7 +44,9 @@ abstract class SqlNodeCreator[+SqlType <: SqlNode, -FPlanType <: FNode](implicit
     }
 
   def apply(fNode: FPlanType, options: CompilerOptions): (SqlNode with WithFNodeOrigin[FNode], CompilerOptions)
+}
 
+object SqlNodeCreator {
   def transformOptions(option: CompilerOptions): CompilerOptions =
     CompilerOptions(option.parameters, option.nodeId + 1, option.unwrapJson)
 
@@ -109,6 +116,7 @@ object SqlNode {
       DuplicateElimination,
       Grouping,
       AllDifferent,
+      Create,
 
       Dual,
       GetVertices,
@@ -381,12 +389,12 @@ class Production(val fNode: fplan.Production,
   override def innerSql: String = {
     val withQueries =
       getSqlRecursively(child)
-        .map { case (nodeId, sql) =>
-          i"""$withQueryNamePrefix$nodeId AS
+        .map { case (sqlQueryName, sql) =>
+          i"""$sqlQueryName AS
              | ($sql)"""
         }.mkString(",\n")
 
-    val projectionSql = getProjectionSql(fNode, renamePairs, childSql, options)
+    val projectionSql = getProjectionSql(renamePairs, childSql, options)
     s"""WITH
        |$withQueries
        |$projectionSql""".stripMargin
@@ -397,9 +405,9 @@ object Production extends SqlNodeCreator1[Production, fplan.Production] {
 
   val withQueryNamePrefix = "q"
 
-  def getSqlRecursively(sqlNode: SqlNode): Seq[(Int, String)] = {
+  def getSqlRecursively(sqlNode: SqlNode): Seq[(String, String)] = {
     sqlNode.children.flatMap(getSqlRecursively) :+
-      (sqlNode.options.nodeId, sqlNode.sql)
+      (sqlNode.sqlQueryName, sqlNode.sql)
   }
 
   override def create(fNode: fplan.Production,
@@ -415,7 +423,7 @@ class Projection(val fNode: fplan.Projection,
   val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
 
   override def innerSql: String =
-    getProjectionSql(fNode, renamePairs, childSql, options)
+    getProjectionSql(renamePairs, childSql, options)
 }
 
 object Projection extends SqlNodeCreator1[Projection, fplan.Projection] {
@@ -517,7 +525,7 @@ class Grouping(val fNode: fplan.Grouping,
   extends UnarySqlNodeFromFNode[fplan.Grouping](child) {
 
   val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
-  val projectionSql = getProjectionSql(fNode, renamePairs, childSql, options)
+  val projectionSql = getProjectionSql(renamePairs, childSql, options)
   val groupByColumns = (fNode.nnode.aggregationCriteria ++ fNode.requiredProperties).map(getSql(_, options))
   val groupByPart = if (groupByColumns.isEmpty)
     ""
@@ -535,6 +543,95 @@ object Grouping extends SqlNodeCreator1[Grouping, fplan.Grouping] {
                       options: CompilerOptions)
   : (Grouping, CompilerOptions) =
     (new Grouping(fNode, child, options), options)
+}
+
+case class GenerateVertexId(override val child: SqlNode,
+                            override val options: CompilerOptions,
+                            newVertexColumnName: String)
+  extends UnarySqlNode(child) {
+
+  override protected def innerSql: String = s"SELECT nextval('vertex_seq') AS $newVertexColumnName, * FROM $childSql"
+}
+
+case class InsertWithSelect(override val options: CompilerOptions,
+                            tableName: String,
+                            renamePairs: Traversable[(String, Option[String])],
+                            fromTableNames: String*)
+  extends LeafSqlNode {
+
+  override protected def innerSql: String = {
+    val selectPairsPart = renamePairs.map {
+      case (oldName, Some(newName)) => oldName + " AS " + newName
+      case (oldName, None) => oldName
+    }.mkString(", ")
+    val fromTablesPart = fromTableNames.mkString(", ")
+
+    i"""INSERT INTO $tableName SELECT $selectPairsPart FROM $fromTablesPart"""
+  }
+}
+
+class Create(val fNode: fplan.Create,
+             val child: SqlNode with WithFNodeOrigin[FNode],
+             val options: CompilerOptions)
+  extends SqlNode with WithFNodeOrigin[fplan.Create] {
+
+  val attribute = fNode.attribute.asInstanceOf[VertexAttribute]
+  val newVertexColumnName = getQuotedColumnName(attribute)
+
+  val generateVertexId = GenerateVertexId(child, options, newVertexColumnName)
+  private val genVertexIdQueryName: String = generateVertexId.sqlQueryName
+
+  val insertVertices =
+    InsertWithSelect(generateVertexId.nextOptions, "vertex", Seq(newVertexColumnName -> None), genVertexIdQueryName)
+
+  val labelStrings = attribute.labels.vertexLabels.map(getSingleQuotedString)
+  val labelInserts =
+    if (labelStrings.isEmpty)
+      None
+    else {
+      val labelNameRows = labelStrings.map("(" + _ + ")").mkString(", ")
+      val labelsTable = s"(VALUES $labelNameRows) AS labels(l)"
+      val renamePairs = Seq(
+        genVertexIdQueryName + "." + newVertexColumnName -> Some("parent"),
+        "labels.l" -> Some("name"))
+
+      Some(InsertWithSelect(insertVertices.nextOptions, "label", renamePairs, genVertexIdQueryName, labelsTable))
+    }
+  val lastQueryBeforeProperties = labelInserts.getOrElse(insertVertices)
+
+  // scanLeft and drop: https://stackoverflow.com/a/47007773
+  val propertyInserts = attribute.properties
+    .scanLeft(lastQueryBeforeProperties) { case (lastQuery, (key, value)) =>
+      val currentOptions = lastQuery.nextOptions
+
+      val keyName = getSingleQuotedString(key)
+      val valueSql = getSql(value, options)
+      val renamePairs = Seq(newVertexColumnName -> Some("parent"), keyName -> Some("key"), valueSql -> Some("value"))
+
+      InsertWithSelect(currentOptions, "vertex_property", renamePairs, genVertexIdQueryName)
+    }.drop(1)
+
+  override def children: Seq[SqlNode] =
+    Seq(child, generateVertexId, insertVertices) ++ labelInserts ++ propertyInserts
+
+  // this Create query has the last nodeId
+  override def lastOptions: CompilerOptions = children.last.nextOptions
+
+  override def innerSql: String =
+    i"""SELECT * FROM $genVertexIdQueryName"""
+}
+
+object Create extends SqlNodeCreator[Create, fplan.Create] {
+
+  override def apply(fNode: fplan.Create,
+                     options: CompilerOptions)
+  : (SqlNode with WithFNodeOrigin[FNode], CompilerOptions) = {
+    val (child, childOptions) = transformOptions(SqlNode(fNode.child, options))
+
+    val createNode = new Create(fNode, child, childOptions)
+
+    (createNode, createNode.lastOptions)
+  }
 }
 
 class Dual(val fNode: fplan.Dual,
