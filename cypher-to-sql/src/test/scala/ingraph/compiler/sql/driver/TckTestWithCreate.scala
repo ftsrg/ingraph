@@ -11,7 +11,8 @@ class TckTestWithCreate extends FunSuite with TckTestRunner {
 object TckTestWithCreate {
   val selectedFeatures = Set("MatchAcceptance", "MatchAcceptance2", "Local")
   val selectedScenarios: Set[String] = Set(
-//    "Dependant CREATE with single row",
+    //    "Dependant CREATE with single row",
+    //    "Dependant CREATE with single row - with aliased attribute",
     "Use multiple MATCH clauses to do a Cartesian product",
 
     // placeholder
