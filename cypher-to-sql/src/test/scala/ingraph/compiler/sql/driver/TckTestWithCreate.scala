@@ -5,12 +5,13 @@ import ingraph.tck.{TckScenarioSet, TckTestRunner}
 import org.scalatest.FunSuite
 
 class TckTestWithCreate extends FunSuite with TckTestRunner {
-//  runTckTests(() => new TckAdapter(new SqlDriver(true)), scenarioSet)
+  runTckTests(() => new TckAdapter(new SqlDriver(true)), scenarioSet)
 }
 
 object TckTestWithCreate {
   val selectedFeatures = Set("MatchAcceptance", "MatchAcceptance2", "Local")
   val selectedScenarios: Set[String] = Set(
+//    "Dependant CREATE with single row",
     "Use multiple MATCH clauses to do a Cartesian product",
 
     // placeholder

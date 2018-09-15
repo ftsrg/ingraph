@@ -51,3 +51,25 @@ Feature: Local
       | n                 | (n :Label) | n. /**/ id | count(n) |
       | (:Label {id: 42}) | true       | 42         | 1        |
     And no side effects
+
+  Scenario: Dependant CREATE with single row
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Label {id: 42})
+      """
+    And having executed:
+      """
+      MATCH (n)
+      CREATE (:Label {id:n.id+1})
+      """
+    When executing query:
+      """
+      MATCH (n)
+      RETURN n.id
+      """
+    Then the result should be:
+      | n.id |
+      | 42   |
+      | 43   |
+    And no side effects
