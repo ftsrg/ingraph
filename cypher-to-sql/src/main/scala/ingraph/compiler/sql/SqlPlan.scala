@@ -545,12 +545,14 @@ object Grouping extends SqlNodeCreator1[Grouping, fplan.Grouping] {
     (new Grouping(fNode, child, options), options)
 }
 
-case class GenerateVertexId(override val child: SqlNode,
+case class GenerateVertexId(child: SqlNode,
                             override val options: CompilerOptions,
                             newVertexColumnName: String)
-  extends UnarySqlNode(child) {
+  extends LeafSqlNode {
 
-  override protected def innerSql: String = s"SELECT nextval('vertex_seq') AS $newVertexColumnName, * FROM $childSql"
+  val childQueryName: String = child.sqlQueryName
+
+  override protected def innerSql: String = s"SELECT nextval('vertex_seq') AS $newVertexColumnName, * FROM $childQueryName"
 }
 
 case class InsertWithSelect(override val options: CompilerOptions,
