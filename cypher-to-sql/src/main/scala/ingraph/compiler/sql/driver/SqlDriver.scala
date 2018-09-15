@@ -15,8 +15,12 @@ import org.postgresql.util.PGobject
 class SqlDriver(val translateCreateQueries: Boolean = false) extends CypherDriver {
 
   // TODO implement CREATE command instead of using Neo4j
-  val backendDriver: CypherDriver = CypherDriverFactory.createNeo4jDriver()
-  val backendSession: Session = backendDriver.session()
+  val backendDriver: Option[CypherDriver] =
+    if (translateCreateQueries)
+      None
+    else
+      Some(CypherDriverFactory.createNeo4jDriver())
+  val backendSession: Option[Session] = backendDriver.map(_.session)
 
   LogManager.getRootLogger.setLevel(Level.OFF)
   val postgres = new EmbeddedPostgresWrapper
@@ -33,8 +37,8 @@ class SqlDriver(val translateCreateQueries: Boolean = false) extends CypherDrive
   override def close(): Unit = {
     postgres.close()
 
-    backendSession.close()
-    backendDriver.close()
+    backendSession.foreach(_.close)
+    backendDriver.foreach(_.close)
   }
 
   override def isEncrypted = false

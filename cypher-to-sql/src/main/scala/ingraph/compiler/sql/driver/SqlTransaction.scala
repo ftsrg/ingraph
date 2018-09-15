@@ -50,7 +50,7 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
     withResources(sqlConnection.createStatement)(sqlStatement => {
       val translateCreateQueries = sqlSession.sqlDriver.translateCreateQueries
       if (!translateCreateQueries && CompileSql.getNodes(sqlCompiler.fplan).exists(_.isInstanceOf[Create])) {
-        val cypherSession = sqlSession.sqlDriver.backendSession
+        val cypherSession = sqlSession.sqlDriver.backendSession.get
         cypherSession.run("MATCH (n) DETACH DELETE n")
 
         cypherSession.run(cypherQuery, statement.parameters)
