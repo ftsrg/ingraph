@@ -361,6 +361,10 @@ object GPlanResolver {
                     case rn: ResolvableName => expr.ReturnItem(so.child, None, rn.resolvedName)
                     case x => throw new UnexpectedTypeException(x, "we were filtering for resolvedNames in sort list")
                   }
+                }) ++ // add the aliased returnitems without aliasing to allow referencing it in the effective projection
+                  p.projectList.flatMap( pi => pi.child match {
+                  case rn: ResolvableName => if (pi.resolvedName == rn.resolvedName) None else Some(expr.ReturnItem(rn, None, rn.resolvedName))
+                  case _ => None
                 }),
                   p.child // note: we checked above not to have distinct
                 )
