@@ -1,16 +1,18 @@
 package ingraph.compiler.sql
 
 import ingraph.compiler.sql.CompileSql.{getQuotedColumnName, getSingleQuotedString, _}
+import ingraph.compiler.sql.Create.graphElementTypeString
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.Production.{getSqlRecursively, withQueryNamePrefix}
 import ingraph.compiler.sql.SqlNodeCreator._
-import ingraph.model.expr.{EdgeListAttribute, NodeHasLabelsAttribute, VertexAttribute}
+import ingraph.model.expr._
 import ingraph.model.fplan
 import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Literal}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
+import scala.Function.tupled
 import scala.reflect.ClassTag
 
 trait SqlNode extends LogicalPlan {
@@ -545,14 +547,15 @@ object Grouping extends SqlNodeCreator1[Grouping, fplan.Grouping] {
     (new Grouping(fNode, child, options), options)
 }
 
-case class GenerateVertexId(child: SqlNode,
-                            override val options: CompilerOptions,
-                            newVertexColumnName: String)
+case class GenerateId(child: SqlNode,
+                      elementTypePrefix: String,
+                      override val options: CompilerOptions,
+                      newElementColumnName: String)
   extends LeafSqlNode {
 
   val childQueryName: String = child.sqlQueryName
 
-  override protected def innerSql: String = s"SELECT nextval('vertex_seq') AS $newVertexColumnName, * FROM $childQueryName"
+  override protected def innerSql: String = s"SELECT nextval('${elementTypePrefix}_seq') AS $newElementColumnName, * FROM $childQueryName"
 }
 
 case class InsertWithSelect(override val options: CompilerOptions,
@@ -572,21 +575,53 @@ case class InsertWithSelect(override val options: CompilerOptions,
   }
 }
 
+object InsertWithSelect {
+  def newElement(options: CompilerOptions,
+                 tableName: String,
+                 renamePairs: Traversable[(String, String)],
+                 fromTableNames: String*)
+  : InsertWithSelect =
+    InsertWithSelect(options, tableName,
+      renamePairs.map(tupled((origName, newName) => origName -> Some(newName))), fromTableNames: _*)
+}
+
 class Create(val fNode: fplan.Create,
              val child: SqlNode with WithFNodeOrigin[FNode],
              val options: CompilerOptions)
   extends SqlNode with WithFNodeOrigin[fplan.Create] {
 
-  val attribute = fNode.attribute.asInstanceOf[VertexAttribute]
-  val newVertexColumnName = getQuotedColumnName(attribute)
+  val attribute = fNode.nnode.attribute.asInstanceOf[ElementAttribute]
+  val typePrefix: String = graphElementTypeString(attribute)
+  val newElementColumnName = getQuotedColumnName(attribute)
 
-  val generateVertexId = GenerateVertexId(child, options, newVertexColumnName)
-  private val genVertexIdQueryName: String = generateVertexId.sqlQueryName
+  val generateId = GenerateId(child, typePrefix, options, newElementColumnName)
+  val genVertexIdQueryName: String = generateId.sqlQueryName
 
-  val insertVertices =
-    InsertWithSelect(generateVertexId.nextOptions, "vertex", Seq(newVertexColumnName -> None), genVertexIdQueryName)
+  private val elementInsertProjectionPairs: Seq[(String, String)] = Seq(newElementColumnName -> (typePrefix + "_id")) ++
+    // edge-specific columns: from, to, type
+    Some(attribute)
+      .collect { case a: RichEdgeAttribute => a }
+      .map(edge => {
+        val typeString = getSingleQuotedString(edge.edge.labels.edgeLabels.head)
+        val (src, trg) = edge.dir match {
+          case Out => edge.src -> edge.trg
+          case In => edge.trg -> edge.src
+        }
 
-  val labelStrings = attribute.labels.vertexLabels.map(getSingleQuotedString)
+        val columnNames = Seq(getQuotedColumnName(src) -> "from", getQuotedColumnName(trg) -> "to")
+
+        columnNames :+ (typeString -> "type")
+      })
+      .getOrElse(Seq())
+
+  val insertElements =
+    InsertWithSelect.newElement(generateId.nextOptions, typePrefix, elementInsertProjectionPairs, genVertexIdQueryName)
+
+  // for vertex labels
+  val labelStrings = Some(attribute)
+    .collect { case a: VertexAttribute => a }
+    .map(_.labels.vertexLabels.map(getSingleQuotedString))
+    .getOrElse(Set())
   val labelInserts =
     if (labelStrings.isEmpty)
       None
@@ -594,12 +629,12 @@ class Create(val fNode: fplan.Create,
       val labelNameRows = labelStrings.map("(" + _ + ")").mkString(", ")
       val labelsTable = s"(VALUES $labelNameRows) AS labels(l)"
       val renamePairs = Seq(
-        genVertexIdQueryName + "." + newVertexColumnName -> Some("parent"),
+        genVertexIdQueryName + "." + newElementColumnName -> Some("parent"),
         "labels.l" -> Some("name"))
 
-      Some(InsertWithSelect(insertVertices.nextOptions, "label", renamePairs, genVertexIdQueryName, labelsTable))
+      Some(InsertWithSelect(insertElements.nextOptions, "label", renamePairs, genVertexIdQueryName, labelsTable))
     }
-  val lastQueryBeforeProperties = labelInserts.getOrElse(insertVertices)
+  val lastQueryBeforeProperties = labelInserts.getOrElse(insertElements)
 
   // scanLeft and drop: https://stackoverflow.com/a/47007773
   val propertyInserts = attribute.properties
@@ -608,13 +643,13 @@ class Create(val fNode: fplan.Create,
 
       val keyName = getSingleQuotedString(key)
       val valueSql = getSql(value, options)
-      val renamePairs = Seq(newVertexColumnName -> Some("parent"), keyName -> Some("key"), valueSql -> Some("value"))
+      val renamePairs = Seq(newElementColumnName -> Some("parent"), keyName -> Some("key"), valueSql -> Some("value"))
 
-      InsertWithSelect(currentOptions, "vertex_property", renamePairs, genVertexIdQueryName)
+      InsertWithSelect(currentOptions, typePrefix + "_property", renamePairs, genVertexIdQueryName)
     }.drop(1)
 
   override def children: Seq[SqlNode] =
-    Seq(child, generateVertexId, insertVertices) ++ labelInserts ++ propertyInserts
+    Seq(child, generateId, insertElements) ++ labelInserts ++ propertyInserts
 
   // this Create query has the last nodeId
   override def lastOptions: CompilerOptions = children.last.nextOptions
@@ -624,6 +659,12 @@ class Create(val fNode: fplan.Create,
 }
 
 object Create extends SqlNodeCreator[Create, fplan.Create] {
+
+  def graphElementTypeString(attribute: ElementAttribute): String =
+    attribute match {
+      case _: VertexAttribute => "vertex"
+      case _: RichEdgeAttribute => "edge"
+    }
 
   override def apply(fNode: fplan.Create,
                      options: CompilerOptions)

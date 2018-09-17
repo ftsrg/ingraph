@@ -14,6 +14,7 @@ object TckTestWithCreate {
     //    "Dependant CREATE with single row",
     //    "Dependant CREATE with single row - with aliased attribute",
     "Use multiple MATCH clauses to do a Cartesian product",
+    "Returning a relationship property value",
 
     // placeholder
     ""
