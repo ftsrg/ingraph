@@ -37,9 +37,11 @@ trait SqlNode extends LogicalPlan {
 }
 
 abstract class SqlNodeCreator[+SqlType <: SqlNode, -FPlanType <: FNode](implicit sqlTag: ClassTag[SqlType], fPlanTag: ClassTag[FPlanType]) {
+  def canCreate(fNode: FPlanType, options: CompilerOptions): Boolean = true
+
   def applyIfPossible(fNode: FNode, options: CompilerOptions): Option[(SqlNode with WithFNodeOrigin[FNode], CompilerOptions)] =
     fNode match {
-      case fNode: FPlanType => Some(apply(fNode, options))
+      case fNode: FPlanType if canCreate(fNode, options) => Some(apply(fNode, options))
       case _ => None
     }
 
@@ -116,7 +118,7 @@ object SqlNode {
       DuplicateElimination,
       Grouping,
       AllDifferent,
-      Create,
+      CreateVertex,
 
       Dual,
       GetVertices,
@@ -572,9 +574,9 @@ case class InsertWithSelect(override val options: CompilerOptions,
   }
 }
 
-class Create(val fNode: fplan.Create,
-             val child: SqlNode with WithFNodeOrigin[FNode],
-             val options: CompilerOptions)
+class CreateVertex(val fNode: fplan.Create,
+                   val child: SqlNode with WithFNodeOrigin[FNode],
+                   val options: CompilerOptions)
   extends SqlNode with WithFNodeOrigin[fplan.Create] {
 
   val attribute = fNode.attribute.asInstanceOf[VertexAttribute]
@@ -623,14 +625,17 @@ class Create(val fNode: fplan.Create,
     i"""SELECT * FROM $genVertexIdQueryName"""
 }
 
-object Create extends SqlNodeCreator[Create, fplan.Create] {
+object CreateVertex extends SqlNodeCreator[CreateVertex, fplan.Create] {
+  override def canCreate(fNode: fplan.Create, options: CompilerOptions): Boolean =
+    super.canCreate(fNode, options) &&
+      fNode.attribute.isInstanceOf[VertexAttribute]
 
   override def apply(fNode: fplan.Create,
                      options: CompilerOptions)
   : (SqlNode with WithFNodeOrigin[FNode], CompilerOptions) = {
     val (child, childOptions) = transformOptions(SqlNode(fNode.child, options))
 
-    val createNode = new Create(fNode, child, childOptions)
+    val createNode = new CreateVertex(fNode, child, childOptions)
 
     (createNode, createNode.lastOptions)
   }
