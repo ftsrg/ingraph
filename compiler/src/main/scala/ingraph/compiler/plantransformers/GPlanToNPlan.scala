@@ -45,7 +45,15 @@ object GPlanToNPlan {
       case gplan.Unwind(unwindItem, child) => nplan.Unwind(unwindItem, transform(child))
       // unary CUD
       case gplan.Create(attributes, child) =>
-        attributes.foldLeft(transform(child)) { (op, attribute) => nplan.Create(attribute, op) }
+        attributes.foldLeft(transform(child)) { (op, attribute) =>
+          val alreadyInScope = op.output.exists(_.resolvedName == attribute.resolvedName)
+
+          // skip create if the vertex already exists
+          if (alreadyInScope)
+            op
+          else
+            nplan.Create(attribute, op)
+        }
       case gplan.Delete(attributes, detach, child) => nplan.Delete(attributes, detach, transform(child))
       case gplan.Merge(attributes, child) =>
         attributes.foldLeft(transform(child)) { (op, attribute) => nplan.Merge(attribute, op) }
