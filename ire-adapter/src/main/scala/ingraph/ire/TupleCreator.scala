@@ -119,7 +119,7 @@ class PullTupleCreator(vertexOps: Seq[GetVertices], edgeOps: Seq[GetEdges],
         indexer.verticesByLabel(opLabels.head).filter(v => opLabels.subsetOf(v.labels))
       case Some(Literal(id, _)) =>
         val label = v.labels.vertexLabels.head
-        val vertex = indexer.verticesByIdLabel(
+        val vertex = indexer.vertexByIdLabel(
           id.asInstanceOf[Long],
           label
         ).getOrElse(throw new IllegalStateException(s"Vertex not found with label ${label} and id ${id}"))

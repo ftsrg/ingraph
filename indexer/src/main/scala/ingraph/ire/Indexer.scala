@@ -39,7 +39,6 @@ class Indexer {
 
   val edgeLookup = mutable.HashMap[Long, IngraphEdge]()
   val edgeTypeLookup = new BufferMultimap[String, IngraphEdge]()
-  val edgeSrcTgtTypeLookup = new BufferMultimap[((Long, Long), String), IngraphEdge]
 
   def fill(tupleMapper: GraphElementToTupleMapper): Unit = {
     for (vertex <- vertexLookup.values) {
@@ -102,7 +101,6 @@ class Indexer {
     edge.targetVertex.edgesIn.addBinding(edge.`type`, edge)
     edgeTypeLookup.addBinding(edge.`type`, edge)
     val srcTgt = (edge.sourceVertex.id, edge.targetVertex.id)
-    edgeSrcTgtTypeLookup.addBinding((srcTgt, edge.`type`), edge)
     mappers.foreach(_.addEdge(edge))
     edge
   }
@@ -115,28 +113,17 @@ class Indexer {
     val edge = edgeLookup(id)
     mappers.foreach(_.removeEdge(edge))
     edgeTypeLookup.removeBinding(edge.`type`, edge)
-    val srcTgt = (edge.sourceVertex.id, edge.targetVertex.id)
-    edgeSrcTgtTypeLookup.removeBinding((srcTgt, edge.`type`), edge)
     edgeLookup.remove(id)
   }
 
-  def edgesBySourceAndTargetAndType(source: IngraphVertex, target: IngraphVertex, `type`: String) =
-    edgeSrcTgtTypeLookup.getOrElse(((source.id, target.id), `type`), Seq()).iterator
-
-  def verticesById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
-  def verticesByIdLabel(id: Long, label: String): Option[IngraphVertex] = vertexIdLabelLookup.get((id, label))
+  def vertexById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
+  def vertexByIdLabel(id: Long, label: String): Option[IngraphVertex] = vertexIdLabelLookup.get((id, label))
   def verticesByLabel(label: String): Iterator[IngraphVertex] = vertexLabelLookup.getOrElse(label, Seq()).iterator
   def vertices(): Iterator[IngraphVertex] = vertexLookup.valuesIterator
 
   def edges(): Iterator[IngraphEdge] = edgeLookup.valuesIterator
   def edgeById(id: Long): Option[IngraphEdge] = edgeLookup.get(id)
   def edgesByType(label: String): Iterator[IngraphEdge] = edgeTypeLookup.getOrElse(label, Seq()).iterator
-
-  def getNumberOfVertices(): Int = vertexLookup.size
-  def getNumberOfEdges(): Int = edgeLookup.size
-  def getNumberOfLabels(): Int = vertexLabelLookup.keySet.size
-  def getNumberOfTypes(): Int = edgeTypeLookup.keySet.size
-  def getNumberOfEdgesWithType(`type`: String): Int = edgeTypeLookup.get(`type`).map(_.size).getOrElse(0)
 
   val rnd = new Random(1)
   def newId(): Long = {
