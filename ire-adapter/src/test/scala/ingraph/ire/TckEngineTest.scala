@@ -10,13 +10,13 @@ class TckEngineTest extends FunSuite {
   def run(createQuery: String, readQuery: String): Iterable[Tuple] = {
     val indexer = new Indexer()
 
-    if (createQuery != "") {
-      val createAdapter = new IngraphOneTimeAdapter(createQuery, "create", indexer)
-      createAdapter.terminate()
+    if (createQuery.nonEmpty) {
+      val createAdapter = new OneTimeQueryAdapter(createQuery, "create", indexer)
+      createAdapter.results()
     }
 
-    val readAdapter = new IngraphIncrementalAdapter(readQuery, "read", indexer)
-    readAdapter.result()
+    val readAdapter = new IncrementalQueryAdapter(readQuery, "read", indexer)
+    readAdapter.results()
   }
 
   // MatchAcceptance.feature

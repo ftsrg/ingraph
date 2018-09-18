@@ -2,21 +2,20 @@ package ingraph.ire
 
 import akka.actor.{ActorRef, Props}
 import hu.bme.mit.ire._
+import hu.bme.mit.ire.collections.BufferMultimap
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, Terminator}
 import hu.bme.mit.ire.nodes.binary._
 import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulAggregate}
-import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
+import ingraph.ire.adapters.tuplecreators.TupleConstants
 import ingraph.model.expr._
 import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
-import ingraph.model.fplan
 import ingraph.model.fplan._
-import ingraph.model.nplan
 import ingraph.parse.ExpressionParser
-import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression, Literal}
+import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression, Literal}
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
@@ -29,7 +28,6 @@ abstract class AnnotatedRelationalEngine extends RelationalEngine {
 object EngineFactory {
 
   case class ForwardConnection(parent: FNode, child: (ReteMessage) => Unit)
-  case class EdgeTransformer(nick: String, source:String, target: String)
 
   def createQueryEngine(plan: FNode, indexer: Indexer): AnnotatedRelationalEngine =
     new AnnotatedRelationalEngine {
