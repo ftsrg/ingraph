@@ -1,7 +1,7 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.inputs.InputMultiplexerFactory
+import hu.bme.mit.ire.inputs.InputTransactionFactory
 import hu.bme.mit.ire.listeners.ChangeListener
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.csv.EdgeMetaData
@@ -14,19 +14,19 @@ class IncrementalQueryAdapter(
     override val indexer: Indexer = new Indexer()
   ) extends AbstractQueryAdapter {
 
-  val inputMultiplexerFactory = new InputMultiplexerFactory
-  inputMultiplexerFactory.subscribe(engine.inputLookup)
+  val inputTransactionFactory = new InputTransactionFactory
+  inputTransactionFactory.subscribe(engine.inputLookup)
 
   val tupleCreator = new TupleCreator(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
     engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap,
     LongIdParser,
-    inputMultiplexerFactory.newInputMultiplexer()
+    inputTransactionFactory.newInputTransaction()
   )
   indexer.subscribe(tupleCreator)
 
   override def results(): Iterable[Tuple] = {
-    tupleCreator.inputMultiplexer.sendAll()
+    tupleCreator.inputTransaction.sendAll()
     engine.getResults()
   }
 

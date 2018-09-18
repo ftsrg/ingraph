@@ -5,13 +5,13 @@ import hu.bme.mit.ire.messages.ChangeSet
 
 import scala.collection.mutable
 
-trait InputMultiplexer {
+trait InputTransaction {
   def sendAll(): Unit
   def add(pred: String, tuple: Tuple)
   def remove(pred: String, tuple: Tuple)
 }
 
-class InputMultiplexerFactory {
+class InputTransactionFactory {
   val subscribers = new mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]
 
   def subscribe(subscriber: Map[String, (ChangeSet) => Unit]) = {
@@ -19,11 +19,11 @@ class InputMultiplexerFactory {
       subscribers.getOrElseUpdate(attribute, mutable.MutableList()) += func
   }
 
-  def newInputMultiplexer(): BatchInputMultiplexer = {
-    new BatchInputMultiplexer
+  def newInputTransaction(): BatchInputTransaction = {
+    new BatchInputTransaction
   }
 
-  class BatchInputMultiplexer extends InputMultiplexer {
+  class BatchInputTransaction extends InputTransaction {
     val positiveChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
     val negativeChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
 

@@ -4,7 +4,7 @@ import akka.actor.{ActorRef, ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
-import hu.bme.mit.ire.inputs.InputMultiplexerFactory
+import hu.bme.mit.ire.inputs.InputTransactionFactory
 import hu.bme.mit.ire.listeners.ConsistentChangeListener
 import hu.bme.mit.ire.messages
 import hu.bme.mit.ire.messages.{ChangeSet, Terminator}
@@ -43,16 +43,16 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
 
   "multiple queries" should "work" in {
     for (i <- 1 to 1000) {
-      val input = new InputMultiplexerFactory
+      val input = new InputTransactionFactory
       val query1 = new TestQuery1
       val query2 = new TestQuery2
       input.subscribe(query1.inputLookup)
       input.subscribe(query2.inputLookup)
-      val inputMultiplexer1 = input.newInputMultiplexer
-      inputMultiplexer1.add("testval", tuple(5, 5))
-      inputMultiplexer1.add("testval", tuple(5, 6))
-      inputMultiplexer1.add("testval2", tuple(5, 7))
-      inputMultiplexer1.sendAll()
+      val inputTransaction1 = input.newInputTransaction
+      inputTransaction1.add("testval", tuple(5, 5))
+      inputTransaction1.add("testval", tuple(5, 6))
+      inputTransaction1.add("testval2", tuple(5, 7))
+      inputTransaction1.sendAll()
       val res1 = query1.getResults()
       assert(res1.toSet == Set(tuple(5, 5), tuple(5, 6)))
       val res2 = query2.getResults()
@@ -61,37 +61,37 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   }
 
   "integration" should "work" in {
-    val input = new InputMultiplexerFactory
+    val input = new InputTransactionFactory
     val query = new TestQuery1
     input.subscribe(query.inputLookup)
-    val inputMultiplexer1 = input.newInputMultiplexer
-    inputMultiplexer1.add("testval", tuple(5, 5))
-    inputMultiplexer1.add("testval", tuple(5, 6))
-    inputMultiplexer1.add("testval", tuple(5, 7))
-    inputMultiplexer1.sendAll()
+    val inputTransaction1 = input.newInputTransaction
+    inputTransaction1.add("testval", tuple(5, 5))
+    inputTransaction1.add("testval", tuple(5, 6))
+    inputTransaction1.add("testval", tuple(5, 7))
+    inputTransaction1.sendAll()
     val res0 = query.getResults()
     assert(res0.toSet == Set(tuple(5, 5), tuple(5, 6), tuple(5, 7)))
-    val inputMultiplexer2 = input.newInputMultiplexer
-    inputMultiplexer2.remove("testval", tuple(5, 5))
-    inputMultiplexer2.remove("testval", tuple(5, 6))
-    inputMultiplexer2.add("tesval2", tuple(3, 2))
-    inputMultiplexer2.add("testval", tuple(5, 8))
-    inputMultiplexer2.sendAll()
+    val inputTransaction2 = input.newInputTransaction
+    inputTransaction2.remove("testval", tuple(5, 5))
+    inputTransaction2.remove("testval", tuple(5, 6))
+    inputTransaction2.add("tesval2", tuple(3, 2))
+    inputTransaction2.add("testval", tuple(5, 8))
+    inputTransaction2.sendAll()
     assert(query.getResults().toSet == Set(tuple(5, 7), tuple(5, 8)))
     val beginTime: Long = System.nanoTime()
     (1 to 5000).foreach(i => {
-      val inputMultiplexerRemove7 = input.newInputMultiplexer
-      inputMultiplexerRemove7.remove("testval", tuple(5, 7))
-      inputMultiplexerRemove7.sendAll()
+      val inputTransactionRemove7 = input.newInputTransaction
+      inputTransactionRemove7.remove("testval", tuple(5, 7))
+      inputTransactionRemove7.sendAll()
       assert(query.getResults().toSet == Set(tuple(5, 8)))
-      val inputMultiplexerRemove8 = input.newInputMultiplexer
-      inputMultiplexerRemove8.remove("testval", tuple(5, 8))
-      inputMultiplexerRemove8.sendAll()
+      val inputTransactionRemove8 = input.newInputTransaction
+      inputTransactionRemove8.remove("testval", tuple(5, 8))
+      inputTransactionRemove8.sendAll()
       assert(query.getResults().toSet == Set())
-      val inputMultiplexerAdd78 = input.newInputMultiplexer
-      inputMultiplexerAdd78.add("testval", tuple(5, 7))
-      inputMultiplexerAdd78.add("testval", tuple(5, 8))
-      inputMultiplexerAdd78.sendAll()
+      val inputTransactionAdd78 = input.newInputTransaction
+      inputTransactionAdd78.add("testval", tuple(5, 7))
+      inputTransactionAdd78.add("testval", tuple(5, 8))
+      inputTransactionAdd78.sendAll()
     })
     val endTime: Long = System.nanoTime() - beginTime
     val avg = endTime / 500 / 3
@@ -100,12 +100,12 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   "listeners" should "listen" in {
     (1 to 1000).foreach(i => {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val input = new InputMultiplexerFactory
+      val input = new InputTransactionFactory
       val query = new TestQuery1
       input.subscribe(query.inputLookup)
-      val inputMultiplexer1 = input.newInputMultiplexer
-      inputMultiplexer1.add("testval", tuple(5, 5))
-      inputMultiplexer1.sendAll()
+      val inputTransaction1 = input.newInputTransaction
+      inputTransaction1.add("testval", tuple(5, 5))
+      inputTransaction1.sendAll()
       query.getResults()
       query.addListener(new ConsistentChangeListener {
         override def listener(positive: Vector[Tuple], negative: Vector[Tuple]): Unit = {
@@ -113,10 +113,10 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
         }
       })
       expectMsg(ChangeSet(positive = Vector(tuple(5, 5))))
-      val inputMultiplexer2 = input.newInputMultiplexer
-      inputMultiplexer2.remove("testval", tuple(5, 5))
-      inputMultiplexer2.add("testval", tuple(6, 6))
-      inputMultiplexer2.sendAll()
+      val inputTransaction2 = input.newInputTransaction
+      inputTransaction2.remove("testval", tuple(5, 5))
+      inputTransaction2.add("testval", tuple(6, 6))
+      inputTransaction2.sendAll()
       query.getResults()
       expectMsg(ChangeSet(positive = Vector(tuple(6, 6)), negative = Vector(tuple(5, 5))))
     })

@@ -1,7 +1,7 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.inputs.InputMultiplexerFactory
+import hu.bme.mit.ire.inputs.InputTransactionFactory
 import ingraph.ire.adapters.tuplecreators.PullTupleCreator
 
 class OneTimeQueryAdapter(
@@ -10,17 +10,17 @@ class OneTimeQueryAdapter(
     override val indexer: Indexer = new Indexer()
   ) extends AbstractQueryAdapter {
 
-  val inputMultiplexerFactory = new InputMultiplexerFactory
-  inputMultiplexerFactory.subscribe(engine.inputLookup)
-  val inputMultiplexer = inputMultiplexerFactory.newInputMultiplexer
+  val inputTransactionFactory = new InputTransactionFactory
+  inputTransactionFactory.subscribe(engine.inputLookup)
+  val inputTransaction = inputTransactionFactory.newInputTransaction
   new PullTupleCreator(
     engine.vertexConverters.values.flatten.toVector.distinct,
     engine.edgeConverters.values.flatten.toVector.distinct,
-    indexer, inputMultiplexer, LongIdParser
+    indexer, inputTransaction, LongIdParser
   )
 
   override def results(): Iterable[Tuple] = {
-    inputMultiplexer.sendAll()
+    inputTransaction.sendAll()
     engine.getResults()
   }
 
