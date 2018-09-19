@@ -24,6 +24,7 @@ class TckScenarioSet(selectedFeatures: Set[String] = Set(),
     .groupBy(scenario => scenario.featureName -> scenario.name)
     .map(_._2.head)
     .toSeq
+    .sortBy(scenario => scenario.featureName -> scenario.name)
 
   // scenarios have globally unique names
   assert(allScenarios.groupBy(_.name).forall(_._2.size == 1))
