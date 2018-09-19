@@ -1,12 +1,40 @@
 package ingraph.compiler.sql.driver
 
+import java.sql.{Connection, DriverManager}
 import java.util.{Map => javaMap}
 
 import org.neo4j.driver.v1._
+import org.neo4j.driver.v1.exceptions.ClientException
 import org.neo4j.driver.v1.types.TypeSystem
 
 class SqlSession(val sqlDriver: SqlDriver) extends Session {
-  override def beginTransaction(): Transaction = new SqlTransaction(this)
+  val sqlConnection: Connection = DriverManager.getConnection(sqlDriver.url)
+  sqlConnection.setAutoCommit(false)
+
+  private[driver] var currentTransaction: Option[SqlTransaction] = None
+
+  override def beginTransaction(): Transaction = {
+    if (currentTransaction.isDefined) {
+      throw new ClientException("You cannot begin a transaction on a session with an open transaction;" + " either run from within the transaction or use a different session.")
+    }
+    else {
+      val transaction = new SqlTransaction(this)
+      currentTransaction = Some(transaction)
+
+      transaction
+    }
+  }
+
+  private[driver] def closeTransaction(sqlTransaction: SqlTransaction, toBeCommitted: Boolean): Unit = {
+    if (currentTransaction.get == sqlTransaction) {
+      if (toBeCommitted)
+        sqlConnection.commit()
+      else
+        sqlConnection.rollback()
+
+      currentTransaction = None
+    }
+  }
 
   override def beginTransaction(bookmark: String): Transaction = ???
 
@@ -18,7 +46,10 @@ class SqlSession(val sqlDriver: SqlDriver) extends Session {
 
   override def reset(): Unit = ???
 
-  override def close(): Unit = {}
+  override def close(): Unit = {
+    currentTransaction.foreach(_.close())
+    sqlConnection.close()
+  }
 
   override def run(statementTemplate: String, parameters: Value): StatementResult = ???
 

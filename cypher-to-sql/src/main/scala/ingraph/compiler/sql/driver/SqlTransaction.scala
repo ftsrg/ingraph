@@ -1,6 +1,5 @@
 package ingraph.compiler.sql.driver
 
-import java.sql.{Connection, DriverManager}
 import java.util.{Map => javaMap}
 
 import ingraph.compiler.sql.Util.withResources
@@ -13,9 +12,6 @@ import scala.collection.JavaConverters._
 
 class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
 
-  val sqlConnection: Connection = DriverManager.getConnection(sqlSession.sqlDriver.url)
-  sqlConnection.setAutoCommit(false)
-
   var toBeCommitted: Option[Boolean] = None
 
   override def success(): Unit = if (toBeCommitted.isEmpty) toBeCommitted = Some(true)
@@ -24,11 +20,9 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
 
   override def close(): Unit = {
     toBeCommitted match {
-      case Some(true) => sqlConnection.commit()
-      case _ => sqlConnection.rollback()
+      case Some(true) => sqlSession.closeTransaction(this, true)
+      case _ => sqlSession.closeTransaction(this, false)
     }
-
-    sqlConnection.close()
   }
 
   override def run(statementTemplate: String, parameters: Value): StatementResult =
@@ -47,7 +41,7 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
     val cypherQuery = statement.text
     val sqlCompiler = new CompileSql(cypherQuery, statement.parameters().asMap.asScala.toMap)
 
-    withResources(sqlConnection.createStatement)(sqlStatement => {
+    withResources(sqlSession.sqlConnection.createStatement)(sqlStatement => {
       val translateCreateQueries = sqlSession.sqlDriver.translateCreateQueries
       if (!translateCreateQueries && CompileSql.getNodes(sqlCompiler.fplan).exists(_.isInstanceOf[Create])) {
         val cypherSession = sqlSession.sqlDriver.backendSession.get
@@ -55,7 +49,7 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
 
         cypherSession.run(cypherQuery, statement.parameters)
 
-        ExportSteps.execute(cypherSession, sqlConnection)
+        ExportSteps.execute(cypherSession, sqlStatement.getConnection)
 
         EmptySqlStatementResult
       }
@@ -70,5 +64,5 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
 
   override def typeSystem(): TypeSystem = sqlSession.typeSystem()
 
-  override def isOpen: Boolean = !sqlConnection.isClosed
+  override def isOpen: Boolean = sqlSession.currentTransaction.contains(this)
 }
