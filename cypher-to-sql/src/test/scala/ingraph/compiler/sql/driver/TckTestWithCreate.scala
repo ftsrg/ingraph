@@ -20,5 +20,11 @@ object TckTestWithCreate {
     ""
   ).filter(!_.isEmpty)
 
-  val scenarioSet = new TckScenarioSet(selectedFeatures, ignoredScenarios = Set(), selectedScenarios = selectedScenarios)
+  val ignoredScenarios: Set[String] = Set(
+    "Many CREATE clauses",
+    // placeholder
+    ""
+  ).filter(!_.isEmpty)
+
+  val scenarioSet = new TckScenarioSet(selectedFeatures, ignoredScenarios, selectedScenarios = selectedScenarios)
 }
