@@ -47,5 +47,21 @@ class IndexerTest extends WordSpec {
       assert(indexer.vertices().map(_.id).toSet == Set(1, 2, 3))
     }
 
+    "deleting edge removes both references" in {
+      val v1 = IngraphVertex(1L, Set())
+      val v2 = IngraphVertex(2L, Set())
+      val e = IngraphEdge(3L, v1, v2, "broken")
+      val indexer = new Indexer()
+      indexer.addVertex(v1)
+      indexer.addVertex(v2)
+      indexer.addEdge(e)
+      assert(v1.edgesOut.nonEmpty)
+      assert(v2.edgesIn.nonEmpty)
+      indexer.removeEdgeById(3L)
+      assert(v1.edgesOut.isEmpty)
+      assert(v1.edgesIn.isEmpty)
+    }
+
+
   }
 }
