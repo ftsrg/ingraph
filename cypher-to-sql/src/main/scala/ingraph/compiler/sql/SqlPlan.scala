@@ -126,7 +126,7 @@ object SqlNode {
     )
     val option = creators.collectFirst(Function.unlift(_.applyIfPossible(fNode, options)))
 
-    option.get
+    option.getOrElse(throw new NoSuchElementException(fNode.getClass.getName + " cannot be compiled to " + classOf[SqlNode].getSimpleName))
   }
 }
 
