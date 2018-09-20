@@ -6,7 +6,7 @@ import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
 import ingraph.model.misc.Function
 import ingraph.model.{fplan, nplan}
-import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, Literal, Not}
+import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Literal, Not}
 import org.apache.spark.sql.types.{LongType, StringType}
 import org.neo4j.driver.v1.{Value, Values}
 
@@ -103,9 +103,26 @@ object CompileSql {
   def getSql(node: Any, options: CompilerOptions): String = {
     val sqlString =
       node match {
+        case CaseWhen(branches, elseValue) => {
+          val branchesPart = branches
+            .map { case (c, v) => getSql(c, options) -> getSql(v, options) }
+            .map { case (condition, value) => s"WHEN $condition THEN $value" }
+            .mkString("\n")
+          val elsePart = elseValue
+            .map(getSql(_, options))
+            .map("ELSE " + _)
+            .getOrElse("")
+
+          i"""CASE $branchesPart
+             |     $elsePart
+             |END"""
+        }
         case node: ReturnItem => getSql(node.child, options)
         case FunctionInvocation(Function.NODE_HAS_LABELS, (vertexColumn: VertexAttribute) :: (vertexLabelSet: VertexLabelSet) :: Nil, false) => {
           getVertexLabelSqlCondition(vertexLabelSet, getQuotedColumnName(vertexColumn)).get
+        }
+        case FunctionInvocation(Function.EXISTS, Seq(propertyAttribute: PropertyAttribute), false) => {
+          getSql(propertyAttribute, options) + " IS NOT NULL"
         }
         case FunctionInvocation(functor@Function.COUNT_ALL, Nil, false) => {
           functor.getPrettyName
