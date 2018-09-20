@@ -3,7 +3,7 @@ package ingraph.compiler.sql.driver
 import java.io.File
 
 import ingraph.compiler.sql.Util._
-import ingraph.compiler.sql.driver.LdbcTest.ldbcQueries
+import ingraph.compiler.sql.driver.LdbcTest.{expectedToSucceed, ldbcQueries}
 import org.scalatest.FunSuite
 
 import scala.reflect.io
@@ -17,7 +17,7 @@ class LdbcTest extends FunSuite {
             try {
               tx.run(cypherQueryString)
             } catch {
-              case throwable: Throwable => cancel(name + " has failed. Only warning!", throwable)
+              case throwable: Throwable if !expectedToSucceed.contains(name) => cancel(name + " has failed. Only warning!", throwable)
             }
           }
         }
@@ -29,6 +29,12 @@ class LdbcTest extends FunSuite {
 object LdbcTest {
   val ldbcQueriesPath = "/interactive-tests"
 
+  val expectedToSucceed: Set[String] = Set(
+    "LdbcShortQuery1PersonProfile",
+    "LdbcShortQuery5MessageCreator",
+    "LdbcShortQuery6MessageForum"
+  )
+
   val ldbcQueries: Seq[(String, String)] =
     new File(getClass.getResource(ldbcQueriesPath).getFile)
       .listFiles()
@@ -38,6 +44,7 @@ object LdbcTest {
         // sort by name then by ID
         filename.replaceAll("""\d+.*$""", "") -> Integer.parseInt(filename.replaceAll("""\D""", ""))
       }
-      .map(f => f.getName -> io.File(f).slurp())
+      .map(io.File(_))
+      .map(f => f.stripExtension -> f.slurp())
       .toSeq
 }
