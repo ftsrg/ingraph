@@ -1,12 +1,13 @@
 package ingraph.compiler.sql
 
+import ingraph.compiler.sql.CompileSql.getSql
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.driver.ValueJsonConversion
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
 import ingraph.model.misc.Function
 import ingraph.model.{fplan, nplan}
-import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Literal, Not}
+import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Expression, IsNotNull, IsNull, Literal, Not}
 import org.apache.spark.sql.types.{LongType, StringType}
 import org.neo4j.driver.v1.{Value, Values}
 
@@ -103,6 +104,8 @@ object CompileSql {
   def getSql(node: Any, options: CompilerOptions): String = {
     val sqlString =
       node match {
+        case IsNull(child) => IsNull(ExpressionWrapper(child, options)).sql
+        case IsNotNull(child) => IsNotNull(ExpressionWrapper(child, options)).sql
         case CaseWhen(branches, elseValue) => {
           val branchesPart = branches
             .map { case (c, v) => getSql(c, options) -> getSql(v, options) }
@@ -249,3 +252,15 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
 }
 
 case class CompilerOptions(parameters: Map[String, Any] = Map(), nodeId: Int = 0, unwrapJson: Boolean = false) {}
+
+case class ExpressionWrapper(expr: Expression, options: CompilerOptions) extends ExpressionBase {
+  override def children: Seq[Expression] = expr.children
+
+  override def productElement(n: Int): Any = expr.productElement(n)
+
+  override def productArity: Int = expr.productArity
+
+  override def canEqual(that: Any): Boolean = expr.canEqual(that)
+
+  override def sql: String = getSql(expr, options)
+}
