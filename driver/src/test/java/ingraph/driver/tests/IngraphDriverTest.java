@@ -22,11 +22,11 @@ public class IngraphDriverTest {
 
 			System.out.println("First create");
 			session.run("CREATE (n:Person {name: 'Jane'})");
-			readHandler.adapter().result();
+			readHandler.adapter().results();
 
 			System.out.println("Second create");
 			session.run("CREATE (n:Person {name: 'Jake'})");
-			readHandler.adapter().result();
+			readHandler.adapter().results();
 		}
 	}
 

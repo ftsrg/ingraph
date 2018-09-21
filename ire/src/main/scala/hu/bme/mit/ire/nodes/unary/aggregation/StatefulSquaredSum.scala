@@ -1,7 +1,7 @@
 package hu.bme.mit.ire.nodes.unary.aggregation
 
 import hu.bme.mit.ire.datatypes._
-import hu.bme.mit.ire.util.GenericMath
+import hu.bme.mit.ire.math.GenericMath
 
 
 class StatefulSquaredSum(sumKey: Int) extends StatefulAggregate {

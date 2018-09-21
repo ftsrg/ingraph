@@ -5,7 +5,7 @@ import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Path
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
 import hu.bme.mit.ire.util.TestUtil._
-import hu.bme.mit.ire.util.Utils
+import hu.bme.mit.ire.util.{TestUtil, Utils}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.concurrent.duration.Duration
@@ -41,14 +41,14 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(), 1), tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3))
       )): _*)
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(2))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(2, Path(), 2), tuple(2, Path(101), 3))
       )): _*)
 
@@ -62,7 +62,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         negative = tupleBag(tuple(2, 101, 3))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(
           tuple(1, Path(100, 101), 3),
           tuple(2, Path(101), 3)
@@ -78,14 +78,14 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(), 1))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3))
       )): _*)
     }
@@ -102,7 +102,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100), 2), tuple(2, Path(101), 3), tuple(1, Path(100, 101), 3))
       )): _*)
 
@@ -164,7 +164,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         negative = tupleBag(tuple(2, 101, 3))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(tuple(1, Path(100, 101), 3), tuple(2, Path(101, 102), 4))
       )): _*)
     }
@@ -179,17 +179,17 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3), tuple(2, Path(101), 3))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(3, 102, 1))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(2, Path(101, 102, 100), 2), tuple(2, Path(101, 102), 1), tuple(1, Path(100, 101, 102), 1), tuple(3, Path(102, 100), 2), tuple(3, Path(102, 100, 101), 3), tuple(3, Path(102), 1))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 103, 4))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(2, Path(101, 102, 100, 103), 4), tuple(1, Path(100, 103), 4), tuple(3, Path(102, 100, 103), 4), tuple(2, Path(103), 4))
       )): _*)
     }
@@ -204,38 +204,38 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100, 101), 3))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(3, 102, 1))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(2, Path(101, 102, 100), 2), tuple(2, Path(101, 102), 1), tuple(1, Path(100, 101, 102), 1), tuple(3, Path(102, 100), 2), tuple(3, Path(102, 100, 101), 3))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 103, 4))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100, 103), 4), tuple(3, Path(102, 100, 103), 4))
       )): _*)
 
       transitiveClosure ! Primary(ChangeSet(
         negative = tupleBag(tuple(3))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(tuple(3, Path(102, 100), 2), tuple(3, Path(102, 100, 103), 4), tuple(3, Path(102, 100, 101), 3))
       )): _*)
 
       transitiveClosure ! Primary(ChangeSet(
         negative = tupleBag(tuple(2))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(tuple(2, Path(101, 102, 100), 2), tuple(2, Path(101, 102), 1))
       )): _*)
 
       transitiveClosure ! Primary(ChangeSet(
         negative = tupleBag(tuple(1))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(tuple(1, Path(100, 101, 102), 1), tuple(1, Path(100, 103), 4), tuple(1, Path(100, 101), 3))
       )): _*)
     }
@@ -250,22 +250,22 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
           expectNoMsg(timeout)
 
           transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 1))))
-          expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+          expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
             positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 1), tuple(2, Path(101, 100), 2), tuple(2, Path(101), 1))
           )): _*)
 
           transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 102, 1))))
-          expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+          expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
             positive = tupleBag(tuple(1, Path(100, 102), 1), tuple(2, Path(101, 100, 102), 1), tuple(2, Path(102, 100), 2), tuple(2, Path(102, 100, 101), 1), tuple(2, Path(102), 1))
           )): _*)
 
           transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 103, 3))))
-          expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+          expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
             positive = tupleBag(tuple(1, Path(100, 103), 3), tuple(2, Path(102, 100, 103), 3), tuple(2, Path(101, 100, 103), 3), tuple(2, Path(103), 3))
           )): _*)
 
           transitiveClosure ! Secondary(ChangeSet(negative = tupleBag(tuple(2, 101, 1))))
-          expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+          expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
             negative = tupleBag(tuple(1, Path(100, 101), 1), tuple(2, Path(101, 100), 2), tuple(2, Path(101), 1), tuple(2, Path(101, 100, 102), 1), tuple(2, Path(102, 100, 101), 1), tuple(2, Path(101, 100, 103), 3))
           )): _*)
     }
@@ -277,34 +277,34 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(), 1), tuple(2, Path(), 2))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 1))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 1), tuple(2, Path(101), 1), tuple(2, Path(101, 100), 2))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 102, 1))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100, 102), 1), tuple(2, Path(101, 100, 102), 1), tuple(2, Path(102, 100, 101), 1), tuple(2, Path(102), 1), tuple(2, Path(102, 100), 2))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 103, 3))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100, 103), 3), tuple(2, Path(102, 100, 103), 3), tuple(2, Path(101, 100, 103), 3), tuple(2, Path(103), 3))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(negative = tupleBag(tuple(2, 101, 1))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(tuple(1, Path(100, 101), 1), tuple(2, Path(101, 100), 2), tuple(2, Path(101), 1), tuple(2, Path(101, 100, 102), 1), tuple(2, Path(102, 100, 101), 1), tuple(2, Path(101, 100, 103), 3))
       )): _*)
 
       transitiveClosure ! Primary(ChangeSet(
         negative = tupleBag(tuple(1))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(tuple(1, Path(), 1), tuple(1, Path(100, 103), 3), tuple(1, Path(100, 102), 1), tuple(1, Path(100), 2))
       )): _*)
     }
@@ -321,7 +321,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3), tuple(2, Path(101), 3))
       )): _*)
 
@@ -344,17 +344,17 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3), tuple(2, Path(101), 3))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(3, 102, 1))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(2, Path(101, 102, 100), 2), tuple(2, Path(101, 102), 1), tuple(1, Path(100, 101, 102), 1), tuple(3, Path(102, 100), 2), tuple(3, Path(102, 100, 101), 3), tuple(3, Path(102), 1))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(negative = tupleBag(tuple(2, 101, 3))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(tuple(1, Path(100, 101, 102), 1), tuple(1, Path(100, 101), 3), tuple(2, Path(101, 102, 100), 2), tuple(2, Path(101, 102), 1), tuple(2, Path(101), 3), tuple(3, Path(102, 100, 101), 3))
       )): _*)
     }
@@ -371,12 +371,12 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3), tuple(2, Path(101), 3))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 102, 3), tuple(2, 103, 3))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(102), 3), tuple(1, Path(100, 103), 3), tuple(2, Path(103), 3))
       )): _*)
     }
@@ -393,12 +393,12 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3), tuple(2, Path(101), 3))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(negative = tupleBag(tuple(2, 101, 3))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(tuple(1, Path(100, 101), 3), tuple(2, Path(101), 3))
       )): _*)
 
@@ -420,7 +420,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(36, 7, 11), tuple(17, 3, 38))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(36, Path(7), 11))
       )): _*)
 
@@ -428,7 +428,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(11, 1, 17))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(36, Path(7, 1, 3), 38), tuple(36, Path(7, 1, 2, 4), 38), tuple(36, Path(7, 1, 2), 21), tuple(36, Path(7, 1), 17))
       )): _*)
     }
@@ -445,19 +445,19 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(36, 7, 11), tuple(36, 6, 37))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(36, Path(7), 11), tuple(36, Path(6), 37))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(37, 3, 11))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(36, Path(6, 3), 11), tuple(37, Path(3), 11))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(11, 1, 21))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(36, Path(6, 3, 1), 21), tuple(36, Path(7, 1), 21), tuple(37, Path(3, 1), 21))
       )): _*)
     }
@@ -475,14 +475,14 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, Path(), 1), tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3))
       )): _*)
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(2))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(2, Path(), 2), tuple(2, Path(101), 3))
       )): _*)
 
@@ -496,7 +496,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         negative = tupleBag(tuple(3, 101, 2))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(
           tuple(1, Path(100, 101), 3),
           tuple(2, Path(101), 3)
@@ -517,14 +517,14 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1, 1001))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
       )): _*)
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(2, 1002))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
       )): _*)
 
@@ -538,7 +538,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         negative = tupleBag(tuple(2, 101, 3, "def"))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(
           tuple(1, 1001, Path(100, 101), 3, "def"),
           tuple(2, 1002, Path(101), 3, "def")
@@ -559,14 +559,14 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1, 1001))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
       )): _*)
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(2, 1002))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
       )): _*)
 
@@ -580,7 +580,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         negative = tupleBag(tuple(3, 101, 2, "def"))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(
           tuple(1, 1001, Path(100, 101), 3, "def"),
           tuple(2, 1002, Path(101), 3, "def")
@@ -601,21 +601,21 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1, 1001))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
       )): _*)
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(2, 1002))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1, 102, 3, "wow"))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(
           tuple(1, 1001, Path(102), 3, "wow"),
           tuple(1, 1001, Path(102), 3, "def"),
@@ -627,7 +627,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         negative = tupleBag(tuple(2, 101, 3, "def"))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(
           tuple(1, 1001, Path(100, 101), 3, "def"),
           tuple(1, 1001, Path(100, 101), 3, "wow"),
@@ -650,21 +650,21 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1, 1001))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
       )): _*)
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(2, 1002))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
       )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1, 102, 3, "def"))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         positive = tupleBag(
           tuple(1, 1001, Path(102), 3, "def")
         )
@@ -673,7 +673,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         negative = tupleBag(tuple(2, 101, 3, "def"))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(
           tuple(1, 1001, Path(100, 101), 3, "def"),
           tuple(2, 1002, Path(101), 3, "def")
@@ -683,7 +683,7 @@ class TransitiveJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with
       transitiveClosure ! Secondary(ChangeSet(
         negative = tupleBag(tuple(1, 102, 3, "def"))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(TestUtil.changeSetPermutations(ChangeSet(
         negative = tupleBag(
           tuple(1, 1001, Path(102), 3, "def")
         )

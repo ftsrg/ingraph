@@ -22,7 +22,7 @@ ext {
   scalaVersion = '2.11.12'
   sparkVersion = '2.3.0'
   slizaaVersion = '9.11.0-SNAPSHOT'
-  xtextVersion = '2.10.0'
+  xtextVersion = '2.12.0'
 }
 
 subprojects {

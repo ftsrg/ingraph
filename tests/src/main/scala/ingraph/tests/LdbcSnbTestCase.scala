@@ -3,6 +3,7 @@ package ingraph.tests
 import java.util
 
 import com.google.gson.Gson
+import ingraph.csv.EdgeMetaData
 
 import scala.collection.JavaConverters._
 
@@ -50,31 +51,31 @@ class LdbcSnbTestCase(val workload: String, val sf: String, val query: Int, val 
     }
   }
 
-  override def edgeCsvPaths: Map[String, (String, String, String)] = {
+  override def edgeCsvPaths: Map[String, EdgeMetaData] = {
     Map(
-      "comment_hasCreator_person"      -> ("Message",      "HAS_CREATOR",    "Person"),
-      "comment_isLocatedIn_place"      -> ("Message",      "IS_LOCATED_IN",  "Place"),
-      "comment_replyOf_comment"        -> ("Message",      "REPLY_OF",       "Message"),
-      "comment_replyOf_post"           -> ("Message",      "REPLY_OF",       "Message"),
-      "forum_containerOf_post"         -> ("Forum",        "CONTAINER_OF",   "Message"),
-      "forum_hasMember_person"         -> ("Forum",        "HAS_MEMBER",     "Person"),
-      "forum_hasModerator_person"      -> ("Forum",        "HAS_MODERATOR",  "Person"),
-      "forum_hasTag_tag"               -> ("Forum",        "HAS_TAG",        "Tag"),
-      "person_hasInterest_tag"         -> ("Person",       "HAS_INTEREST",   "Tag"),
-      "person_isLocatedIn_place"       -> ("Person",       "IS_LOCATED_IN",  "Place"),
-      "person_knows_person"            -> ("Person",       "KNOWS",          "Person"),
-      "person_likes_comment"           -> ("Person",       "LIKES",          "Message"),
-      "person_likes_post"              -> ("Person",       "LIKES",          "Message"),
-      "place_isPartOf_place"           -> ("Place",        "IS_PART_OF",     "Place"),
-      "post_hasCreator_person"         -> ("Message",      "HAS_CREATOR",    "Person"),
-      "comment_hasTag_tag"             -> ("Message",      "HAS_TAG",        "Tag"),
-      "post_hasTag_tag"                -> ("Message",      "HAS_TAG",        "Tag"),
-      "post_isLocatedIn_place"         -> ("Message",      "IS_LOCATED_IN",  "Place"),
-      "tagclass_isSubclassOf_tagclass" -> ("TagClass",     "IS_SUBCLASS_OF", "TagClass"),
-      "tag_hasType_tagclass"           -> ("Tag",          "HAS_TYPE",       "TagClass"),
-      "organisation_isLocatedIn_place" -> ("Organisation", "IS_LOCATED_IN",  "Place"),
-      "person_studyAt_organisation"    -> ("Person",       "STUDY_OF",       "Organisation"),
-      "person_workAt_organisation"     -> ("Person",       "WORK_AT",        "Organisation")
+      "comment_hasCreator_person"      -> EdgeMetaData("Message",      "HAS_CREATOR",    "Person"),
+      "comment_isLocatedIn_place"      -> EdgeMetaData("Message",      "IS_LOCATED_IN",  "Place"),
+      "comment_replyOf_comment"        -> EdgeMetaData("Message",      "REPLY_OF",       "Message"),
+      "comment_replyOf_post"           -> EdgeMetaData("Message",      "REPLY_OF",       "Message"),
+      "forum_containerOf_post"         -> EdgeMetaData("Forum",        "CONTAINER_OF",   "Message"),
+      "forum_hasMember_person"         -> EdgeMetaData("Forum",        "HAS_MEMBER",     "Person"),
+      "forum_hasModerator_person"      -> EdgeMetaData("Forum",        "HAS_MODERATOR",  "Person"),
+      "forum_hasTag_tag"               -> EdgeMetaData("Forum",        "HAS_TAG",        "Tag"),
+      "person_hasInterest_tag"         -> EdgeMetaData("Person",       "HAS_INTEREST",   "Tag"),
+      "person_isLocatedIn_place"       -> EdgeMetaData("Person",       "IS_LOCATED_IN",  "Place"),
+      "person_knows_person"            -> EdgeMetaData("Person",       "KNOWS",          "Person"),
+      "person_likes_comment"           -> EdgeMetaData("Person",       "LIKES",          "Message"),
+      "person_likes_post"              -> EdgeMetaData("Person",       "LIKES",          "Message"),
+      "place_isPartOf_place"           -> EdgeMetaData("Place",        "IS_PART_OF",     "Place"),
+      "post_hasCreator_person"         -> EdgeMetaData("Message",      "HAS_CREATOR",    "Person"),
+      "comment_hasTag_tag"             -> EdgeMetaData("Message",      "HAS_TAG",        "Tag"),
+      "post_hasTag_tag"                -> EdgeMetaData("Message",      "HAS_TAG",        "Tag"),
+      "post_isLocatedIn_place"         -> EdgeMetaData("Message",      "IS_LOCATED_IN",  "Place"),
+      "tagclass_isSubclassOf_tagclass" -> EdgeMetaData("TagClass",     "IS_SUBCLASS_OF", "TagClass"),
+      "tag_hasType_tagclass"           -> EdgeMetaData("Tag",          "HAS_TYPE",       "TagClass"),
+      "organisation_isLocatedIn_place" -> EdgeMetaData("Organisation", "IS_LOCATED_IN",  "Place"),
+      "person_studyAt_organisation"    -> EdgeMetaData("Person",       "STUDY_OF",       "Organisation"),
+      "person_workAt_organisation"     -> EdgeMetaData("Person",       "WORK_AT",        "Organisation")
     ) map {
       case (file, labels) => (csvDir + file + csvPostfix) -> labels
     }
