@@ -106,6 +106,7 @@ object CompileSql {
       node match {
         case IsNull(child) => IsNull(ExpressionWrapper(child, options)).sql
         case IsNotNull(child) => IsNotNull(ExpressionWrapper(child, options)).sql
+        case ListExpression(list) => "ARRAY[" + list.map(getSql(_, options)).mkString(", ") + "]"
         case CaseWhen(branches, elseValue) => {
           val branchesPart = branches
             .map { case (c, v) => getSql(c, options) -> getSql(v, options) }
@@ -121,6 +122,8 @@ object CompileSql {
              |END"""
         }
         case node: ReturnItem => getSql(node.child, options)
+        case FunctionInvocation(Function.LENGTH, Seq(edgeListAttribute: EdgeListAttribute), false) =>
+          "array_length(" + getSql(edgeListAttribute, options) + ")"
         case FunctionInvocation(Function.NODE_HAS_LABELS, (vertexColumn: VertexAttribute) :: (vertexLabelSet: VertexLabelSet) :: Nil, false) => {
           getVertexLabelSqlCondition(vertexLabelSet, getQuotedColumnName(vertexColumn)).get
         }
