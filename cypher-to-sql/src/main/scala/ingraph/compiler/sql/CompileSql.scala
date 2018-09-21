@@ -127,6 +127,9 @@ object CompileSql {
         case FunctionInvocation(Function.EXISTS, Seq(propertyAttribute: PropertyAttribute), false) => {
           getSql(propertyAttribute, options) + " IS NOT NULL"
         }
+        case FunctionInvocation(Function.TOINTEGER | Function.TOINT, Seq(expr: Expression), false) => {
+          "(" + getSql(expr, CompilerOptions(options.parameters, options.nodeId, unwrapJson = true)) + ")::INTEGER"
+        }
         case FunctionInvocation(functor@Function.COUNT_ALL, Nil, false) => {
           functor.getPrettyName
         }
