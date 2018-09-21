@@ -164,7 +164,14 @@ object CompileSql {
           else
             s"($leftSql $operator $rightSql)"
         }
-        case node: ResolvableName => getQuotedColumnName(node)
+        case node: ResolvableName => {
+          val unwrapPart =
+            if (options.unwrapJson && node.isInstanceOf[PropertyAttribute])
+              "->'value'->>'val'"
+            else
+              ""
+          getQuotedColumnName(node) + unwrapPart
+        }
         case node: IndexLookupExpression => {
           // TODO support indexing of SQL arrays too
           // JSON indexing
