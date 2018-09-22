@@ -38,7 +38,7 @@ case class GetVertices(requiredProperties: Seq[ResolvableName], nnode: nplan.Get
 }
 
 case class GetEdges(requiredProperties: Seq[ResolvableName], nnode: nplan.GetEdges) extends LeafFNode with TGetEdges{
-  override def flatSchema = nnode.output ++ requiredProperties
+  override val flatSchema = nnode.output ++ requiredProperties
   val src = nnode.src
   val trg = nnode.trg
   val edge = nnode.edge
