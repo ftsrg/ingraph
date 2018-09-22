@@ -15,8 +15,8 @@ trait IngraphElement {
 case class IngraphVertex(id: Long,
                          labels: Set[String],
                          override val properties: Map[String, Any] = Map()) extends IngraphElement {
-  val edgesOut: mutable.HashSet[IngraphEdge] = mutable.HashSet[IngraphEdge]()
-  val edgesIn: mutable.HashSet[IngraphEdge] = mutable.HashSet[IngraphEdge]()
+  val edgesOut: mutable.Buffer[IngraphEdge] = mutable.Buffer[IngraphEdge]()
+  val edgesIn: mutable.Buffer[IngraphEdge] = mutable.Buffer[IngraphEdge]()
 
   override def toString: String = s"Vertex($id, $properties)"
 }
