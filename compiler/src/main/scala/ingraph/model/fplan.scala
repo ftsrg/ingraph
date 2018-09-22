@@ -33,7 +33,7 @@ trait EquiJoinLike extends JoinLike {
 
 // leaf nodes
 case class GetVertices(requiredProperties: Seq[ResolvableName], nnode: nplan.GetVertices) extends LeafFNode with TGetVertices {
-  override def flatSchema = nnode.output ++ requiredProperties
+  override val flatSchema = nnode.output ++ requiredProperties
   override val v: VertexAttribute = nnode.v
 }
 
