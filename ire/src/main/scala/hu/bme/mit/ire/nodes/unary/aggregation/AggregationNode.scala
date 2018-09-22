@@ -1,8 +1,7 @@
 package hu.bme.mit.ire.nodes.unary.aggregation
 
-import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.{Tuple, TupleBag}
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, SingleForwarder}
 import hu.bme.mit.ire.nodes.unary.UnaryNode
 
 import scala.collection.immutable.VectorBuilder

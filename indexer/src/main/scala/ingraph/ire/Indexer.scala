@@ -1,7 +1,7 @@
 package ingraph.ire
 
+
 import com.google.common.collect.HashMultimap
-import hu.bme.mit.ire.util.BufferMultimap
 import ingraph.bulkloader.csv.data.{CsvEdge, CsvVertex}
 
 import scala.collection.JavaConversions._
@@ -32,7 +32,7 @@ case class IngraphEdge(id: Long,
 
 class Indexer {
 
-  val mappers = mutable.Buffer[GraphElementToTupleMapper]()
+  val mappers = mutable.Buffer[TTupleCreator]()
 
   val vertexLookup = mutable.HashMap[Long, IngraphVertex]()
   val vertexLabelLookup = HashMultimap.create[String, IngraphVertex]()
@@ -41,7 +41,7 @@ class Indexer {
   val edgeLookup = mutable.HashMap[Long, IngraphEdge]()
   val edgeTypeLookup = HashMultimap.create[String, IngraphEdge]()
 
-  def fill(tupleMapper: GraphElementToTupleMapper): Unit = {
+  def fill(tupleMapper: TTupleCreator): Unit = {
     for (vertex <- vertexLookup.values) {
       tupleMapper.addVertex(vertex)
     }
@@ -50,7 +50,7 @@ class Indexer {
     }
   }
 
-  def subscribe(tupleMapper: GraphElementToTupleMapper): Unit = {
+  def subscribe(tupleMapper: TTupleCreator): Unit = {
     mappers += tupleMapper
     fill(tupleMapper)
   }
@@ -119,8 +119,8 @@ class Indexer {
     mappers.foreach(_.removeEdge(edge))
     edgeTypeLookup.remove(edge.`type`, edge)
     edgeLookup.remove(edge.id)
-    edge.sourceVertex.edgesOut.remove(edge.`type`, edge)
-    edge.targetVertex.edgesIn.remove(edge.`type`, edge)
+    edge.sourceVertex.edgesOut.remove(edge)
+    edge.targetVertex.edgesIn.remove(edge)
   }
 
   def vertexById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)

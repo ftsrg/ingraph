@@ -1,9 +1,9 @@
 package hu.bme.mit.ire.nodes.binary
 
-import hu.bme.mit.ire.SingleForwarder
+import hu.bme.mit.ire.collections.{BufferMultimap, CounterMultimap}
 import hu.bme.mit.ire.datatypes.{Mask, Path, Tuple}
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.util.{BufferMultimap, CounterMultimap, SizeCounter}
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, SingleForwarder}
+import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable

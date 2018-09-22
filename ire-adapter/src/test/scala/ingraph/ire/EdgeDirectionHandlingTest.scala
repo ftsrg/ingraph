@@ -25,22 +25,22 @@ class EdgeDirectionHandlingTest extends FunSuite {
 
   test("handle ->") {
     val indexer = initializeIndexer()
-    val adapter = new IngraphIncrementalAdapter(
+    val adapter = new IncrementalQueryAdapter(
       "MATCH (t:Train)-[r:ON]->(seg1:Segment) RETURN t, seg1", "->", indexer)
-    assert(adapter.result() == List(Vector(1, 2)))
+    assert(adapter.results() == List(Vector(1, 2)))
   }
 
   test("handle <-") {
     val indexer = initializeIndexer()
-    val adapter = new IngraphIncrementalAdapter(
+    val adapter = new IncrementalQueryAdapter(
       "MATCH (seg1: Segment)<-[r:ON]-(t:Train) RETURN t, seg1", "->", indexer)
-    assert(adapter.result() == List(Vector(1, 2)))
+    assert(adapter.results() == List(Vector(1, 2)))
   }
 
   test("handle undirected") {
     val indexer = initializeIndexer()
-    val adapter = new IngraphIncrementalAdapter(
+    val adapter = new IncrementalQueryAdapter(
       "MATCH (seg1: Segment)-[r:NEXT]-(seg2:Segment) RETURN seg1, seg2", "->", indexer)
-    assert(adapter.result().size == 4) // TODO: test for ids once sorting is done
+    assert(adapter.results().size == 4) // TODO: test for ids once sorting is done
   }
 }

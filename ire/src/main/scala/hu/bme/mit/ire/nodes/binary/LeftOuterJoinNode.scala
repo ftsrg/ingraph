@@ -1,10 +1,8 @@
 package hu.bme.mit.ire.nodes.binary
 
-import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Slot._
 import hu.bme.mit.ire.datatypes._
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.util.TestUtil._
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, SingleForwarder}
 
 class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         override val primaryTupleWidth: Int,
@@ -90,9 +88,9 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def combineNullTuple(inputTuple: Tuple): Tuple = {
-    var nullPart = tuple()
+    var nullPart: Seq[Any] = Seq()
     for(i <- 1 to secondaryTupleWidth - secondaryMask.size)
-      nullPart = nullPart ++ tuple(null)
+      nullPart = nullPart ++ Seq(null)
 
     inputTuple ++ nullPart
   }
