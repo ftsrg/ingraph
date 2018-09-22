@@ -1,7 +1,6 @@
 package hu.bme.mit.ire.nodes.unary
 
 import akka.actor.{Actor, Stash}
-import hu.bme.mit.ire._
 import hu.bme.mit.ire.messages._
 
 abstract class UnaryNode(val expectedTerminatorCount: Int = 1) extends Actor with Forwarder with Stash with TerminatorHandler {

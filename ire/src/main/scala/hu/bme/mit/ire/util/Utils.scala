@@ -10,25 +10,6 @@ import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
 import scala.collection.mutable
 
 object Utils {
-  def nop(id: String, b: Any) = {}
-
-  def idStringToLong(in: String): Long = {
-    in.drop(1).toLong
-  }
-
-  /**
-    * Produces permutations based on the change set, e.g.
-    * {+ <1, 2>, <3, 4>} -> {{+ <1, 2>, <3, 4>}, {+ <3, 4>, <1, 2>}}
-    * @param cs
-    * @return
-    */
-  def changeSetPermutations(cs: ChangeSet) = {
-    val values = for (
-      pos <- cs.positive.toVector.permutations;
-      neg <- cs.negative.toVector.permutations
-    ) yield ChangeSet(pos, neg)
-    values.toSeq
-  }
 
   object conversions {
     implicit def toSendingFunction(base: ActorRef): ReteMessage => Unit = base ! _

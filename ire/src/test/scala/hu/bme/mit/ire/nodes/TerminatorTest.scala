@@ -2,8 +2,7 @@ package hu.bme.mit.ire.nodes
 
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire._
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
+import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary, Terminator}
 import hu.bme.mit.ire.nodes.binary.JoinNode
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
 import hu.bme.mit.ire.util.TestUtil._

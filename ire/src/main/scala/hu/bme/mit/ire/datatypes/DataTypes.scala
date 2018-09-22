@@ -1,6 +1,6 @@
 package hu.bme.mit.ire
 
-import hu.bme.mit.ire.util.BufferMultimap
+import hu.bme.mit.ire.collections.BufferMultimap
 
 package object datatypes {
   type Tuple = IndexedSeq[Any]
