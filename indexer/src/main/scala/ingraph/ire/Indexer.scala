@@ -1,5 +1,6 @@
 package ingraph.ire
 
+import com.google.common.collect.HashMultimap
 import hu.bme.mit.ire.util.BufferMultimap
 import ingraph.bulkloader.csv.data.{CsvEdge, CsvVertex}
 
@@ -14,8 +15,8 @@ trait IngraphElement {
 case class IngraphVertex(id: Long,
                          labels: Set[String],
                          override val properties: Map[String, Any] = Map()) extends IngraphElement {
-  val edgesOut: BufferMultimap[String, IngraphEdge] = new BufferMultimap[String, IngraphEdge]()
-  val edgesIn: BufferMultimap[String, IngraphEdge] = new BufferMultimap[String, IngraphEdge]()
+  val edgesOut: mutable.HashSet[IngraphEdge] = mutable.HashSet[IngraphEdge]()
+  val edgesIn: mutable.HashSet[IngraphEdge] = mutable.HashSet[IngraphEdge]()
 
   override def toString: String = s"Vertex($id, $properties)"
 }
@@ -34,11 +35,11 @@ class Indexer {
   val mappers = mutable.Buffer[GraphElementToTupleMapper]()
 
   val vertexLookup = mutable.HashMap[Long, IngraphVertex]()
-  val vertexLabelLookup = new BufferMultimap[String, IngraphVertex]()
+  val vertexLabelLookup = HashMultimap.create[String, IngraphVertex]()
   val vertexIdLabelLookup = mutable.HashMap[(Long, String), IngraphVertex]()
 
   val edgeLookup = mutable.HashMap[Long, IngraphEdge]()
-  val edgeTypeLookup = new BufferMultimap[String, IngraphEdge]()
+  val edgeTypeLookup = HashMultimap.create[String, IngraphEdge]()
 
   def fill(tupleMapper: GraphElementToTupleMapper): Unit = {
     for (vertex <- vertexLookup.values) {
@@ -63,7 +64,7 @@ class Indexer {
 
   def addVertex(vertex: IngraphVertex): IngraphVertex = {
     for (label <- vertex.labels) {
-      vertexLabelLookup.addBinding(label, vertex)
+      vertexLabelLookup.put(label, vertex)
       vertexIdLabelLookup((vertex.id, label)) = vertex
     }
 
@@ -74,13 +75,13 @@ class Indexer {
 
   def removeVertexById(id: Long, detach: Boolean = false): Unit = {
     val vertex = vertexLookup(id)
-    val edges = vertex.edgesOut.valuesIterator.flatten ++ vertex.edgesIn.valuesIterator.flatten
+    val edges = vertex.edgesOut.iterator() ++ vertex.edgesIn.iterator()
     if (!detach && edges.nonEmpty)
       throw new IllegalArgumentException("Won't remove connected vertex without DETACH")
     else if (detach)
-      for { edge <- edges } removeEdgeById(edge.id)
+      for { edge <- edges.toList } removeEdge(edge)
     for (label <- vertex.labels) {
-      vertexLabelLookup.removeBinding(label, vertex)
+      vertexLabelLookup.remove(label, vertex)
       vertexIdLabelLookup.remove((vertex.id, label))
     }
     vertexLookup.remove(id)
@@ -97,9 +98,9 @@ class Indexer {
 
   def addEdge(edge: IngraphEdge): IngraphEdge = {
     edgeLookup(edge.id) = edge
-    edge.sourceVertex.edgesOut.addBinding(edge.`type`, edge)
-    edge.targetVertex.edgesIn.addBinding(edge.`type`, edge)
-    edgeTypeLookup.addBinding(edge.`type`, edge)
+    edge.sourceVertex.edgesOut.add(edge)
+    edge.targetVertex.edgesIn.add(edge)
+    edgeTypeLookup.put(edge.`type`, edge)
     val srcTgt = (edge.sourceVertex.id, edge.targetVertex.id)
     mappers.foreach(_.addEdge(edge))
     edge
@@ -111,19 +112,25 @@ class Indexer {
 
   def removeEdgeById(id: Long): Unit = {
     val edge = edgeLookup(id)
+    removeEdge(edge)
+  }
+
+  def removeEdge(edge: IngraphEdge): Unit = {
     mappers.foreach(_.removeEdge(edge))
-    edgeTypeLookup.removeBinding(edge.`type`, edge)
-    edgeLookup.remove(id)
+    edgeTypeLookup.remove(edge.`type`, edge)
+    edgeLookup.remove(edge.id)
+    edge.sourceVertex.edgesOut.remove(edge.`type`, edge)
+    edge.targetVertex.edgesIn.remove(edge.`type`, edge)
   }
 
   def vertexById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
   def vertexByIdLabel(id: Long, label: String): Option[IngraphVertex] = vertexIdLabelLookup.get((id, label))
-  def verticesByLabel(label: String): Iterator[IngraphVertex] = vertexLabelLookup.getOrElse(label, Seq()).iterator
+  def verticesByLabel(label: String): Iterator[IngraphVertex] = vertexLabelLookup.get(label).iterator
   def vertices(): Iterator[IngraphVertex] = vertexLookup.valuesIterator
 
   def edges(): Iterator[IngraphEdge] = edgeLookup.valuesIterator
   def edgeById(id: Long): Option[IngraphEdge] = edgeLookup.get(id)
-  def edgesByType(label: String): Iterator[IngraphEdge] = edgeTypeLookup.getOrElse(label, Seq()).iterator
+  def edgesByType(label: String): Iterator[IngraphEdge] = edgeTypeLookup.get(label).iterator
 
   val rnd = new Random(1)
   def newId(): Long = {
