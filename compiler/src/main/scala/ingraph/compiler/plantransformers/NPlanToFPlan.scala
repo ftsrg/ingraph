@@ -133,11 +133,11 @@ object NPlanToFPlan {
       case a: ReturnItem => extractProperties(a.child)
       case a: PropertyAttribute => Seq(a)
       case _ => Seq()
-    }) ++ expression.children.flatMap(extractProperties)
+    }) ++ expression.children.flatMap(extractProperties).distinct
   }
 
   def extractProperties(projectList: TProjectList): Seq[ResolvableName] = {
-    projectList.flatMap(extractProperties)
+    projectList.flatMap(extractProperties).distinct
   }
 
   def extractPropertiesFromInsertion(attribute: ResolvableName): Seq[ResolvableName] = {

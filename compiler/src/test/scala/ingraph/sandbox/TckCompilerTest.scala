@@ -225,6 +225,21 @@ class TckCompilerTest extends CompilerTest {
     assert(expectedColumnNames == actualColumnNames)
   }
 
+  test("Return unique list of required properties") {
+    val stages = compile(
+      """MATCH (m:Message {id:2061584476422})
+        |RETURN
+        | m.creationDate as messageCreationDate,
+        | CASE exists(m.content)
+        |   WHEN true THEN m.content
+        |   ELSE m.imageFile
+        | END AS messageContent
+      """.stripMargin
+    )
+    val requiredProperties = findFirstByType(stages.fplan, classOf[GetVertices]).requiredProperties
+    assert(4 == requiredProperties.length)
+  }
+
   ignore("Placeholder for debugging plans") {
     val stages = compile(
       """
