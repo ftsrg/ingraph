@@ -13,7 +13,7 @@ class SqlSession(val sqlDriver: SqlDriver) extends Session {
 
   private[driver] var currentTransaction: Option[SqlTransaction] = None
 
-  override def beginTransaction(): Transaction = {
+  override def beginTransaction(): SqlTransaction = {
     if (currentTransaction.isDefined) {
       throw new ClientException("You cannot begin a transaction on a session with an open transaction;" + " either run from within the transaction or use a different session.")
     }

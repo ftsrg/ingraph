@@ -1,15 +1,13 @@
 package ingraph.compiler.sql.driver
 
 import ingraph.driver.CypherDriver
+import org.neo4j.driver.v1.Transaction
 import org.opencypher.tools.tck.api.{CypherValueRecords, Graph, QueryType, SideEffectQuery}
 import org.opencypher.tools.tck.values.CypherValue
 
 import scala.collection.JavaConverters._
 
-class TckAdapter(cypherDriver: CypherDriver = new SqlDriver()) extends Graph {
-  private val session = cypherDriver.session
-  private val transaction = session.beginTransaction()
-
+class TckAdapter(transaction: Transaction) extends Graph {
   override def cypher(query: String, params: Map[String, CypherValue], meta: QueryType): Result = {
     // TODO
     if (meta == SideEffectQuery)
@@ -32,7 +30,5 @@ class TckAdapter(cypherDriver: CypherDriver = new SqlDriver()) extends Graph {
 
   override def close(): Unit = {
     transaction.close()
-    session.close()
-    cypherDriver.close()
   }
 }

@@ -32,7 +32,7 @@ class SqlDriver(val translateCreateQueries: Boolean = false) extends CypherDrive
     }
   }
 
-  override def session: Session = new SqlSession(this)
+  override def session: SqlSession = new SqlSession(this)
 
   override def close(): Unit = {
     postgres.close()

@@ -1,5 +1,6 @@
 package ingraph.compiler.sql.driver
 
+import java.sql.Connection
 import java.util.{Map => javaMap}
 
 import ingraph.compiler.sql.Util.withResources
@@ -11,6 +12,8 @@ import org.neo4j.driver.v1.types.TypeSystem
 import scala.collection.JavaConverters._
 
 class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
+
+  val rawSqlConnection: Connection = sqlSession.sqlConnection
 
   var toBeCommitted: Option[Boolean] = None
 
@@ -41,7 +44,7 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
     val cypherQuery = statement.text
     val sqlCompiler = new CompileSql(cypherQuery, statement.parameters().asMap.asScala.toMap)
 
-    withResources(sqlSession.sqlConnection.createStatement)(sqlStatement => {
+    withResources(rawSqlConnection.createStatement)(sqlStatement => {
       val translateCreateQueries = sqlSession.sqlDriver.translateCreateQueries
       if (!translateCreateQueries && CompileSql.getNodes(sqlCompiler.fplan).exists(_.isInstanceOf[Create])) {
         val cypherSession = sqlSession.sqlDriver.backendSession.get

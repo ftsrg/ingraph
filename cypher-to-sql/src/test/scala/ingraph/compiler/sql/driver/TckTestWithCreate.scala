@@ -4,8 +4,10 @@ import ingraph.compiler.sql.driver.TckTestWithCreate.scenarioSet
 import ingraph.tck.{TckScenarioSet, TckTestRunner}
 import org.scalatest.FunSuite
 
-class TckTestWithCreate extends FunSuite with TckTestRunner {
-  runTckTests(() => new TckAdapter(new SqlDriver(true)), scenarioSet)
+class TckTestWithCreate extends FunSuite with TckTestRunner with SharedSqlDriver {
+  runTckTests(() => new TckAdapter(beginTransaction()), scenarioSet)
+
+  override def translateCreateQueries: Boolean = true
 }
 
 object TckTestWithCreate {
