@@ -46,6 +46,7 @@ subprojects {
     maven { url 'https://repo.eclipse.org/content/groups/viatra2' }
     maven { url 'https://docs.inf.mit.bme.hu/ingraph-deps' }
     maven { url 'https://dl.bintray.com/ldbc/snb' }
+    maven { url 'https://jitpack.io' }
   }
 
   dependencies {

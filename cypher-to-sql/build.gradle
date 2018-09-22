@@ -11,6 +11,7 @@ dependencies {
   compile project(':compiler')
   compile 'ru.yandex.qatools.embed:postgresql-embedded:2.9'
   compile 'org.postgresql:postgresql:42.2.4'
+  compile 'com.github.cytosm.cytosm:common:master-SNAPSHOT'
   compile group: 'org.opencypher', name: 'tck', version: opencypherVersion
   compile group: 'org.opencypher', name: 'tck-api', version: opencypherVersion
 
