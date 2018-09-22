@@ -6,9 +6,9 @@ import org.opencypher.tools.tck.api.{CypherTCK, Feature, Graph, Scenario}
 import org.scalactic.source
 import org.scalatest.FunSuiteLike
 
-class TckScenarioSet(selectedFeatures: Set[String] = Set(),
-                     ignoredScenarios: Set[String] = Set(),
-                     selectedScenarios: Set[String] = Set()) {
+class TckScenarioSet(val selectedFeatures: Set[String] = Set(),
+                     val ignoredScenarios: Set[String] = Set(),
+                     val selectedScenarios: Set[String] = Set()) {
   val localFeaturePath = "/local-features"
 
   val localFeatures: Seq[Feature] = {

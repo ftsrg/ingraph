@@ -9,22 +9,15 @@ class TckTestWithCreate extends FunSuite with TckTestRunner {
 }
 
 object TckTestWithCreate {
-  val selectedFeatures = Set("MatchAcceptance", "MatchAcceptance2", "Local")
-  val selectedScenarios: Set[String] = Set(
-    //    "Dependant CREATE with single row",
-    //    "Dependant CREATE with single row - with aliased attribute",
-    "Use multiple MATCH clauses to do a Cartesian product",
-    "Returning a relationship property value",
-
-    // placeholder
-    ""
-  ).filter(!_.isEmpty)
+  val selectedFeatures: Set[String] = TckTest.scenarioSet.selectedFeatures
+  val selectedScenarios: Set[String] = TckTest.scenarioSet.selectedScenarios
 
   val ignoredScenarios: Set[String] = Set(
     "Many CREATE clauses",
+    "Returning multiple node property values",
     // placeholder
     ""
   ).filter(!_.isEmpty)
 
-  val scenarioSet = new TckScenarioSet(selectedFeatures, ignoredScenarios, selectedScenarios = selectedScenarios)
+  val scenarioSet = new TckScenarioSet(selectedFeatures, ignoredScenarios, selectedScenarios)
 }
