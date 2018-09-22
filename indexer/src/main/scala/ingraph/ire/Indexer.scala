@@ -98,8 +98,8 @@ class Indexer {
 
   def addEdge(edge: IngraphEdge): IngraphEdge = {
     edgeLookup(edge.id) = edge
-    edge.sourceVertex.edgesOut.add(edge)
-    edge.targetVertex.edgesIn.add(edge)
+    edge.sourceVertex.edgesOut += edge
+    edge.targetVertex.edgesIn += edge
     edgeTypeLookup.put(edge.`type`, edge)
     val srcTgt = (edge.sourceVertex.id, edge.targetVertex.id)
     mappers.foreach(_.addEdge(edge))
@@ -119,8 +119,8 @@ class Indexer {
     mappers.foreach(_.removeEdge(edge))
     edgeTypeLookup.remove(edge.`type`, edge)
     edgeLookup.remove(edge.id)
-    edge.sourceVertex.edgesOut.remove(edge)
-    edge.targetVertex.edgesIn.remove(edge)
+    edge.sourceVertex.edgesOut -= edge
+    edge.targetVertex.edgesIn -= edge
   }
 
   def vertexById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
