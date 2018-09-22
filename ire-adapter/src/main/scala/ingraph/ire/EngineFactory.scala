@@ -248,16 +248,16 @@ object EngineFactory {
     }
 
     private def delete(op: Delete, indexer: Indexer, expr: ForwardConnection) = {
-      val removals: Seq[(Tuple) => Unit] = op.attributes.map {
+      val removals: Seq[Tuple => Unit] = op.attributes.map {
         index =>
           val expr = ExpressionParser[Long](index)
           if (index.isVertex) {
-            (t: Tuple) => indexer.removeVertexById(expr(t), op.nnode.detach)
+            t: Tuple => indexer.removeVertexById(expr(t), op.nnode.detach)
           } else {
-            (t: Tuple) => indexer.removeEdgeById(expr(t))
+            t: Tuple => indexer.removeEdgeById(expr(t))
           }
       }
-      (m: ReteMessage) => {
+      m: ReteMessage => {
         m match {
           case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r))
           case _ =>
