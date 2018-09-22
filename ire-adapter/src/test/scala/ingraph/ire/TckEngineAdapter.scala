@@ -1,6 +1,7 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
+import ingraph.compiler.FPlanParser
 import ingraph.model.expr.{AbstractReturnItem, EdgeListAttribute, ResolvableName, VertexAttribute}
 import ingraph.model.fplan.Production
 import org.opencypher.tools.tck.api._
@@ -51,8 +52,8 @@ class TckEngineAdapter extends Graph {
     println(query)
     val result = meta match {
       case InitQuery => {
-        val createAdapter = new IngraphOneTimeAdapter(query, meta.toString, indexer)
-        createAdapter.terminate()
+        val createAdapter = new OneTimeQueryAdapter(query, meta.toString, indexer)
+        createAdapter.results()
 
         CypherValueRecords.empty
       }
@@ -61,11 +62,11 @@ class TckEngineAdapter extends Graph {
       case _ => {
         println("++++++++++++++++")
 
-        val readAdapter = new IngraphIncrementalAdapter(query, meta.toString, indexer)
+        val readAdapter = new IncrementalQueryAdapter(query, meta.toString, indexer)
 
-        val plan = readAdapter.plan.asInstanceOf[Production]
+        val plan = FPlanParser.parse(query).asInstanceOf[Production]
         val columnNames = plan.outputNames.toSeq
-        val resultTuples = readAdapter.result
+        val resultTuples = readAdapter.results()
 
         val tupleConversion: Tuple => Map[String, CypherValue] = tuple => {
           val cellInfos = columnNames zip plan.output zip tuple
