@@ -6,15 +6,44 @@ import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.mutable
 
-class AntiJoinNode(override val next: (ReteMessage) => Unit,
+class CountingMultiMap[K,V] {
+  private def innerMap: mutable.Map[V, Int] = mutable.HashMap.empty[V,Int].withDefault(k => 0)
+  private val _values = new mutable.HashMap[K,mutable.Map[V, Int]]().withDefault(k => innerMap)
+  def addBinding(key: K, value: V): Boolean = {
+    val valueSet = _values(key)
+    val newKey = valueSet.isEmpty
+    val newValue = valueSet(value) + 1
+    valueSet(value) = newValue
+    _values(key) = valueSet
+    newKey
+  }
+  def removeBinding(key: K, value: V): Unit = {
+    val valueSet = _values(key)
+    if (valueSet(value) == 1) {
+      valueSet.remove(value)
+      if (valueSet.isEmpty) {
+        _values.remove(key)
+      }
+    } else if (valueSet(value) != 0) {
+      valueSet(value) -= 1
+    }
+  }
+  def contains(key: K): Boolean = {
+    _values.contains(key)
+  }
+
+  def apply(key: K): Iterable[V] = {
+    _values(key).flatMap(kv => Seq.fill(kv._2)(kv._1))
+  }
+}
+
+class AntiJoinNode(override val next: ReteMessage => Unit,
                    override val primaryMask: Mask,
                    override val secondaryMask: Mask)
   extends AbstractJoinNode(primaryMask, secondaryMask) with SingleForwarder {
 
-  val forwardValues = new mutable.HashMap[Seq[Any], mutable.Set[Tuple]]
-    with mutable.MultiMap[Seq[Any], Tuple]
-  val antiValues = new mutable.HashMap[Seq[Any], mutable.Set[Tuple]]
-    with mutable.MultiMap[Seq[Any], Tuple]
+  val forwardValues = new CountingMultiMap[Seq[Any], Tuple]()
+  val antiValues = new CountingMultiMap[Seq[Any], Tuple]()
 
   def onPrimary(changeSet: ChangeSet): Unit = {
     val positive = changeSet.positive
@@ -50,10 +79,14 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
     val positive = changeSet.positive
     val negative = changeSet.negative
 
+    val newKeys = mutable.HashSet[Seq[Any]]()
     positive.foreach(
       m => {
         val key = secondaryMask.map(i => m(i))
-        antiValues.addBinding(key, m)
+        val newValue = antiValues.addBinding(key, m)
+        if (newValue){
+          newKeys += key
+        }
       }
     )
     negative.foreach(
@@ -62,26 +95,23 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
         antiValues.removeBinding(key, m)
       }
     )
-
-    val joinedNegative = (for {//this is switched because antijoin
+    val joinedNegativeKeys = (for {//this is switched because antijoin
       node <- positive
-      key = secondaryMask.map(i => node(i))
-      if antiValues.contains(key)
-      if forwardValues.contains(key)
-      value <- forwardValues(key)
-    } yield value).distinct
-
-    val joinedPositive = (for {
+      secondaryKey = secondaryMask.map(i => node(i))
+      if newKeys.contains(secondaryKey)
+      if forwardValues.contains(secondaryKey)
+    } yield secondaryKey).distinct
+    val joinedNegative = joinedNegativeKeys.flatMap(k => forwardValues(k))
+    val joinedPositive = for {
       node <- negative
       key = secondaryMask.map(i => node(i))
       if !antiValues.contains(key)
       if forwardValues.contains(key)
       value <- forwardValues(key)
-    } yield value).distinct
+    } yield value
 
     forward(ChangeSet(joinedPositive, joinedNegative))
   }
 
-  override def onSizeRequest(): Long = SizeCounter.countDeeper(forwardValues.values)
-  + SizeCounter.count(antiValues.values)
+  override def onSizeRequest(): Long = ???
 }

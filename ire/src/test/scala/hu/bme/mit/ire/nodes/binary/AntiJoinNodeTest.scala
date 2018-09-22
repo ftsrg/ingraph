@@ -16,6 +16,23 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
   }
 
   import hu.bme.mit.ire.util.TestUtil._
+  "CountingMultiMap" must {
+    "handle removals" in {
+      val x = new CountingMultiMap[Int, Int]()
+      assert(!x.contains(5))
+      x.addBinding(5, 6)
+      x.addBinding(5, 6)
+      assert(x(5) == Seq(6, 6))
+      x.addBinding(5, 7)
+      assert(x(5).toSet == Set(6, 7))
+      x.removeBinding(5, 6)
+      assert(x(5).toSet == Set(6, 7))
+      x.removeBinding(5, 6)
+      assert(x(5).toSet == Set(7))
+      x.removeBinding(5, 7)
+      assert(x(5) == Seq())
+    }
+  }
 
   "AntiJoin" must {
     "do simple antijoins 0" in {
