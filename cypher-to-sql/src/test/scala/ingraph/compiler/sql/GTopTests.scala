@@ -12,8 +12,6 @@ import scala.reflect.io
 
 class GTopTests extends FunSuite with TckTestRunner with SharedSqlDriver {
 
-  override def translateCreateQueries: Boolean = true
-
   test("Load GTop and data") {
     // based on
     //   https://github.com/cytosm/cytosm/blob/41e786f600724358836629fc3f70787834c85270/common/docs/movies.db

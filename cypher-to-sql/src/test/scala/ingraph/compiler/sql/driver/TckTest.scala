@@ -5,8 +5,6 @@ import org.scalatest.FunSuite
 
 class TckTest extends FunSuite with TckTestRunner with SharedSqlDriver {
   runTckTests(() => new TckAdapter(beginTransaction()), TckTest.scenarioSet)
-
-  override def translateCreateQueries: Boolean = false
 }
 
 object TckTest {

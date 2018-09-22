@@ -5,9 +5,7 @@ import org.scalatest.{BeforeAndAfterAll, Suite}
 trait SharedSqlDriver extends BeforeAndAfterAll {
   this: Suite =>
 
-  def translateCreateQueries: Boolean
-
-  private val driver = new SqlDriver(translateCreateQueries)
+  def driver() = new SqlDriver(translateCreateQueries = true)
   private val session: SqlSession = driver.session()
   
   def beginTransaction(): SqlTransaction = {
