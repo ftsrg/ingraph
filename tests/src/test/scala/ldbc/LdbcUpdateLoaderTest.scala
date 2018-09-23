@@ -7,7 +7,7 @@ class LdbcUpdateLoaderTest extends FunSuite {
 
   val CSV_DIR: String = "../graphs/ldbc-snb-bi/sf01/"
 
-  test("parse streams") {
+  ignore("parse streams") {
     val indexer = new Indexer()
     val loader = new LdbcUpdateLoader(indexer, CSV_DIR)
     loader.load()

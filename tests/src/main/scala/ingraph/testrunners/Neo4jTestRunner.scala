@@ -35,9 +35,9 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
     .setConfig("apoc.import.file.use_neo4j_config", "true")
     .setConfig("dbms.security.allow_csv_import_from_file_urls","true")
     .setConfig("dbms.directories.import", "../graphs/")
-    .setConfig(bolt.`type`, "BOLT")
-    .setConfig(bolt.enabled, "true")
-    .setConfig(bolt.address, "localhost:7688")
+//    .setConfig(bolt.`type`, "BOLT")
+//    .setConfig(bolt.enabled, "true")
+//    .setConfig(bolt.address, "localhost:7688")
     .newGraphDatabase
 
   def load(graphMLPath: String): Unit = {

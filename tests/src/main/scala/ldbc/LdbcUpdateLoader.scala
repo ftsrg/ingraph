@@ -17,9 +17,10 @@ class LdbcUpdateLoader(val indexer: Indexer, val csvDir: String) {
 
   implicit def stringList(x: Any): List[String] = x.asInstanceOf[java.util.List[Object]].asScala.map(_.asInstanceOf[String]).toList
 
-  implicit def orgList(x: Any): List[Organization] =
-    x.asInstanceOf[java.util.List[Object]].asScala.flatMap(s => Organization.parse(s.asInstanceOf[String])).toList
-
+  implicit def orgList(x: Any): List[Organization] = {
+    if (x == null) return List()
+    Organization.parse(x.asInstanceOf[String]).toList
+  }
   def load() {
     val loader = new LdbcUpdateStreamCsvLoader(csvDir)
 
