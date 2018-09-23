@@ -1,6 +1,6 @@
 package ingraph.expressionparser
 
-import hu.bme.mit.ire.math.GenericMath
+import ingraph.ire.math.GenericMath
 import ingraph.model.misc.Function
 import ingraph.model.misc.Function._
 

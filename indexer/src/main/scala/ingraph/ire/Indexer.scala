@@ -1,6 +1,6 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.collections.BufferMultimap
+import ingraph.ire.collections.BufferMultimap
 import ingraph.bulkloader.csv.data.{CsvEdge, CsvVertex}
 
 import scala.collection.JavaConversions._

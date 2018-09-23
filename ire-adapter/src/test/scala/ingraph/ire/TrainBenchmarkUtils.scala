@@ -1,6 +1,6 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.datatypes.Tuple
+import ingraph.ire.datatypes.Tuple
 import ingraph.csv.EdgeMetaData
 import org.supercsv.prefs.CsvPreference
 
