@@ -102,13 +102,14 @@ class AntiJoinNode(override val next: ReteMessage => Unit,
       if forwardValues.contains(secondaryKey)
     } yield secondaryKey).distinct
     val joinedNegative = joinedNegativeKeys.flatMap(k => forwardValues(k))
-    val joinedPositive = for {
+
+    val joinedPositiveKeys = (for {
       node <- negative
       key = secondaryMask.map(i => node(i))
       if !antiValues.contains(key)
-      if forwardValues.contains(key)
-      value <- forwardValues(key)
-    } yield value
+      if forwardValues.contains(key)}
+      yield key).distinct
+    val joinedPositive = joinedPositiveKeys.flatMap(k => forwardValues(k))
 
     forward(ChangeSet(joinedPositive, joinedNegative))
   }

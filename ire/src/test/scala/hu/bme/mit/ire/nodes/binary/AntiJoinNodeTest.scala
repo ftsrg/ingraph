@@ -285,5 +285,17 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
           positive = tupleBag(tuple(1, 2, 3, 4), tuple(1, 2, 3, 4), tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))): _*
       )
     }
+
+    "not send double secondary positive updates" in {
+      val m = mask(0)
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, m, m)))
+      val primary = tupleBag(tuple(1, 2))
+      val secondary = tupleBag(tuple(1, 2), tuple(1, 3))
+      joiner ! Secondary(ChangeSet(secondary))
+      joiner ! Primary(ChangeSet(primary))
+      joiner ! Secondary(ChangeSet(negative=secondary))
+      expectMsg(ChangeSet(positive=primary))
+    }
   }
 }
