@@ -7,82 +7,113 @@ import ingraph.ire.messages.SingleForwarder
 
 import scala.collection.mutable
 
-class AntiJoinNode(override val next: (ReteMessage) => Unit,
+class CountingMultiMap[K,V] {
+  private def innerMap: mutable.Map[V, Int] = mutable.HashMap.empty[V,Int].withDefault(k => 0)
+  private val _values = new mutable.HashMap[K,mutable.Map[V, Int]]().withDefault(k => innerMap)
+  def addBinding(key: K, value: V): Boolean = {
+    val valueSet = _values(key)
+    val newKey = valueSet.isEmpty
+    val newValue = valueSet(value) + 1
+    valueSet(value) = newValue
+    _values(key) = valueSet
+    newKey
+  }
+  def removeBinding(key: K, value: V): Unit = {
+    val valueSet = _values(key)
+    if (valueSet(value) == 1) {
+      valueSet.remove(value)
+      if (valueSet.isEmpty) {
+        _values.remove(key)
+      }
+    } else if (valueSet(value) != 0) {
+      valueSet(value) -= 1
+    }
+  }
+  def contains(key: K): Boolean = {
+    _values.contains(key)
+  }
+
+  def apply(key: K): Iterable[V] = {
+    _values(key).flatMap(kv => Seq.fill(kv._2)(kv._1))
+  }
+}
+
+class AntiJoinNode(override val next: ReteMessage => Unit,
                    override val primaryMask: Mask,
                    override val secondaryMask: Mask)
   extends AbstractJoinNode(primaryMask, secondaryMask) with SingleForwarder {
 
-  val primaryIndexer = new JoinCache
-  val secondaryTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
-  val secondaryProjectedTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
-
-  override def onSizeRequest(): Long = SizeCounter.countDeeper(
-    primaryIndexer.values) + SizeCounter.count(secondaryTuples, secondaryProjectedTuples)
+  val forwardValues = new CountingMultiMap[Seq[Any], Tuple]()
+  val antiValues = new CountingMultiMap[Seq[Any], Tuple]()
 
   def onPrimary(changeSet: ChangeSet): Unit = {
-    val resultPositive = for {
-      tuple <- changeSet.positive
-      if !secondaryProjectedTuples.contains(extract(tuple, primaryMask))
-    } yield tuple
+    val positive = changeSet.positive
+    val negative = changeSet.negative
 
-    val resultNegative = for {
-      tuple <- changeSet.negative
-      if !secondaryProjectedTuples.contains(extract(tuple, primaryMask))
-    } yield tuple
+    val joinedPositive = for {
+      node <- positive
+      if !antiValues.contains(primaryMask.map(i => node(i)))
+    } yield node
 
-    forward(ChangeSet(resultPositive, resultNegative))
 
-    // maintain the content of the slot's indexer
-    for (tuple <- changeSet.positive) primaryIndexer.addBinding   (extract(tuple, primaryMask), tuple)
-    for (tuple <- changeSet.negative) primaryIndexer.removeBinding(extract(tuple, primaryMask), tuple)
+    val joinedNegative = for {
+      node <- negative
+    } yield node
+
+    forward(ChangeSet(joinedPositive, joinedNegative))
+
+    positive.foreach(
+      m => {
+        val key = primaryMask.map(i => m(i))
+        forwardValues.addBinding(key, m)
+      }
+    )
+    negative.foreach(
+      m => {
+        val key = primaryMask.map(i => m(i))
+        forwardValues.removeBinding(key, m)
+      }
+    )
   }
 
   def onSecondary(changeSet: ChangeSet): Unit = {
-    // positive part
-    val deltaSProjected = changeSet.positive.map(tuple => extract(tuple, secondaryMask)).toSet
-    val deltaSMinusS = deltaSProjected -- secondaryProjectedTuples
+    val positive = changeSet.positive
+    val negative = changeSet.negative
 
-    val resultNegative = leftJoin(primaryIndexer.values, deltaSMinusS, primaryMask)
+    val newKeys = mutable.HashSet[Seq[Any]]()
+    positive.foreach(
+      m => {
+        val key = secondaryMask.map(i => m(i))
+        val newValue = antiValues.addBinding(key, m)
+        if (newValue){
+          newKeys += key
+        }
+      }
+    )
+    negative.foreach(
+      m => {
+        val key = secondaryMask.map(i => m(i))
+        antiValues.removeBinding(key, m)
+      }
+    )
+    val joinedNegativeKeys = (for {//this is switched because antijoin
+      node <- positive
+      secondaryKey = secondaryMask.map(i => node(i))
+      if newKeys.contains(secondaryKey)
+      if forwardValues.contains(secondaryKey)
+    } yield secondaryKey).distinct
+    val joinedNegative = joinedNegativeKeys.flatMap(k => forwardValues(k))
 
-    // negative part
-    val sMinusDeltaS = secondaryTuples -- changeSet.negative
-    val sMinusDeltaSProjected = sMinusDeltaS.map(tuple => extract(tuple, secondaryMask))
+    val joinedPositiveKeys = (for {
+      node <- negative
+      key = secondaryMask.map(i => node(i))
+      if !antiValues.contains(key)
+      if forwardValues.contains(key)}
+      yield key).distinct
+    val joinedPositive = joinedPositiveKeys.flatMap(k => forwardValues(k))
 
-    val x = leftJoin(primaryIndexer.values, secondaryProjectedTuples, primaryMask).toBuffer
-    val y = leftJoin(primaryIndexer.values, sMinusDeltaSProjected, primaryMask).toBuffer
-    val resultPositive = x -- y
-
-    // maintain the content of the slot's indexer
-    for (tuple <- changeSet.positive) {
-      secondaryTuples.add(tuple)
-      //secondaryProjectedTuples.add(extract(tuple, secondaryMask))
-    }
-    for (tuple <- changeSet.negative) {
-      secondaryTuples.remove(tuple)
-      //secondaryProjectedTuples.remove(extract(tuple, secondaryMask))
-    }
-    // TODO introduce an appropriate data structure to maintain this incrementally
-    secondaryProjectedTuples.clear()
-    secondaryProjectedTuples ++= (for {
-      tuple <- secondaryTuples
-    } yield extract(tuple, secondaryMask))
-
-    forward(ChangeSet(resultPositive.toVector, resultNegative.toVector))
+    forward(ChangeSet(joinedPositive, joinedNegative))
   }
 
-  def projectSecondaryTuples(tuples: Vector[Tuple]): Vector[Tuple] = {
-    for {
-      tuple <- tuples
-    } yield extract(tuple, secondaryMask)
-  }
-
-  def leftJoin(leftTuples: Iterable[Iterable[Tuple]], rightTuples: collection.Set[Tuple], leftMask: Mask): Iterable[Tuple] = {
-    val result = for {
-      leftTupleSets <- leftTuples
-      leftTuple <- leftTupleSets
-      if rightTuples.contains(extract(leftTuple, leftMask))
-    } yield leftTuple
-    result
-  }
-
+  override def onSizeRequest(): Long = ???
 }

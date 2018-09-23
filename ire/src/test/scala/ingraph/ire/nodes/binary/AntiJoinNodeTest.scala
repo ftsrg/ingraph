@@ -18,6 +18,24 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
 
   import ingraph.ire.util.TestUtil._
 
+  "CountingMultiMap" must {
+    "handle removals" in {
+      val x = new CountingMultiMap[Int, Int]()
+      assert(!x.contains(5))
+      x.addBinding(5, 6)
+      x.addBinding(5, 6)
+      assert(x(5) == Seq(6, 6))
+      x.addBinding(5, 7)
+      assert(x(5).toSet == Set(6, 7))
+      x.removeBinding(5, 6)
+      assert(x(5).toSet == Set(6, 7))
+      x.removeBinding(5, 6)
+      assert(x(5).toSet == Set(7))
+      x.removeBinding(5, 7)
+      assert(x(5) == Seq())
+    }
+  }
+
   "AntiJoin" must {
     "do simple antijoins 0" in {
       val primary = ChangeSet(
@@ -78,7 +96,7 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
         positive = tupleBag(tuple(4, 5, 6, 7))
       ))
     }
-    //based on https://github.com/FTSRG/incqueryd/tree/master/ingraph.incqueryd.client/ingraph.incqueryd.rete.nodes/src/test/resources/test-cases
+    //based on https://github.com/FTSRG/incqueryd/tree/master/hu.bme.mit.incqueryd.client/hu.bme.mit.incqueryd.rete.nodes/src/test/resources/test-cases
     "do antijoin 1" in {
       val prim = ChangeSet(
         positive = tupleBag(tuple(5, 6, 7), tuple(10, 11, 7))
@@ -268,6 +286,18 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
         TestUtil.changeSetPermutations(ChangeSet(
           positive = tupleBag(tuple(1, 2, 3, 4), tuple(1, 2, 3, 4), tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))): _*
       )
+    }
+
+    "not send double secondary positive updates" in {
+      val m = mask(0)
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, m, m)))
+      val primary = tupleBag(tuple(1, 2))
+      val secondary = tupleBag(tuple(1, 2), tuple(1, 3))
+      joiner ! Secondary(ChangeSet(secondary))
+      joiner ! Primary(ChangeSet(primary))
+      joiner ! Secondary(ChangeSet(negative=secondary))
+      expectMsg(ChangeSet(positive=primary))
     }
   }
 }
