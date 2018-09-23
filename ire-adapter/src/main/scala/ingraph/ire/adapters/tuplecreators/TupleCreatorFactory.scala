@@ -5,6 +5,7 @@ import ingraph.ire.inputs.InputTransaction
 import ingraph.ire._
 import ingraph.model.expr.{EdgeAttribute, NodeHasLabelsAttribute, PropertyAttribute, VertexAttribute}
 import ingraph.model.fplan.{GetEdges, GetVertices}
+import org.apache.spark.sql.catalyst.expressions.Literal
 
 object TupleConstants {
   val ID_KEY = "id"

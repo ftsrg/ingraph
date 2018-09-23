@@ -31,21 +31,25 @@ class IndexerTest extends WordSpec {
       assert(indexer.edgesByType("eats").map(_.id).toSet == Set(8))
     }
 
-    "return vertices by id" in {
-      val cat = indexer.verticesById(3).get
-      assert(cat.id == 3)
-      assert(cat.edgesOut("hates").map(_.targetVertex.id).toSet == Set(1, 2))
-    }
-
-    "make create navigable entities" in {
-      val maybeVertex = indexer.verticesById(2)
-      assert(maybeVertex.map(_.edgesOut("owns").head.sourceVertex.id).contains(2))
-      assert(maybeVertex.map(_.edgesIn("owns").head.targetVertex.id).contains(2))
-    }
-
     "can query all vertices" in {
       assert(indexer.vertices().map(_.id).toSet == Set(1, 2, 3))
     }
+
+    "deleting edge removes both references" in {
+      val v1 = IngraphVertex(1L, Set())
+      val v2 = IngraphVertex(2L, Set())
+      val e = IngraphEdge(3L, v1, v2, "broken")
+      val indexer = new Indexer()
+      indexer.addVertex(v1)
+      indexer.addVertex(v2)
+      indexer.addEdge(e)
+      assert(v1.edgesOut.nonEmpty)
+      assert(v2.edgesIn.nonEmpty)
+      indexer.removeEdgeById(3L)
+      assert(v1.edgesOut.isEmpty)
+      assert(v1.edgesIn.isEmpty)
+    }
+
 
   }
 }
