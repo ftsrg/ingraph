@@ -10,7 +10,7 @@ for SF in $SFS; do
 	for RUN in `seq 1 $RUNS`; do
 		for QUERY in $QUERIES; do
 			echo scale factor: $SF, run: $RUN, query: $QUERY
-			./tests $SF $QUERY | tee results.csv
+			./tests $SF $QUERY | tee -a results.csv
 		done
 	done
 done
