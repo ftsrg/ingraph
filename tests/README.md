@@ -4,7 +4,7 @@
 Build the project, and move the files to the root of the repository.
 
 ```console
-. run.sh
+./run.sh
 ```
 
 Before executing the benchmark, ensure that the JVM will have sufficient memory, e.g.:
