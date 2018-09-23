@@ -27,6 +27,10 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
 
   val gds = gdsBuilder
     .setConfig("apoc.import.file.enabled", "true")
+    .setConfig("apoc.export.file.enabled", "true")
+    .setConfig("apoc.import.file.use_neo4j_config", "true")
+    .setConfig("dbms.security.allow_csv_import_from_file_urls","true")
+    .setConfig("dbms.directories.import", "../graphs/")
     .setConfig(bolt.`type`, "BOLT")
     .setConfig(bolt.enabled, "true")
     .setConfig(bolt.address, "localhost:7688")
