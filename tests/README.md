@@ -4,19 +4,11 @@
 Build the project, and move the files to the root of the repository.
 
 ```console
-. package.sh
+. run.sh
 ```
 
-Ensure that the JVM will have sufficient memory:
+Before executing the benchmark, ensure that the JVM will have sufficient memory, e.g.:
 
 ```bash
 export JAVA_OPTS="-Xms4G -Xmx12G"
 ```
-
-To use the SF1 data set and benchmark query 4, run something like the following command. Note that the Neo4j instance has to be stopped beforehand.
-
-```bash
-./tests 1 4 ~/neo4j/data/databases/graph.db
-```
-
-To run ingraph, simply omit the Neo4j directory.
