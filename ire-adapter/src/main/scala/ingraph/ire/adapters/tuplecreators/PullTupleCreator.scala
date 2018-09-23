@@ -1,6 +1,6 @@
 package ingraph.ire.adapters.tuplecreators
 
-import hu.bme.mit.ire.inputs.InputTransaction
+import ingraph.ire.inputs.InputTransaction
 import ingraph.ire.{IdParser, Indexer, IngraphEdge}
 import ingraph.model.fplan.{GetEdges, GetVertices}
 import org.apache.spark.sql.catalyst.expressions.Literal

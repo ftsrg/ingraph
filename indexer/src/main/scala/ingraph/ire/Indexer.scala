@@ -1,6 +1,5 @@
 package ingraph.ire
 
-
 import com.google.common.collect.HashMultimap
 import ingraph.bulkloader.csv.data.{CsvEdge, CsvVertex}
 
