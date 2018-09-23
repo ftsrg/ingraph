@@ -16,6 +16,10 @@ import org.neo4j.test.TestGraphDatabaseFactory
 
 import scala.collection.JavaConverters._
 
+/**
+  * @param tc test case
+  * @param neo4jDir Neo4j database to use. If set to None, the test will fire up a new ImpermanentDatabase.
+  */
 class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends AutoCloseable {
 
   val bolt = GraphDatabaseSettings.boltConnector("0")
