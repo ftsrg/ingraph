@@ -20,7 +20,7 @@ case class IngraphVertex(id: Long,
   override def toString: String = s"Vertex($id, $properties)"
 }
 
-case class IngraphEdge(id: Long,
+case class  IngraphEdge(id: Long,
                        sourceVertex: IngraphVertex,
                        targetVertex: IngraphVertex,
                        `type`: String,
