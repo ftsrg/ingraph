@@ -4,6 +4,8 @@ import ingraph.tck.{TckScenarioSet, TckTestRunner}
 import org.scalatest.FunSuite
 
 class TckTest extends FunSuite with TckTestRunner with SharedSqlDriver {
+  override def driver(): SqlDriver = new SqlDriver(translateCreateQueries = false)
+
   runTckTests(() => new TckAdapter(beginTransaction()), TckTest.scenarioSet)
 }
 
