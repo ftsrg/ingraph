@@ -42,7 +42,7 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
 
   override def run(statement: Statement): StatementResult = {
     val cypherQuery = statement.text
-    val sqlCompiler = new CompileSql(cypherQuery, statement.parameters().asMap.asScala.toMap)
+    val sqlCompiler = new CompileSql(cypherQuery, statement.parameters().asMap.asScala.toMap, sqlSession.sqlDriver.gTop)
 
     withResources(rawSqlConnection.createStatement)(sqlStatement => {
       val translateCreateQueries = sqlSession.sqlDriver.translateCreateQueries

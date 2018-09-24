@@ -7,12 +7,13 @@ import ingraph.compiler.sql.Util.withResources
 import ingraph.compiler.sql._
 import ingraph.driver.{CypherDriver, CypherDriverFactory}
 import org.apache.log4j.{Level, LogManager}
+import org.cytosm.common.gtop.GTop
 import org.neo4j.driver.v1._
 import org.neo4j.driver.v1.exceptions.NoSuchRecordException
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
 
-class SqlDriver(val translateCreateQueries: Boolean = false) extends CypherDriver {
+class SqlDriver(val translateCreateQueries: Boolean = false, val gTop: Option[GTop] = None) extends CypherDriver {
 
   // TODO implement CREATE command instead of using Neo4j
   val backendDriver: Option[CypherDriver] =

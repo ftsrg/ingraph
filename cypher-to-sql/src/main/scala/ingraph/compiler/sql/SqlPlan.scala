@@ -11,8 +11,11 @@ import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Literal}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+import org.cytosm.common.gtop.GTop
+import org.cytosm.common.gtop.implementation.relational.ImplementationNode
 
 import scala.Function.tupled
+import scala.collection.JavaConverters._
 import scala.reflect.ClassTag
 
 trait SqlNode extends LogicalPlan {
@@ -50,7 +53,7 @@ abstract class SqlNodeCreator[+SqlType <: SqlNode, -FPlanType <: FNode](implicit
 
 object SqlNodeCreator {
   def transformOptions(option: CompilerOptions): CompilerOptions =
-    CompilerOptions(option.parameters, option.nodeId + 1, option.unwrapJson)
+    option.copy(nodeId = option.nodeId + 1)
 
   def transformOptions[LocalSqlType](tuple: (LocalSqlType, CompilerOptions)): (LocalSqlType, CompilerOptions) =
     (tuple._1, transformOptions(tuple._2))
@@ -195,24 +198,55 @@ object GetEdges extends SqlNodeCreator0[GetEdges, fplan.GetEdges] {
 class GetVertices(val fNode: fplan.GetVertices,
                   val options: CompilerOptions)
   extends LeafSqlNodeFromFNode[fplan.GetVertices] {
+
+  val gTop: Option[GTop] = options.gTop
+
+  val vertexLabelConstraints = fNode.nnode.v.labels.vertexLabels
+  // TODO support more source tables
+  private val implNode: Option[ImplementationNode] = gTop
+    .map(_.getImplementationLevel
+      .getImplementationNodes.asScala
+      .find(node =>
+        // all vertex label constraints from the pattern must be satisfied,
+        // i.e. the implementation nodes should contain all of them
+        // empty = {vertex label constraints} \ {types in the table}
+        vertexLabelConstraints.diff(node.getTypes.asScala.toSet).isEmpty)
+      .get)
+  val vertexTable = implNode.map(_.getTableName).getOrElse("vertex")
+  // TODO support complex primary key
+  val vertexIdColumn = implNode.map(_.getId.get(0).getColumnName).getOrElse("vertex_id")
+
   val columns =
     (
-      s"""vertex_id AS ${getQuotedColumnName(fNode.nnode.v)}""" +:
+      s"""$vertexIdColumn AS ${getQuotedColumnName(fNode.nnode.v)}""" +:
         fNode.requiredProperties
           // skip NodeHasLabelsAttribute since it has no resolvedName to use as column name
           // TODO use NodeHasLabelsAttribute
           .filterNot(_.isInstanceOf[NodeHasLabelsAttribute])
-          .map(prop =>s"""(SELECT value FROM vertex_property WHERE parent = vertex_id AND key = ${getSingleQuotedString(prop.name)}) AS ${getQuotedColumnName(prop)}"""))
+          .map { prop =>
+            // TODO insert NULL if no column with that name
+            val propertyValuePart = implNode
+              .map(_.getAttributes.asScala
+                .find(prop.name == _.getAbstractionLevelName)
+                .map(_.getColumnName)
+                .map(getQuotedColumnName)
+                .get)
+              .getOrElse(
+                s"(SELECT value FROM vertex_property WHERE parent = $vertexIdColumn AND key = ${getSingleQuotedString(prop.name)})")
+
+            propertyValuePart + s" AS ${getQuotedColumnName(prop)}"
+          })
       .mkString(",\n")
 
-  val labelConstraint = getVertexLabelSqlCondition(fNode.nnode.v.labels, "vertex_id")
+  val labelConstraint = getVertexLabelSqlCondition(fNode.nnode.v.labels, vertexIdColumn)
+    .filter(_ => gTop.isEmpty) // no need for constraint if GTop is available
     .map("WHERE " + _)
     .getOrElse("")
 
   override def innerSql: String =
     i"""SELECT
        |  $columns
-       |FROM vertex
+       |FROM $vertexTable
        |$labelConstraint"""
 }
 

@@ -9,6 +9,7 @@ import ingraph.model.misc.Function
 import ingraph.model.{fplan, nplan}
 import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Expression, IsNotNull, IsNull, Literal, Not}
 import org.apache.spark.sql.types.{LongType, StringType}
+import org.cytosm.common.gtop.GTop
 import org.neo4j.driver.v1.{Value, Values}
 
 object CompileSql {
@@ -131,7 +132,7 @@ object CompileSql {
           getSql(propertyAttribute, options) + " IS NOT NULL"
         }
         case FunctionInvocation(Function.TOINTEGER | Function.TOINT, Seq(expr: Expression), false) => {
-          "(" + getSql(expr, CompilerOptions(options.parameters, options.nodeId, unwrapJson = true)) + ")::INTEGER"
+          "(" + getSql(expr, options.copy(unwrapJson = true)) + ")::INTEGER"
         }
         case FunctionInvocation(functor@Function.COUNT_ALL, Nil, false) => {
           functor.getPrettyName
@@ -157,8 +158,8 @@ object CompileSql {
               case _ => true
             }
 
-          val leftSql = getSql(node.left, CompilerOptions(options.parameters, options.nodeId, localUnwrapJson))
-          val rightSql = getSql(node.right, CompilerOptions(options.parameters, options.nodeId, localUnwrapJson))
+          val leftSql = getSql(node.left, options.copy(unwrapJson = localUnwrapJson))
+          val rightSql = getSql(node.right, options.copy(unwrapJson = localUnwrapJson))
           val operator = node.sqlOperator
 
           if (Seq(leftSql, rightSql).exists(_.contains("\n")))
@@ -246,14 +247,14 @@ object CompileSql {
   }
 }
 
-class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map()) extends CompilerTest {
+class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map(), gTop: Option[GTop] = None) extends CompilerTest {
 
   val stages = compile(cypherQuery)
 
   val fplan = stages.fplan
 
   // TODO don't execute it more than once
-  def sqlNode = SqlNode(fplan, CompilerOptions(parameters))._1
+  def sqlNode = SqlNode(fplan, CompilerOptions(parameters, gTop))._1
 
   def sql = sqlNode.sql
 
@@ -264,7 +265,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
 
 }
 
-case class CompilerOptions(parameters: Map[String, Any] = Map(), nodeId: Int = 0, unwrapJson: Boolean = false) {}
+case class CompilerOptions(parameters: Map[String, Any] = Map(), gTop: Option[GTop] = None, nodeId: Int = 0, unwrapJson: Boolean = false) {}
 
 case class ExpressionWrapper(expr: Expression, options: CompilerOptions) extends ExpressionBase {
   override def children: Seq[Expression] = expr.children
