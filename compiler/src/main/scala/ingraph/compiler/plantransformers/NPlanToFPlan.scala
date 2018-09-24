@@ -89,6 +89,11 @@ object NPlanToFPlan {
         val left = transform(j.left, rpLeft)
         val right = transform(j.right, rpRight)
 
+        assert(
+          rpTotal.length == rpLeft.length + rpRight.length,
+          "Some properties were not propagated to either side of the join-like operator"
+        )
+
         j match {
           case o: nplan.AntiJoin => {
             assert(rpRight.isEmpty)
