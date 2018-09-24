@@ -33,7 +33,7 @@ class GTopTests extends FunSuite with TckTestRunner with SharedSqlDriver {
         withResources(statement.executeQuery("SELECT title FROM movie")) { resultSet =>
 
           val actualTitles = Stream.continually(resultSet.next().toOption(resultSet.getString(1))).takeWhile(_.isDefined).flatten.toSet
-          val expectedTitles = Set("The Matrix", "The Devil's Advocate", "Monster")
+          val expectedTitles = Set("The Matrix", "The Devil s Advocate", "Monster")
 
           assertResult(expectedTitles)(actualTitles)
         }

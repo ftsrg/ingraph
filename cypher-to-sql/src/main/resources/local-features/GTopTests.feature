@@ -10,6 +10,6 @@ Feature: GTopTests
     Then the result should be:
       | m.title                |
       | 'The Matrix'           |
-      | 'The Devil's Advocate' |
+      | 'The Devil s Advocate' |
       | 'Monster'              |
     And no side effects

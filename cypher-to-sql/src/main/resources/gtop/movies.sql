@@ -28,7 +28,7 @@ CREATE TABLE movie
     tagline VARCHAR(100)
 );
 INSERT INTO movie (id, title, released, tagline) VALUES (1, 'The Matrix', 1999, 'Welcome to the Real World');
-INSERT INTO movie (id, title, released, tagline) VALUES (2, 'The Devil''s Advocate', 1997, 'Evil has its winning ways');
+INSERT INTO movie (id, title, released, tagline) VALUES (2, 'The Devil s Advocate', 1997, 'Evil has its winning ways');
 INSERT INTO movie (id, title, released, tagline) VALUES (3, 'Monster', 2003, 'The first female serial killer of America');
 CREATE TABLE person
 (
