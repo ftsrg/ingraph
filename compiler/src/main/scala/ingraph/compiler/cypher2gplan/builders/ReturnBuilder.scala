@@ -2,9 +2,11 @@ package ingraph.compiler.cypher2gplan.builders
 
 import ingraph.compiler.cypher2gplan.util.BuilderUtil
 import ingraph.model.expr.types.TSortOrder
+import ingraph.compiler.cypher2gplan.util.GrammarUtil._
 import ingraph.model.{expr, gplan}
-import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedStar}
+import org.apache.spark.sql.catalyst.analysis.UnresolvedStar
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
+import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -13,7 +15,7 @@ import scala.collection.mutable.ListBuffer
 object ReturnBuilder {
   def dispatchBuildReturn(clause: oc.Clause, content: gplan.GNode): gplan.GNode = {
     clause match {
-      case r: oc.Return => buildReturnBody(r.isDistinct, r.getBody, content)
+      case r: oc.Return => buildReturnBody(r.isDistinct, r.getBody, content, isReturnClause = true)
       case w: oc.With => buildWithClause(w, content)
     }
   }
@@ -23,7 +25,7 @@ object ReturnBuilder {
       (where) => Some(ExpressionBuilder.buildExpressionNoJoinAllowed(where.getExpression))
     )
 
-    buildReturnBody(w.isDistint, w.getReturnBody, content, selectionCondition)
+    buildReturnBody(w.isDistint, w.getReturnBody, content, selectionCondition, isReturnClause = false)
   }
 
 
@@ -31,7 +33,7 @@ object ReturnBuilder {
     * Process the common part of a RETURN and a WITH clause,
     * i.e. the distinct flag and the ReturnBody.
     */
-  def buildReturnBody(distinct: Boolean, returnBody: oc.ReturnBody, content: gplan.GNode, selectionCondition: Option[cExpr.Expression] = None): gplan.GNode = {
+  def buildReturnBody(distinct: Boolean, returnBody: oc.ReturnBody, content: gplan.GNode, selectionCondition: Option[cExpr.Expression] = None, isReturnClause: Boolean): gplan.GNode = {
     val returnItems = returnBody.getReturnItems
 
     // this will hold the project list compiled
@@ -45,7 +47,18 @@ object ReturnBuilder {
     }
     for (returnItem <- returnItems.getItems.asScala) {
       val e = ExpressionBuilder.buildExpressionNoJoinAllowed(returnItem.getExpression)
-      Option(returnItem.getAlias).fold(elements += expr.ReturnItem(e))( (alias) => elements += expr.ReturnItem(e, Some(alias.getName)) )
+
+      // use parsed text from query as alias if no column name is available in a RETURN clause
+      // for VariableRef there's no need to override the name of the variable
+      val parsedText =
+        if (isReturnClause && !returnItem.getExpression.isInstanceOf[VariableRef]) Some(returnItem.parsedText)
+        else None
+      val alias = Option(returnItem.getAlias)
+        .map(_.getName)
+        .map(Some(_))
+        .getOrElse(parsedText)
+
+      elements += expr.ReturnItem(e, alias)
     }
 
     val sortOrder: Option[TSortOrder] = Option(returnBody.getOrder).map(

@@ -2,8 +2,8 @@ package ingraph.sandbox
 
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr.{IndexLookupExpression, IndexRangeExpression}
-import ingraph.model.fplan.{FNode, LeafFNode, Selection, TransitiveJoin}
-import ingraph.model.{fplan, gplan, nplan}
+import ingraph.model.fplan._
+import ingraph.model.gplan
 
 class TckCompilerTest extends CompilerTest {
 
@@ -212,6 +212,32 @@ class TckCompilerTest extends CompilerTest {
       """.stripMargin
     )
     findFirstByType(stages.fplan, classOf[Selection]).conditionTuple
+  }
+
+  test("Unnamed columns") {
+    val stages = compile(
+      """MATCH (n)
+        |RETURN `n`, (n :Label), n. /**/ `id`, count(n), 1 + 1, $`param`
+      """.stripMargin
+    )
+    val expectedColumnNames = Seq("n", "(n :Label)", "n. /**/ `id`", "count(n)", "1 + 1", "$`param`")
+    val actualColumnNames = stages.fplan.asInstanceOf[Production].outputNames.toSeq
+    assert(expectedColumnNames == actualColumnNames)
+  }
+
+  test("Return unique list of required properties") {
+    val stages = compile(
+      """MATCH (m:Message {id:2061584476422})
+        |RETURN
+        | m.creationDate as messageCreationDate,
+        | CASE exists(m.content)
+        |   WHEN true THEN m.content
+        |   ELSE m.imageFile
+        | END AS messageContent
+      """.stripMargin
+    )
+    val requiredProperties = findFirstByType(stages.fplan, classOf[GetVertices]).requiredProperties
+    assert(4 == requiredProperties.length)
   }
 
   ignore("Placeholder for debugging plans") {

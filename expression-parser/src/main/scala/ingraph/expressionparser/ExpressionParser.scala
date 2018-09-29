@@ -1,8 +1,8 @@
 package ingraph.parse
 
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.nodes.unary.aggregation._
-import hu.bme.mit.ire.util.GenericMath
+import ingraph.ire.datatypes.Tuple
+import ingraph.ire.math.GenericMath
+import ingraph.ire.nodes.unary.aggregation._
 import ingraph.expressionparser.FunctionLookup
 import ingraph.model.expr._
 import org.apache.spark.sql.catalyst.expressions.{Add, And, BinaryArithmetic, BinaryComparison, BinaryOperator, CaseWhen, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Remainder, Subtract}

@@ -34,28 +34,23 @@ class BiValidationTest extends FunSuite {
 
   val transitives = Seq(14, 16, 18) //3
   val buggy = Seq(3, 5, 6, 8, 15, 17, 21) //7
-  val working = Seq(2, 4, 7, 9, 12, 22, 23, 24) //8
+  //  val targetQueries = Seq(1, 2, 3, 4, 6, 7, 8, 9, 12, 13, 15, 17, 21, 22, 23, 24)
+  val working = Seq(2, 3, 4, 6, 7, 8, 9, 12, 15, 22, 23, 24)
 
-  val testCases: Seq[LdbcSnbTestCase] = (transitives++working).sorted map (i => new LdbcSnbTestCase("bi", sf, i, f"${csvDir}/$i%02d/", csvPostfix, Seq()))
-
-//  val ntr = new Neo4jTestRunner
-//  ntr.load(graphMLPath)
+  val testCases: Seq[LdbcSnbTestCase] = (working).sorted map (i => new LdbcSnbTestCase("bi", sf, i, f"${csvDir}/$i%02d/", csvPostfix, Seq()))
 
   testCases.foreach {
     tc =>
-      test(s"${tc.name}") {
-        println(tc.name)
-
+      ignore(s"${tc.name}") {
         val itr = new IngraphTestRunner(tc)
         val ingraphResults = itr.run()
 
-        val ntr = new Neo4jTestRunner(tc, None)
-        ntr.load(graphMLDir + tc.name + graphMLPostfix)
+        val ntr = new Neo4jTestRunner(tc, Some("../graphs/ldbc-snb-bi/db-sf01/graph.db"))
         val neo4jResults = ntr.run()
         ntr.close
 
         println("ingraph results: " + ingraphResults.map(x => x.toSeq.sortBy(_._1)))
-        println("neo4j results: " + neo4jResults.map(x => x.toSeq.sortBy(_._1)))
+        println("neo4j   results: " + neo4jResults.map(x => x.toSeq.sortBy(_._1)))
         assert(ingraphResults == neo4jResults)
       }
   }

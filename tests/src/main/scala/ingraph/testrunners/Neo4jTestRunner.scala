@@ -16,6 +16,10 @@ import org.neo4j.test.TestGraphDatabaseFactory
 
 import scala.collection.JavaConverters._
 
+/**
+  * @param tc test case
+  * @param neo4jDir Neo4j database to use. If set to None, the test will fire up a new ImpermanentDatabase.
+  */
 class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends AutoCloseable {
 
   val bolt = GraphDatabaseSettings.boltConnector("0")
@@ -27,9 +31,13 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
 
   val gds = gdsBuilder
     .setConfig("apoc.import.file.enabled", "true")
-    .setConfig(bolt.`type`, "BOLT")
-    .setConfig(bolt.enabled, "true")
-    .setConfig(bolt.address, "localhost:7688")
+    .setConfig("apoc.export.file.enabled", "true")
+    .setConfig("apoc.import.file.use_neo4j_config", "true")
+    .setConfig("dbms.security.allow_csv_import_from_file_urls","true")
+    .setConfig("dbms.directories.import", "../graphs/")
+//    .setConfig(bolt.`type`, "BOLT")
+//    .setConfig(bolt.enabled, "true")
+//    .setConfig(bolt.address, "localhost:7688")
     .newGraphDatabase
 
   def load(graphMLPath: String): Unit = {

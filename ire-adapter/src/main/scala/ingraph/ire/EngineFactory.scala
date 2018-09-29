@@ -1,22 +1,23 @@
 package ingraph.ire
 
 import akka.actor.{ActorRef, Props}
-import hu.bme.mit.ire._
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.engine.RelationalEngine
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.nodes.binary._
-import hu.bme.mit.ire.nodes.unary._
-import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulAggregate}
-import hu.bme.mit.ire.util.BufferMultimap
-import hu.bme.mit.ire.util.Utils.conversions._
+import ingraph.ire._
+import ingraph.ire.collections.BufferMultimap
+import ingraph.ire.datatypes.Tuple
+import ingraph.ire.engine.RelationalEngine
+import ingraph.ire.messages.{ChangeSet, ReteMessage}
+import ingraph.ire.nodes.binary._
+import ingraph.ire.nodes.unary._
+import ingraph.ire.nodes.unary.aggregation.{AggregationNode, StatefulAggregate}
+import ingraph.ire.util.Utils.conversions._
+import ingraph.ire.adapters.tuplecreators.TupleConstants
+import ingraph.ire.messages.Terminator
+import ingraph.ire.nodes.unary.SelectionNode
 import ingraph.model.expr._
 import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
-import ingraph.model.fplan
 import ingraph.model.fplan._
-import ingraph.model.nplan
 import ingraph.parse.ExpressionParser
-import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression, Literal}
+import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression, Literal}
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
@@ -29,7 +30,6 @@ abstract class AnnotatedRelationalEngine extends RelationalEngine {
 object EngineFactory {
 
   case class ForwardConnection(parent: FNode, child: (ReteMessage) => Unit)
-  case class EdgeTransformer(nick: String, source:String, target: String)
 
   def createQueryEngine(plan: FNode, indexer: Indexer): AnnotatedRelationalEngine =
     new AnnotatedRelationalEngine {
@@ -248,16 +248,16 @@ object EngineFactory {
     }
 
     private def delete(op: Delete, indexer: Indexer, expr: ForwardConnection) = {
-      val removals: Seq[(Tuple) => Unit] = op.attributes.map {
+      val removals: Seq[Tuple => Unit] = op.attributes.map {
         index =>
           val expr = ExpressionParser[Long](index)
           if (index.isVertex) {
-            (t: Tuple) => indexer.removeVertexById(expr(t), op.nnode.detach)
+            t: Tuple => indexer.removeVertexById(expr(t), op.nnode.detach)
           } else {
-            (t: Tuple) => indexer.removeEdgeById(expr(t))
+            t: Tuple => indexer.removeEdgeById(expr(t))
           }
       }
-      (m: ReteMessage) => {
+      m: ReteMessage => {
         m match {
           case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r))
           case _ =>

@@ -5,6 +5,12 @@ import ingraph.tests.LdbcSnbTestCase
 
 object BenchmarkMain {
 
+  /**
+    * args(0): specifies the scale factor.
+    * args(1): specifies the query.
+    * args(2): if set, Neo4j is executed using the given directory. If not set, ingraph is executed.
+    * @param args
+    */
   def main(args: Array[String]): Unit = {
     val sf = args(0)
     val query = args(1).toInt
@@ -51,8 +57,6 @@ object BenchmarkMain {
         val neo4jResults = ntr.run()
         ntr.close
     }
-
-//    assert(ingraphResults == neo4jResults)
 
     // some Akka stuff gets stuck despite my best efforts to shutdown
     // System.exit(0) was not sufficient

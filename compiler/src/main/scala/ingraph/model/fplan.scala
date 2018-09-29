@@ -33,12 +33,12 @@ trait EquiJoinLike extends JoinLike {
 
 // leaf nodes
 case class GetVertices(requiredProperties: Seq[ResolvableName], nnode: nplan.GetVertices) extends LeafFNode with TGetVertices {
-  override def flatSchema = nnode.output ++ requiredProperties
+  override val flatSchema = nnode.output ++ requiredProperties
   override val v: VertexAttribute = nnode.v
 }
 
 case class GetEdges(requiredProperties: Seq[ResolvableName], nnode: nplan.GetEdges) extends LeafFNode with TGetEdges{
-  override def flatSchema = nnode.output ++ requiredProperties
+  override val flatSchema = nnode.output ++ requiredProperties
   val src = nnode.src
   val trg = nnode.trg
   val edge = nnode.edge
@@ -64,7 +64,7 @@ case class Production(nnode: nplan.Production,
                       child: FNode
                      ) extends UnaryFNode with TProduction {
   override def output = nnode.output
-  def outputNames: Iterable[String] = output.map(_.resolvedName.get.resolvedName.replaceAll("#\\d+$", "").replace('$', '.'))
+  def outputNames: Iterable[String] = output.map(_.resolvedName.get.resolvedName.replaceAll("#\\d+$", ""))
 }
 
 case class Projection(requiredProperties: Seq[ResolvableName],

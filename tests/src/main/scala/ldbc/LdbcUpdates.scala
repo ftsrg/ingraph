@@ -3,6 +3,14 @@ package ldbc
 trait LdbcUpdate
 
 case class Organization(organizationId: Long, year: Int)
+object Organization {
+  // Parse horrific csv list format:
+  // 321,2008;3,2004
+  def parse(s: String): Iterable[Organization] = {
+    for (org <- s.split(";"))
+      yield Organization(org(0).toLong, org(1).toInt)
+  }
+}
 
 case class Update1AddPerson(
                              personId: Long,
