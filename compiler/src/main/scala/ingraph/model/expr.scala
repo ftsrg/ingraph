@@ -3,13 +3,14 @@ package ingraph.model.expr
 import ingraph.model.expr.types._
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
-import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression, NamedExpression, UnaryExpression}
+import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression, NamedExpression, SortOrder, UnaryExpression}
 import org.apache.spark.sql.catalyst.{InternalRow, expressions => cExpr}
 import org.apache.spark.sql.types.{DataType, Metadata, StringType}
 
 package object types {
   type TPropertyMap = Map[String, cExpr.Expression]
   type TProjectList = Seq[ReturnItem]
+  type TSortOrder = Seq[SortOrder]
   type TResolvedName = Option[TResolvedNameValue]
   type VertexLabel = String
   type EdgeLabel = String
@@ -120,8 +121,8 @@ abstract class AttributeBase extends Attribute {
   override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
 }
 
-case class TupleIndexLiteralAttribute(index: Int, side: Option[Side] = None, isVertex: Boolean = false) extends AttributeBase {
-  assert(index >= 0, s"Cannot index an array with $index")
+case class TupleIndexLiteralAttribute(index: Int, side: Option[Side] = None, isVertex: Boolean = false, debugInfo: String = "") extends AttributeBase {
+  assert(index >= 0, s"Cannot index an array with $index, debugInfo: $debugInfo")
   override def name: String = ???
 }
 abstract class Side

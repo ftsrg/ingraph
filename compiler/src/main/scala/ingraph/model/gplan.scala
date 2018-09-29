@@ -1,7 +1,7 @@
 package ingraph.model.gplan
 
 import ingraph.model.expr._
-import ingraph.model.expr.types.TProjectList
+import ingraph.model.expr.types.{TProjectList, TSortOrder}
 import ingraph.model.plan._
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Expression, SortOrder}
@@ -91,9 +91,10 @@ abstract class AbstractProjection(projectList: TProjectList, child: GNode) exten
 }
 
 /**
-  * An UnresolvedProjection will either be resolved to a Projection or to a Grouping based on its projectList.
+  * An UnresolvedProjection will either be resolved to a Projection or to a Grouping based on its projectList,
+  * followed by DuplicateElimination, Sort, Top, Selection
   */
-case class UnresolvedProjection(override val projectList: TProjectList, override val child: GNode) extends AbstractProjection(projectList, child)
+case class UnresolvedProjection(override val projectList: TProjectList, override val child: GNode, distinct: Boolean = false, sortOrder: Option[TSortOrder] = None, skipExpr: Option[Expression] = None, limitExpr: Option[Expression] = None, selectionCondition: Option[Expression] = None) extends AbstractProjection(projectList, child)
 case class Projection(override val projectList: TProjectList, override val child: GNode) extends AbstractProjection(projectList, child)
 
 /**
@@ -110,7 +111,7 @@ case class Selection(condition: Expression, child: GNode) extends UnaryGNode wit
   override def expressionChildren = Seq(condition)
 }
 
-case class Sort(order: Seq[SortOrder], child: GNode) extends UnaryGNode with TSort {
+case class Sort(order: TSortOrder, child: GNode) extends UnaryGNode with TSort {
   override def expressionChildren = order
 }
 
