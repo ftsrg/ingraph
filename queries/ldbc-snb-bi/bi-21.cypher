@@ -37,7 +37,8 @@ WITH
   collect(zombie.id) AS zombieIds
 UNWIND zombieIds AS zombieId
 MATCH
-  (zombie:Person {id: zombieId})
+  (zombie:Person)
+WHERE zombie.id = zombieId
 OPTIONAL MATCH
   (zombie)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(likerZombie:Person)
 WHERE likerZombie.id IN zombieIds
