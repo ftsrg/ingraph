@@ -458,7 +458,7 @@ class RandomCompilationTest extends CompilerTest {
         |""".stripMargin)
 
     assert(stages.gplan.find(p => p.isInstanceOf[gplan.Sort] ).get.asInstanceOf[gplan.Sort].child.asInstanceOf[gplan.Projection]
-      .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("x$foo#0")))
+      .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("x.foo#0")))
   }
 
   test("should not introduce additional projection for ORDER BY on attribute already present in the projection") {
@@ -483,6 +483,26 @@ class RandomCompilationTest extends CompilerTest {
     assert( returnProjectionOp.projectList(0).child.asInstanceOf[expr.ResolvableName].resolvedName == sortOp.order(0).child.asInstanceOf[expr.ResolvableName].resolvedName)
   }
 
+
+  test("should not introduce additional projection for ORDER BY on property whose base element is already present in the projection") {
+    val stages = compile(
+      """MATCH   (tag:Tag)
+        |RETURN   tag
+        |ORDER BY tag.name ASC
+        |""".stripMargin)
+
+    // get the gplan tree and cast to the desired types
+    val productionOp = stages.gplan.asInstanceOf[gplan.Production]
+    val sortOp = productionOp.child.asInstanceOf[gplan.Sort]
+    val returnProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
+    val alldifferentOp = returnProjectionOp.child.asInstanceOf[gplan.AllDifferent]
+    assert( Option(alldifferentOp).isDefined )
+    // last projection and the sorting has a single item...
+    assert( returnProjectionOp.projectList.length == 1)
+    assert( sortOp.order.length == 1)
+    // ... and the latter is a property of the former
+    assert( returnProjectionOp.projectList(0).child.asInstanceOf[expr.ResolvableName].resolvedName == sortOp.order(0).child.asInstanceOf[expr.PropertyAttribute].elementAttribute.resolvedName)
+  }
 }
 
 /** Random compiler tests that must stop after GPlan compilation.
