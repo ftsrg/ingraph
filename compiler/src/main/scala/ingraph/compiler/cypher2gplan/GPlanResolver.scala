@@ -203,15 +203,15 @@ object GPlanResolver {
     case rn: expr.ResolvableName =>
       if (rn.resolvedName.isDefined) rn // do not resolve already resolved stuff again
       else rn match {
-        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, snr.resolve(name, rn))
-        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, snr.resolve(name, rn))
+        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties.mapValues(_.transform(expressionNameResolver(snr))), isAnonymous, snr.resolve(name, rn))
+        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties.mapValues(_.transform(expressionNameResolver(snr))), isAnonymous, snr.resolve(name, rn))
         case expr.RichEdgeAttribute(src, trg, edge, dir) => expr.RichEdgeAttribute(
           src.transform(expressionNameResolver(snr)).asInstanceOf[expr.VertexAttribute],
           trg.transform(expressionNameResolver(snr)).asInstanceOf[expr.VertexAttribute],
           edge.transform(expressionNameResolver(snr)).asInstanceOf[expr.EdgeAttribute],
           dir
         )
-        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, snr.resolve(name, rn))
+        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties.mapValues(_.transform(expressionNameResolver(snr))), isAnonymous, minHops, maxHops, snr.resolve(name, rn))
         case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name,
           // see "scoped name resolver shorthand" above
           elementAttribute.transform(expressionNameResolver(snr)).asInstanceOf[expr.ElementAttribute],
