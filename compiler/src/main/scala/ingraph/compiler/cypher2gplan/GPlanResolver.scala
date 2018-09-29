@@ -322,7 +322,6 @@ object GPlanResolver {
       if (sortOrder.isEmpty && (resolvedSkipExpr.isDefined || resolvedLimitExpr.isDefined))
         throw new IllegalSkipLimitUsageException
 
-      // private def sortProjectResolveHelper(order: Seq[SortOrder], projectList: expr.types.TProjectList, child: GNode, topOp: Option[gplan.Top]) = {
       val resolvedProjectList = projectList.map( pi => expr.ReturnItem(pi.child.transform(expressionResolver), pi.alias, pi.resolvedName) )
 
       val afterTopSortProjectOp: gplan.GNode = projectionResolveHelper(resolvedProjectList, child) match {
@@ -341,6 +340,11 @@ object GPlanResolver {
             val newSortOp = sortResolveHelper(so, afterDistinct)
             // find resolved names that the sort involves but the projection hides
             val additionalSortItems: TSortOrder = newSortOp.order.flatMap( so => so.child match {
+              // in case of sorting by a porpertyattribute, its enough to have itself or its base elementattribute in the projection list
+              case pa: PropertyAttribute => p.projectList.foldLeft[ Option[SortOrder] ]( Some(so) )(
+                (acc, ri) => if (ri.resolvedName == pa.resolvedName || ri.resolvedName == pa.elementAttribute.resolvedName) None else acc
+              )
+              // in case of sorting by other resolvable names, we need to have itself present after the projection
               case rn: ResolvableName => p.projectList.foldLeft[ Option[SortOrder] ]( Some(so) )(
                 (acc, ri) => if (ri.resolvedName == rn.resolvedName) None else acc
               )

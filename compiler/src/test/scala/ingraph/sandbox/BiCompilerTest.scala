@@ -101,8 +101,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-21")
   }
 
-  // map literal
-  ignore("bi-22 from file: International dialog") {
+  test("bi-22 from file: International dialog") {
     val stages=compileFromFile("bi-22")
   }
 
