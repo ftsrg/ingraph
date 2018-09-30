@@ -104,7 +104,7 @@ object FunctionLookup {
         collection.asInstanceOf[SeqLike[Any, Vector[Any]]].contains(element)
       case POW => (base, exp) =>
         Math.pow(base.toDouble, exp.toDouble)
-      // these are not define as functions in openCypher, but it's reasonable to treat them as such
+      // these are not defined as functions in openCypher, but it's reasonable to treat them as such
       case STARTS_WITH => (string, substring) => string.startsWith(substring)
       case ENDS_WITH => (string, substring) => string.endsWith(substring)
       case CONTAINS => (string, substring) => string.contains(substring)
