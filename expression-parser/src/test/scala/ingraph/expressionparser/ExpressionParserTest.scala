@@ -86,6 +86,17 @@ class ExpressionParserTest extends WordSpec {
       assert(func(Vector(3, "red")) == 3)
     }
 
+    "not mess up math" in {
+      val plan = getPlan(
+        """MATCH (n)
+          |RETURN
+          |1 < 1 as result""".stripMargin)
+      val projection = plan
+        .asInstanceOf[Production].child
+        .asInstanceOf[Projection]
+      val func = ExpressionParser[Any](projection.projectionTuple.head)
+      assert(func(Vector()) == false)
+    }
   }
 
   private def getPlan(query: String) = FPlanParser.parse(query)

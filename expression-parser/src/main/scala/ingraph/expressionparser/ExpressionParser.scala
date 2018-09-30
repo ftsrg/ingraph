@@ -48,8 +48,8 @@ object ExpressionParser {
       val right: Tuple => Any = parse(exp.right)
       exp match {
         case _: EqualTo => (t: Tuple) => left(t) == right(t)
-        case _: LessThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) <= 0
-        case _: LessThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) < 0
+        case _: LessThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) < 0
+        case _: LessThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) <= 0
         case _: GreaterThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) > 0
         case _: GreaterThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) >= 0
       }
