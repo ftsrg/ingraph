@@ -218,6 +218,16 @@ object GenericMath extends Ordering[Any] {
       return -1
     }
     a match {
+      case a: Vector[Any] =>
+        b match {
+          case b: Vector[Any] =>
+            for ((x, y) <- a.zip(b)) {
+              val cmp = GenericMath.compare(x, y)
+              if (cmp != 0)
+                return cmp
+            }
+            0
+        }
       case a: Float =>
         b match {
           case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
