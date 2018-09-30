@@ -221,6 +221,7 @@ object GenericMath extends Ordering[Any] {
       case a: Vector[Any] =>
         b match {
           case b: Vector[Any] =>
+            assert(a.length == b.length)
             for ((x, y) <- a.zip(b)) {
               val cmp = GenericMath.compare(x, y)
               if (cmp != 0)

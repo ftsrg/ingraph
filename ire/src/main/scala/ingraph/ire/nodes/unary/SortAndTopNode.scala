@@ -32,12 +32,7 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
       }
       // Treemap uses the ordering function equality for detecting duplicate keys, so we need to make sure
       // that tuples with same keys are compared as different
-      for ((x, y) <- x.zip(y)) {
-        val cmp = GenericMath.compare(x, y)
-        if (cmp != 0)
-          return cmp
-      }
-      throw new IllegalStateException(s"$x and $y are neither equal nor non-equal")
+      GenericMath.compare(x, y)
     }
   }
 
