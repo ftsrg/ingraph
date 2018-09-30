@@ -17,12 +17,13 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
                      limit: Option[Long],
                      ascendingOrder: Vector[Boolean])
   extends UnaryNode with SingleForwarder {
-
   val longSkip = skip.getOrElse(0L)
   val longLimit = limit.getOrElse(Long.MaxValue / 2L)
   //implicit val order = new Ordering[Tuple] {
   val comparator = new Comparator[Tuple] {
     override def compare(x: Tuple, y: Tuple): Int = {
+      if (x == y)
+        return 0
       for ((x, y, ascending) <- (keyLookup(x), keyLookup(y), ascendingOrder).zipped) {
         val cmp = GenericMath.compare(x, y)
         if (cmp != 0) {
@@ -31,18 +32,12 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
       }
       // Treemap uses the ordering function equality for detecting duplicate keys, so we need to make sure
       // that tuples with same keys are compared as different
-      // TODO check if returning -1 for non-equal tuples would mess things up
-//      for ((x, y) <- inverseKeyLookup(x).zip(inverseKeyLookup(y))) {
-//        val cmp = GenericMath.compare(x, y)
-//        if (cmp != 0)
-//          return cmp
-//      }
-      // TODO i haven't really checked because it's 10PM
-      if (x != y) {
-        1
-      } else {
-        0
+      for ((x, y) <- x.zip(y)) {
+        val cmp = GenericMath.compare(x, y)
+        if (cmp != 0)
+          return cmp
       }
+      throw new IllegalStateException(s"$x and $y are neither equal nor non-equal")
     }
   }
 
