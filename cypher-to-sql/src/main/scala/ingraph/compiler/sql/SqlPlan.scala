@@ -9,7 +9,7 @@ import ingraph.model.expr._
 import ingraph.model.fplan
 import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
-import org.apache.spark.sql.catalyst.expressions.{Attribute, Literal}
+import org.apache.spark.sql.catalyst.expressions.Literal
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.cytosm.common.gtop.GTop
 import org.cytosm.common.gtop.implementation.relational.ImplementationNode
@@ -27,7 +27,7 @@ trait SqlNode extends LogicalPlan {
 
   override def children: Seq[SqlNode]
 
-  override def output: Seq[Attribute] = ???
+  override def output: Seq[ResolvableName] = ???
 
   protected def innerSql: String
 
@@ -41,14 +41,14 @@ trait SqlNode extends LogicalPlan {
   }
 }
 
-abstract class SqlNodeCreator[+SqlType <: SqlNode, -FPlanType <: FNode](implicit sqlTag: ClassTag[SqlType], fPlanTag: ClassTag[FPlanType]) {
-  def applyIfPossible(fNode: FNode, options: CompilerOptions): Option[(SqlNode with WithFNodeOrigin[FNode], CompilerOptions)] =
+abstract class SqlNodeCreator[-FPlanType <: FNode](implicit fPlanTag: ClassTag[FPlanType]) {
+  def applyIfPossible(fNode: FNode, options: CompilerOptions): Option[(SqlNode, CompilerOptions)] =
     fNode match {
       case fNode: FPlanType => Some(apply(fNode, options))
       case _ => None
     }
 
-  def apply(fNode: FPlanType, options: CompilerOptions): (SqlNode with WithFNodeOrigin[FNode], CompilerOptions)
+  def apply(fNode: FPlanType, options: CompilerOptions): (SqlNode, CompilerOptions)
 }
 
 object SqlNodeCreator {
@@ -59,17 +59,17 @@ object SqlNodeCreator {
     (tuple._1, transformOptions(tuple._2))
 }
 
-abstract class SqlNodeCreator2[+SqlType <: BinarySqlNodeFromFNode[BinaryFNode], -FPlanType <: BinaryFNode]
-(implicit sqlTag: ClassTag[SqlType], fPlanTag: ClassTag[FPlanType])
-  extends SqlNodeCreator[SqlType, FPlanType] {
+abstract class SqlNodeCreator2[-FPlanType <: BinaryFNode]
+(implicit fPlanTag: ClassTag[FPlanType])
+  extends SqlNodeCreator[FPlanType] {
 
   def create(fNode: FPlanType,
-             left: SqlNode with WithFNodeOrigin[FNode],
-             right: SqlNode with WithFNodeOrigin[FNode],
+             left: SqlNode,
+             right: SqlNode,
              options: CompilerOptions)
-  : (SqlType, CompilerOptions)
+  : (SqlNode, CompilerOptions)
 
-  override def apply(fNode: FPlanType, options: CompilerOptions): (SqlType, CompilerOptions) = {
+  override def apply(fNode: FPlanType, options: CompilerOptions): (SqlNode, CompilerOptions) = {
     val (left, leftOptions) = transformOptions(SqlNode(fNode.left, options))
     val (right, rightOptions) = transformOptions(SqlNode(fNode.right, leftOptions))
 
@@ -77,37 +77,37 @@ abstract class SqlNodeCreator2[+SqlType <: BinarySqlNodeFromFNode[BinaryFNode], 
   }
 }
 
-abstract class SqlNodeCreator1[+SqlType <: UnarySqlNodeFromFNode[UnaryFNode], -FPlanType <: UnaryFNode]
-(implicit sqlTag: ClassTag[SqlType], fPlanTag: ClassTag[FPlanType])
-  extends SqlNodeCreator[SqlType, FPlanType] {
+abstract class SqlNodeCreator1[-FPlanType <: UnaryFNode]
+(implicit fPlanTag: ClassTag[FPlanType])
+  extends SqlNodeCreator[FPlanType] {
 
   def create(fNode: FPlanType,
-             child: SqlNode with WithFNodeOrigin[FNode],
+             child: SqlNode,
              options: CompilerOptions)
-  : (SqlType, CompilerOptions)
+  : (SqlNode, CompilerOptions)
 
-  override def apply(fNode: FPlanType, options: CompilerOptions): (SqlType, CompilerOptions) = {
+  override def apply(fNode: FPlanType, options: CompilerOptions): (SqlNode, CompilerOptions) = {
     val (child, childOptions) = transformOptions(SqlNode(fNode.child, options))
 
     create(fNode, child, childOptions)
   }
 }
 
-abstract class SqlNodeCreator0[+SqlType <: LeafSqlNodeFromFNode[LeafFNode], -FPlanType <: LeafFNode]
-(implicit sqlTag: ClassTag[SqlType], fPlanTag: ClassTag[FPlanType])
-  extends SqlNodeCreator[SqlType, FPlanType] {
+abstract class SqlNodeCreator0[-FPlanType <: LeafFNode]
+(implicit fPlanTag: ClassTag[FPlanType])
+  extends SqlNodeCreator[FPlanType] {
 
   def create(fNode: FPlanType,
              options: CompilerOptions)
-  : (SqlType, CompilerOptions)
+  : (SqlNode, CompilerOptions)
 
-  override def apply(fNode: FPlanType, options: CompilerOptions): (SqlType, CompilerOptions) =
+  override def apply(fNode: FPlanType, options: CompilerOptions): (SqlNode, CompilerOptions) =
     create(fNode, options)
 }
 
 object SqlNode {
-  def apply(fNode: FNode, options: CompilerOptions): (SqlNode with WithFNodeOrigin[FNode], CompilerOptions) = {
-    val creators = Seq[SqlNodeCreator[_ <: SqlNode, _ <: FNode]](
+  def apply(fNode: FNode, options: CompilerOptions): (SqlNode, CompilerOptions) = {
+    val creators = Seq[SqlNodeCreator[_ <: FNode]](
       AntiJoin,
       // TransitiveJoin must precede EquiJoinLike
       TransitiveJoin,
@@ -136,6 +136,9 @@ object SqlNode {
 trait WithFNodeOrigin[+T <: FNode] extends Equals with Product1[T] {
   this: SqlNode =>
   def fNode: T
+
+  // TODO rework this to contain SQL specific output with type
+  override def output: Seq[ResolvableName] = fNode.flatSchema
 
   override def _1: T = fNode
 
@@ -188,7 +191,7 @@ class GetEdges(val fNode: fplan.GetEdges,
   override def innerSql: String = getGetEdgesSql(fNode)
 }
 
-object GetEdges extends SqlNodeCreator0[GetEdges, fplan.GetEdges] {
+object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
   override def create(fNode: fplan.GetEdges,
                       options: CompilerOptions)
   : (GetEdges, CompilerOptions) =
@@ -250,7 +253,7 @@ class GetVertices(val fNode: fplan.GetVertices,
        |$labelConstraint"""
 }
 
-object GetVertices extends SqlNodeCreator0[GetVertices, fplan.GetVertices] {
+object GetVertices extends SqlNodeCreator0[fplan.GetVertices] {
   override def create(fNode: fplan.GetVertices,
                       options: CompilerOptions)
   : (GetVertices, CompilerOptions) =
@@ -258,7 +261,7 @@ object GetVertices extends SqlNodeCreator0[GetVertices, fplan.GetVertices] {
 }
 
 class TransitiveJoin(val fNode: fplan.TransitiveJoin,
-                     override val left: SqlNode with WithFNodeOrigin[FNode],
+                     override val left: SqlNode,
                      override val right: GetEdges,
                      val options: CompilerOptions)
   extends BinarySqlNodeFromFNode[fplan.TransitiveJoin](left, right) {
@@ -272,7 +275,7 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
   val edgeListName = getQuotedColumnName(edgesNode.nnode.edge)
   val edgesFromVertexName = getQuotedColumnName(edgesNode.nnode.src)
   val edgesToVertexName = getQuotedColumnName(edgesNode.nnode.trg)
-  val leftNodeColumnNames = left.fNode.flatSchema.map(getQuotedColumnName).mkString(", ")
+  val leftNodeColumnNames = left.output.map(getQuotedColumnName).mkString(", ")
   val joinNodeColumnNames = fNode.flatSchema.map(getQuotedColumnName).mkString(",\n")
 
   val lowerBound = edgeListAttribute.minHops.getOrElse(1)
@@ -319,10 +322,10 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
        |$lowerBoundConstraint"""
 }
 
-object TransitiveJoin extends SqlNodeCreator2[TransitiveJoin, fplan.TransitiveJoin] {
+object TransitiveJoin extends SqlNodeCreator2[fplan.TransitiveJoin] {
   override def create(fNode: fplan.TransitiveJoin,
-                      left: SqlNode with WithFNodeOrigin[FNode],
-                      right: SqlNode with WithFNodeOrigin[FNode],
+                      left: SqlNode,
+                      right: SqlNode,
                       options: CompilerOptions)
   : (TransitiveJoin, CompilerOptions) =
     (new TransitiveJoin(fNode, left, right.asInstanceOf[GetEdges], options), options)
@@ -330,8 +333,8 @@ object TransitiveJoin extends SqlNodeCreator2[TransitiveJoin, fplan.TransitiveJo
 
 // EquiJoinLike nodes except TransitiveJoin
 class EquiJoinLike(val fNode: fplan.EquiJoinLike,
-                   override val left: SqlNode with WithFNodeOrigin[FNode],
-                   override val right: SqlNode with WithFNodeOrigin[FNode],
+                   override val left: SqlNode,
+                   override val right: SqlNode,
                    val options: CompilerOptions)
   extends BinarySqlNodeFromFNode[fplan.EquiJoinLike](left, right) {
 
@@ -370,18 +373,18 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
        |$joinConditionPart"""
 }
 
-object EquiJoinLike extends SqlNodeCreator2[EquiJoinLike, fplan.EquiJoinLike] {
+object EquiJoinLike extends SqlNodeCreator2[fplan.EquiJoinLike] {
   override def create(fNode: fplan.EquiJoinLike,
-                      left: SqlNode with WithFNodeOrigin[FNode],
-                      right: SqlNode with WithFNodeOrigin[FNode],
+                      left: SqlNode,
+                      right: SqlNode,
                       options: CompilerOptions)
   : (EquiJoinLike, CompilerOptions) =
     (new EquiJoinLike(fNode, left, right, options), options)
 }
 
 class AntiJoin(val fNode: fplan.AntiJoin,
-               override val left: SqlNode with WithFNodeOrigin[FNode],
-               override val right: SqlNode with WithFNodeOrigin[FNode],
+               override val left: SqlNode,
+               override val right: SqlNode,
                val options: CompilerOptions)
   extends BinarySqlNodeFromFNode[fplan.AntiJoin](left, right) {
   val columnConditions = fNode.commonAttributes
@@ -403,17 +406,17 @@ class AntiJoin(val fNode: fplan.AntiJoin,
        |  )"""
 }
 
-object AntiJoin extends SqlNodeCreator2[AntiJoin, fplan.AntiJoin] {
+object AntiJoin extends SqlNodeCreator2[fplan.AntiJoin] {
   override def create(fNode: fplan.AntiJoin,
-                      left: SqlNode with WithFNodeOrigin[FNode],
-                      right: SqlNode with WithFNodeOrigin[FNode],
+                      left: SqlNode,
+                      right: SqlNode,
                       options: CompilerOptions)
   : (AntiJoin, CompilerOptions) =
     (new AntiJoin(fNode, left, right, options), options)
 }
 
 class Production(val fNode: fplan.Production,
-                 override val child: SqlNode with WithFNodeOrigin[FNode],
+                 override val child: SqlNode,
                  val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.Production](child) {
   val renamePairs = fNode.output.zip(fNode.outputNames)
@@ -437,7 +440,7 @@ class Production(val fNode: fplan.Production,
   }
 }
 
-object Production extends SqlNodeCreator1[Production, fplan.Production] {
+object Production extends SqlNodeCreator1[fplan.Production] {
 
   val withQueryNamePrefix = "q"
 
@@ -447,13 +450,13 @@ object Production extends SqlNodeCreator1[Production, fplan.Production] {
   }
 
   override def create(fNode: fplan.Production,
-                      child: SqlNode with WithFNodeOrigin[FNode],
+                      child: SqlNode,
                       options: CompilerOptions): (Production, CompilerOptions) =
     (new Production(fNode, child, options), options)
 }
 
 class Projection(val fNode: fplan.Projection,
-                 override val child: SqlNode with WithFNodeOrigin[FNode],
+                 override val child: SqlNode,
                  val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.Projection](child) {
   val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
@@ -462,16 +465,16 @@ class Projection(val fNode: fplan.Projection,
     getProjectionSql(renamePairs, childSql, options)
 }
 
-object Projection extends SqlNodeCreator1[Projection, fplan.Projection] {
+object Projection extends SqlNodeCreator1[fplan.Projection] {
   override def create(fNode: fplan.Projection,
-                      child: SqlNode with WithFNodeOrigin[FNode],
+                      child: SqlNode,
                       options: CompilerOptions)
   : (Projection, CompilerOptions) =
     (new Projection(fNode, child, options), options)
 }
 
 class Selection(val fNode: fplan.Selection,
-                override val child: SqlNode with WithFNodeOrigin[FNode],
+                override val child: SqlNode,
                 val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.Selection](child) {
   val condition = getSql(fNode.nnode.condition, options)
@@ -481,16 +484,16 @@ class Selection(val fNode: fplan.Selection,
        |WHERE $condition"""
 }
 
-object Selection extends SqlNodeCreator1[Selection, fplan.Selection] {
+object Selection extends SqlNodeCreator1[fplan.Selection] {
   override def create(fNode: fplan.Selection,
-                      child: SqlNode with WithFNodeOrigin[FNode],
+                      child: SqlNode,
                       options: CompilerOptions)
   : (Selection, CompilerOptions) =
     (new Selection(fNode, child, options), options)
 }
 
 class AllDifferent(val fNode: fplan.AllDifferent,
-                   override val child: SqlNode with WithFNodeOrigin[FNode],
+                   override val child: SqlNode,
                    val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.AllDifferent](child) {
   val edgeIdsArray = ("ARRAY[]::INTEGER[]" +: fNode.nnode.edges.map(getQuotedColumnName)).mkString(" || ")
@@ -506,16 +509,16 @@ class AllDifferent(val fNode: fplan.AllDifferent,
        |  $wherePart"""
 }
 
-object AllDifferent extends SqlNodeCreator1[AllDifferent, fplan.AllDifferent] {
+object AllDifferent extends SqlNodeCreator1[fplan.AllDifferent] {
   override def create(fNode: fplan.AllDifferent,
-                      child: SqlNode with WithFNodeOrigin[FNode],
+                      child: SqlNode,
                       options: CompilerOptions)
   : (AllDifferent, CompilerOptions) =
     (new AllDifferent(fNode, child, options), options)
 }
 
 class SortAndTop(val fNode: fplan.SortAndTop,
-                 override val child: SqlNode with WithFNodeOrigin[FNode],
+                 override val child: SqlNode,
                  val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.SortAndTop](child) {
   val nnode = fNode.nnode
@@ -531,32 +534,32 @@ class SortAndTop(val fNode: fplan.SortAndTop,
        |  $offsetPart"""
 }
 
-object SortAndTop extends SqlNodeCreator1[SortAndTop, fplan.SortAndTop] {
+object SortAndTop extends SqlNodeCreator1[fplan.SortAndTop] {
   override def create(fNode: fplan.SortAndTop,
-                      child: SqlNode with WithFNodeOrigin[FNode],
+                      child: SqlNode,
                       options: CompilerOptions)
   : (SortAndTop, CompilerOptions) =
     (new SortAndTop(fNode, child, options), options)
 }
 
 class DuplicateElimination(val fNode: fplan.DuplicateElimination,
-                           override val child: SqlNode with WithFNodeOrigin[FNode],
+                           override val child: SqlNode,
                            val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.DuplicateElimination](child) {
   override def innerSql: String =
     i"""SELECT DISTINCT * FROM $childSql AS subquery"""
 }
 
-object DuplicateElimination extends SqlNodeCreator1[DuplicateElimination, fplan.DuplicateElimination] {
+object DuplicateElimination extends SqlNodeCreator1[fplan.DuplicateElimination] {
   override def create(fNode: fplan.DuplicateElimination,
-                      child: SqlNode with WithFNodeOrigin[FNode],
+                      child: SqlNode,
                       options: CompilerOptions)
   : (DuplicateElimination, CompilerOptions) =
     (new DuplicateElimination(fNode, child, options), options)
 }
 
 class Grouping(val fNode: fplan.Grouping,
-               override val child: SqlNode with WithFNodeOrigin[FNode],
+               override val child: SqlNode,
                val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.Grouping](child) {
 
@@ -573,9 +576,9 @@ class Grouping(val fNode: fplan.Grouping,
        |$groupByPart"""
 }
 
-object Grouping extends SqlNodeCreator1[Grouping, fplan.Grouping] {
+object Grouping extends SqlNodeCreator1[fplan.Grouping] {
   override def create(fNode: fplan.Grouping,
-                      child: SqlNode with WithFNodeOrigin[FNode],
+                      child: SqlNode,
                       options: CompilerOptions)
   : (Grouping, CompilerOptions) =
     (new Grouping(fNode, child, options), options)
@@ -620,7 +623,7 @@ object InsertWithSelect {
 }
 
 class Create(val fNode: fplan.Create,
-             val child: SqlNode with WithFNodeOrigin[FNode],
+             val child: SqlNode,
              val options: CompilerOptions)
   extends SqlNode with WithFNodeOrigin[fplan.Create] {
 
@@ -692,7 +695,7 @@ class Create(val fNode: fplan.Create,
     i"""SELECT * FROM $genVertexIdQueryName"""
 }
 
-object Create extends SqlNodeCreator[Create, fplan.Create] {
+object Create extends SqlNodeCreator[fplan.Create] {
 
   def graphElementTypeString(attribute: ElementAttribute): String =
     attribute match {
@@ -702,7 +705,7 @@ object Create extends SqlNodeCreator[Create, fplan.Create] {
 
   override def apply(fNode: fplan.Create,
                      options: CompilerOptions)
-  : (SqlNode with WithFNodeOrigin[FNode], CompilerOptions) = {
+  : (SqlNode, CompilerOptions) = {
     val (child, childOptions) = transformOptions(SqlNode(fNode.child, options))
 
     val createNode = new Create(fNode, child, childOptions)
@@ -718,17 +721,9 @@ class Dual(val fNode: fplan.Dual,
   override def innerSql: String = "SELECT"
 }
 
-object Dual extends SqlNodeCreator0[Dual, fplan.Dual] {
+object Dual extends SqlNodeCreator0[fplan.Dual] {
   override def create(fNode: fplan.Dual,
                       options: CompilerOptions)
   : (Dual, CompilerOptions) =
     (new Dual(fNode, options), options)
 }
-
-
-
-
-
-
-
-
