@@ -90,7 +90,7 @@ class ExpressionParserTest extends WordSpec {
       val plan = getPlan(
         """MATCH (n)
           |RETURN
-          |1 < 1 as result""".stripMargin)
+          |52 / 32 < 1 as result""".stripMargin)
       val projection = plan
         .asInstanceOf[Production].child
         .asInstanceOf[Projection]
