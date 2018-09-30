@@ -58,6 +58,8 @@ object CompileSql {
   }
 
   def getGetEdgesSql(node: fplan.GetEdges, forcedFromColumnName: Option[String] = None, forcedEdgeColumnName: Option[String] = None, forcedToColumnName: Option[String] = None) = {
+    assert(node.nnode.directed, "Cannot compile undirected GetEdges. Use UnionAll instead.")
+
     def getColumnName(forcedColumnName: Option[String], originalAttributeProvider: nplan.GetEdges => ResolvableName): String = {
       forcedColumnName.map(getQuotedColumnName).getOrElse(getQuotedColumnName(originalAttributeProvider(node.nnode)))
     }
@@ -78,13 +80,6 @@ object CompileSql {
     else
       s"WHERE type IN (${edgeLabelsEscaped.mkString(", ")})"
 
-    val undirectedSelectPart = if (node.nnode.directed)
-      ""
-    else
-      i"""UNION ALL
-         |SELECT "to", edge_id, "from" FROM edge
-         |$typeConstraintPart"""
-
     val vertexLabelConstraints = Map(fromColumnName -> node.src, toColumnName -> node.trg)
       .mapValues(_.labels)
       .flatMap { case (columnName, labelSet) => getVertexLabelSqlCondition(labelSet, columnName) }
@@ -97,7 +92,6 @@ object CompileSql {
        |  (
        |    SELECT "from" AS $fromColumnName, edge_id AS $edgeColumnName, "to" AS $toColumnName FROM edge
        |    $typeConstraintPart
-       |    $undirectedSelectPart
        |  ) subquery
        |$vertexLabelConstraintPart"""
   }

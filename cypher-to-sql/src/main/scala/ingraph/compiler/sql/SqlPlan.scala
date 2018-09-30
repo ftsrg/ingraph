@@ -194,8 +194,24 @@ class GetEdges(val fNode: fplan.GetEdges,
 object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
   override def create(fNode: fplan.GetEdges,
                       options: CompilerOptions)
-  : (GetEdges, CompilerOptions) =
-    (new GetEdges(fNode, options), options)
+  : (SqlNode, CompilerOptions) = {
+    if (fNode.nnode.directed)
+      (new GetEdges(fNode, options), options)
+    else {
+      val sameDirectionNNode = fNode.nnode.copy(directed = true)
+      val oppositeDirectionNNode = sameDirectionNNode
+        .copy(src = sameDirectionNNode.trg)
+        .copy(trg = sameDirectionNNode.src)
+
+      val sameDirectionFNode = fNode.copy(nnode = sameDirectionNNode)
+      val oppositeDirectionFNode = fNode.copy(nnode = oppositeDirectionNNode)
+
+      val (left, leftOptions) = transformOptions(create(sameDirectionFNode, options))
+      val (right, rightOptions) = transformOptions(create(oppositeDirectionFNode, leftOptions))
+
+      UnionAll(left, right, rightOptions) -> rightOptions
+    }
+  }
 }
 
 class GetVertices(val fNode: fplan.GetVertices,
@@ -582,6 +598,25 @@ object Grouping extends SqlNodeCreator1[fplan.Grouping] {
                       options: CompilerOptions)
   : (Grouping, CompilerOptions) =
     (new Grouping(fNode, child, options), options)
+}
+
+case class UnionAll(override val left: SqlNode,
+                    override val right: SqlNode,
+                    options: CompilerOptions)
+  extends BinarySqlNode(left, right) {
+
+  // the children must have the same number of columns and their types must match
+  // additional constraint here is that the columns must have the same names in each subquery
+  assert(left.output.map(_.resolvedName).toSet == right.output.map(_.resolvedName).toSet)
+
+  // explicitly specify columns for the right query
+  // to have the same order of columns as in the left query
+  private val columns: String = left.output.map(getQuotedColumnName).mkString(", ")
+
+  override protected def innerSql: String =
+    i"""SELECT * FROM $leftSql
+       |UNION ALL
+       |SELECT $columns FROM $rightSql"""
 }
 
 case class GenerateId(child: SqlNode,
