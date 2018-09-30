@@ -46,7 +46,7 @@ object BenchmarkMain {
          |DETACH DELETE n
     """.stripMargin
 
-    val tc = new LdbcSnbTestCase("bi", sf, query, f"${csvDir}/", csvPostfix, Seq(removePost, removeForum))
+    val tc = new LdbcSnbTestCase("bi", sf, query, csvDir, csvPostfix, Seq(removePost, removeForum))
 
     neo4jDir match {
       case None =>

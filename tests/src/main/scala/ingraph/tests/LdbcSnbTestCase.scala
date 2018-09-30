@@ -11,7 +11,11 @@ object LdbcSnbTestCase  {
   private val gson = new Gson()
 }
 
-class LdbcSnbTestCase(val workload: String, val sf: String, val query: Int, val csvDir: String, val csvPostfix: String,
+class LdbcSnbTestCase(val workload: String,
+                      val sf: String,
+                      val query: Int,
+                      val csvDir: String,
+                      val csvPostfix: String,
                       val updateQuerySpecifications: Seq[String] = Seq()
                      ) extends TestCase with CSVData {
   override def name: String = f"$workload-$query%02d"
