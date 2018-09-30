@@ -71,7 +71,7 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
     }
     for (tuple <- changeSet.negative) {
       val count = data.get(tuple)
-      if (count >  1) {
+      if (count > 1) {
         data.put(tuple, count - 1)
       } else {
         data.remove(tuple)
