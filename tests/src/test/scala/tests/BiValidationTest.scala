@@ -5,7 +5,7 @@ import org.scalatest.FunSuite
 
 class BiValidationTest extends FunSuite {
 
-  val sf = "01"
+  val sf = "tiny"
   def csvDir = f"../graphs/ldbc-snb-bi"
   def csvPostfix = "_0_0.csv"
 
