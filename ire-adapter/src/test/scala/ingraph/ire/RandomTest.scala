@@ -93,7 +93,32 @@ class RandomTest extends FunSuite {
     assert(queryAdapter.results().size == 2)
   }
 
-  test("Optionals for two expands") {
+  test("Optionals for two expands, separately") {
+    val indexer = new Indexer()
+    val createAdapter = new OneTimeQueryAdapter(
+      """CREATE
+        |  (p2:Person {id: 1}),
+        |  (p1:Person {id: 2})<-[:HAS_CREATOR]-(m:Message)<-[:LIKES]-(p3:Person {id: 3})
+        |""".stripMargin,
+      "",
+      indexer
+    )
+    createAdapter.results()
+    val queryAdapter = new IncrementalQueryAdapter(
+      """MATCH (zombie:Person)
+        |WHERE zombie.id IN [1, 2]
+        |OPTIONAL MATCH (zombie)<-[:HAS_CREATOR]-(message:Message)
+        |OPTIONAL MATCH (message)<-[:LIKES]-(likerZombie:Person)
+        |WHERE likerZombie.id IN [1, 2]
+        |RETURN zombie.id, likerZombie.id
+        |""".stripMargin,
+      "",
+      indexer
+    )
+    assert(queryAdapter.results().size == 2)
+  }
+
+  test("Optionals for two expands in one") {
     val indexer = new Indexer()
     val createAdapter = new OneTimeQueryAdapter(
       """CREATE
