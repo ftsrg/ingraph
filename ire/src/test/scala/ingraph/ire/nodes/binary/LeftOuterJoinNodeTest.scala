@@ -1,12 +1,14 @@
 package ingraph.ire.nodes.binary
 
-import akka.actor.{ActorSystem, Props, actorRef2Scala}
+import akka.actor.{ActorSystem, PoisonPill, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import ingraph.ire.messages.{ChangeSet, Primary, Secondary}
 import ingraph.ire.util.TestUtil._
 import ingraph.ire.util.Utils
 import ingraph.ire.util.TestUtil
 import org.scalatest.{Matchers, WordSpecLike, _}
+
+import scala.concurrent.duration.Duration
 
 class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
@@ -276,6 +278,45 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
         )
       )): _*)
     }
+
+    "tpc-h 13 lojo" in {
+      println(System.getProperty("user.dir"))
+      //select c_custkey, o_orderkey from CUSTOMER left outer join ORDERS on c_custkey = o_custkey
+      val customerSource = io.Source.fromFile("../graphs/tpc-h/customers.csv")
+      val customers = customerSource.getLines().drop(1)
+        .map(_.split(",").take(3))
+        .map(f => {
+          val Array(custKey, segment, country) = f
+          Vector(custKey, segment, country.toLong)
+        }).toVector
+
+      val orderSource = io.Source.fromFile("../graphs/tpc-h/orders.csv")
+      val orders = orderSource.getLines().drop(1)
+        .map(_.split(",").take(3))
+        .map(f => {
+          val Array(date, orderKey, custKey) = f
+          Vector(date, orderKey, custKey)
+        }).toVector
+
+      for (i <- 0 to 10) {
+        val tupleWidth = 2
+        val primaryMask = mask(0)
+        val secondaryMask = mask(1)
+        val echoActor = system.actorOf(TestActors.echoActorProps)
+        val joiner = system.actorOf(Props(
+          new LeftOuterJoinNode(echoActor ! _, tupleWidth, tupleWidth, primaryMask, secondaryMask)))
+        Utils.time {
+          joiner ! Secondary(ChangeSet(positive = orders))
+          joiner ! Primary(ChangeSet(positive = customers))
+          import scala.concurrent.duration._
+          val first = receiveN(1, 60 seconds).head.asInstanceOf[ChangeSet]
+          assert(first.positive.length == 150000)
+        }
+        joiner ! PoisonPill
+      }
+    }
+
   }
+
 
 }
