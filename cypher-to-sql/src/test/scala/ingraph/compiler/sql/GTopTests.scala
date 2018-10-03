@@ -51,7 +51,8 @@ class GTopTests extends FunSuite with TckTestRunner with SharedSqlDriver {
 }
 
 object GTopTests {
-  val selectedScenarios = Set("Return property of type-filtered node")
+  val selectedScenarios: Set[String] = Set()
+  val ignoredScenarios: Set[String] = Set()
 
-  val scenarioSet = new TckScenarioSet(Set("GTopTests"), ignoredScenarios = Set(), selectedScenarios)
+  val scenarioSet = new TckScenarioSet(Set("GTopTests"), ignoredScenarios, selectedScenarios)
 }

@@ -188,7 +188,7 @@ abstract class BinarySqlNodeFromFNode[+T <: BinaryFNode]
 class GetEdges(val fNode: fplan.GetEdges,
                val options: CompilerOptions)
   extends LeafSqlNodeFromFNode[fplan.GetEdges] {
-  override def innerSql: String = getGetEdgesSql(fNode)
+  override def innerSql: String = getGetEdgesSql(fNode, options)
 }
 
 object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
@@ -284,7 +284,7 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
   val edgesNode = right.fNode
 
   // TODO override column names in right
-  override val rightSql: String = getGetEdgesSql(edgesNode, Some("current_from"), Some("edge_id"))
+  override val rightSql: String = getGetEdgesSql(edgesNode, options, Some("current_from"), Some("edge_id"))
   val edgesSql = rightSql
 
   val edgeListAttribute = fNode.nnode.edgeList
