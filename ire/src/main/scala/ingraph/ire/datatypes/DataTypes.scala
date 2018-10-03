@@ -6,7 +6,7 @@ package object datatypes {
   type Tuple = IndexedSeq[Any]
   type TupleBag = Vector[Tuple]
   type Mask = Seq[Int]
-  type JoinCache = BufferMultimap[Tuple, Tuple]
+  type JoinCache = BufferMultimap[Seq[Any], Tuple]
 
   type Path = Vector[Long]
   val Path = scala.collection.immutable.Vector

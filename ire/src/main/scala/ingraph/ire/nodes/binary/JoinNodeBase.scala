@@ -19,8 +19,8 @@ abstract class JoinNodeBase extends BinaryNode {
 
   override def onSizeRequest(): Long = SizeCounter.countDeeper(primaryIndexer.values, secondaryIndexer.values)
 
-  def extract(tuple: Tuple, mask: Mask): Tuple = {
-    mask.map(i => tuple(i)).toVector
+  def extract(tuple: Tuple, mask: Mask): Seq[Any] = {
+    mask.map(i => tuple(i))
   }
 
   def combine(tuple: Tuple, otherTuple: Tuple, slot: Slot): Tuple = {
