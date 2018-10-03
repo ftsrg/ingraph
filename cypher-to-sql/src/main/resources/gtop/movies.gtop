@@ -9,19 +9,19 @@
       "attributes" : [ "id", "name", "born" ]
     } ],
     "abstractionEdges" : [ {
-      "types" : [ "person_id_directed_person_id" ],
+      "types" : [ "directed" ],
       "attributes" : [ ],
       "sourceType" : [ "person" ],
       "destinationType" : [ "movie" ],
       "directed" : true
     }, {
-      "types" : [ "person_id_acted_in_person_id" ],
+      "types" : [ "acted_in" ],
       "attributes" : [ "role" ],
       "sourceType" : [ "person" ],
       "destinationType" : [ "movie" ],
       "directed" : true
     }, {
-      "types" : [ "person_id_produced_person_id" ],
+      "types" : [ "produced" ],
       "attributes" : [ ],
       "sourceType" : [ "person" ],
       "destinationType" : [ "movie" ],
@@ -30,7 +30,6 @@
   },
   "implementationLevel" : {
     "graphMetadata" : {
-      "storageLayout" : "IGNORETIME",
       "backendSystem" : "RELATIONAL"
     },
     "implementationNodes" : [ {
@@ -83,7 +82,7 @@
       "restrictions" : [ ]
     } ],
     "implementationEdges" : [ {
-      "types" : [ "person_id_directed_person_id" ],
+      "types" : [ "directed" ],
       "paths" : [ {
         "traversalHops" : [ {
           "sourceTableName" : "person",
@@ -97,7 +96,7 @@
         } ]
       } ]
     }, {
-      "types" : [ "person_id_acted_in_person_id" ],
+      "types" : [ "acted_in" ],
       "paths" : [ {
         "traversalHops" : [ {
           "sourceTableName" : "person",
@@ -115,7 +114,7 @@
         } ]
       } ]
     }, {
-      "types" : [ "person_id_produced_person_id" ],
+      "types" : [ "produced" ],
       "paths" : [ {
         "traversalHops" : [ {
           "sourceTableName" : "person",
