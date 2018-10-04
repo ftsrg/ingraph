@@ -494,6 +494,20 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
     )
   }
 
+  test("Simple variable length pattern / undirected edge") {
+    compileAndRunQuery(
+      """CREATE (a {name: 'A'}), (b {name: 'B'}),
+        |       (c {name: 'C'}), (d {name: 'D'})
+        |CREATE (a)-[:CONTAINS]->(b),
+        |       (b)-[:CONTAINS]->(c),
+        |       (c)-[:CONTAINS]->(d)
+      """.stripMargin,
+      """MATCH (a {name: 'A'})-[:CONTAINS*]-(x)
+        |RETURN x
+      """.stripMargin
+    )
+  }
+
   test("Simple variable length pattern / exact length") {
     compileAndRunQuery(
       """CREATE (a {name: 'A'}), (b {name: 'B'}),
