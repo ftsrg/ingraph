@@ -189,31 +189,40 @@ abstract class BinarySqlNodeFromFNode[+T <: BinaryFNode]
 (left: SqlNode, right: SqlNode)
   extends BinarySqlNode(left, right) with WithFNodeOrigin[T] {}
 
+trait GetEdgesLike extends SqlNode {
+  def fNode: fplan.GetEdges
+}
+
 class GetEdges(val fNode: fplan.GetEdges,
                val options: CompilerOptions)
-  extends LeafSqlNodeFromFNode[fplan.GetEdges] {
+  extends LeafSqlNodeFromFNode[fplan.GetEdges] with GetEdgesLike {
   override def innerSql: String = getGetEdgesSql(fNode, options)
 }
 
 object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
-  override def create(fNode: fplan.GetEdges,
+  override def create(fNodeInput: fplan.GetEdges,
                       options: CompilerOptions)
   : (SqlNode, CompilerOptions) = {
-    if (fNode.nnode.directed)
-      (new GetEdges(fNode, options), options)
+    if (fNodeInput.nnode.directed)
+      (new GetEdges(fNodeInput, options), options)
     else {
-      val sameDirectionNNode = fNode.nnode.copy(directed = true)
+      val sameDirectionNNode = fNodeInput.nnode.copy(directed = true)
       val oppositeDirectionNNode = sameDirectionNNode
-        .copy(src = sameDirectionNNode.trg)
-        .copy(trg = sameDirectionNNode.src)
+        .copy(src = sameDirectionNNode.trg,
+          trg = sameDirectionNNode.src)
 
-      val sameDirectionFNode = fNode.copy(nnode = sameDirectionNNode)
-      val oppositeDirectionFNode = fNode.copy(nnode = oppositeDirectionNNode)
+      val sameDirectionFNode = fNodeInput.copy(nnode = sameDirectionNNode)
+      val oppositeDirectionFNode = fNodeInput.copy(nnode = oppositeDirectionNNode)
 
       val (left, leftOptions) = transformOptions(create(sameDirectionFNode, options))
       val (right, rightOptions) = transformOptions(create(oppositeDirectionFNode, leftOptions))
 
-      UnionAll(left, right, rightOptions) -> rightOptions
+      val unionAll = UnionAll(left, right, rightOptions)
+      val identityNode = new IdentityNode(unionAll, unionAll.nextOptions) with GetEdgesLike {
+        override def fNode: fplan.GetEdges = fNodeInput
+      }
+
+      identityNode -> identityNode.lastOptions
     }
   }
 }
