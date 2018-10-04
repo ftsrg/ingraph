@@ -5,6 +5,7 @@ import ingraph.compiler.sql.Create.graphElementTypeString
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.Production.{getSqlRecursively, withQueryNamePrefix}
 import ingraph.compiler.sql.SqlNodeCreator._
+import ingraph.compiler.sql.TransitiveJoin.{currentFromColumnName, edgeIdColumnName}
 import ingraph.model.expr._
 import ingraph.model.fplan
 import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
@@ -281,19 +282,16 @@ object GetVertices extends SqlNodeCreator0[fplan.GetVertices] {
 
 class TransitiveJoin(val fNode: fplan.TransitiveJoin,
                      override val left: SqlNode,
-                     override val right: GetEdges,
+                     override val right: SqlNode,
                      val options: CompilerOptions)
   extends BinarySqlNodeFromFNode[fplan.TransitiveJoin](left, right) {
-  val edgesNode = right.fNode
-
-  // TODO override column names in right
-  override val rightSql: String = getGetEdgesSql(edgesNode, options, Some("current_from"), Some("edge_id"))
+  val edgesFNode = fNode.right
   val edgesSql = rightSql
 
   val edgeListAttribute = fNode.nnode.edgeList
-  val edgeListName = getQuotedColumnName(edgesNode.nnode.edge)
-  val edgesFromVertexName = getQuotedColumnName(edgesNode.nnode.src)
-  val edgesToVertexName = getQuotedColumnName(edgesNode.nnode.trg)
+  val edgeListName = getQuotedColumnName(edgesFNode.nnode.edge)
+  val edgesFromVertexName = getQuotedColumnName(edgesFNode.nnode.src)
+  val edgesToVertexName = getQuotedColumnName(edgesFNode.nnode.trg)
   val leftNodeColumnNames = left.output.map(getQuotedColumnName).mkString(", ")
   val joinNodeColumnNames = fNode.flatSchema.map(getQuotedColumnName).mkString(",\n")
 
@@ -324,15 +322,13 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
        |  UNION ALL
        |  SELECT
        |    $leftNodeColumnNames,
-       |    ($edgeListName|| edge_id) AS $edgeListName,
+       |    ($edgeListName|| $edgeIdColumnName) AS $edgeListName,
        |    edges.$edgesToVertexName AS nextFrom,
        |    edges.$edgesToVertexName
-       |  FROM
-       |    ( $edgesSql
-       |    ) edges
+       |  FROM (SELECT * FROM $edgesSql) edges
        |    INNER JOIN recursive_table
-       |      ON edge_id <> ALL ($edgeListName) -- edge uniqueness
-       |         AND next_from = current_from
+       |      ON $edgeIdColumnName <> ALL ($edgeListName) -- edge uniqueness
+       |         AND next_from = $currentFromColumnName
        |         $upperBoundConstraint
        |)
        |SELECT
@@ -342,12 +338,34 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
 }
 
 object TransitiveJoin extends SqlNodeCreator2[fplan.TransitiveJoin] {
+  val currentFromColumnName = "current_from"
+  val edgeIdColumnName = "edge_id"
+
   override def create(fNode: fplan.TransitiveJoin,
                       left: SqlNode,
                       right: SqlNode,
                       options: CompilerOptions)
-  : (TransitiveJoin, CompilerOptions) =
-    (new TransitiveJoin(fNode, left, right.asInstanceOf[GetEdges], options), options)
+  : (SqlNode, CompilerOptions) =
+    (new TransitiveJoin(fNode, left, right, options), options)
+
+  override def apply(fNode: fplan.TransitiveJoin, options: CompilerOptions): (SqlNode, CompilerOptions) = {
+    // transform GetEdges at right
+    val origFNode = fNode.right
+    val origNNode = origFNode.nnode
+
+    val origSrc = origNNode.src.copy(name = currentFromColumnName,
+      resolvedName = Some(types.TResolvedNameValue(currentFromColumnName, currentFromColumnName)))
+    val origEdge = origNNode.edge.copy(name = edgeIdColumnName,
+      resolvedName = Some(types.TResolvedNameValue(edgeIdColumnName, edgeIdColumnName)))
+
+    val getEdgesNNode = origNNode.copy(src = origSrc, edge = origEdge)
+    val getEdgesFNode = origFNode.copy(nnode = getEdgesNNode)
+
+    val (left, _) = SqlNode(fNode.left, options)
+    val (right, _) = SqlNode(getEdgesFNode, left.nextOptions)
+
+    create(fNode, left, right, right.nextOptions)
+  }
 }
 
 // EquiJoinLike nodes except TransitiveJoin
