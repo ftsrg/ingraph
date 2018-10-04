@@ -334,7 +334,7 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
   // TODO don't execute it more than once
   def sqlNode = SqlNode(fplan, CompilerOptions(parameters, gTop))._1
 
-  def sql = sqlNode.sql
+  def sql = sqlNode.sql.get
 
   def run(): String = {
     println(sql)

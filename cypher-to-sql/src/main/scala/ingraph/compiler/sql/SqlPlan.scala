@@ -31,14 +31,13 @@ trait SqlNode extends LogicalPlan {
 
   protected def innerSql: String
 
-  def sqlQueryName: String = withQueryNamePrefix + lastOptions.nodeId
+  def originalSqlQueryName: String = withQueryNamePrefix + lastOptions.nodeId
 
-  def sql: String = {
-    val nodeType = getClass.getSimpleName
+  def sqlQueryNameToRefer: String = originalSqlQueryName
 
-    s"""-- $nodeType
-       |$innerSql""".stripMargin
-  }
+  val nodeType: String = getClass.getSimpleName
+
+  def sql: Option[String] = Some(innerSql)
 }
 
 abstract class SqlNodeCreator[-FPlanType <: FNode](implicit fPlanTag: ClassTag[FPlanType]) {
@@ -162,16 +161,20 @@ abstract class LeafSqlNode
 abstract class UnarySqlNode(val child: SqlNode)
   extends GenericUnaryNode[SqlNode] with SqlNode {
 
-  val childSql = child.sqlQueryName
+  override def sqlQueryNameToRefer: String =
+    if (sql.isDefined) super.sqlQueryNameToRefer
+    else child.sqlQueryNameToRefer
+
+  val childSql = child.sqlQueryNameToRefer
 }
 
 abstract class BinarySqlNode
 (val left: SqlNode, val right: SqlNode)
   extends GenericBinaryNode[SqlNode] with SqlNode {
 
-  def leftSql = left.sqlQueryName
+  def leftSql = left.sqlQueryNameToRefer
 
-  def rightSql = right.sqlQueryName
+  def rightSql = right.sqlQueryNameToRefer
 }
 
 abstract class LeafSqlNodeFromFNode[+T <: LeafFNode]
@@ -442,12 +445,23 @@ class Production(val fNode: fplan.Production,
     }
 
   override def innerSql: String = {
+    val children = getSqlRecursively(child)
+    val emptyQueriesAtEndCount = children.reverse.takeWhile(_.sql.isEmpty).size
+    val queriesAtEndWithoutComma = children.takeRight(emptyQueriesAtEndCount + 1).toSet
     val withQueries =
-      getSqlRecursively(child)
-        .map { case (sqlQueryName, sql) =>
-          i"""$sqlQueryName AS
-             | ($sql)"""
-        }.mkString(",\n")
+      children
+        .map { sqlNode =>
+          val commaIfNeeded =
+            if (queriesAtEndWithoutComma.contains(sqlNode)) ""
+            else ","
+
+          if (sqlNode.sql.isDefined)
+            i"""${sqlNode.sqlQueryNameToRefer} AS
+               | (-- ${sqlNode.nodeType}
+               |  ${sqlNode.sql.get})$commaIfNeeded"""
+          else
+            s"-- ${sqlNode.originalSqlQueryName} (${sqlNode.nodeType}): ${sqlNode.sqlQueryNameToRefer}"
+        }.mkString("\n")
 
     val projectionSql = getProjectionSql(renamePairs, childSql, options)
     s"""WITH
@@ -460,9 +474,10 @@ object Production extends SqlNodeCreator1[fplan.Production] {
 
   val withQueryNamePrefix = "q"
 
-  def getSqlRecursively(sqlNode: SqlNode): Seq[(String, String)] = {
-    sqlNode.children.flatMap(getSqlRecursively) :+
-      (sqlNode.sqlQueryName, sqlNode.sql)
+  def getSqlRecursively(sqlNode: SqlNode): Seq[SqlNode] = {
+    val childQueries = sqlNode.children.flatMap(getSqlRecursively)
+
+    childQueries :+ sqlNode
   }
 
   override def create(fNode: fplan.Production,
@@ -523,6 +538,10 @@ class AllDifferent(val fNode: fplan.AllDifferent,
   override def innerSql: String =
     i"""SELECT * FROM $childSql AS subquery
        |  $wherePart"""
+
+  override def sql: Option[String] =
+    if (allDifferentNeeded) super.sql
+    else None
 }
 
 object AllDifferent extends SqlNodeCreator1[fplan.AllDifferent] {
@@ -625,7 +644,7 @@ case class GenerateId(child: SqlNode,
                       newElementColumnName: String)
   extends LeafSqlNode {
 
-  val childQueryName: String = child.sqlQueryName
+  val childQueryName: String = child.sqlQueryNameToRefer
 
   override protected def innerSql: String = s"SELECT nextval('${elementTypePrefix}_seq') AS $newElementColumnName, * FROM $childQueryName"
 }
@@ -667,7 +686,7 @@ class Create(val fNode: fplan.Create,
   val newElementColumnName = getQuotedColumnName(attribute)
 
   val generateId = GenerateId(child, typePrefix, options, newElementColumnName)
-  val genVertexIdQueryName: String = generateId.sqlQueryName
+  val genVertexIdQueryName: String = generateId.sqlQueryNameToRefer
 
   private val elementInsertProjectionPairs: Seq[(String, String)] = Seq(newElementColumnName -> (typePrefix + "_id")) ++
     // edge-specific columns: from, to, type
@@ -761,4 +780,30 @@ object Dual extends SqlNodeCreator0[fplan.Dual] {
                       options: CompilerOptions)
   : (Dual, CompilerOptions) =
     (new Dual(fNode, options), options)
+}
+
+class IdentityNode(override val child: SqlNode,
+                   val options: CompilerOptions)
+  extends UnarySqlNode(child) {
+
+  override def sql: Option[String] = None
+
+  override protected def innerSql: String = ???
+
+  override def productElement(n: Int): Any = child.productElement(n)
+
+  override def productArity: Int = child.productArity
+
+  override def canEqual(that: Any): Boolean =
+    that match {
+      case that: IdentityNode => child canEqual that.child
+      case _ => false
+    }
+}
+
+object IdentityNode {
+  def apply(child: SqlNode): (SqlNode, CompilerOptions) = {
+    val node = new IdentityNode(child, child.nextOptions)
+    node -> node.lastOptions
+  }
 }
