@@ -25,3 +25,9 @@ class UnexpectedTypeException(val a: Any, val info: String = "(details not given
 
 class UnsupportedException(val info: String)
   extends CompilerException(s"Usupported (for now): ${info}.")
+
+class IllegalSkipLimitUsageException
+  extends CompilerException(s"Skip or limit found, but no sorting was given.")
+
+class IllegalSortingAfterDistinctException(val info: String)
+  extends CompilerException(s"Sort needs variables not available after DISTINCT projection: ${info}.")

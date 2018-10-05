@@ -1,10 +1,11 @@
 package ingraph.ire.adapters.tuplecreators
 
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.inputs.InputTransaction
+import ingraph.ire.datatypes.Tuple
+import ingraph.ire.inputs.InputTransaction
 import ingraph.ire._
 import ingraph.model.expr.{EdgeAttribute, NodeHasLabelsAttribute, PropertyAttribute, VertexAttribute}
 import ingraph.model.fplan.{GetEdges, GetVertices}
+import org.apache.spark.sql.catalyst.expressions.Literal
 
 object TupleConstants {
   val ID_KEY = "id"

@@ -13,7 +13,7 @@ ext {
   log4jVersion = '1.2.17'
   neo4jDriverVersion = '1.4.6'
   neo4jVersion = '3.3.5'
-  neo4jApocVersion = '3.3.0.1'
+  neo4jApocVersion = '3.3.0.4'
   opencypherVersion = '1.0.0-M10'
   pegdownVersion = '1.6.0'
   scalaShortVersion = '2.11'

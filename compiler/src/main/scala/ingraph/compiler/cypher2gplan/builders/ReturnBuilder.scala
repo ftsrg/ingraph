@@ -1,6 +1,7 @@
 package ingraph.compiler.cypher2gplan.builders
 
 import ingraph.compiler.cypher2gplan.util.BuilderUtil
+import ingraph.model.expr.types.TSortOrder
 import ingraph.compiler.cypher2gplan.util.GrammarUtil._
 import ingraph.model.{expr, gplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedStar
@@ -20,14 +21,11 @@ object ReturnBuilder {
   }
 
   def buildWithClause(w: oc.With, content: gplan.GNode): gplan.GNode = {
-    val rb = buildReturnBody(w.isDistint, w.getReturnBody, content, isReturnClause = false)
-
-    Option(w.getWhere).fold(rb)(
-      (where) => {
-        val condition = ExpressionBuilder.buildExpressionNoJoinAllowed(where.getExpression)
-        gplan.Selection(condition, rb)
-      }
+    val selectionCondition: Option[cExpr.Expression] = Option(w.getWhere).flatMap(
+      (where) => Some(ExpressionBuilder.buildExpressionNoJoinAllowed(where.getExpression))
     )
+
+    buildReturnBody(w.isDistint, w.getReturnBody, content, selectionCondition, isReturnClause = false)
   }
 
 
@@ -35,7 +33,7 @@ object ReturnBuilder {
     * Process the common part of a RETURN and a WITH clause,
     * i.e. the distinct flag and the ReturnBody.
     */
-  def buildReturnBody(distinct: Boolean, returnBody: oc.ReturnBody, content: gplan.GNode, isReturnClause: Boolean): gplan.GNode = {
+  def buildReturnBody(distinct: Boolean, returnBody: oc.ReturnBody, content: gplan.GNode, selectionCondition: Option[cExpr.Expression] = None, isReturnClause: Boolean): gplan.GNode = {
     val returnItems = returnBody.getReturnItems
 
     // this will hold the project list compiled
@@ -63,35 +61,24 @@ object ReturnBuilder {
       elements += expr.ReturnItem(e, alias)
     }
 
-    //TODO: check after resolving: if (elements.empty) unrecoverableError('''RETURN items processed and resulted in no column values to return''')
-
-    // We create an unresolved projection which is to be resolved to either Projection or Grouping
-    val projection = gplan.UnresolvedProjection(elements, content)
-
-    // add duplicate-elimination operator if return DISTINCT was specified
-    val op1 = if (distinct) gplan.DuplicateElimination(projection) else projection
-
-    val op2 = Option(returnBody.getOrder).fold(op1)(
+    val sortOrder: Option[TSortOrder] = Option(returnBody.getOrder).map(
       (order) => {
-        val sortEntries: Seq[cExpr.SortOrder] = order.getOrderBy.asScala.map(oe => {
+        order.getOrderBy.asScala.map(oe => {
           val sortExpression = ExpressionBuilder.buildExpressionNoJoinAllowed(oe.getExpression)
           val sortDirection: cExpr.SortDirection = Option(oe.getSort)
             .filter( _.toUpperCase.startsWith("DESC") ) // not null and DESC -> Some("DESC"), else none
             .fold[cExpr.SortDirection](cExpr.Ascending)( _ => cExpr.Descending)
           cExpr.SortOrder(sortExpression, sortDirection)
         })
-        gplan.Sort(sortEntries, op1)
       }
     )
 
-    val op3 = (Option(returnBody.getSkip), Option(returnBody.getLimit)) match {
-      case (None, None) => op2
-      case (skipOpt, limitOpt) => {
-        val s = skipOpt.flatMap( (skip)  => BuilderUtil.convertToSkipLimitConstant(skip.getSkip) )
-        val l = limitOpt.flatMap( (limit) => BuilderUtil.convertToSkipLimitConstant(limit.getLimit) )
-        gplan.Top(s, l, op2)
-      }
-    }
-    op3
+    val skipExpr = Option(returnBody.getSkip).flatMap( (skip)  => BuilderUtil.convertToSkipLimitConstant(skip.getSkip) )
+    val limitExpr = Option(returnBody.getLimit).flatMap( (limit) => BuilderUtil.convertToSkipLimitConstant(limit.getLimit) )
+
+    //TODO: check after resolving: if (elements.empty) unrecoverableError('''RETURN items processed and resulted in no column values to return''')
+
+    // We create an unresolved projection which is to be resolved to either Projection or Grouping followed by DuplicateElimination, Sort, Top, Selection
+    gplan.UnresolvedProjection(elements, content, distinct, sortOrder, skipExpr, limitExpr, selectionCondition)
   }
 }

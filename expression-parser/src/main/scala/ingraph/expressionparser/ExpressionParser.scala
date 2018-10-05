@@ -1,8 +1,8 @@
 package ingraph.parse
 
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.math.GenericMath
-import hu.bme.mit.ire.nodes.unary.aggregation._
+import ingraph.ire.datatypes.Tuple
+import ingraph.ire.math.GenericMath
+import ingraph.ire.nodes.unary.aggregation._
 import ingraph.expressionparser.FunctionLookup
 import ingraph.model.expr._
 import org.apache.spark.sql.catalyst.expressions.{Add, And, BinaryArithmetic, BinaryComparison, BinaryOperator, CaseWhen, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Remainder, Subtract}
@@ -71,7 +71,7 @@ object ExpressionParser {
         case _: And => (t: Tuple) => left(t) && right(t)
         case _: Or => (t: Tuple) => left(t) || right(t)
       }
-    case TupleIndexLiteralAttribute(index, _, _) =>
+    case TupleIndexLiteralAttribute(index, _, _, _) =>
       tuple  => tuple(index)
 
     case invoc: FunctionInvocation =>
@@ -105,7 +105,7 @@ object ExpressionParser {
   }
 
   def parseAggregate(exp: Expression): Option[(Int, () => StatefulAggregate)] = exp match {
-    case FunctionInvocation(functor, Seq(TupleIndexLiteralAttribute(index, _, _)), isDistinct) =>
+    case FunctionInvocation(functor, Seq(TupleIndexLiteralAttribute(index, _, _, _)), isDistinct) =>
       import ingraph.model.misc.Function._
       val factory = if (!isDistinct) functor match {
         case AVG => () => new StatefulAverage(index)

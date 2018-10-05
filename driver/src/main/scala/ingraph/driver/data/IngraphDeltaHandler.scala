@@ -1,7 +1,7 @@
 package ingraph.driver.data
 
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.listeners.{ChangeListener, ConsistentChangeListener}
+import ingraph.ire.datatypes.Tuple
+import ingraph.ire.listeners.{ChangeListener, ConsistentChangeListener}
 import org.neo4j.driver.v1.Record
 
 import scala.collection.JavaConverters._

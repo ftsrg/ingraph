@@ -1,7 +1,7 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.inputs.InputTransactionFactory
+import ingraph.ire.datatypes.Tuple
+import ingraph.ire.inputs.InputTransactionFactory
 import ingraph.ire.adapters.tuplecreators.PullTupleCreator
 
 class OneTimeQueryAdapter(
