@@ -33,12 +33,12 @@ trait EquiJoinLike extends JoinLike {
 
 // leaf nodes
 case class GetVertices(requiredProperties: Seq[ResolvableName], nnode: nplan.GetVertices) extends LeafFNode with TGetVertices {
-  override def flatSchema = nnode.output ++ requiredProperties
+  override val flatSchema = nnode.output ++ requiredProperties
   override val v: VertexAttribute = nnode.v
 }
 
 case class GetEdges(requiredProperties: Seq[ResolvableName], nnode: nplan.GetEdges) extends LeafFNode with TGetEdges{
-  override def flatSchema = nnode.output ++ requiredProperties
+  override val flatSchema = nnode.output ++ requiredProperties
   val src = nnode.src
   val trg = nnode.trg
   val edge = nnode.edge
@@ -214,7 +214,8 @@ object SchemaMapper {
     expression.transform {
       case a: ResolvableName => TupleIndexLiteralAttribute(
         flatSchema.map(_.resolvedName).indexOf(a.resolvedName),
-        isVertex = a.isInstanceOf[VertexAttribute]
+        isVertex = a.isInstanceOf[VertexAttribute],
+        debugInfo = s"resolved name to lookup was: ${a.resolvedName}"
       )
       case FunctionInvocation(
         ingraph.model.misc.Function.NODE_HAS_LABELS,

@@ -1,6 +1,6 @@
 package ingraph.ire.adapters.tuplecreators
 
-import hu.bme.mit.ire.inputs.InputTransaction
+import ingraph.ire.inputs.InputTransaction
 import ingraph.ire.{IdParser, Indexer, IngraphEdge}
 import ingraph.model.fplan.{GetEdges, GetVertices}
 import org.apache.spark.sql.catalyst.expressions.Literal
@@ -20,7 +20,7 @@ class PullTupleCreator(vertexOps: Seq[GetVertices],
         indexer.verticesByLabel(opLabels.head).filter(v => opLabels.subsetOf(v.labels))
       case Some(Literal(id, _)) =>
         val label = v.labels.vertexLabels.head
-        val vertex = indexer.verticesByIdLabel(
+        val vertex = indexer.vertexByIdLabel(
           id.asInstanceOf[Long],
           label
         ).getOrElse(throw new IllegalStateException(s"Vertex not found with label ${label} and id ${id}"))

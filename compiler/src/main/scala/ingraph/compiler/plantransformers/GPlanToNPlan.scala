@@ -33,8 +33,8 @@ object GPlanToNPlan {
           Right()
         )
       case gplan.Top(skipExpr, limitExpr, gplan.Sort(order, child)) => nplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
-      // if Sort operator found w/o Top, then skip and limit defaults to None
       case gplan.Top(_, _, _) => throw new UnsupportedOperationException("Vanilla 'SKIP'/'LIMIT' is not supported, add an 'ORDER BY' clause. Please.")
+      // if Sort operator found w/o Top, then skip and limit defaults to None
       case gplan.Sort(order, child) => nplan.SortAndTop(None, None, order, transform(child))
       case gplan.Production(child) => nplan.Production(transform(child))
       case gplan.Projection(projectList, child) => nplan.Projection(projectList, transform(child))

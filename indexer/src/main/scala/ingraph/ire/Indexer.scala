@@ -1,6 +1,6 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.collections.BufferMultimap
+import com.google.common.collect.HashMultimap
 import ingraph.bulkloader.csv.data.{CsvEdge, CsvVertex}
 
 import scala.collection.JavaConversions._
@@ -14,13 +14,13 @@ trait IngraphElement {
 case class IngraphVertex(id: Long,
                          labels: Set[String],
                          override val properties: Map[String, Any] = Map()) extends IngraphElement {
-  val edgesOut: BufferMultimap[String, IngraphEdge] = new BufferMultimap[String, IngraphEdge]()
-  val edgesIn: BufferMultimap[String, IngraphEdge] = new BufferMultimap[String, IngraphEdge]()
+  val edgesOut: mutable.Buffer[IngraphEdge] = mutable.Buffer[IngraphEdge]()
+  val edgesIn: mutable.Buffer[IngraphEdge] = mutable.Buffer[IngraphEdge]()
 
   override def toString: String = s"Vertex($id, $properties)"
 }
 
-case class IngraphEdge(id: Long,
+case class  IngraphEdge(id: Long,
                        sourceVertex: IngraphVertex,
                        targetVertex: IngraphVertex,
                        `type`: String,
@@ -34,12 +34,11 @@ class Indexer {
   val mappers = mutable.Buffer[TTupleCreator]()
 
   val vertexLookup = mutable.HashMap[Long, IngraphVertex]()
-  val vertexLabelLookup = new BufferMultimap[String, IngraphVertex]()
+  val vertexLabelLookup = HashMultimap.create[String, IngraphVertex]()
   val vertexIdLabelLookup = mutable.HashMap[(Long, String), IngraphVertex]()
 
   val edgeLookup = mutable.HashMap[Long, IngraphEdge]()
-  val edgeTypeLookup = new BufferMultimap[String, IngraphEdge]()
-  val edgeSrcTgtTypeLookup = new BufferMultimap[((Long, Long), String), IngraphEdge]
+  val edgeTypeLookup = HashMultimap.create[String, IngraphEdge]()
 
   def fill(tupleMapper: TTupleCreator): Unit = {
     for (vertex <- vertexLookup.values) {
@@ -64,7 +63,7 @@ class Indexer {
 
   def addVertex(vertex: IngraphVertex): IngraphVertex = {
     for (label <- vertex.labels) {
-      vertexLabelLookup.addBinding(label, vertex)
+      vertexLabelLookup.put(label, vertex)
       vertexIdLabelLookup((vertex.id, label)) = vertex
     }
 
@@ -75,13 +74,13 @@ class Indexer {
 
   def removeVertexById(id: Long, detach: Boolean = false): Unit = {
     val vertex = vertexLookup(id)
-    val edges = vertex.edgesOut.valuesIterator.flatten ++ vertex.edgesIn.valuesIterator.flatten
+    val edges = vertex.edgesOut.iterator() ++ vertex.edgesIn.iterator()
     if (!detach && edges.nonEmpty)
       throw new IllegalArgumentException("Won't remove connected vertex without DETACH")
     else if (detach)
-      for { edge <- edges } removeEdgeById(edge.id)
+      for { edge <- edges.toList } removeEdge(edge)
     for (label <- vertex.labels) {
-      vertexLabelLookup.removeBinding(label, vertex)
+      vertexLabelLookup.remove(label, vertex)
       vertexIdLabelLookup.remove((vertex.id, label))
     }
     vertexLookup.remove(id)
@@ -98,11 +97,10 @@ class Indexer {
 
   def addEdge(edge: IngraphEdge): IngraphEdge = {
     edgeLookup(edge.id) = edge
-    edge.sourceVertex.edgesOut.addBinding(edge.`type`, edge)
-    edge.targetVertex.edgesIn.addBinding(edge.`type`, edge)
-    edgeTypeLookup.addBinding(edge.`type`, edge)
+    edge.sourceVertex.edgesOut += edge
+    edge.targetVertex.edgesIn += edge
+    edgeTypeLookup.put(edge.`type`, edge)
     val srcTgt = (edge.sourceVertex.id, edge.targetVertex.id)
-    edgeSrcTgtTypeLookup.addBinding((srcTgt, edge.`type`), edge)
     mappers.foreach(_.addEdge(edge))
     edge
   }
@@ -113,30 +111,25 @@ class Indexer {
 
   def removeEdgeById(id: Long): Unit = {
     val edge = edgeLookup(id)
-    mappers.foreach(_.removeEdge(edge))
-    edgeTypeLookup.removeBinding(edge.`type`, edge)
-    val srcTgt = (edge.sourceVertex.id, edge.targetVertex.id)
-    edgeSrcTgtTypeLookup.removeBinding((srcTgt, edge.`type`), edge)
-    edgeLookup.remove(id)
+    removeEdge(edge)
   }
 
-  def edgesBySourceAndTargetAndType(source: IngraphVertex, target: IngraphVertex, `type`: String) =
-    edgeSrcTgtTypeLookup.getOrElse(((source.id, target.id), `type`), Seq()).iterator
+  def removeEdge(edge: IngraphEdge): Unit = {
+    mappers.foreach(_.removeEdge(edge))
+    edgeTypeLookup.remove(edge.`type`, edge)
+    edgeLookup.remove(edge.id)
+    edge.sourceVertex.edgesOut -= edge
+    edge.targetVertex.edgesIn -= edge
+  }
 
-  def verticesById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
-  def verticesByIdLabel(id: Long, label: String): Option[IngraphVertex] = vertexIdLabelLookup.get((id, label))
-  def verticesByLabel(label: String): Iterator[IngraphVertex] = vertexLabelLookup.getOrElse(label, Seq()).iterator
+  def vertexById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
+  def vertexByIdLabel(id: Long, label: String): Option[IngraphVertex] = vertexIdLabelLookup.get((id, label))
+  def verticesByLabel(label: String): Iterator[IngraphVertex] = vertexLabelLookup.get(label).iterator
   def vertices(): Iterator[IngraphVertex] = vertexLookup.valuesIterator
 
   def edges(): Iterator[IngraphEdge] = edgeLookup.valuesIterator
   def edgeById(id: Long): Option[IngraphEdge] = edgeLookup.get(id)
-  def edgesByType(label: String): Iterator[IngraphEdge] = edgeTypeLookup.getOrElse(label, Seq()).iterator
-
-  def getNumberOfVertices(): Int = vertexLookup.size
-  def getNumberOfEdges(): Int = edgeLookup.size
-  def getNumberOfLabels(): Int = vertexLabelLookup.keySet.size
-  def getNumberOfTypes(): Int = edgeTypeLookup.keySet.size
-  def getNumberOfEdgesWithType(`type`: String): Int = edgeTypeLookup.get(`type`).map(_.size).getOrElse(0)
+  def edgesByType(label: String): Iterator[IngraphEdge] = edgeTypeLookup.get(label).iterator
 
   val rnd = new Random(1)
   def newId(): Long = {

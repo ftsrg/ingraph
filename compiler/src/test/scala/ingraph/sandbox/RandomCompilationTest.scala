@@ -25,10 +25,9 @@ class RandomCompilationTest extends CompilerTest {
 
   test("Random test from cypher string") {
     compile(
-      """MATCH (segment:Segment)
-        |WHERE NOT NOT NOT (segment.length > 0)
-        |RETURN segment, segment.length AS length
-        |     , case segment.length when +0 then 'zero' when --+-1 then 'almost OK' else 'too bad' end AS lengthComment""".stripMargin)
+      """MATCH (n)
+        |WITH n.id + 1 AS new_id
+        |CREATE (:Label {id: new_id}) """.stripMargin)
 
   }
 
@@ -437,6 +436,72 @@ class RandomCompilationTest extends CompilerTest {
     assert(stages.gplan.find(p => p.isInstanceOf[gplan.Delete] ).get.asInstanceOf[gplan.Delete].attributes(0).resolvedName.isDefined)
   }
 
+  test("should retain ORDER BY attributes in projection") {
+    val stages = compile(
+      """WITH 1 AS x, 2 AS y
+        |RETURN x
+        |ORDER BY y
+        |LIMIT 1
+        |""".stripMargin)
+
+    assert(stages.gplan.find(p => p.isInstanceOf[gplan.Sort] ).get.asInstanceOf[gplan.Sort].child.asInstanceOf[gplan.Projection]
+      .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("y#0")))
+  }
+
+  test("should retain the property itself for ORDER BY properties in projection") {
+    val stages = compile(
+      """MATCH (a:A)-[r:REL]->(x:B)
+        |RETURN a
+        |ORDER BY x.foo
+        |LIMIT 1
+        |""".stripMargin)
+
+    assert(stages.gplan.find(p => p.isInstanceOf[gplan.Sort] ).get.asInstanceOf[gplan.Sort].child.asInstanceOf[gplan.Projection]
+      .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("x.foo#0")))
+  }
+
+  test("should not introduce additional projection for ORDER BY on attribute already present in the projection") {
+    val stages = compile(
+      """MATCH   (tag:Tag)
+        |WITH     tag.name AS tagName
+        |RETURN   tagName
+        |ORDER BY tagName ASC
+        |""".stripMargin)
+
+    // get the gplan tree and cast to the desired types
+    val productionOp = stages.gplan.asInstanceOf[gplan.Production]
+    val sortOp = productionOp.child.asInstanceOf[gplan.Sort]
+    val returnProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
+    val withProjectionOp = returnProjectionOp.child.asInstanceOf[gplan.Projection]
+    val alldifferentOp = withProjectionOp.child.asInstanceOf[gplan.AllDifferent]
+    assert( Option(alldifferentOp).isDefined )
+    // last projection and the sorting has a single item...
+    assert( returnProjectionOp.projectList.length == 1)
+    assert( sortOp.order.length == 1)
+    // ... and they are the same
+    assert( returnProjectionOp.projectList(0).child.asInstanceOf[expr.ResolvableName].resolvedName == sortOp.order(0).child.asInstanceOf[expr.ResolvableName].resolvedName)
+  }
+
+
+  test("should not introduce additional projection for ORDER BY on property whose base element is already present in the projection") {
+    val stages = compile(
+      """MATCH   (tag:Tag)
+        |RETURN   tag
+        |ORDER BY tag.name ASC
+        |""".stripMargin)
+
+    // get the gplan tree and cast to the desired types
+    val productionOp = stages.gplan.asInstanceOf[gplan.Production]
+    val sortOp = productionOp.child.asInstanceOf[gplan.Sort]
+    val returnProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
+    val alldifferentOp = returnProjectionOp.child.asInstanceOf[gplan.AllDifferent]
+    assert( Option(alldifferentOp).isDefined )
+    // last projection and the sorting has a single item...
+    assert( returnProjectionOp.projectList.length == 1)
+    assert( sortOp.order.length == 1)
+    // ... and the latter is a property of the former
+    assert( returnProjectionOp.projectList(0).child.asInstanceOf[expr.ResolvableName].resolvedName == sortOp.order(0).child.asInstanceOf[expr.PropertyAttribute].elementAttribute.resolvedName)
+  }
 }
 
 /** Random compiler tests that must stop after GPlan compilation.

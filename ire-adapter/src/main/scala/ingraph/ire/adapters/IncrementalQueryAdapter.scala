@@ -1,8 +1,8 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.inputs.InputTransactionFactory
-import hu.bme.mit.ire.listeners.ChangeListener
+import ingraph.ire.datatypes.Tuple
+import ingraph.ire.inputs.InputTransactionFactory
+import ingraph.ire.listeners.ChangeListener
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.csv.EdgeMetaData
 import ingraph.ire.adapters.tuplecreators.TupleCreator
