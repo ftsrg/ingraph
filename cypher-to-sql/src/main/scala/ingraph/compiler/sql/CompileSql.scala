@@ -306,7 +306,7 @@ object CompileSql {
       val jsonString = ValueJsonConversion.gson.toJson(value, classOf[Value])
       val sqlStringLiteral = Literal(jsonString)
 
-      sqlStringLiteral.sql
+      sqlStringLiteral.sql + "::jsonb"
     }
   }
 
