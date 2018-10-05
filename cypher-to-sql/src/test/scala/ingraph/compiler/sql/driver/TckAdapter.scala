@@ -1,6 +1,6 @@
 package ingraph.compiler.sql.driver
 
-import org.neo4j.driver.v1.{Session, Transaction}
+import org.neo4j.driver.v1.{Session, StatementResult, Transaction}
 import org.opencypher.tools.tck.api.{CypherValueRecords, Graph, QueryType, SideEffectQuery}
 import org.opencypher.tools.tck.values.CypherValue
 
@@ -14,7 +14,16 @@ class TckAdapter(session: Session) extends Graph {
     if (meta == SideEffectQuery)
       CypherValueRecords.empty
     else {
-      val result = transaction.run(query, params.map { case (k, v) => k -> TckValueToDriver(v) }.asJava)
+      var result: StatementResult = null
+      try {
+        result = transaction.run(query, params.map { case (k, v) => k -> TckValueToDriver(v) }.asJava)
+      } catch {
+        case exception: Exception => {
+          // avoid using errored connection for further tests
+          session.close()
+          throw exception
+        }
+      }
 
       val header = result.keys.asScala.toList
       val rows = result.list().asScala

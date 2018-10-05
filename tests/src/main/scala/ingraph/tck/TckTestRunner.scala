@@ -89,7 +89,12 @@ trait TckTestRunner {
             println(s"vvvvvvvvvvvvvvvv $testName vvvvvvvvvvvvvvvv")
             println()
 
-            scenario(tckAdapterProvider()).execute()
+            val graph = tckAdapterProvider()
+            try {
+              scenario(graph).execute()
+            } finally {
+              graph.close()
+            }
           }(pos)
         else
           ignore(testName) {}(pos)

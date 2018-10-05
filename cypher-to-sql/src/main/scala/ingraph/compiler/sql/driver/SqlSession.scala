@@ -63,5 +63,5 @@ class SqlSession(val sqlDriver: SqlDriver) extends Session {
 
   override def typeSystem(): TypeSystem = ???
 
-  override def isOpen: Boolean = true
+  override def isOpen: Boolean = !sqlConnection.isClosed
 }
