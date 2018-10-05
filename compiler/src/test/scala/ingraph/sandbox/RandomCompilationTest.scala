@@ -25,10 +25,9 @@ class RandomCompilationTest extends CompilerTest {
 
   test("Random test from cypher string") {
     compile(
-      """MATCH (segment:Segment)
-        |WHERE NOT NOT NOT (segment.length > 0)
-        |RETURN segment, segment.length AS length
-        |     , case segment.length when +0 then 'zero' when --+-1 then 'almost OK' else 'too bad' end AS lengthComment""".stripMargin)
+      """MATCH (n)
+        |WITH n.id + 1 AS new_id
+        |CREATE (:Label {id: new_id}) """.stripMargin)
 
   }
 
