@@ -1,6 +1,6 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.datatypes.Tuple
+import ingraph.ire.datatypes.Tuple
 import ingraph.compiler.FPlanParser
 import ingraph.model.expr.{AbstractReturnItem, EdgeListAttribute, ResolvableName, VertexAttribute}
 import ingraph.model.fplan.Production
