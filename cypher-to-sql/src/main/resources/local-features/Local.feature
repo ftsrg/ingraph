@@ -96,3 +96,65 @@ Feature: Local
       | 42   |
       | 43   |
     And no side effects
+
+# https://neo4j.com/docs/developer-manual/3.4/cypher/syntax/expressions/#syntax-simple-case
+  Scenario: Simple CASE
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Person {eyes: 'brown'})
+      CREATE (:Person {eyes: 'blue'})
+      CREATE (:Person)
+      CREATE (:Person {eyes: 'brown'})
+      CREATE (:Person {eyes: 'blue'})
+      CREATE (:Person {eyes: 'red'})
+      """
+    When executing query:
+      """
+      MATCH (n:Person)
+      RETURN
+      CASE n.eyes
+        WHEN 'blue' THEN 1
+        WHEN 'brown' THEN 2
+        ELSE 3
+      END AS result
+      """
+    Then the result should be:
+      | result |
+      | 2      |
+      | 1      |
+      | 3      |
+      | 2      |
+      | 1      |
+      | 3      |
+    And no side effects
+
+# https://neo4j.com/docs/developer-manual/3.4/cypher/syntax/expressions/#syntax-generic-case
+  Scenario: Generic CASE
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Person {age: 38, eyes: 'brown'})
+      CREATE (:Person {age: 25, eyes: 'blue' })
+      CREATE (:Person {age: 53, eyes: 'green'})
+      CREATE (:Person {         eyes: 'brown'})
+      CREATE (:Person {age: 41, eyes: 'blue' })
+      """
+    When executing query:
+      """
+      MATCH (n)
+      RETURN
+      CASE
+        WHEN n.eyes = 'blue' THEN 1
+        WHEN n.age < 40 THEN 2
+        ELSE 3
+      END AS result
+      """
+    Then the result should be:
+      | result |
+      | 2      |
+      | 1      |
+      | 3      |
+      | 3      |
+      | 1      |
+    And no side effects

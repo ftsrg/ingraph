@@ -16,6 +16,8 @@ object TckTest {
     "Return vertices and edges with integer properties",
     "Return vertices and edges",
     "Unnamed columns",
+    "Simple CASE",
+    "Generic CASE",
 
     // MatchAcceptance
     "Cope with shadowed variables",
