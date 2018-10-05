@@ -13,7 +13,7 @@ import scala.collection.JavaConverters._
 
 class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
 
-  val rawSqlConnection: Connection = sqlSession.sqlConnection
+  def rawSqlConnection: Connection = sqlSession.sqlConnection
 
   var toBeCommitted: Option[Boolean] = None
 
@@ -60,7 +60,9 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
         val sqlQuery = sqlCompiler.run()
 
         // TODO check lifecycle of ResultSet after closing sqlStatement if lazy loading is used
-        new SqlStatementResult(sqlStatement.executeQuery(sqlQuery))
+        withResources(sqlStatement.executeQuery(sqlQuery)) { resultSet =>
+          SqlStatementResult.createFromResultSet(resultSet)
+        }
       }
     })
   }

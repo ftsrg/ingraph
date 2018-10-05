@@ -3,6 +3,7 @@ package ingraph.compiler.sql.driver
 import java.sql.ResultSet
 import java.util.{List => javaList}
 
+import ingraph.compiler.sql.driver.SqlDriver._
 import org.neo4j.driver.internal.InternalRecord
 import org.neo4j.driver.v1.summary.ResultSummary
 import org.neo4j.driver.v1.{Record, StatementResult, util}
@@ -10,30 +11,9 @@ import org.neo4j.driver.v1.{Record, StatementResult, util}
 import scala.collection.JavaConverters._
 import scala.collection.{immutable, mutable}
 
-class SqlStatementResult(resultSet: ResultSet) extends StatementResult {
-
-  import SqlDriver._
-
-  private val columnIndices = 1 to resultSet.getMetaData.getColumnCount
-
-  val columnNames: immutable.IndexedSeq[String] = columnIndices.map(i => resultSet.getMetaData.getColumnName(i))
+class SqlStatementResult(val columnNames: Seq[String], val results: Seq[Record]) extends StatementResult {
 
   override val keys: javaList[String] = columnNames.asJava
-
-  // TODO use lazy loading
-  private def loadResults(): immutable.IndexedSeq[Record] = {
-    val buffer = mutable.Buffer[Record]()
-
-    while (resultSet.next()) {
-      val columnValues = columnIndices.map(resultSet.getObject).map(SqlDriver.toValue)
-
-      buffer += new InternalRecord(keys, columnValues.toArray)
-    }
-
-    buffer.toIndexedSeq
-  }
-
-  val results: immutable.IndexedSeq[Record] = loadResults()
 
   private val iterator: java.util.Iterator[Record] = results.toIterator.asJava
 
@@ -70,6 +50,25 @@ class SqlStatementResult(resultSet: ResultSet) extends StatementResult {
   }
 
   override def summary(): ResultSummary = ???
+}
+
+object SqlStatementResult {
+  // TODO use lazy loading
+  def createFromResultSet(resultSet: ResultSet): SqlStatementResult = {
+    val columnIndices = 1 to resultSet.getMetaData.getColumnCount
+
+    val columnNames: immutable.IndexedSeq[String] = columnIndices.map(i => resultSet.getMetaData.getColumnName(i))
+
+    val buffer = mutable.Buffer[Record]()
+
+    while (resultSet.next()) {
+      val columnValues = columnIndices.map(resultSet.getObject).map(SqlDriver.toValue)
+
+      buffer += new InternalRecord(columnNames.asJava, columnValues.toArray)
+    }
+
+    new SqlStatementResult(columnNames, buffer.toIndexedSeq)
+  }
 }
 
 object EmptySqlStatementResult extends StatementResult {

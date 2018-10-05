@@ -1,13 +1,14 @@
 package ingraph.compiler.sql.driver
 
-import ingraph.driver.CypherDriver
-import org.neo4j.driver.v1.Transaction
+import org.neo4j.driver.v1.{Session, Transaction}
 import org.opencypher.tools.tck.api.{CypherValueRecords, Graph, QueryType, SideEffectQuery}
 import org.opencypher.tools.tck.values.CypherValue
 
 import scala.collection.JavaConverters._
 
-class TckAdapter(transaction: Transaction) extends Graph {
+class TckAdapter(session: Session) extends Graph {
+  private val transaction: Transaction = session.beginTransaction()
+
   override def cypher(query: String, params: Map[String, CypherValue], meta: QueryType): Result = {
     // TODO
     if (meta == SideEffectQuery)

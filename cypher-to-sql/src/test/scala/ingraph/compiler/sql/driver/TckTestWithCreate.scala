@@ -5,7 +5,7 @@ import ingraph.tck.{TckScenarioSet, TckTestRunner}
 import org.scalatest.FunSuite
 
 class TckTestWithCreate extends FunSuite with TckTestRunner with SharedSqlDriver {
-  runTckTests(() => new TckAdapter(beginTransaction()), scenarioSet)
+  runTckTests(() => new TckAdapter(session), scenarioSet)
 }
 
 object TckTestWithCreate {

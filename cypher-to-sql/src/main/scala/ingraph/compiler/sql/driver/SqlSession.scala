@@ -26,7 +26,7 @@ class SqlSession(val sqlDriver: SqlDriver) extends Session {
   }
 
   private[driver] def closeTransaction(sqlTransaction: SqlTransaction, toBeCommitted: Boolean): Unit = {
-    if (currentTransaction.get == sqlTransaction) {
+    if (currentTransaction.contains(sqlTransaction) && !sqlConnection.isClosed) {
       if (toBeCommitted)
         sqlConnection.commit()
       else
