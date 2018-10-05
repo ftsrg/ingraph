@@ -17,7 +17,7 @@ trait CSVData {
 }
 
 abstract class TestCase {
-  def readToString(path: String): String = Source.fromFile(s"$path").getLines().mkString("\n")
+  def readToString(path: String): String = Source.fromFile(path).getLines().mkString("\n")
 
   def name: String
   def querySpecification: String
