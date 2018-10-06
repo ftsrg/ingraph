@@ -51,7 +51,7 @@ public class LdbcUpdateStreamCsvLoader {
 		new NotNull(),                      //  7 person.gender
 		new ParseEpochToDate(),             //  8 person.birthDay
 		new ParseEpochToDateTime(),         //  9 person.creationDate
-		new NotNull(),                      // 10 person.locationIp
+		new NotNull(),                      // 10 person.locationIP
 		new NotNull(),                      // 11 person.browserUsed
 		new ParseLong(),                    // 12 person-isLocatedIn->City.id
 		new ParseList(Function.identity()), // 13 {person.speaks}
@@ -91,7 +91,7 @@ public class LdbcUpdateStreamCsvLoader {
 		new ParseLong(),                    //  4 post.id
 		new Optional(),                     //  5 post.imageFile
 		new ParseEpochToDateTime(),         //  6 post.creationDate
-		new NotNull(),                      //  7 post.locationIp
+		new NotNull(),                      //  7 post.locationIP
 		new NotNull(),                      //  8 post.browserUsed
 		new Optional(),                     //  9 post.language
 		new Optional(),                     // 10 post.content
@@ -105,7 +105,7 @@ public class LdbcUpdateStreamCsvLoader {
 	final CellProcessor[] UPDATE_7 = new CellProcessor[]{
 		new ParseLong(),                    //  4 comment.id
 		new ParseEpochToDateTime(),         //  5 comment.creationDate
-		new NotNull(),                      //  6 comment.locationIp
+		new NotNull(),                      //  6 comment.locationIP
 		new NotNull(),                      //  7 comment.browserUsed
 		new NotNull(),                      //  8 comment.content
 		new ParseInt(),                     //  9 comment.length
