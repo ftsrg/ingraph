@@ -5,6 +5,7 @@ import com.google.common.collect.ObjectArrays;
 import ingraph.bulkloader.csv.loader.cellprocessor.ParseEpochToDate;
 import ingraph.bulkloader.csv.loader.cellprocessor.ParseEpochToDateTime;
 import ingraph.bulkloader.csv.loader.cellprocessor.ParseList;
+import org.supercsv.cellprocessor.ConvertNullTo;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.ParseLong;
@@ -88,18 +89,18 @@ public class LdbcUpdateStreamCsvLoader {
 	};
 
 	final CellProcessor[] UPDATE_6 = new CellProcessor[]{
-		new ParseLong(),                    //  4 post.id
-		new Optional(),                     //  5 post.imageFile
-		new ParseEpochToDateTime(),         //  6 post.creationDate
-		new NotNull(),                      //  7 post.locationIP
-		new NotNull(),                      //  8 post.browserUsed
-		new Optional(),                     //  9 post.language
-		new Optional(),                     // 10 post.content
-		new ParseInt(),                     // 11 post.length
-		new ParseLong(),                    // 12 post-hasCreator->Person.id
-		new ParseLong(),                    // 13 post<-containerOf-Forum.id
-		new ParseLong(),                    // 14 post-isLocatedIn->Country.id
-		new ParseList(Long::valueOf),       // 15 {post-hasTag->Tag.id}
+		new ParseLong(),                      //  4 post.id
+		new ConvertNullTo("\"\""), //  5 post.imageFile
+		new ParseEpochToDateTime(),           //  6 post.creationDate
+		new NotNull(),                        //  7 post.locationIP
+		new NotNull(),                        //  8 post.browserUsed
+		new ConvertNullTo("\"\""), //  9 post.language
+		new ConvertNullTo("\"\""), // 10 post.content
+		new ParseInt(),                       // 11 post.length
+		new ParseLong(),                      // 12 post-hasCreator->Person.id
+		new ParseLong(),                      // 13 post<-containerOf-Forum.id
+		new ParseLong(),                      // 14 post-isLocatedIn->Country.id
+		new ParseList(Long::valueOf),         // 15 {post-hasTag->Tag.id}
 	};
 
 	final CellProcessor[] UPDATE_7 = new CellProcessor[]{

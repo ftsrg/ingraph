@@ -1,11 +1,13 @@
 package ldbc
 
 import ingraph.bulkloader.csv.loader.LdbcUpdateStreamCsvLoader
-import ingraph.ire.{Indexer, IngraphVertex}
 
 import scala.collection.JavaConverters._
+import scala.io.Source
 
-class LdbcUpdateLoader(val indexer: Indexer, val csvDir: String) {
+class LdbcUpdateLoader(val csvDir: String,
+                       val queryPrefix: String,
+                       val queryPostfix: String) {
 
   implicit def longs(x: Any): Long = x.asInstanceOf[Long]
 
@@ -30,8 +32,8 @@ class LdbcUpdateLoader(val indexer: Indexer, val csvDir: String) {
 
       updateType match {
         case 1 => Update1AddPerson(u(3), u(4), u(5), u(6), u(7), u(8), u(9), u(10), u(11), u(12), u(13), u(14), u(15), u(16))
-        case 2 => Update2_3AddMessageLike(u(3), u(4), u(5))
-        case 3 => Update2_3AddMessageLike(u(3), u(4), u(5))
+        case 2 => Update2AddPostLike(u(3), u(4), u(5))
+        case 3 => Update3AddCommentLike(u(3), u(4), u(5))
         case 4 => Update4AddForum(u(3), u(4), u(5), u(6), u(7))
         case 5 => Update5AddForumMembership(u(3), u(4), u(5))
         case 6 => Update6AddPost(u(3), u(4), u(5), u(6), u(7), u(8), u(9), u(10), u(11), u(12), u(13), u(14))
@@ -41,9 +43,10 @@ class LdbcUpdateLoader(val indexer: Indexer, val csvDir: String) {
     }
 
     for (up <- updates) {
-      up match {
+      val querySpecification = up match {
         case up: Update1AddPerson => update(up)
-        case up: Update2_3AddMessageLike => update(up)
+        case up: Update2AddPostLike => update(up)
+        case up: Update3AddCommentLike => update(up)
         case up: Update4AddForum => update(up)
         case up: Update5AddForumMembership => update(up)
         case up: Update6AddPost => update(up)
@@ -53,98 +56,129 @@ class LdbcUpdateLoader(val indexer: Indexer, val csvDir: String) {
     }
   }
 
-  def update(person: Update1AddPerson): Unit = {
-    val v = IngraphVertex(person.personId,
-      Set("Person"),
-      Map("firstName" -> person.personFirstName,
-        "lastName" -> person.personLastName,
-        "gender" -> person.gender,
-        "birthDay" -> person.birthday,
-        "creationDate" -> person.creationDate,
-        "locationIp" -> person.locationIp,
-        "browserUsed" -> person.browserUsed,
-        "speaks" -> person.languages,
-        "email" -> person.emails
-      )
+  def update(u: Update1AddPerson): Unit = {
+    val parameters = Map(
+      "personId" -> u.personId,
+      "personFirstName" -> u.personFirstName,
+      "personLastName" -> u.personLastName,
+      "gender" -> u.gender,
+      "birthDay" -> u.birthday,
+      "creationDate" -> u.creationDate,
+      "locationIP" -> u.locationIP,
+      "browserUsed" -> u.browserUsed,
+      "speaks" -> convertStringList(u.languages),
+      "email" -> convertStringList(u.emails),
+      "tagIds" -> convertLongList(u.tagIds),
+      "studyAt" -> convertOrgList(u.studyAt),
+      "workAt" -> convertOrgList(u.workAt)
     )
-    indexer.addVertex(v)
-    indexer.addEdge(indexer.newId(), person.personId, person.cityId, "IS_LOCATED_IN")
-    for (tagId <- person.tagIds) {
-      indexer.addEdge(indexer.newId(), person.personId, tagId, "HAS_INTEREST")
-    }
-    for (org <- person.studyAt)
-      indexer.addEdge( indexer.newId(), person.personId, org.organizationId, "studyAt")
-    for (w <- person.workAt)
-      indexer.addEdge( indexer.newId(), person.personId, w.organizationId, "workAt")
+    substituteParameters(1, parameters)
   }
 
-  def update(like: Update2_3AddMessageLike): Unit = {
-    indexer.addEdge(
-      indexer.newId(), like.personId, like.postId, "LIKES", Map("creationDate" -> like.creationDate))
-
-  }
-
-  def update(forum: Update4AddForum): Unit = {
-    indexer.addVertex(IngraphVertex(forum.forumId, Set("Forum"), Map("creationDate" -> forum.creationDate)))
-    indexer.addEdge(
-      indexer.newId(), forum.forumId, forum.moderatorPersonId,
-      "HAS_MODERATOR"
+  def update(u: Update2AddPostLike): String = {
+    val parameters = Map(
+      "personId" -> u.personId,
+      "postId" -> u.postId,
+      "creationDate" -> u.creationDate
     )
-    for (tagId <- forum.tagIds) {
-      indexer.addEdge(indexer.newId(), forum.forumId, tagId, "HAS_TAG")
-    }
+    substituteParameters(2, parameters)
   }
 
-  def update(member: Update5AddForumMembership): Unit = {
-    indexer.addEdge(indexer.newId(), member.personId , member.forumId, "HAS_MEMBER",
-      Map("joinDate" -> member.joinDate))
-  }
-
-  def update(post: Update6AddPost): Unit = {
-    indexer.addVertex(
-      IngraphVertex(
-        post.postId,
-        Set("Post"),
-        Map("imageFile" -> post.imageFile,
-          "creationDate" -> post.creationDate,
-          "locationIp" -> post.locationIp,
-          "browserUsed" -> post.browserUsed,
-          "language" -> post.language,
-          "content" -> post.content,
-          "length" -> post.length)
-      )
+  def update(u: Update3AddCommentLike): String = {
+    val parameters = Map(
+      "personId" -> u.personId,
+      "commentId" -> u.commentId,
+      "creationDate" -> u.creationDate
     )
-    indexer.addEdge(indexer.newId(), post.postId, post.authorPersonId, "HAS_CREATOR")
-    indexer.addEdge(indexer.newId(), post.forumId, post.postId, "CONTAINER_OF")
-    indexer.addEdge(indexer.newId(), post.postId, post.countryId, "IS_LOCATED_IN")
-    for (tagId <- post.tagIds) {
-      indexer.addEdge(indexer.newId(), post.postId, tagId, "HAS_TAG")
-    }
+    substituteParameters(3, parameters)
   }
 
-  def update(comment: Update7AddComment): Unit = {
-    indexer.addVertex(
-      IngraphVertex(comment.commentId, Set("Comment"),
-        Map("creationDate" -> comment.creationDate,
-          "locationIp" -> comment.locationIp,
-          "browserUsed" -> comment.browserUsed,
-          "content" -> comment.content,
-          "length" -> comment.length))
+  def update(u: Update4AddForum): String = {
+    val parameters = Map(
+      "forumId" -> u.forumId,
+      "forumTitle" -> u.forumTitle,
+      "creationDate" -> u.creationDate,
+      "moderatorPersonId" -> u.moderatorPersonId,
+      "tagIds" -> convertLongList(u.tagIds)
     )
-    indexer.addEdge(indexer.newId(), comment.commentId, comment.authorPersonId, "HAS_CREATOR")
-    indexer.addEdge(indexer.newId(), comment.commentId, Math.max(comment.replyToCommentId, comment.replyToPostId),
-      "REPLY_OF")
-    for (tagId <- comment.tagIds) {
-      indexer.addEdge(
-        indexer.newId(), comment.commentId, tagId, "HAS_TAG"
-      )
-    }
+    substituteParameters(4, parameters)
   }
 
-  def update(friendship: Update8AddFriendship): Unit = {
-    indexer.addEdge(
-        indexer.newId(), friendship.person1Id, friendship.person2Id, "KNOWS",
-        Map("creationDate" -> friendship.creationDate)
+  def update(u: Update5AddForumMembership): String = {
+    val parameters = Map(
+      "personId" -> u.personId,
+      "forumId" -> u.forumId,
+      "joinDate" -> u.joinDate
+    )
+    substituteParameters(5, parameters)
+  }
+
+  def update(u: Update6AddPost): String = {
+    val parameters = Map(
+      "postId" -> u.postId,
+      "imageFile" -> u.imageFile,
+      "creationDate" -> u.creationDate,
+      "locationIP" -> u.locationIP,
+      "browserUsed" -> u.browserUsed,
+      "language" -> u.language,
+      "content" -> u.content,
+      "length" -> u.length,
+      "authorPersonId" -> u.authorPersonId,
+      "forumId" -> u.forumId,
+      "countryId" -> u.countryId,
+      "tagIds" -> convertLongList(u.tagIds)
+    )
+    substituteParameters(6, parameters)
+  }
+
+  def update(u: Update7AddComment): String = {
+    val parameters = Map(
+      "commentId" -> u.commentId,
+      "creationDate" -> u.creationDate,
+      "locationIP" -> u.locationIP,
+      "browserUsed" -> u.browserUsed,
+      "content" -> u.content,
+      "length" -> u.length,
+      "authorPersonId" -> u.authorPersonId,
+      "countryId" -> u.countryId,
+      "replyToPostId" -> u.replyToPostId,
+      "replyToCommentId" -> u.replyToCommentId,
+      "tagIds" -> convertLongList(u.tagIds)
+    )
+    substituteParameters(7, parameters)
+  }
+
+  def update(u: Update8AddFriendship): String = {
+    val parameters = Map(
+      "person1Id" -> u.person1Id,
+      "person2Id" -> u.person2Id,
+      "creationDate" -> u.creationDate
+    )
+    substituteParameters(8, parameters)
+  }
+
+  def convertLongList(longs: List[Long]): Unit = {
+    "[" + longs.mkString(", ") + "]"
+  }
+
+  def convertStringList(strings: List[String]): String = {
+    "[" + strings.map(it => s"'${it}'").mkString(", ") + "]"
+  }
+
+  def convertOrgList(organizations: List[Organization]): String = {
+    "[" +
+      organizations.map(
+        it => s"[${it.organizationId}, ${it.year}]"
+      ).mkString(", ") +
+      "]"
+  }
+
+  def substituteParameters(query: Int, parameters: Map[String, Any]): String = {
+    val queryFile = queryPrefix + query + queryPostfix
+    val baseQuerySpecification = Source.fromFile(queryFile).getLines().mkString("\n")
+
+    parameters.foldLeft(baseQuerySpecification)(
+      (querySpecification, parameter) => querySpecification.replaceAllLiterally("$" + parameter._1.toString, parameter._2.toString)
     )
   }
 
