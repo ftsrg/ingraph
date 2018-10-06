@@ -155,8 +155,6 @@ object TckTestWithCreate {
     "Variable length optional relationships with bound nodes",
     "Variable length optional relationships with length predicates",
     "WITH after OPTIONAL MATCH",
-    "Handle ORDER BY with LIMIT 1",
-    "ORDER BY with LIMIT 0 should not generate errors",
     "Accept valid Unicode literal",
     "Aliasing expressions",
     "DISTINCT on nullable values",
