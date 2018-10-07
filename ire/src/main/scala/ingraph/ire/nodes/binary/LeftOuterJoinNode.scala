@@ -4,8 +4,6 @@ import ingraph.ire.datatypes.Slot._
 import ingraph.ire.datatypes._
 import ingraph.ire.messages.{ChangeSet, ReteMessage, SingleForwarder}
 
-import scala.collection.immutable.VectorBuilder
-
 class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         override val primaryTupleWidth: Int,
                         override val secondaryTupleWidth: Int,
@@ -13,81 +11,64 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         override val secondaryMask: Mask)
   extends JoinNodeBase with SingleForwarder {
 
+  val pairlessTuples = new JoinCache
+
   override def onSizeRequest(): Long = 0
 
   override def onPrimary(changeSet: ChangeSet): Unit = {
-
-    val positive = new VectorBuilder[Tuple]()
-//    val joinedPositive = joinTuples(changeSet.positive, secondaryIndexer, primaryMask, Primary)
-    for (
-      tuple <- changeSet.positive;
-      primaryKey = extract(tuple, primaryMask)
-      ) {
-      secondaryIndexer.get(primaryKey) match {
-        case None => positive += (tuple ++ nullFiller)
-        case Some(buffer) => positive ++= buffer.map(combine(tuple, _, Primary))
-      }
-
-      primaryIndexer.addBinding(primaryKey, tuple)
-    }
-
     forward(ChangeSet(
-      positive = positive.result(),
+      positive = changeSet.positive.flatMap(calculatePrimaryPositive),
       negative = changeSet.negative.flatMap(calculatePrimaryNegative)
     ))
   }
 
+  override def onSecondary(changeSet: ChangeSet): Unit = {
+    val positiveUpdatesChangeSet = changeSet.positive.map(calculateSecondaryPositive).reduceOption(combineChangeSets).getOrElse(ChangeSet())
+    val negativeUpdatesChangeSet = changeSet.negative.map(calculateSecondaryNegative).reduceOption(combineChangeSets).getOrElse(ChangeSet())
+
+    forward(combineChangeSets(positiveUpdatesChangeSet, negativeUpdatesChangeSet))
+  }
+
   private def calculatePrimaryPositive(inputTuple: Tuple): Iterable[Tuple] = {
     val joinedPositiveTuples: Iterable[Tuple] = joinTuples(Vector(inputTuple), secondaryIndexer, primaryMask, Primary)
-    val primaryKey = extract(inputTuple, primaryMask)
+    val joinAttributesTuple = extract(inputTuple, primaryMask)
 
-    primaryIndexer.addBinding(primaryKey, inputTuple)
+    primaryIndexer.addBinding(joinAttributesTuple, inputTuple)
 
     if(joinedPositiveTuples.isEmpty){
-//      pairlessTuples.addBinding(primaryKey, inputTuple)
-      return Seq(padWithNull(inputTuple))
+      pairlessTuples.addBinding(joinAttributesTuple, inputTuple)
+      return Vector(padWithNull(inputTuple))
     }
 
     joinedPositiveTuples
   }
 
   private def calculatePrimaryNegative(inputTuple: Tuple): Iterable[Tuple] = {
-    val primaryKey = extract(inputTuple, primaryMask)
+    val joinAttributesTuple = extract(inputTuple, primaryMask)
 
-    primaryIndexer.get(primaryKey) match {
-      case None => ;
-      case Some(buffer) =>
-        if (buffer.contains(inputTuple) && !secondaryIndexer.contains(primaryKey))
-          return Iterable(padWithNull(inputTuple))
+    primaryIndexer.removeBinding(joinAttributesTuple, inputTuple)
+
+    if(pairlessTuples.entryExists(joinAttributesTuple, _ == inputTuple)){
+      pairlessTuples.removeBinding(joinAttributesTuple, inputTuple)
+      return Vector(padWithNull(inputTuple))
     }
-
-    primaryIndexer.removeBinding(primaryKey, inputTuple)
 
     joinTuples(Vector(inputTuple), secondaryIndexer, primaryMask, Primary)
   }
 
-  override def onSecondary(changeSet: ChangeSet): Unit = {
-    val positiveUpdatesChangeSet = changeSet.positive.map(calculateSecondaryPositive).reduceOption(combineChangeSets).getOrElse(ChangeSet())
-    val negativeUpdatesChangeSet = changeSet.negative.map(calculateSecondaryNegative).reduceOption(combineChangeSets).getOrElse(ChangeSet())
-//
-    forward(combineChangeSets(positiveUpdatesChangeSet, negativeUpdatesChangeSet))
-  }
-
   private def calculateSecondaryPositive(inputTuple: Tuple): ChangeSet = {
-    val joinedPositiveTuples = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
+    val joinedPositiveTuples: Vector[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
 
     var negativeTuples: Vector[Tuple] = Vector()
 
-    val secondaryKey = extract(inputTuple, secondaryMask)
-    if (!secondaryIndexer.contains(secondaryKey))
-    primaryIndexer.get(secondaryKey) match {
-      case Some(buffer) => negativeTuples = buffer.map(padWithNull).toVector
-      case None => ;
+    val joinAttributesTuple = extract(inputTuple, secondaryMask)
+    if(pairlessTuples.contains(joinAttributesTuple)){
+      negativeTuples = pairlessTuples.remove(joinAttributesTuple).get.map(padWithNull).toVector
     }
 
-    secondaryIndexer.addBinding(secondaryKey, inputTuple)
+    secondaryIndexer.addBinding(joinAttributesTuple, inputTuple)
 
-    ChangeSet(positive = joinedPositiveTuples.toVector, negative = negativeTuples)
+    ChangeSet(positive = joinedPositiveTuples, negative = negativeTuples)
   }
 
   private def calculateSecondaryNegative(inputTuple: Tuple): ChangeSet = {
@@ -97,15 +78,16 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
     val positiveTuples = if (
       joinedNegativeTuples.nonEmpty && secondaryIndexer(joinAttributesTuple).size <= 1){
       val pairsFromPrimary = primaryIndexer(joinAttributesTuple)
+      pairlessTuples.put(joinAttributesTuple, pairsFromPrimary)
       pairsFromPrimary.map(padWithNull).toVector
     } else Vector.empty[Tuple]
 
     secondaryIndexer.removeBinding(joinAttributesTuple, inputTuple)
 
-    ChangeSet(positive=positiveTuples, negative=joinedNegativeTuples.toVector)
+    ChangeSet(positive=positiveTuples, negative=joinedNegativeTuples)
   }
 
-  private val nullFiller = Vector.fill(secondaryTupleWidth - secondaryMask.size)(null)
+  private val nullFiller = Seq.fill(secondaryTupleWidth - secondaryMask.size)(null)
   private def padWithNull(inputTuple: Tuple): Tuple = {
     inputTuple ++ nullFiller
   }
