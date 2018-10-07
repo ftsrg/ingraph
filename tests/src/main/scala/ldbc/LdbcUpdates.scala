@@ -94,4 +94,4 @@ case class Update9RemovePost(postId: Long) extends LdbcUpdate
 
 case class Update10RemoveForum(forumId: Long) extends LdbcUpdate
 
-case class Update11RemoveHasInterest(sourceId: Long, targetId: Long) extends LdbcUpdate
+case class Update11RemoveHasInterest(personId: Long, tagId: Long) extends LdbcUpdate

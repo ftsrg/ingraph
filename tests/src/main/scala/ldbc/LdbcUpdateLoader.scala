@@ -196,8 +196,8 @@ class LdbcUpdateLoader(val csvDir: String,
 
   def update(u: Update11RemoveHasInterest): String = {
     val parameters = Map(
-      "sourceId" -> u.sourceId,
-      "targetId" -> u.targetId
+      "personId" -> u.personId,
+      "tagId" -> u.tagId
     )
     substituteParameters(11, parameters)
   }
