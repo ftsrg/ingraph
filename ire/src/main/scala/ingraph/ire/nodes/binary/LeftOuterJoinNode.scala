@@ -57,7 +57,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def calculateSecondaryPositive(inputTuple: Tuple): ChangeSet = {
-    val joinedPositiveTuples: Vector[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
+    val joinedPositiveTuples = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
 
     var negativeTuples: Vector[Tuple] = Vector()
 
@@ -68,7 +68,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
 
     secondaryIndexer.addBinding(joinAttributesTuple, inputTuple)
 
-    ChangeSet(positive = joinedPositiveTuples, negative = negativeTuples)
+    ChangeSet(positive = joinedPositiveTuples.toVector, negative = negativeTuples)
   }
 
   private def calculateSecondaryNegative(inputTuple: Tuple): ChangeSet = {
@@ -84,10 +84,10 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
 
     secondaryIndexer.removeBinding(joinAttributesTuple, inputTuple)
 
-    ChangeSet(positive=positiveTuples, negative=joinedNegativeTuples)
+    ChangeSet(positive=positiveTuples, negative=joinedNegativeTuples.toVector)
   }
 
-  private val nullFiller = Seq.fill(secondaryTupleWidth - secondaryMask.size)(null)
+  private val nullFiller = Vector.fill(secondaryTupleWidth - secondaryMask.size)(null)
   private def padWithNull(inputTuple: Tuple): Tuple = {
     inputTuple ++ nullFiller
   }

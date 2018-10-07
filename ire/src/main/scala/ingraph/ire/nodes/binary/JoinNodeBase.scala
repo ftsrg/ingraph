@@ -33,7 +33,7 @@ abstract class JoinNodeBase extends BinaryNode {
   def joinTuples(tuples: Vector[Tuple], otherIndexer: JoinCache, slotMask: Mask, slot: Slot): Iterable[Tuple] = {
     for {
       tuple <- tuples
-      joinAttributes = slotMask.map(i => tuple(i)).toVector
+      joinAttributes = extract(tuple, slotMask)
       if otherIndexer.contains(joinAttributes)
       otherTupleFull <- otherIndexer(joinAttributes)
     } yield combine(tuple, otherTupleFull, slot)
