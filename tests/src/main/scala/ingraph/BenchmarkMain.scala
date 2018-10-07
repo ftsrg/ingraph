@@ -52,15 +52,13 @@ object BenchmarkMain {
       case None =>
         val itr = new IngraphTestRunner(tc)
         val ingraphResults = itr.run()
+        itr.close
       case Some(_) =>
         val ntr = new Neo4jTestRunner(tc, neo4jDir)
         val neo4jResults = ntr.run()
         ntr.close
     }
 
-    // some Akka stuff gets stuck despite my best efforts to shutdown
-    // System.exit(0) was not sufficient
-    Runtime.getRuntime.halt(0)
   }
 
 }

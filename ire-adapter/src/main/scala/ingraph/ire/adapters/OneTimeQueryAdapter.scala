@@ -24,7 +24,7 @@ class OneTimeQueryAdapter(
     engine.getResults()
   }
 
-  override def close {
+  override def close() {
     engine.shutdown()
   }
 
