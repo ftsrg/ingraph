@@ -30,7 +30,7 @@ object LdbcTest {
   val ldbcQueriesPath = "/interactive-tests"
 
   val expectedToSucceed: Set[String] = Set(
-    "LdbcQuery2",
+//    "LdbcQuery2",
     "LdbcQuery3",
     "LdbcQuery4",
     "LdbcQuery5",
