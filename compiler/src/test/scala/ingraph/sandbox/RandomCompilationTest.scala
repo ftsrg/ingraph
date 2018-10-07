@@ -25,10 +25,9 @@ class RandomCompilationTest extends CompilerTest {
 
   test("Random test from cypher string") {
     compile(
-      """MATCH (segment:Segment)
-        |WHERE NOT NOT NOT (segment.length > 0)
-        |RETURN segment, segment.length AS length
-        |     , case segment.length when +0 then 'zero' when --+-1 then 'almost OK' else 'too bad' end AS lengthComment""".stripMargin)
+      """MATCH (n)
+        |WITH n.id + 1 AS new_id
+        |CREATE (:Label {id: new_id}) """.stripMargin)
 
   }
 
@@ -461,6 +460,22 @@ class RandomCompilationTest extends CompilerTest {
       .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("x.foo#0")))
   }
 
+  test("should allow (compile) RETURN DISTINCT even is doing ORDER BY on the unaliased version of an aliased returnitem") {
+    val stages = compile(
+      """MATCH (a:A)
+        |RETURN DISTINCT a.foo
+        |ORDER BY a.foo
+        |""".stripMargin)
+  }
+
+  test("should allow (compile) RETURN DISTINCT even is doing ORDER BY on a property of the unaliased version of an aliased returnitem") {
+    val stages = compile(
+      """MATCH (a:A)
+        |RETURN DISTINCT a as bar
+        |ORDER BY a.foo
+        |""".stripMargin)
+  }
+
   test("should not introduce additional projection for ORDER BY on attribute already present in the projection") {
     val stages = compile(
       """MATCH   (tag:Tag)
@@ -503,6 +518,33 @@ class RandomCompilationTest extends CompilerTest {
     // ... and the latter is a property of the former
     assert( returnProjectionOp.projectList(0).child.asInstanceOf[expr.ResolvableName].resolvedName == sortOp.order(0).child.asInstanceOf[expr.PropertyAttribute].elementAttribute.resolvedName)
   }
+
+  test("should not duplicate aliased return item's base expression in the introduced additional projection for ORDER BY on unaliased item") {
+    val stages = compile(
+      """MATCH (p:Person)
+        |RETURN p.name AS name
+        |ORDER BY p.name
+        |LIMIT 1
+        |""".stripMargin)
+
+    // get the gplan tree and cast to the desired types
+    val productionOp = stages.gplan.asInstanceOf[gplan.Production]
+    val returnProjectionOp = productionOp.child.asInstanceOf[gplan.Projection]
+    val topOp = returnProjectionOp.child.asInstanceOf[gplan.Top]
+    val sortOp = topOp.child.asInstanceOf[gplan.Sort]
+    val introducedProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
+    val alldifferentOp = introducedProjectionOp.child.asInstanceOf[gplan.AllDifferent]
+    assert( Option(alldifferentOp).isDefined )
+    // last projection and the sorting has a single item and the introduced has 2 items
+    assert( returnProjectionOp.projectList.length == 1)
+    assert( sortOp.order.length == 1)
+    assert( introducedProjectionOp.projectList.length == 2)
+    // ... and the latter contains the sort key
+    assert( returnProjectionOp.projectList.foldLeft[Boolean](false)( (acc, pi) => {
+        acc || (pi.child.asInstanceOf[expr.ResolvableName].resolvedName == sortOp.order(0).child.asInstanceOf[expr.ResolvableName].resolvedName)
+      })
+    )
+  }
 }
 
 /** Random compiler tests that must stop after GPlan compilation.
@@ -539,4 +581,33 @@ scala.MatchError: 'Unwind unwindattribute(listexpression(1, 2, 3), li, Some(li#0
         |RETURN li AS l
       """.stripMargin)
   }
+
+  test("Complex create query") {
+    compile(
+      """MATCH (c:City {id:1226})
+        |CREATE (p:Person {id: 10995116277777, firstName: 'Almira', lastName: 'Patras', gender: 'female', birthday: 19830628, creationDate: 20101203163954934, locationIP: '193.104.227.215', browserUsed: 'Internet Explorer', speaks: ['ru', 'en'], emails: ['Almira10995116277777@gmail.com', 'Almira10995116277777@gmx.com']})-[:IS_LOCATED_IN]->(c)
+        |WITH p, count(*) AS dummy1
+        |UNWIND [1916] AS tagId
+        |    MATCH (t:Tag {id: tagId})
+        |    CREATE (p)-[:HAS_INTEREST]->(t)
+        |WITH p, count(*) AS dummy2
+        |UNWIND [[53, 49]] AS s
+        |    MATCH (u:Organisation {id: s[0]})
+        |    CREATE (p)-[:STUDY_AT {classYear: s[1]}]->(u)
+        |WITH p, count(*) AS dummy3
+        |UNWIND [] AS w
+        |    MATCH (comp:Organisation {id: w[0]})
+        |    CREATE (p)-[:WORKS_AT {workFrom: w[1]}]->(comp)
+      """.stripMargin)
+  }
+
+  test("Indexing array in MATCH") {
+    val stages = compile(
+      """UNWIND [[20, 30]] AS tuple
+        |MATCH (org:Organisation {id: tuple[0]})
+        |RETURN org.id
+      """.stripMargin)
+    printlnSuppressIfIngraph(stages.toString)
+  }
+
 }

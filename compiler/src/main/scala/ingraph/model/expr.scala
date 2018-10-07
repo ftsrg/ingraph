@@ -212,7 +212,9 @@ case class VertexLabelSet(vertexLabels: Set[VertexLabel] = Set(), status: LabelS
  */
 case class EdgeLabelSet(edgeLabels: Set[EdgeLabel] = Set(), status: LabelSetStatus = Empty) extends LabelSet(status)
 
-abstract class ElementAttribute(name: String, val properties: TPropertyMap, isAnonymous: Boolean, override val resolvedName: TResolvedName) extends GraphAttribute(name) with ResolvableName
+abstract class ElementAttribute(name: String, val properties: TPropertyMap, isAnonymous: Boolean, override val resolvedName: TResolvedName) extends GraphAttribute(name) with ResolvableName with HasExtraChildren {
+  override def extraChildren: Seq[Expression] = properties.values.toSeq
+}
 
 abstract class AbstractVertexAttribute(
   override val name: String, val labels: VertexLabelSet = VertexLabelSet(),

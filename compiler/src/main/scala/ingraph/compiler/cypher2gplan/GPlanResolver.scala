@@ -203,15 +203,15 @@ object GPlanResolver {
     case rn: expr.ResolvableName =>
       if (rn.resolvedName.isDefined) rn // do not resolve already resolved stuff again
       else rn match {
-        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, snr.resolve(name, rn))
-        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, snr.resolve(name, rn))
+        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties.mapValues(_.transform(expressionNameResolver(snr))), isAnonymous, snr.resolve(name, rn))
+        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties.mapValues(_.transform(expressionNameResolver(snr))), isAnonymous, snr.resolve(name, rn))
         case expr.RichEdgeAttribute(src, trg, edge, dir) => expr.RichEdgeAttribute(
           src.transform(expressionNameResolver(snr)).asInstanceOf[expr.VertexAttribute],
           trg.transform(expressionNameResolver(snr)).asInstanceOf[expr.VertexAttribute],
           edge.transform(expressionNameResolver(snr)).asInstanceOf[expr.EdgeAttribute],
           dir
         )
-        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, snr.resolve(name, rn))
+        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties.mapValues(_.transform(expressionNameResolver(snr))), isAnonymous, minHops, maxHops, snr.resolve(name, rn))
         case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name,
           // see "scoped name resolver shorthand" above
           elementAttribute.transform(expressionNameResolver(snr)).asInstanceOf[expr.ElementAttribute],
@@ -356,21 +356,46 @@ object GPlanResolver {
               wrapInTopOperatorHelper(resolvedSkipExpr, resolvedLimitExpr, newSortOp)
             } else {
               // extra variables needed for the sorting, but DISTINCT was in place
-              if (distinct) throw new IllegalSortingAfterDistinctException(additionalSortItems.map( _.child.toString() ).toString())
+              if (distinct) {
+                // FIXME: possibly merge this with the creation of additionalSortItems
+                // see if all of them is legal
+                val allLegal: Boolean = additionalSortItems.map(_.child).foldLeft[Boolean](true)( (acc, sortExpr) => {
+                  // this item appears aliased in the project list.
+                  // Note: the order by requires this item unaliased, but they will be added to the introduced projection when building the more loose projection below
+                  val appearAliased: Boolean = sortExpr match {
+                    case sortRN: ResolvableName => projectList.find( ri => ri.child match {
+                      case riRN: ResolvableName => sortRN.resolvedName == riRN.resolvedName
+                      case _ => false
+                    }).isDefined
+                    case _ => false
+                  }
+                  // this is a propertyAttribute whose elementAttribute appear aliased in the project list.
+                  val baseAppearAliased: Boolean = sortExpr match {
+                    case sortRN: PropertyAttribute => projectList.find( ri => ri.child match {
+                      case riRN: ResolvableName => sortRN.elementAttribute.resolvedName == riRN.resolvedName
+                      case _ => false
+                    }).isDefined
+                    case _ => false
+                  }
+
+                  acc && (appearAliased || baseAppearAliased)
+                })
+                if (!allLegal) {
+                  throw new IllegalSortingAfterDistinctException(additionalSortItems.map(_.child.toString()).toString())
+                }
+              }
 
               // we build a more loose projection, then sort, then fall back to the projection originally requested.
               val innerSortOp = gplan.Sort(newSortOp.order,
-                gplan.Projection(p.projectList ++ additionalSortItems.map(so => {
-                  so.child match {
+                gplan.Projection((p.projectList ++ additionalSortItems.map(so => so.child match {
                     case rn: ResolvableName => expr.ReturnItem(so.child, None, rn.resolvedName)
                     case x => throw new UnexpectedTypeException(x, "we were filtering for resolvedNames in sort list")
-                  }
                 }) ++ // add the aliased returnitems without aliasing to allow referencing it in the effective projection
                   p.projectList.flatMap( pi => pi.child match {
                   case rn: ResolvableName => if (pi.resolvedName == rn.resolvedName) None else Some(expr.ReturnItem(rn, None, rn.resolvedName))
                   case _ => None
-                }),
-                  p.child // note: we checked above not to have distinct
+                })).distinct // this is to remove duplicates that might originate from e.g. adding aliased return items and items from sorting without using that alias
+                , p.child // note: we checked above not to have distinct
                 )
               )
 
