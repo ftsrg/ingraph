@@ -460,6 +460,13 @@ class RandomCompilationTest extends CompilerTest {
       .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("x.foo#0")))
   }
 
+  test("should allow (compile) RETURN DISTINCT even is doing ORDER BY on the unaliased version of an aliased returnitem") {
+    val stages = compile(
+      """MATCH (a:A)
+        |RETURN DISTINCT a.foo
+        |ORDER BY a.foo
+        |""".stripMargin)
+  }
   test("should not introduce additional projection for ORDER BY on attribute already present in the projection") {
     val stages = compile(
       """MATCH   (tag:Tag)

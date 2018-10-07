@@ -356,7 +356,25 @@ object GPlanResolver {
               wrapInTopOperatorHelper(resolvedSkipExpr, resolvedLimitExpr, newSortOp)
             } else {
               // extra variables needed for the sorting, but DISTINCT was in place
-              if (distinct) throw new IllegalSortingAfterDistinctException(additionalSortItems.map( _.child.toString() ).toString())
+              if (distinct) {
+                // see if all of them is legal
+                val allLegal: Boolean = additionalSortItems.map(_.child).foldLeft[Boolean](true)( (acc, sortExpr) => {
+                  // this item appears aliased in the project list.
+                  // Note: the order by requires this item unaliased, but they will be added to the introduced projection when building the more loose projection below
+                  val appearAliased: Boolean = sortExpr match {
+                    case sortRN: ResolvableName => projectList.find( ri => ri.child match {
+                      case riRN: ResolvableName => sortRN.resolvedName == riRN.resolvedName
+                      case _ => false
+                    }).isDefined
+                    case _ => false
+                  }
+
+                  acc && appearAliased
+                })
+                if (!allLegal) {
+                  throw new IllegalSortingAfterDistinctException(additionalSortItems.map(_.child.toString()).toString())
+                }
+              }
 
               // we build a more loose projection, then sort, then fall back to the projection originally requested.
               val innerSortOp = gplan.Sort(newSortOp.order,
