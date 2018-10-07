@@ -7,13 +7,18 @@ import ingraph.parse.ExpressionParser
 import org.scalatest.WordSpec
 
 class ExpressionParserTest extends WordSpec {
-
-  def parseFilter(query: String): (Tuple) => Boolean = {
+  private def getPlan(query: String) = FPlanParser.parse(query)
+  private def parseFilter(query: String): (Tuple) => Boolean = {
     val selection = getPlan(query)
       .asInstanceOf[Production].child
       .asInstanceOf[Projection].child
       .asInstanceOf[Selection]
     ExpressionParser(selection.conditionTuple)
+  }
+
+  private def runReturn(query: String): Any = {
+    val projection = getPlan(query).asInstanceOf[Production].child.asInstanceOf[Projection]
+    ExpressionParser(projection.projectionTuple.head)(Vector())
   }
 
   val rocks = "emfrocks"
@@ -44,10 +49,19 @@ class ExpressionParserTest extends WordSpec {
       assert(!func(Vector(1, 1)))
     }
 
-    "handle comparison edge cases" in {
-      val func = parseFilter("""MATCH (n) WHERE n.x > 1 RETURN n.x""")
-      assert(func(Vector(0, 2)))
-      assert(!func(Vector(0, 1)))
+    "handle comparison" in {
+      val compareOps = Map(
+        ">" -> ((x: Int, y: Int) => x > y),
+        ">=" -> ((x: Int, y: Int) => x >= y),
+        "=" -> ((x: Int, y: Int) => x == y),
+        "<" -> ((x: Int, y: Int) => x < y),
+        "<=" -> ((x: Int, y: Int) => x <= y)
+      )
+      for (x <- 0 to 3; y <- 0 to 3; (str, fun)  <- compareOps) {
+        val res = runReturn(s"""RETURN $x $str $y""")
+        val actual = fun(x, y)
+        assert(res == actual)
+      }
     }
 
     "parse complicated routesensor expression" in {
@@ -85,8 +99,5 @@ class ExpressionParserTest extends WordSpec {
       assert(func(Vector(2, "brown")) == 5)
       assert(func(Vector(3, "red")) == 3)
     }
-
   }
-
-  private def getPlan(query: String) = FPlanParser.parse(query)
 }
