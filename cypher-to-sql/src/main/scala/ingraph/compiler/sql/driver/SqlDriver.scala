@@ -27,7 +27,6 @@ class SqlDriver(val translateCreateQueries: Boolean = false,
       Some(CypherDriverFactory.createNeo4jDriver())
   val backendSession: Option[Session] = backendDriver.map(_.session)
 
-  LogManager.getRootLogger.setLevel(Level.OFF)
   val url = database.url
 
   withResources(DriverManager.getConnection(url)) { sqlConnection =>
@@ -65,6 +64,7 @@ object SqlDriver {
   }
 
   class PostgresDatabase extends Database {
+    LogManager.getRootLogger.setLevel(Level.ERROR)
     val postgres = new EmbeddedPostgresWrapper
 
     override def url: String = postgres.Url
