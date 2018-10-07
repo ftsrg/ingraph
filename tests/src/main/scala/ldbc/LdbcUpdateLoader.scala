@@ -34,7 +34,7 @@ class LdbcUpdateLoader(val csvDir: String,
         case 8 => Update8AddFriendship(u(3), u(4), u(5))
         case 9 => Update9RemovePost(u(3))
         case 10 => Update10RemoveForum(u(3))
-        case 11 => Update11RemoveXXX(u(3), u(4))
+        case 11 => Update11RemoveHasInterest(u(3), u(4))
       }
     }
   }
@@ -53,7 +53,7 @@ class LdbcUpdateLoader(val csvDir: String,
         case up: Update8AddFriendship => update(up)
         case up: Update9RemovePost => update(up)
         case up: Update10RemoveForum => update(up)
-        case up: Update11RemoveXXX => update(up)
+        case up: Update11RemoveHasInterest => update(up)
       }
       println(query)
       query
@@ -194,7 +194,7 @@ class LdbcUpdateLoader(val csvDir: String,
     substituteParameters(10, parameters)
   }
 
-  def update(u: Update11RemoveXXX): String = {
+  def update(u: Update11RemoveHasInterest): String = {
     val parameters = Map(
       "sourceId" -> u.sourceId,
       "targetId" -> u.targetId

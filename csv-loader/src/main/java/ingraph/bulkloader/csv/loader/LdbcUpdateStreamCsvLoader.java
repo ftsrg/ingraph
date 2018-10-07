@@ -123,8 +123,21 @@ public class LdbcUpdateStreamCsvLoader {
 		new ParseEpochToDateTime(),         //  6 knows.creationDate
 	};
 
+	final CellProcessor[] UPDATE_9 = new CellProcessor[]{
+		new ParseLong(),                    //  4 post.id
+	};
+
+	final CellProcessor[] UPDATE_10 = new CellProcessor[]{
+		new ParseLong(),                    //  4 forum.id
+	};
+
+	final CellProcessor[] UPDATE_11 = new CellProcessor[]{
+		new ParseLong(),                    //  4 person.id
+		new ParseLong(),                    //  5 tag.id
+	};
+
 	final List<CellProcessor[]> UPDATES =
-		ImmutableList.of(UPDATE_1, UPDATE_2, UPDATE_3, UPDATE_4, UPDATE_5, UPDATE_6, UPDATE_7, UPDATE_8);
+		ImmutableList.of(UPDATE_1, UPDATE_2, UPDATE_3, UPDATE_4, UPDATE_5, UPDATE_6, UPDATE_7, UPDATE_8, UPDATE_9, UPDATE_10, UPDATE_11);
 
 	final Map<Integer, CellProcessor[]> UPDATE_PROCESSORS =
 		IntStream

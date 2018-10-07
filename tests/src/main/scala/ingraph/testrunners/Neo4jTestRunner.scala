@@ -79,7 +79,7 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
     tx.failure()
     tx.close()
 
-//    println(tc.sf + "," + tc.query + ",neo4j," + queryTime + "," + updateTimes.mkString(","))
+    println(tc.sf + "," + tc.query + ",neo4j," + queryTime + "," + updateTimes.mkString(","))
     results1
   }
 
