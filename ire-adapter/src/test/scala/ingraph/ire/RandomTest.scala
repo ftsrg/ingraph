@@ -77,7 +77,7 @@ class RandomTest extends FunSuite {
     assert(adapter.results() == List(Vector(20, 30)))
   }
 
-  test("Indexing array in MATCH") {
+  ignore("Indexing array in MATCH") {
     val query =
       """UNWIND [[20, 30]] AS tuple
         |MATCH (org:Organisation {id: tuple[0]})
