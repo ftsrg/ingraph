@@ -15,3 +15,4 @@ for SF in $SFS; do
 		done
 	done
 done
+slack chat send "READY! @ $HOSTNAME" '#incremental'
