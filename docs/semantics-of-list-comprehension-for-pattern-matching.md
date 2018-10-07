@@ -1,11 +1,15 @@
 # Semantics of list comprehensions for pattern matching
 
+Toy dataset:
+
 ```
 CREATE
   (cA:City {name: 'New York'}),
   (cB:City {name: 'Montreal'})<-[:LIVES_IN]-(pA:Person {name: 'A'}),
   (cC:City {name: 'Budapest'})<-[:LIVES_IN]-(pB:Person {name: 'B'})-[:LIKES]->(m:Movie {name: 'The Usual Suspects'})
 ```
+
+The query using [list comprehensions](https://neo4j.com/docs/developer-manual/current/cypher/syntax/lists/#cypher-list-comprehension):
 
 ```
 MATCH (c:City)
@@ -14,7 +18,21 @@ WITH c, collect(p) AS persons
 RETURN c.name, length([p IN persons WHERE (p)-[:LIKES]->(:Movie)]) AS movieLoverCount
 ```
 
-This can be translated to the following expression:
+Results:
+
+```
+╒══════════╤═════════════════╕
+│"c.name"  │"movieLoverCount"│
+╞══════════╪═════════════════╡
+│"New York"│0                │
+├──────────┼─────────────────┤
+│"Montreal"│0                │
+├──────────┼─────────────────┤
+│"Budapest"│1                │
+└──────────┴─────────────────┘
+```
+
+If list comprehensions are not allowed, the query can be translated to the following expression:
 
 ```
 MATCH (c:City)                              // 1

@@ -460,6 +460,22 @@ class RandomCompilationTest extends CompilerTest {
       .projectList.foldLeft(false)( (acc, ri) => acc || ri.resolvedName.get.resolvedName.equals("x.foo#0")))
   }
 
+  test("should allow (compile) RETURN DISTINCT even is doing ORDER BY on the unaliased version of an aliased returnitem") {
+    val stages = compile(
+      """MATCH (a:A)
+        |RETURN DISTINCT a.foo
+        |ORDER BY a.foo
+        |""".stripMargin)
+  }
+
+  test("should allow (compile) RETURN DISTINCT even is doing ORDER BY on a property of the unaliased version of an aliased returnitem") {
+    val stages = compile(
+      """MATCH (a:A)
+        |RETURN DISTINCT a as bar
+        |ORDER BY a.foo
+        |""".stripMargin)
+  }
+
   test("should not introduce additional projection for ORDER BY on attribute already present in the projection") {
     val stages = compile(
       """MATCH   (tag:Tag)
@@ -501,6 +517,33 @@ class RandomCompilationTest extends CompilerTest {
     assert( sortOp.order.length == 1)
     // ... and the latter is a property of the former
     assert( returnProjectionOp.projectList(0).child.asInstanceOf[expr.ResolvableName].resolvedName == sortOp.order(0).child.asInstanceOf[expr.PropertyAttribute].elementAttribute.resolvedName)
+  }
+
+  test("should not duplicate aliased return item's base expression in the introduced additional projection for ORDER BY on unaliased item") {
+    val stages = compile(
+      """MATCH (p:Person)
+        |RETURN p.name AS name
+        |ORDER BY p.name
+        |LIMIT 1
+        |""".stripMargin)
+
+    // get the gplan tree and cast to the desired types
+    val productionOp = stages.gplan.asInstanceOf[gplan.Production]
+    val returnProjectionOp = productionOp.child.asInstanceOf[gplan.Projection]
+    val topOp = returnProjectionOp.child.asInstanceOf[gplan.Top]
+    val sortOp = topOp.child.asInstanceOf[gplan.Sort]
+    val introducedProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
+    val alldifferentOp = introducedProjectionOp.child.asInstanceOf[gplan.AllDifferent]
+    assert( Option(alldifferentOp).isDefined )
+    // last projection and the sorting has a single item and the introduced has 2 items
+    assert( returnProjectionOp.projectList.length == 1)
+    assert( sortOp.order.length == 1)
+    assert( introducedProjectionOp.projectList.length == 2)
+    // ... and the latter contains the sort key
+    assert( returnProjectionOp.projectList.foldLeft[Boolean](false)( (acc, pi) => {
+        acc || (pi.child.asInstanceOf[expr.ResolvableName].resolvedName == sortOp.order(0).child.asInstanceOf[expr.ResolvableName].resolvedName)
+      })
+    )
   }
 }
 
