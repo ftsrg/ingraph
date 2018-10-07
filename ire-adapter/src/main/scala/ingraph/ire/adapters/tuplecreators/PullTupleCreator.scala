@@ -42,7 +42,7 @@ class PullTupleCreator(vertexOps: Seq[GetVertices],
         val unfiltered = operator.src.properties.get(TupleConstants.ID_KEY) match {
           case Some(Literal(srcId,_)) =>
             // TODO: benchmark if we should do this for trgId too
-            indexer.vertexLookup(srcId.asInstanceOf[Long]).edgesOut
+            indexer.vertexLookup(srcId.asInstanceOf[Long]).edgesOut.filter(e => labels.contains(e.`type`))
           case None =>
             labels.flatMap(label =>
                 indexer.edgesByType(label)
