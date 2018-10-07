@@ -41,11 +41,12 @@ class CountingMultiMap[K,V] {
       }
       0
     } else if (valueSet(value) != 0) {
-      val newValue: Int = valueSet(value)
+      val newValue: Int = valueSet(value) - 1
       valueSet(value) = newValue
       newValue
+    } else {
+      0
     }
-    0
   }
 
   def remove(key: K): Iterable[V] = {
