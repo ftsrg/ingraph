@@ -28,14 +28,14 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
     val queryTime = sLoad.elapsed(TimeUnit.NANOSECONDS)
 
     val indexer = queryHandler.adapter.indexer
-    val updateTimes = tc.updateQuerySpecifications.map { q =>
-      val sUpdate = Stopwatch.createStarted()
-      update(q, "upd", indexer, queryHandler)
-      listener.terminated()
-      sUpdate.elapsed(TimeUnit.NANOSECONDS)
-    }.toList
-
-    println(tc.sf + "," + tc.query + ",ingraph," + queryTime + "," + updateTimes.mkString(","))
+//    val updateTimes = tc.updateQuerySpecifications.map { q =>
+//      val sUpdate = Stopwatch.createStarted()
+//      update(q, "upd", indexer, queryHandler)
+//      listener.terminated()
+//      sUpdate.elapsed(TimeUnit.NANOSECONDS)
+//    }.toList
+//
+//    println(tc.sf + "," + tc.query + ",ingraph," + queryTime + "," + updateTimes.mkString(","))
     queryHandler.result()
   }
 

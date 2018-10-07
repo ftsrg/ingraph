@@ -20,7 +20,7 @@ object BenchmarkMain {
       None
     }
 
-    def csvDir = f"../graphs/ldbc-snb-bi/sf${sf}/"
+    def csvDir = f"../graphs/ldbc-snb-bi/"
     def csvPostfix = "_0_0.csv"
 
     val postId = sf match {
@@ -46,7 +46,7 @@ object BenchmarkMain {
          |DETACH DELETE n
     """.stripMargin
 
-    val tc = new LdbcSnbTestCase("bi", sf, query, f"${csvDir}/", csvPostfix, Seq(removePost, removeForum))
+    val tc = new LdbcSnbTestCase("bi", sf, query, f"${csvDir}/")
 
     neo4jDir match {
       case None =>

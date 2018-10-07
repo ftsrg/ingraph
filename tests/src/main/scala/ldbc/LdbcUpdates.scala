@@ -89,3 +89,9 @@ case class Update8AddFriendship(
                                      person2Id: Long,
                                      creationDate: Long
                                    ) extends LdbcUpdate
+
+case class Update9RemovePost(postId: Long) extends LdbcUpdate
+
+case class Update10RemoveForum(forumId: Long) extends LdbcUpdate
+
+case class Update11RemoveXXX(sourceId: Long, targetId: Long) extends LdbcUpdate

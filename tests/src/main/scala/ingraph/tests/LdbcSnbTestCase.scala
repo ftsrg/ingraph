@@ -4,6 +4,7 @@ import java.util
 
 import com.google.gson.Gson
 import ingraph.csv.EdgeMetaData
+import ldbc.LdbcUpdateLoader
 
 import scala.collection.JavaConverters._
 
@@ -11,10 +12,17 @@ object LdbcSnbTestCase  {
   private val gson = new Gson()
 }
 
-class LdbcSnbTestCase(val workload: String, val sf: String, val query: Int, val csvDir: String, val csvPostfix: String,
-                      val updateQuerySpecifications: Seq[String] = Seq()
+class LdbcSnbTestCase(val workload: String,
+                      val sf: String,
+                      val query: Int,
+                      val csvDir: String
                      ) extends TestCase with CSVData {
-  override def name: String = f"$workload-$query%02d"
+  val updateQueryPrefix: String = "../queries/ldbc-snb-interactive/interactive-update-"
+  val updateQueryPostfix: String = ".cypher"
+  val csvPostfix = "_0_0.csv"
+  val sfCsvDir = s"${csvDir}/sf${sf}/"
+
+  override def name: String = f"${workload}-${query}%02d"
 
   override def querySpecification: String = {
     def convert(v: Any): String = {
@@ -28,7 +36,7 @@ class LdbcSnbTestCase(val workload: String, val sf: String, val query: Int, val 
 
     val baseQuerySpecification: String = readToString(s"../queries/ldbc-snb-${workload}/${name}.cypher")
     val parameters: Map[String, String] = LdbcSnbTestCase.gson
-      .fromJson(readToString(f"../graphs/ldbc-snb-bi/$query%02d/parameters"), classOf[java.util.Map[String, Object]])
+      .fromJson(readToString(f"../graphs/ldbc-snb-bi/${query}%02d/parameters"), classOf[java.util.Map[String, Object]])
       .asScala
       .toMap
       .map { case (k, v) => (k, convert(v)) }
@@ -47,7 +55,7 @@ class LdbcSnbTestCase(val workload: String, val sf: String, val query: Int, val 
       "tagclass" -> List("TagClass"),
       "tag" -> List("Tag")
     ) map {
-      case (file, labels) => (csvDir + file + csvPostfix) -> labels
+      case (file, labels) => (sfCsvDir + file + csvPostfix) -> labels
     }
   }
 
@@ -77,8 +85,11 @@ class LdbcSnbTestCase(val workload: String, val sf: String, val query: Int, val 
       "person_studyAt_organisation"    -> EdgeMetaData("Person",       "STUDY_OF",       "Organisation"),
       "person_workAt_organisation"     -> EdgeMetaData("Person",       "WORK_AT",        "Organisation")
     ) map {
-      case (file, labels) => (csvDir + file + csvPostfix) -> labels
+      case (file, labels) => (sfCsvDir + file + csvPostfix) -> labels
     }
   }
+
+  val loader = new LdbcUpdateLoader(sfCsvDir, updateQueryPrefix, updateQueryPostfix)
+  val updates = loader.generateQuerySpecifications()
 
 }

@@ -69,17 +69,17 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
     val queryTime = sLoad.elapsed(TimeUnit.NANOSECONDS)
 
     val tx = gds.beginTx()
-
-    val updateTimes = tc.updateQuerySpecifications.map { q =>
+    val updateTimes = tc.updates.map { updateQuery =>
+      println(updateQuery)
       val s = Stopwatch.createStarted()
-      gds.execute(q)
+      gds.execute(updateQuery)
       val results2 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
       s.elapsed(TimeUnit.NANOSECONDS)
     }.toList
     tx.failure()
     tx.close()
 
-    println(tc.sf + "," + tc.query + ",neo4j," + queryTime + "," + updateTimes.mkString(","))
+//    println(tc.sf + "," + tc.query + ",neo4j," + queryTime + "," + updateTimes.mkString(","))
     results1
   }
 
