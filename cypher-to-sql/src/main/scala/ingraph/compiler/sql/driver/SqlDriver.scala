@@ -5,6 +5,7 @@ import java.sql.{DriverManager, Statement => sqlStatement}
 
 import ingraph.compiler.sql.Util.withResources
 import ingraph.compiler.sql._
+import ingraph.compiler.sql.driver.SqlDriver.{Database, PostgresDatabase}
 import ingraph.driver.{CypherDriver, CypherDriverFactory}
 import org.apache.log4j.{Level, LogManager}
 import org.cytosm.common.gtop.GTop
@@ -13,7 +14,10 @@ import org.neo4j.driver.v1.exceptions.NoSuchRecordException
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
 
-class SqlDriver(val translateCreateQueries: Boolean = false, val gTop: Option[GTop] = None) extends CypherDriver {
+class SqlDriver(val translateCreateQueries: Boolean = false,
+                val gTop: Option[GTop] = None,
+                val database: Database = new PostgresDatabase)
+  extends CypherDriver {
 
   // TODO implement CREATE command instead of using Neo4j
   val backendDriver: Option[CypherDriver] =
@@ -24,8 +28,7 @@ class SqlDriver(val translateCreateQueries: Boolean = false, val gTop: Option[GT
   val backendSession: Option[Session] = backendDriver.map(_.session)
 
   LogManager.getRootLogger.setLevel(Level.OFF)
-  val postgres = new EmbeddedPostgresWrapper
-  val url = postgres.Url
+  val url = database.url
 
   withResources(DriverManager.getConnection(url)) { sqlConnection =>
     withResources(sqlConnection.createStatement) {
@@ -36,7 +39,7 @@ class SqlDriver(val translateCreateQueries: Boolean = false, val gTop: Option[GT
   override def session: SqlSession = new SqlSession(this)
 
   override def close(): Unit = {
-    postgres.close()
+    database.close()
 
     backendSession.foreach(_.close)
     backendDriver.foreach(_.close)
@@ -56,6 +59,18 @@ class SqlDriver(val translateCreateQueries: Boolean = false, val gTop: Option[GT
 }
 
 object SqlDriver {
+
+  trait Database extends AutoCloseable {
+    def url: String
+  }
+
+  class PostgresDatabase extends Database {
+    val postgres = new EmbeddedPostgresWrapper
+
+    override def url: String = postgres.Url
+
+    override def close(): Unit = postgres.close()
+  }
 
   def dumpTable(sqlStatement: sqlStatement, tablename: String): Unit = {
     dump(sqlStatement, "SELECT * FROM " + tablename)
