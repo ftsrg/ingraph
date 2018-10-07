@@ -10,8 +10,7 @@ class BiValidationTest extends FunSuite {
   val csvDir = "../graphs/ldbc-snb-bi/"
 
   // val targets = Seq(1, 2, 3, 4, 6, 7, 8, 9, 12, 13, 15, 17, 21, 22, 23, 24)
-  // val queries = Seq(2, 3, 4, 6, 7, 8, 9, 12, 15, 22, 23, 24)
-  val queries = Seq(2)
+  val queries = Seq(2, 3, 4, 6, 7, 8, 9, 12, 15, 22, 23, 24)
 
   val testCases: Seq[LdbcSnbTestCase] = queries.sorted map (query => new LdbcSnbTestCase(
     "bi", sf, query, csvDir
@@ -19,7 +18,7 @@ class BiValidationTest extends FunSuite {
 
   testCases.foreach {
     tc =>
-      test(s"${tc.name}") {
+      ignore(s"${tc.name}") {
         val ntr = new Neo4jTestRunner(tc, Some(s"../graphs/ldbc-snb-bi/db-sf${sf}/graph.db"))
         val neo4jResults = ntr.run()
         ntr.close()
