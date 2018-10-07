@@ -36,7 +36,7 @@ object LdbcTest {
     "LdbcQuery5",
     "LdbcQuery6",
     "LdbcQuery8",
-//    "LdbcQuery9",
+    "LdbcQuery9",
     "LdbcQuery11",
     "LdbcQuery12",
     "LdbcShortQuery1PersonProfile",
