@@ -467,6 +467,15 @@ class RandomCompilationTest extends CompilerTest {
         |ORDER BY a.foo
         |""".stripMargin)
   }
+
+  test("should allow (compile) RETURN DISTINCT even is doing ORDER BY on a property of the unaliased version of an aliased returnitem") {
+    val stages = compile(
+      """MATCH (a:A)
+        |RETURN DISTINCT a as bar
+        |ORDER BY a.foo
+        |""".stripMargin)
+  }
+
   test("should not introduce additional projection for ORDER BY on attribute already present in the projection") {
     val stages = compile(
       """MATCH   (tag:Tag)

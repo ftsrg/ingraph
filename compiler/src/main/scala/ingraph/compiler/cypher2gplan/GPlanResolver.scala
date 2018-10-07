@@ -357,6 +357,7 @@ object GPlanResolver {
             } else {
               // extra variables needed for the sorting, but DISTINCT was in place
               if (distinct) {
+                // FIXME: possibly merge this with the creation of additionalSortItems
                 // see if all of them is legal
                 val allLegal: Boolean = additionalSortItems.map(_.child).foldLeft[Boolean](true)( (acc, sortExpr) => {
                   // this item appears aliased in the project list.
@@ -368,8 +369,16 @@ object GPlanResolver {
                     }).isDefined
                     case _ => false
                   }
+                  // this is a propertyAttribute whose elementAttribute appear aliased in the project list.
+                  val baseAppearAliased: Boolean = sortExpr match {
+                    case sortRN: PropertyAttribute => projectList.find( ri => ri.child match {
+                      case riRN: ResolvableName => sortRN.elementAttribute.resolvedName == riRN.resolvedName
+                      case _ => false
+                    }).isDefined
+                    case _ => false
+                  }
 
-                  acc && appearAliased
+                  acc && (appearAliased || baseAppearAliased)
                 })
                 if (!allLegal) {
                   throw new IllegalSortingAfterDistinctException(additionalSortItems.map(_.child.toString()).toString())
