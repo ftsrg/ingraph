@@ -282,8 +282,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       )): _*)
     }
 
-    "tpc-h 13 lojo" in {
-      println(System.getProperty("user.dir"))
+    "tpc-h 13 lojo" ignore {
       //select c_custkey, o_orderkey from CUSTOMER left outer join ORDERS on c_custkey = o_custkey
       val customerSource = io.Source.fromFile("../graphs/tpc-h/customers.csv")
       val customers = customerSource.getLines().drop(1)
