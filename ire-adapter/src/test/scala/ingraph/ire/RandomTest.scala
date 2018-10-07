@@ -68,4 +68,23 @@ class RandomTest extends FunSuite {
     assert(adapter.results() == List(Vector(1), Vector(2), Vector("ot")))
   }
 
+  test("Indexing array") {
+    val query =
+      """UNWIND [[20, 30]] AS s
+        |RETURN s[0], s[1]
+      """.stripMargin
+    val adapter = new IncrementalQueryAdapter(query, "")
+    assert(adapter.results() == List(Vector(20, 30)))
+  }
+
+  ignore("Indexing array in MATCH") {
+    val query =
+      """UNWIND [[20, 30]] AS tuple
+        |MATCH (org:Organisation {id: tuple[0]})
+        |RETURN org.id
+      """.stripMargin
+    val adapter = new IncrementalQueryAdapter(query, "")
+    adapter.results()
+  }
+
 }

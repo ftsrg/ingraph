@@ -14,13 +14,13 @@ MATCH
   (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(zombie:Person)
 OPTIONAL MATCH
   (zombie)<-[:HAS_CREATOR]-(message:Message)
-  WHERE zombie.creationDate  < $endDate
+WHERE zombie.creationDate  < $endDate
   AND message.creationDate < $endDate
 WITH
   country,
-  zombie,
   endDateYear,
   endDateMonth,
+  zombie,
   zombie.creationDate/10000000000000   AS zombieCreationYear,
   zombie.creationDate/100000000000%100 AS zombieCreationMonth,
   count(message) AS messageCount
@@ -28,28 +28,26 @@ WITH
   country,
   zombie,
   12 * (endDateYear  - zombieCreationYear )
-+ (endDateMonth - zombieCreationMonth)
-+ 1 AS months,
-messageCount
+     + (endDateMonth - zombieCreationMonth)
+     + 1 AS months,
+  messageCount
 WHERE messageCount / months < 1
 WITH
   country,
   collect(zombie.id) AS zombieIds
 UNWIND zombieIds AS zombieId
-OPTIONAL MATCH
-  (zombie)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(likerZombie:Person)
-  WHERE zombie.id = zombieId
-  AND likerZombie.id IN zombieIds
-WITH
-  zombieId,
-  count(likerZombie) AS zombieLikeCount
 MATCH
   (zombie:Person)
-  WHERE zombie.id = zombieId
-//OPTIONAL
-MATCH
+WHERE zombie.id = zombieId
+OPTIONAL MATCH
+  (zombie)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(likerZombie:Person)
+WHERE likerZombie.id IN zombieIds
+WITH
+  zombie,
+  count(likerZombie) AS zombieLikeCount
+OPTIONAL MATCH
   (zombie)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(likerPerson:Person)
-  WHERE likerPerson.creationDate < $endDate
+WHERE likerPerson.creationDate < $endDate
 WITH
   zombie,
   zombieLikeCount,
@@ -61,8 +59,8 @@ RETURN
   CASE totalLikeCount
     WHEN 0 THEN 0
     ELSE zombieLikeCount / toFloat(totalLikeCount)
-    END AS zombieScore
-  ORDER BY
+  END AS zombieScore
+ORDER BY
   zombieScore DESC,
   zombie.id ASC
-  LIMIT 100
+LIMIT 100

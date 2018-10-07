@@ -581,4 +581,33 @@ scala.MatchError: 'Unwind unwindattribute(listexpression(1, 2, 3), li, Some(li#0
         |RETURN li AS l
       """.stripMargin)
   }
+
+  test("Complex create query") {
+    compile(
+      """MATCH (c:City {id:1226})
+        |CREATE (p:Person {id: 10995116277777, firstName: 'Almira', lastName: 'Patras', gender: 'female', birthday: 19830628, creationDate: 20101203163954934, locationIP: '193.104.227.215', browserUsed: 'Internet Explorer', speaks: ['ru', 'en'], emails: ['Almira10995116277777@gmail.com', 'Almira10995116277777@gmx.com']})-[:IS_LOCATED_IN]->(c)
+        |WITH p, count(*) AS dummy1
+        |UNWIND [1916] AS tagId
+        |    MATCH (t:Tag {id: tagId})
+        |    CREATE (p)-[:HAS_INTEREST]->(t)
+        |WITH p, count(*) AS dummy2
+        |UNWIND [[53, 49]] AS s
+        |    MATCH (u:Organisation {id: s[0]})
+        |    CREATE (p)-[:STUDY_AT {classYear: s[1]}]->(u)
+        |WITH p, count(*) AS dummy3
+        |UNWIND [] AS w
+        |    MATCH (comp:Organisation {id: w[0]})
+        |    CREATE (p)-[:WORKS_AT {workFrom: w[1]}]->(comp)
+      """.stripMargin)
+  }
+
+  test("Indexing array in MATCH") {
+    val stages = compile(
+      """UNWIND [[20, 30]] AS tuple
+        |MATCH (org:Organisation {id: tuple[0]})
+        |RETURN org.id
+      """.stripMargin)
+    printlnSuppressIfIngraph(stages.toString)
+  }
+
 }

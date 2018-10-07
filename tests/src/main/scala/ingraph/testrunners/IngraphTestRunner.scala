@@ -11,10 +11,10 @@ import org.supercsv.prefs.CsvPreference
 
 class IngraphTestRunner(tc: LdbcSnbTestCase) {
 
-  def run() : List[Map[String, Any]] = {
-    val driver = CypherDriverFactory.createIngraphDriver()
+  val driver = CypherDriverFactory.createIngraphDriver()
+  val session = driver.session()
 
-    val session = driver.session()
+  def run() : List[Map[String, Any]] = {
     val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
     val queryHandler = session.registerQuery(tc.name, tc.querySpecification)
     val sLoad = Stopwatch.createStarted()
@@ -28,22 +28,32 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
     val queryTime = sLoad.elapsed(TimeUnit.NANOSECONDS)
 
     val indexer = queryHandler.adapter.indexer
-    val updateTimes = tc.updateQuerySpecifications.map { q =>
-      val sUpdate = Stopwatch.createStarted()
-      update(q, "upd", indexer, queryHandler)
-      listener.terminated()
-      sUpdate.elapsed(TimeUnit.NANOSECONDS)
+    val updateTimes = tc.updates.map { updateQuery =>
+      val s = Stopwatch.createStarted()
+      update(updateQuery, "upd", indexer, queryHandler, listener)
+      s.elapsed(TimeUnit.NANOSECONDS)
     }.toList
 
     println(tc.sf + "," + tc.query + ",ingraph," + queryTime + "," + updateTimes.mkString(","))
     queryHandler.result()
   }
 
-  def update(querySpecification: String, queryName: String, indexer: Indexer, queryHandler: IngraphQueryHandler): List[Map[String, Any]] = {
-    val adapter = new OneTimeQueryAdapter(querySpecification, "del", indexer)
+  def update(querySpecification: String,
+             queryName: String,
+             indexer: Indexer,
+             queryHandler: IngraphQueryHandler,
+             listener: ResultCollectingChangeListener): List[Map[String, Any]] = {
+    val adapter = new OneTimeQueryAdapter(querySpecification, queryName, indexer)
     adapter.results()
     adapter.close()
-    queryHandler.result
+    val results = queryHandler.result
+    listener.terminated()
+    return results
+  }
+
+  def close(): Unit = {
+    session.close()
+    driver.close()
   }
 
 }
