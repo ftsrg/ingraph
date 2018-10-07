@@ -39,11 +39,18 @@ class PullTupleCreator(vertexOps: Seq[GetVertices],
     val labels = operator.nnode.edge.labels.edgeLabels
     val edges: Iterable[IngraphEdge] = operator.nnode.edge.properties.get(TupleConstants.ID_KEY) match {
       case None =>
-        (for (label <- labels)
-          yield {
-            indexer.edgesByType(label).filter(e => sourceLabels.subsetOf(e.sourceVertex.labels)
-              && targetLabels.subsetOf(e.targetVertex.labels))
-          }).flatten
+        val unfiltered = operator.src.properties.get(TupleConstants.ID_KEY) match {
+          case Some(Literal(srcId,_)) =>
+            // TODO: benchmark if we should do this for trgId too
+            indexer.vertexLookup(srcId.asInstanceOf[Long]).edgesOut
+          case None =>
+            labels.flatMap(label =>
+                indexer.edgesByType(label)
+              )
+        }
+        unfiltered.filter(e =>
+          sourceLabels.subsetOf(e.sourceVertex.labels)
+            && targetLabels.subsetOf(e.targetVertex.labels))
       case Some(Literal(id, _)) =>
         val edge = indexer.edgeById(id.asInstanceOf[Long]).get
         assert(sourceLabels.subsetOf(edge.sourceVertex.labels)
