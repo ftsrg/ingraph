@@ -2,8 +2,7 @@ package ingraph.ire.nodes.binary
 
 import ingraph.ire.datatypes.Slot._
 import ingraph.ire.datatypes._
-import ingraph.ire.messages.{ChangeSet, ReteMessage}
-import ingraph.ire.messages.SingleForwarder
+import ingraph.ire.messages.{ChangeSet, ReteMessage, SingleForwarder}
 
 class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         override val primaryTupleWidth: Int,
@@ -38,7 +37,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
 
     if(joinedPositiveTuples.isEmpty){
       pairlessTuples.addBinding(joinAttributesTuple, inputTuple)
-      return Vector(combineNullTuple(inputTuple))
+      return Vector(padWithNull(inputTuple))
     }
 
     joinedPositiveTuples
@@ -51,49 +50,46 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
 
     if(pairlessTuples.entryExists(joinAttributesTuple, _ == inputTuple)){
       pairlessTuples.removeBinding(joinAttributesTuple, inputTuple)
-      return Vector(combineNullTuple(inputTuple))
+      return Vector(padWithNull(inputTuple))
     }
 
     joinTuples(Vector(inputTuple), secondaryIndexer, primaryMask, Primary)
   }
 
   private def calculateSecondaryPositive(inputTuple: Tuple): ChangeSet = {
-    val joinedPositiveTuples: Vector[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
+    val joinedPositiveTuples = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
 
     var negativeTuples: Vector[Tuple] = Vector()
 
     val joinAttributesTuple = extract(inputTuple, secondaryMask)
     if(pairlessTuples.contains(joinAttributesTuple)){
-      negativeTuples = pairlessTuples.remove(joinAttributesTuple).get.map(combineNullTuple).toVector
+      negativeTuples = pairlessTuples.remove(joinAttributesTuple).get.map(padWithNull).toVector
     }
 
     secondaryIndexer.addBinding(joinAttributesTuple, inputTuple)
 
-    ChangeSet(positive = joinedPositiveTuples, negative = negativeTuples)
+    ChangeSet(positive = joinedPositiveTuples.toVector, negative = negativeTuples)
   }
 
   private def calculateSecondaryNegative(inputTuple: Tuple): ChangeSet = {
-    val joinedNegativeTuples: Vector[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
-    var positiveTuples: Vector[Tuple] = Vector()
+    val joinedNegativeTuples = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
 
     val joinAttributesTuple = extract(inputTuple, secondaryMask)
-    if(joinedNegativeTuples.nonEmpty && secondaryIndexer.get(joinAttributesTuple).get.size <= 1){
-      val pairsFromPrimary = primaryIndexer.get(joinAttributesTuple).get
+    val positiveTuples = if (
+      joinedNegativeTuples.nonEmpty && secondaryIndexer(joinAttributesTuple).size <= 1){
+      val pairsFromPrimary = primaryIndexer(joinAttributesTuple)
       pairlessTuples.put(joinAttributesTuple, pairsFromPrimary)
-      positiveTuples = pairsFromPrimary.map(combineNullTuple).toVector
-    }
+      pairsFromPrimary.map(padWithNull).toVector
+    } else Vector.empty[Tuple]
 
     secondaryIndexer.removeBinding(joinAttributesTuple, inputTuple)
 
-    ChangeSet(positive = positiveTuples, negative = joinedNegativeTuples)
+    ChangeSet(positive=positiveTuples, negative=joinedNegativeTuples.toVector)
   }
 
-  private def combineNullTuple(inputTuple: Tuple): Tuple = {
-    var nullPart: Seq[Any] = Seq()
-    for(i <- 1 to secondaryTupleWidth - secondaryMask.size)
-      nullPart = nullPart ++ Seq(null)
-
-    inputTuple ++ nullPart
+  private val nullFiller = Vector.fill(secondaryTupleWidth - secondaryMask.size)(null)
+  private def padWithNull(inputTuple: Tuple): Tuple = {
+    inputTuple ++ nullFiller
   }
 
   private def combineChangeSets(cs1: ChangeSet, cs2: ChangeSet): ChangeSet = {
@@ -103,7 +99,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
 }
 
 
-class ThetaLeftOuterJoinNode(override val next: (ReteMessage) => Unit,
+class ThetaLeftOuterJoinNode(override val next: ReteMessage => Unit,
                         override val primaryTupleWidth: Int,
                         override val secondaryTupleWidth: Int,
                         override val primaryMask: Mask,
@@ -111,7 +107,7 @@ class ThetaLeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         val theta: Tuple => Boolean)
   extends LeftOuterJoinNode(next, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask) {
   override def joinTuples(tuples: Vector[Tuple], otherIndexer: JoinCache,
-                          slotMask: Mask, slot: Slot): TupleBag = {
+                          slotMask: Mask, slot: Slot): Iterable[Tuple] = {
     super.joinTuples(tuples, otherIndexer, slotMask, slot).filter(theta(_))
   }
 }

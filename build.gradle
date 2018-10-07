@@ -29,13 +29,10 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'scala'
   apply plugin: 'maven-publish'
-
   jar {
     from sourceSets.main.allJava
     from sourceSets.main.allScala
   }
-
-  sourceSets.test.resources.srcDirs = ["$rootDir/queries", "$rootDir/graphs"]
 
   sourceCompatibility = 1.8
   targetCompatibility = 1.8

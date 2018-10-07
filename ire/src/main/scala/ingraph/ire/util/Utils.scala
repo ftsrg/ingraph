@@ -26,6 +26,15 @@ object Utils {
 
   }
 
+  def time[R](block: => R): Long = {
+    val t0 = System.nanoTime()
+    val result = block    // call-by-name
+    val t1 = System.nanoTime()
+    val elapsed = t1 - t0
+    println("Elapsed time: " + elapsed + "ns")
+    elapsed
+  }
+
 }
 
 class AtomicUniqueCounter {

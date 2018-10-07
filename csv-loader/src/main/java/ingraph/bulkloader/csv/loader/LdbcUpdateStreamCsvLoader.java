@@ -5,6 +5,7 @@ import com.google.common.collect.ObjectArrays;
 import ingraph.bulkloader.csv.loader.cellprocessor.ParseEpochToDate;
 import ingraph.bulkloader.csv.loader.cellprocessor.ParseEpochToDateTime;
 import ingraph.bulkloader.csv.loader.cellprocessor.ParseList;
+import org.supercsv.cellprocessor.ConvertNullTo;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.ParseLong;
@@ -26,7 +27,9 @@ import java.util.stream.IntStream;
 public class LdbcUpdateStreamCsvLoader {
 
 	// make sure to load persons first
-	public static final List<String> CSV_FILENAMES = ImmutableList.of("person", "forum");
+	//public static final List<String> CSV_FILENAMES = ImmutableList.of("person", "forum");
+	//public static final String PREFIX = "updateStream_0_0_";
+	public static final List<String> CSV_FILENAMES = ImmutableList.of("small");
 	public static final String PREFIX = "updateStream_0_0_";
 	public static final String POSTFIX = ".csv";
 	public static final CsvPreference LDBC_CSV_PREFERENCE =
@@ -51,7 +54,7 @@ public class LdbcUpdateStreamCsvLoader {
 		new NotNull(),                      //  7 person.gender
 		new ParseEpochToDate(),             //  8 person.birthDay
 		new ParseEpochToDateTime(),         //  9 person.creationDate
-		new NotNull(),                      // 10 person.locationIp
+		new NotNull(),                      // 10 person.locationIP
 		new NotNull(),                      // 11 person.browserUsed
 		new ParseLong(),                    // 12 person-isLocatedIn->City.id
 		new ParseList(Function.identity()), // 13 {person.speaks}
@@ -88,24 +91,24 @@ public class LdbcUpdateStreamCsvLoader {
 	};
 
 	final CellProcessor[] UPDATE_6 = new CellProcessor[]{
-		new ParseLong(),                    //  4 post.id
-		new Optional(),                     //  5 post.imageFile
-		new ParseEpochToDateTime(),         //  6 post.creationDate
-		new NotNull(),                      //  7 post.locationIp
-		new NotNull(),                      //  8 post.browserUsed
-		new Optional(),                     //  9 post.language
-		new Optional(),                     // 10 post.content
-		new ParseInt(),                     // 11 post.length
-		new ParseLong(),                    // 12 post-hasCreator->Person.id
-		new ParseLong(),                    // 13 post<-containerOf-Forum.id
-		new ParseLong(),                    // 14 post-isLocatedIn->Country.id
-		new ParseList(Long::valueOf),       // 15 {post-hasTag->Tag.id}
+		new ParseLong(),                      //  4 post.id
+		new ConvertNullTo("\"\""), //  5 post.imageFile
+		new ParseEpochToDateTime(),           //  6 post.creationDate
+		new NotNull(),                        //  7 post.locationIP
+		new NotNull(),                        //  8 post.browserUsed
+		new ConvertNullTo("\"\""), //  9 post.language
+		new ConvertNullTo("\"\""), // 10 post.content
+		new ParseInt(),                       // 11 post.length
+		new ParseLong(),                      // 12 post-hasCreator->Person.id
+		new ParseLong(),                      // 13 post<-containerOf-Forum.id
+		new ParseLong(),                      // 14 post-isLocatedIn->Country.id
+		new ParseList(Long::valueOf),         // 15 {post-hasTag->Tag.id}
 	};
 
 	final CellProcessor[] UPDATE_7 = new CellProcessor[]{
 		new ParseLong(),                    //  4 comment.id
 		new ParseEpochToDateTime(),         //  5 comment.creationDate
-		new NotNull(),                      //  6 comment.locationIp
+		new NotNull(),                      //  6 comment.locationIP
 		new NotNull(),                      //  7 comment.browserUsed
 		new NotNull(),                      //  8 comment.content
 		new ParseInt(),                     //  9 comment.length
@@ -122,8 +125,21 @@ public class LdbcUpdateStreamCsvLoader {
 		new ParseEpochToDateTime(),         //  6 knows.creationDate
 	};
 
+	final CellProcessor[] UPDATE_9 = new CellProcessor[]{
+		new ParseLong(),                    //  4 post.id
+	};
+
+	final CellProcessor[] UPDATE_10 = new CellProcessor[]{
+		new ParseLong(),                    //  4 forum.id
+	};
+
+	final CellProcessor[] UPDATE_11 = new CellProcessor[]{
+		new ParseLong(),                    //  4 person.id
+		new ParseLong(),                    //  5 tag.id
+	};
+
 	final List<CellProcessor[]> UPDATES =
-		ImmutableList.of(UPDATE_1, UPDATE_2, UPDATE_3, UPDATE_4, UPDATE_5, UPDATE_6, UPDATE_7, UPDATE_8);
+		ImmutableList.of(UPDATE_1, UPDATE_2, UPDATE_3, UPDATE_4, UPDATE_5, UPDATE_6, UPDATE_7, UPDATE_8, UPDATE_9, UPDATE_10, UPDATE_11);
 
 	final Map<Integer, CellProcessor[]> UPDATE_PROCESSORS =
 		IntStream

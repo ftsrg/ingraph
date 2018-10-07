@@ -14,7 +14,7 @@ class BiCompilerTest extends CompilerTest {
     , printFPlan = true
   )
 
-  test("bi-01 from file: Posting summary") {
+  ignore("bi-01 from file: Posting summary") {
     val stages=compileFromFile("bi-01")
   }
 
@@ -50,7 +50,7 @@ class BiCompilerTest extends CompilerTest {
     val stages=compileFromFile("bi-09")
   }
 
-  test("bi-10 from file: Central Person for a Tag") {
+  ignore("bi-10 from file: Central Person for a Tag") {
     val stages=compileFromFile("bi-10")
   }
 

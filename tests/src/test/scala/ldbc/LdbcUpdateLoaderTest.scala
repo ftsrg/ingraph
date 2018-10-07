@@ -1,16 +1,16 @@
 package ldbc
 
-import ingraph.ire.Indexer
 import org.scalatest.FunSuite
 
 class LdbcUpdateLoaderTest extends FunSuite {
 
-  val CSV_DIR: String = "../graphs/ldbc-snb-bi/sf01/"
+  val csvDir: String = "../graphs/ldbc-snb-bi/csv-sftiny/"
+  val updateQueryPrefix: String = "../queries/ldbc-snb-interactive/interactive-update-"
+  val updateQueryPostfix: String = ".cypher"
 
-  ignore("parse streams") {
-    val indexer = new Indexer()
-    val loader = new LdbcUpdateLoader(indexer, CSV_DIR)
-    loader.load()
+  test("Generate update query specifications") {
+    val loader = new LdbcUpdateLoader(csvDir, updateQueryPrefix, updateQueryPostfix)
+    loader.generateQuerySpecifications()
   }
 
 }

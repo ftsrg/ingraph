@@ -68,4 +68,97 @@ class RandomTest extends FunSuite {
     assert(adapter.results() == List(Vector(1), Vector(2), Vector("ot")))
   }
 
+  test("Optionals for one expand") {
+    val indexer = new Indexer()
+    val createAdapter = new OneTimeQueryAdapter(
+      """CREATE
+        |  (p2:Person {id: 1}),
+        |  (p1:Person {id: 2})<-[:HAS_CREATOR]-(m:Message {id: 99})
+        |""".stripMargin,
+      "",
+      indexer
+    )
+    createAdapter.results()
+
+    val queryAdapter = new IncrementalQueryAdapter(
+      """MATCH (zombie:Person)
+        |WHERE zombie.id IN [1, 2]
+        |OPTIONAL MATCH (zombie)<-[:HAS_CREATOR]-(message:Message)
+        |WHERE message.id IN [101]
+        |RETURN zombie.id, message.id
+        |""".stripMargin,
+      "",
+      indexer
+    )
+    assert(queryAdapter.results().size == 2)
+  }
+
+  test("Optionals for two expands, separately") {
+    val indexer = new Indexer()
+    val createAdapter = new OneTimeQueryAdapter(
+      """CREATE
+        |  (p2:Person {id: 1}),
+        |  (p1:Person {id: 2})<-[:HAS_CREATOR]-(m:Message)<-[:LIKES]-(p3:Person {id: 3})
+        |""".stripMargin,
+      "",
+      indexer
+    )
+    createAdapter.results()
+    val queryAdapter = new IncrementalQueryAdapter(
+      """MATCH (zombie:Person)
+        |WHERE zombie.id IN [1, 2]
+        |OPTIONAL MATCH (zombie)<-[:HAS_CREATOR]-(message:Message)
+        |OPTIONAL MATCH (message)<-[:LIKES]-(likerZombie:Person)
+        |WHERE likerZombie.id IN [1, 2]
+        |RETURN zombie.id, likerZombie.id
+        |""".stripMargin,
+      "",
+      indexer
+    )
+    assert(queryAdapter.results().size == 2)
+  }
+
+  ignore("Optionals for two expands in one") {
+    val indexer = new Indexer()
+    val createAdapter = new OneTimeQueryAdapter(
+      """CREATE
+        |  (p2:Person {id: 1}),
+        |  (p1:Person {id: 2})<-[:HAS_CREATOR]-(m:Message)<-[:LIKES]-(p3:Person {id: 3})
+        |""".stripMargin,
+      "",
+      indexer
+    )
+    createAdapter.results()
+    val queryAdapter = new IncrementalQueryAdapter(
+      """MATCH (zombie:Person)
+        |WHERE zombie.id IN [1, 2]
+        |OPTIONAL MATCH (zombie)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(likerZombie:Person)
+        |WHERE likerZombie.id IN [1, 2]
+        |RETURN zombie.id, likerZombie.id
+        |""".stripMargin,
+      "",
+      indexer
+    )
+    assert(queryAdapter.results().size == 2)
+  }
+
+  test("Indexing array") {
+    val query =
+      """UNWIND [[20, 30]] AS s
+        |RETURN s[0], s[1]
+      """.stripMargin
+    val adapter = new IncrementalQueryAdapter(query, "")
+    assert(adapter.results() == List(Vector(20, 30)))
+  }
+
+  ignore("Indexing array in MATCH") {
+    val query =
+      """UNWIND [[20, 30]] AS tuple
+        |MATCH (org:Organisation {id: tuple[0]})
+        |RETURN org.id
+      """.stripMargin
+    val adapter = new IncrementalQueryAdapter(query, "")
+    adapter.results()
+  }
+
 }

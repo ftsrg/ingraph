@@ -19,7 +19,7 @@ case class Update1AddPerson(
                              gender: String,
                              birthday: Long,
                              creationDate: Long,
-                             locationIp: String,
+                             locationIP: String,
                              browserUsed: String,
                              cityId: Long,
                              languages: List[String],
@@ -29,11 +29,17 @@ case class Update1AddPerson(
                              workAt: List[Organization]
                            ) extends LdbcUpdate
 
-case class Update2_3AddMessageLike(
-                               personId: Long,
-                               postId: Long,
-                               creationDate: Long
-                             ) extends LdbcUpdate
+case class Update2AddPostLike(
+                                  personId: Long,
+                                  postId: Long,
+                                  creationDate: Long
+                                ) extends LdbcUpdate
+
+case class Update3AddCommentLike(
+                                  personId: Long,
+                                  commentId: Long,
+                                  creationDate: Long
+                                ) extends LdbcUpdate
 
 case class Update4AddForum(
                             forumId: Long,
@@ -53,7 +59,7 @@ case class Update6AddPost(
                            postId: Long,
                            imageFile: String,
                            creationDate: Long,
-                           locationIp: String,
+                           locationIP: String,
                            browserUsed: String,
                            language: String,
                            content: String,
@@ -67,7 +73,7 @@ case class Update6AddPost(
 case class Update7AddComment(
                               commentId: Long,
                               creationDate: Long,
-                              locationIp: String,
+                              locationIP: String,
                               browserUsed: String,
                               content: String,
                               length: Int,
@@ -83,3 +89,9 @@ case class Update8AddFriendship(
                                      person2Id: Long,
                                      creationDate: Long
                                    ) extends LdbcUpdate
+
+case class Update9RemovePost(postId: Long) extends LdbcUpdate
+
+case class Update10RemoveForum(forumId: Long) extends LdbcUpdate
+
+case class Update11RemoveHasInterest(personId: Long, tagId: Long) extends LdbcUpdate
