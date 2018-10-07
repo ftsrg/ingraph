@@ -360,17 +360,15 @@ object GPlanResolver {
 
               // we build a more loose projection, then sort, then fall back to the projection originally requested.
               val innerSortOp = gplan.Sort(newSortOp.order,
-                gplan.Projection(p.projectList ++ additionalSortItems.map(so => {
-                  so.child match {
+                gplan.Projection((p.projectList ++ additionalSortItems.map(so => so.child match {
                     case rn: ResolvableName => expr.ReturnItem(so.child, None, rn.resolvedName)
                     case x => throw new UnexpectedTypeException(x, "we were filtering for resolvedNames in sort list")
-                  }
                 }) ++ // add the aliased returnitems without aliasing to allow referencing it in the effective projection
                   p.projectList.flatMap( pi => pi.child match {
                   case rn: ResolvableName => if (pi.resolvedName == rn.resolvedName) None else Some(expr.ReturnItem(rn, None, rn.resolvedName))
                   case _ => None
-                }),
-                  p.child // note: we checked above not to have distinct
+                })).distinct // this is to remove duplicates that might originate from e.g. adding aliased return items and items from sorting without using that alias
+                , p.child // note: we checked above not to have distinct
                 )
               )
 
