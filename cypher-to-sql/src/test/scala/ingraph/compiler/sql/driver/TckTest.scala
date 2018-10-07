@@ -56,7 +56,7 @@ object TckTest {
     "Matching with many predicates and larger pattern",
     "Missing node property should become null",
     "Missing relationship property should become null",
-    "Multiple anonymous nodes in a pattern",
+//    "Multiple anonymous nodes in a pattern",
     "Non-optional matches should not return nulls",
     "OPTIONAL MATCH with previously bound nodes",
     "Projecting nodes and relationships",
