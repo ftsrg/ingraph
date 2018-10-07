@@ -2,13 +2,16 @@ package ingraph.ire.nodes.binary
 
 import akka.actor.{ActorSystem, PoisonPill, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import ingraph.ire.datatypes.TupleBag
 import ingraph.ire.messages.{ChangeSet, Primary, Secondary}
 import ingraph.ire.util.TestUtil._
 import ingraph.ire.util.Utils
 import ingraph.ire.util.TestUtil
 import org.scalatest.{Matchers, WordSpecLike, _}
 
+import scala.collection.immutable
 import scala.concurrent.duration.Duration
+import scala.util.Random
 
 class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
@@ -297,23 +300,32 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
           val Array(date, orderKey, custKey) = f
           Vector(date, orderKey, custKey)
         }).toVector
-
-      for (i <- 0 to 10) {
+      val rnd = new Random(5)
+      val ordersNeg: TupleBag = rnd.shuffle(orders).take(100)
+      val customersNeg: TupleBag = rnd.shuffle(customers).take(100)
+      val times = (0 to 60).map { _ =>
         val tupleWidth = 2
         val primaryMask = mask(0)
         val secondaryMask = mask(1)
         val echoActor = system.actorOf(TestActors.echoActorProps)
         val joiner = system.actorOf(Props(
           new LeftOuterJoinNode(echoActor ! _, tupleWidth, tupleWidth, primaryMask, secondaryMask)))
-        Utils.time {
-          joiner ! Secondary(ChangeSet(positive = orders))
-          joiner ! Primary(ChangeSet(positive = customers))
-          import scala.concurrent.duration._
-          val first = receiveN(1, 60 seconds).head.asInstanceOf[ChangeSet]
-          assert(first.positive.length == 150000)
+
+        import scala.concurrent.duration._
+        joiner ! Secondary(ChangeSet(positive = orders))
+        joiner ! Primary(ChangeSet(positive = customers))
+        receiveN(1, 60 hours)
+        val time = Utils.time {
+          joiner ! Secondary(ChangeSet(negative = ordersNeg))
+          joiner ! Primary(ChangeSet(negative = customersNeg))
+          val first = receiveN(2, 60 hours)
         }
         joiner ! PoisonPill
+        time
       }
+      println(times)
+      val best = times.sorted.take(5)
+      println(best.sum / best.size)
     }
 
   }
