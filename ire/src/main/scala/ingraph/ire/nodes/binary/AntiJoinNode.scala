@@ -9,28 +9,59 @@ import scala.collection.mutable
 
 class CountingMultiMap[K,V] {
   private def innerMap: mutable.Map[V, Int] = mutable.HashMap.empty[V,Int].withDefault(k => 0)
-  private val _values = new mutable.HashMap[K,mutable.Map[V, Int]]().withDefault(k => innerMap)
+  private val _values = new mutable.HashMap[K, mutable.Map[V, Int]]().withDefault(k => innerMap)
+
   def addBinding(key: K, value: V): Boolean = {
     val valueSet = _values(key)
     val newKey = valueSet.isEmpty
+    increaseValue(key, value, valueSet)
+    newKey
+  }
+
+  private def increaseValue(key: K, value: V, valueSet: mutable.Map[V, Int]): Int = {
     val newValue = valueSet(value) + 1
     valueSet(value) = newValue
     _values(key) = valueSet
-    newKey
+    newValue
   }
-  def removeBinding(key: K, value: V): Unit = {
+
+  def put(key: K, values: mutable.Iterable[V]): Unit = {
     val valueSet = _values(key)
+    for (v <- values) {
+      increaseValue(key, v, valueSet)
+    }
+  }
+
+  def removeBinding(key: K, value: V): Int = {
+    val valueSet: mutable.Map[V, Int] = _values(key)
     if (valueSet(value) == 1) {
       valueSet.remove(value)
       if (valueSet.isEmpty) {
         _values.remove(key)
       }
+      0
     } else if (valueSet(value) != 0) {
-      valueSet(value) -= 1
+      val newValue: Int = valueSet(value) - 1
+      valueSet(value) = newValue
+      newValue
+    } else {
+      0
     }
   }
+
+  def remove(key: K): Iterable[V] = {
+    _values.remove(key) match {
+      case Some(x) => x.flatMap(kv => Seq.fill(kv._2)(kv._1))
+      case None => Iterable.empty[V]
+    }
+  }
+
   def contains(key: K): Boolean = {
     _values.contains(key)
+  }
+
+  def containsComposite(key: K, value: V): Boolean = {
+    _values(key).contains(value)
   }
 
   def apply(key: K): Iterable[V] = {

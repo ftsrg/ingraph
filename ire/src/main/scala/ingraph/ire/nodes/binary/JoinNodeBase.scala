@@ -19,8 +19,8 @@ abstract class JoinNodeBase extends BinaryNode {
 
   override def onSizeRequest(): Long = SizeCounter.countDeeper(primaryIndexer.values, secondaryIndexer.values)
 
-  def extract(tuple: Tuple, mask: Mask): Tuple = {
-    mask.map(i => tuple(i)).toVector
+  def extract(tuple: Tuple, mask: Mask): Seq[Any] = {
+    mask.map(i => tuple(i))
   }
 
   def combine(tuple: Tuple, otherTuple: Tuple, slot: Slot): Tuple = {
@@ -30,10 +30,10 @@ abstract class JoinNodeBase extends BinaryNode {
       otherTuple ++ extract(tuple, secondaryMaskInverse)
   }
 
-  def joinTuples(tuples: Vector[Tuple], otherIndexer: JoinCache, slotMask: Mask, slot: Slot): TupleBag = {
+  def joinTuples(tuples: Vector[Tuple], otherIndexer: JoinCache, slotMask: Mask, slot: Slot): Iterable[Tuple] = {
     for {
       tuple <- tuples
-      joinAttributes = slotMask.map(i => tuple(i)).toVector
+      joinAttributes = extract(tuple, slotMask)
       if otherIndexer.contains(joinAttributes)
       otherTupleFull <- otherIndexer(joinAttributes)
     } yield combine(tuple, otherTupleFull, slot)
@@ -41,8 +41,10 @@ abstract class JoinNodeBase extends BinaryNode {
 
   def join(delta: ChangeSet, slotIndexer: JoinCache, otherIndexer: JoinCache, slotMask: Mask, otherMaskInverse: Mask, slot: Slot): Unit = {
     // join the tuples based on the other slot's indexer
-    val joinedPositiveTuples: TupleBag = joinTuples(delta.positive, otherIndexer, slotMask, slot)
-    val joinedNegativeTuples: TupleBag = joinTuples(delta.negative, otherIndexer, slotMask, slot)
+    val joinedPositiveTuples = joinTuples(delta.positive, otherIndexer, slotMask, slot)
+    val joinedNegativeTuples = joinTuples(delta.negative, otherIndexer, slotMask, slot)
+
+    forward(ChangeSet(joinedPositiveTuples.toVector, joinedNegativeTuples.toVector))
 
     // maintain the content of the slot's indexer
     for (tuple <- delta.positive)
@@ -50,7 +52,6 @@ abstract class JoinNodeBase extends BinaryNode {
     for (tuple <- delta.negative)
       slotIndexer.removeBinding(extract(tuple, slotMask), tuple)
 
-    forward(ChangeSet(joinedPositiveTuples, joinedNegativeTuples))
   }
 
   def onPrimary(changeSet: ChangeSet): Unit = {
