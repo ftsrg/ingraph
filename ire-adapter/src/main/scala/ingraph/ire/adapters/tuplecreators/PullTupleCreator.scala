@@ -52,13 +52,14 @@ class PullTupleCreator(vertexOps: Seq[GetVertices],
         Seq(edge)
     }
 
+    val operatorString = operator.toString()
     for (edge <- edges) {
       val tuple = EdgeTransformer(edge, operator, idParser)
-      inputTransaction.add(operator.toString(), tuple)
+      inputTransaction.add(operatorString, tuple)
       if (!operator.nnode.directed) {
         val rTuple = EdgeTransformer(
           edge.copy(sourceVertex = edge.targetVertex, targetVertex = edge.sourceVertex), operator, idParser)
-        inputTransaction.add(operator.toString(), rTuple)
+        inputTransaction.add(operatorString, rTuple)
       }
     }
   }
