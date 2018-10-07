@@ -27,7 +27,9 @@ import java.util.stream.IntStream;
 public class LdbcUpdateStreamCsvLoader {
 
 	// make sure to load persons first
-	public static final List<String> CSV_FILENAMES = ImmutableList.of("person", "forum");
+	//public static final List<String> CSV_FILENAMES = ImmutableList.of("person", "forum");
+	//public static final String PREFIX = "updateStream_0_0_";
+	public static final List<String> CSV_FILENAMES = ImmutableList.of("small");
 	public static final String PREFIX = "updateStream_0_0_";
 	public static final String POSTFIX = ".csv";
 	public static final CsvPreference LDBC_CSV_PREFERENCE =
