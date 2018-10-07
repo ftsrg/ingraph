@@ -20,7 +20,6 @@ class LdbcSnbTestCase(val workload: String,
   val updateQueryPrefix: String = "../queries/ldbc-snb-interactive/interactive-update-"
   val updateQueryPostfix: String = ".cypher"
   val csvPostfix = "_0_0.csv"
-  val sfCsvDir = s"${csvDir}/csv-sf${sf}/"
 
   override def name: String = f"${workload}-${query}%02d"
 
@@ -55,7 +54,7 @@ class LdbcSnbTestCase(val workload: String,
       "tagclass" -> List("TagClass"),
       "tag" -> List("Tag")
     ) map {
-      case (file, labels) => (sfCsvDir + file + csvPostfix) -> labels
+      case (file, labels) => (csvDir + file + csvPostfix) -> labels
     }
   }
 
@@ -85,11 +84,11 @@ class LdbcSnbTestCase(val workload: String,
       "person_studyAt_organisation"    -> EdgeMetaData("Person",       "STUDY_OF",       "Organisation"),
       "person_workAt_organisation"     -> EdgeMetaData("Person",       "WORK_AT",        "Organisation")
     ) map {
-      case (file, labels) => (sfCsvDir + file + csvPostfix) -> labels
+      case (file, labels) => (csvDir + file + csvPostfix) -> labels
     }
   }
 
-  val loader = new LdbcUpdateLoader(sfCsvDir, updateQueryPrefix, updateQueryPostfix)
+  val loader = new LdbcUpdateLoader(csvDir, updateQueryPrefix, updateQueryPostfix)
   val updates = loader.generateQuerySpecifications()
 
 }

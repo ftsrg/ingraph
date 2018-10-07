@@ -6,59 +6,34 @@ import ingraph.tests.LdbcSnbTestCase
 object BenchmarkMain {
 
   /**
-    * args(0): specifies the scale factor.
-    * args(1): specifies the query.
-    * args(2): if set, Neo4j is executed using the given directory. If not set, ingraph is executed.
+    * args(0): number of runs
+    * args(1): scale factor
+    * args(2): query
+    * args(3): tool
     * @param args
     */
   def main(args: Array[String]): Unit = {
-    val sf = args(0)
-    val query = args(1).toInt
-    val neo4jDir = if (args.length > 2) {
-      Some(args(2))
-    } else {
-      None
+    val runs = args(0).toInt
+    val sf = args(1)
+    val query = args(2).toInt
+    val tool = args(3)
+
+    val csvDir = s"../graphs/ldbc-snb-bi/csv-sf${sf}/"
+    val dbDir = s"../graphs/ldbc-snb-bi/db-sf${sf}/graph.db"
+    val tc = new LdbcSnbTestCase("bi", sf, query, csvDir)
+
+    for (run <- 1 to runs) {
+      tool.toLowerCase match {
+        case "neo4j" =>
+          val ntr = new Neo4jTestRunner(tc, Some(csvDir))
+          val neo4jResults = ntr.run()
+          ntr.close
+        case "ingraph" =>
+          val itr = new IngraphTestRunner(tc)
+          val ingraphResults = itr.run()
+          itr.close
+      }
     }
-
-    def csvDir = f"../graphs/ldbc-snb-bi/"
-    def csvPostfix = "_0_0.csv"
-
-    val postId = sf match {
-      case "tiny" => 137438953796L
-      case   "01" => 412317167461L
-      case   "03" => 412316860440L
-      case    "1" => 962072674360L
-      case    "3" => 3573412790304L
-    }
-    val forumId = sf match {
-      case "tiny" => 274877906944L
-      case   "01" => 893353199216L
-      case   "03" => 893353197569L
-      case    "1" => 1786706395137L
-      case    "3" => 3573412790338L
-    }
-    val removePost =
-      s"""MATCH (n:Message:Post {id: ${postId}})
-         |DETACH DELETE n
-    """.stripMargin
-    val removeForum =
-      s"""MATCH (n:Forum {id: ${forumId}})
-         |DETACH DELETE n
-    """.stripMargin
-
-    val tc = new LdbcSnbTestCase("bi", sf, query, f"${csvDir}/")
-
-    neo4jDir match {
-      case None =>
-        val itr = new IngraphTestRunner(tc)
-        val ingraphResults = itr.run()
-        itr.close
-      case Some(_) =>
-        val ntr = new Neo4jTestRunner(tc, neo4jDir)
-        val neo4jResults = ntr.run()
-        ntr.close
-    }
-
   }
 
 }
