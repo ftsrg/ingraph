@@ -1,6 +1,10 @@
 dist: trusty
 sudo: required
 language: java
+services:
+  - postgresql
+addons:
+  postgresql: "9.6"
 jdk:
   - oraclejdk8
 env:
@@ -17,6 +21,8 @@ before_install:
 # we re-generate openCypher TCK tests with the actual regressionTest/failingTest classification
   - cd opencypher-tests; ./generate-parser-tests.py; cd ..
 # we use the install block to stop the build if any command fails
+before_script:
+  - psql -c "ALTER ROLE postgres PASSWORD 'foo'" -U postgres
 install:
 #  - if scripts/travis-tex-run-required.sh ; then sudo apt-get install -qq -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex latexmk lmodern pgf; fi
   - ./gradlew assemble testClasses --stacktrace
@@ -24,6 +30,13 @@ script:
   # only build and deploy the results if the build is performed on the master branch
   # Note: actual tex generation is commented out in generate-and-deploy-report.sh
   - if scripts/travis-tex-run-required.sh ; then scripts/generate-and-deploy-report.sh; fi
+  # Postgres vvv
+  - chmod 755 ~
+  - cd cypher-to-sql/ldbc_snb_implementations/postgres/load-scripts
+  - export PG_CSV_DIR=$(pwd)/../test-data
+  - ./load.sh
+  - cd ../../../..
+  # Postgres ^^^
   - ./gradlew test --continue --stacktrace
 notifications:
   slack:

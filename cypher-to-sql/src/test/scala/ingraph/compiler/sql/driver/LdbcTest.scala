@@ -4,23 +4,61 @@ import java.io.File
 
 import ingraph.compiler.sql.Util._
 import ingraph.compiler.sql.driver.LdbcTest.{expectedToSucceed, ldbcQueries}
+import ingraph.compiler.sql.driver.SqlDriver.ExternalDatabase
+import org.cytosm.common.gtop.GTop
+import org.cytosm.common.gtop.io.SerializationInterface
 import org.scalatest.FunSuite
 
 import scala.reflect.io
 
 class LdbcTest extends FunSuite {
-  ldbcQueries.foreach { case (name, cypherQueryString) =>
-    test(name) {
-      withResources(new SqlDriver(translateCreateQueries = true)) { driver =>
+  val gTop: GTop = SerializationInterface.read(new File(getClass.getResource("/gtop/ldbc.gtop").getFile))
+  val url = "jdbc:postgresql://localhost:5432/ldbcsf1?user=postgres&password=foo"
+
+  test("SQL") {
+    withResources(
+      new SqlDriver(
+        translateCreateQueries = true,
+        gTop = Some(gTop),
+        database = ExternalDatabase(url),
+        initializeDb = false)) {
+      driver =>
         withResources(driver.session) { session =>
           withResources(session.beginTransaction()) { tx =>
-            try {
-              tx.run(cypherQueryString)
-            } catch {
-              case throwable: Throwable if !expectedToSucceed.contains(name) => cancel(name + " has failed. Only warning!", throwable)
+            withResources(tx.rawSqlConnection.createStatement()) { statement =>
+              SqlDriver.dump(statement, "SELECT * FROM person LIMIT 20")
+
+              withResources(statement.executeQuery("SELECT count(*) FROM person")) { resultSet =>
+                assert(resultSet.next())
+                val count = resultSet.getInt(1)
+                assert(!resultSet.next())
+
+                assertResult(46)(count)
+              }
             }
           }
         }
+    }
+  }
+
+  (("Simple test", "MATCH (n:Person) RETURN n ORDER BY n.id LIMIT 10") +: ldbcQueries).foreach { case (name, cypherQueryString) =>
+    test(name) {
+      withResources(
+        new SqlDriver(
+          translateCreateQueries = true,
+          gTop = Some(gTop),
+          database = ExternalDatabase(url),
+          initializeDb = false)) {
+        driver =>
+          withResources(driver.session) { session =>
+            withResources(session.beginTransaction()) { tx =>
+              try {
+                tx.run(cypherQueryString)
+              } catch {
+                case throwable: Throwable if !expectedToSucceed.contains(name) => cancel(name + " has failed. Only warning!", throwable)
+              }
+            }
+          }
       }
     }
   }
@@ -30,21 +68,21 @@ object LdbcTest {
   val ldbcQueriesPath = "/interactive-tests"
 
   val expectedToSucceed: Set[String] = Set(
-//    "LdbcQuery2",
-    "LdbcQuery3",
-    "LdbcQuery4",
-    "LdbcQuery5",
-    "LdbcQuery6",
-    "LdbcQuery8",
-    "LdbcQuery9",
-    "LdbcQuery11",
-    "LdbcQuery12",
-    "LdbcShortQuery1PersonProfile",
-    "LdbcShortQuery3PersonFriends",
-    "LdbcShortQuery4MessageContent",
-    "LdbcShortQuery5MessageCreator",
-    "LdbcShortQuery6MessageForum",
-    "LdbcShortQuery7MessageReplies"
+    //    "LdbcQuery2",
+    //    "LdbcQuery3",
+    //    "LdbcQuery4",
+    //    "LdbcQuery5",
+    //    "LdbcQuery6",
+    //    "LdbcQuery8",
+    //    "LdbcQuery9",
+    //    "LdbcQuery11",
+    //    "LdbcQuery12",
+    //    "LdbcShortQuery1PersonProfile",
+    //    "LdbcShortQuery3PersonFriends",
+    //    "LdbcShortQuery4MessageContent",
+    //    "LdbcShortQuery5MessageCreator",
+    //    "LdbcShortQuery6MessageForum",
+    //    "LdbcShortQuery7MessageReplies"
   )
 
   val ldbcQueries: Seq[(String, String)] =

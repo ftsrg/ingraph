@@ -16,7 +16,8 @@ import org.postgresql.util.PGobject
 
 class SqlDriver(val translateCreateQueries: Boolean = false,
                 val gTop: Option[GTop] = None,
-                val database: Database = new PostgresDatabase)
+                val database: Database = new PostgresDatabase,
+                val initializeDb: Boolean = true)
   extends CypherDriver {
 
   // TODO implement CREATE command instead of using Neo4j
@@ -29,9 +30,11 @@ class SqlDriver(val translateCreateQueries: Boolean = false,
 
   val url = database.url
 
-  withResources(DriverManager.getConnection(url)) { sqlConnection =>
-    withResources(sqlConnection.createStatement) {
-      _.executeUpdate(SqlQueries.createTables)
+  if (initializeDb) {
+    withResources(DriverManager.getConnection(url)) { sqlConnection =>
+      withResources(sqlConnection.createStatement) {
+        _.executeUpdate(SqlQueries.createTables)
+      }
     }
   }
 
@@ -70,6 +73,11 @@ object SqlDriver {
     override def url: String = postgres.Url
 
     override def close(): Unit = postgres.close()
+  }
+
+  case class ExternalDatabase(url: String) extends Database {
+    // the database should be closed from outside
+    override def close(): Unit = {}
   }
 
   def dumpTable(sqlStatement: sqlStatement, tablename: String): Unit = {
