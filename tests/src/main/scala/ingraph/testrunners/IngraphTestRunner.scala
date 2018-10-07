@@ -11,10 +11,10 @@ import org.supercsv.prefs.CsvPreference
 
 class IngraphTestRunner(tc: LdbcSnbTestCase) {
 
-  def run() : List[Map[String, Any]] = {
-    val driver = CypherDriverFactory.createIngraphDriver()
+  val driver = CypherDriverFactory.createIngraphDriver()
+  val session = driver.session()
 
-    val session = driver.session()
+  def run() : List[Map[String, Any]] = {
     val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
     val queryHandler = session.registerQuery(tc.name, tc.querySpecification)
     val sLoad = Stopwatch.createStarted()
@@ -29,13 +29,12 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
 
     val indexer = queryHandler.adapter.indexer
     val updateTimes = tc.updates.map { updateQuery =>
-      println(updateQuery)
       val s = Stopwatch.createStarted()
       update(updateQuery, "upd", indexer, queryHandler, listener)
       s.elapsed(TimeUnit.NANOSECONDS)
     }.toList
 
-  //    println(tc.sf + "," + tc.query + ",ingraph," + queryTime + "," + updateTimes.mkString(","))
+    println(tc.sf + "," + tc.query + ",ingraph," + queryTime + "," + updateTimes.mkString(","))
     queryHandler.result()
   }
 
@@ -50,6 +49,11 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
     val results = queryHandler.result
     listener.terminated()
     return results
+  }
+
+  def close(): Unit = {
+    session.close()
+    driver.close()
   }
 
 }

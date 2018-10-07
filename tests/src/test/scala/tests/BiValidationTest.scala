@@ -19,7 +19,7 @@ class BiValidationTest extends FunSuite {
 
   testCases.foreach {
     tc =>
-      test(s"${tc.name}") {
+      ignore(s"${tc.name}") {
         val ntr = new Neo4jTestRunner(tc, Some(s"../graphs/ldbc-snb-bi/db-sf${sf}/graph.db"))
         val neo4jResults = ntr.run()
         ntr.close()

@@ -42,7 +42,7 @@ class LdbcUpdateLoader(val csvDir: String,
   def generateQuerySpecifications(): Iterable[String] = {
     val updates: Iterable[LdbcUpdate] = load()
     for (up <- updates) yield {
-      val query = up match {
+      up match {
         case up: Update1AddPerson => update(up)
         case up: Update2AddPostLike => update(up)
         case up: Update3AddCommentLike => update(up)
@@ -55,8 +55,6 @@ class LdbcUpdateLoader(val csvDir: String,
         case up: Update10RemoveForum => update(up)
         case up: Update11RemoveHasInterest => update(up)
       }
-      println(query)
-      query
     }
   }
 

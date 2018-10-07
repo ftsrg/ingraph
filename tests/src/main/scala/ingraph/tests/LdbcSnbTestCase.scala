@@ -20,7 +20,7 @@ class LdbcSnbTestCase(val workload: String,
   val updateQueryPrefix: String = "../queries/ldbc-snb-interactive/interactive-update-"
   val updateQueryPostfix: String = ".cypher"
   val csvPostfix = "_0_0.csv"
-  val sfCsvDir = s"${csvDir}/sf${sf}/"
+  val sfCsvDir = s"${csvDir}/csv-sf${sf}/"
 
   override def name: String = f"${workload}-${query}%02d"
 
