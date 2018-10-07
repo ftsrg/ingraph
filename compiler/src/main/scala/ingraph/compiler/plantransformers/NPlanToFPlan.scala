@@ -145,7 +145,7 @@ object NPlanToFPlan {
 
   def extractPropertiesFromInsertion(attribute: ResolvableName): Seq[ResolvableName] = {
     attribute match {
-      case a: VertexAttribute => extractProperties(a)
+      case e: ElementAttribute => e.properties.flatMap(p => extractProperties(p._2)).toSeq
       case RichEdgeAttribute(src, trg, edge, _) => Seq(src, trg, edge).flatMap(extractProperties)
       case _ => Seq()
     }

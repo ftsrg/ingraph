@@ -240,6 +240,18 @@ class TckCompilerTest extends CompilerTest {
     assert(4 == requiredProperties.length)
   }
 
+  test("Schema inferencing for CREATE") {
+    val stages = compile(
+      """MATCH (n)
+        |CREATE (m:Label {prop: n.id + 1})
+      """.stripMargin)
+    val create = findFirstByType(stages.fplan, classOf[Create])
+    val getVertices = findFirstByType(stages.fplan, classOf[GetVertices])
+
+    assert(2 == getVertices.flatSchema.length)
+    assert(3 == create.flatSchema.length)
+  }
+
   ignore("Placeholder for debugging plans") {
     val stages = compile(
       """
