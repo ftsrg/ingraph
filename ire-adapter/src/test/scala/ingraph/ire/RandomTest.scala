@@ -118,7 +118,7 @@ class RandomTest extends FunSuite {
     assert(queryAdapter.results().size == 2)
   }
 
-  test("Optionals for two expands in one") {
+  ignore("Optionals for two expands in one") {
     val indexer = new Indexer()
     val createAdapter = new OneTimeQueryAdapter(
       """CREATE
