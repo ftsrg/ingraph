@@ -56,25 +56,48 @@ Feature: Local
     Given an empty graph
     And having executed:
       """
-      CREATE (:Label {id: 42})
+      CREATE (:Person {age: 42})
       """
     And having executed:
       """
       MATCH (n)
-      CREATE (:Label {id: n.id + 1})
+      CREATE (:Person {age: n.age})
       """
     When executing query:
       """
       MATCH (n)
-      RETURN n.id
+      RETURN n.age
       """
     Then the result should be:
-      | n.id |
-      | 42   |
-      | 43   |
+      | n.age |
+      | 42    |
+      | 42    |
     And no side effects
 
   Scenario: Dependant CREATE with single row - with aliased attribute
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Person {age: 42})
+      """
+    And having executed:
+      """
+      MATCH (n)
+      WITH n.age AS new_age
+      CREATE (:Person {age: new_age})
+      """
+    When executing query:
+      """
+      MATCH (n)
+      RETURN n.age
+      """
+    Then the result should be:
+      | n.age |
+      | 42    |
+      | 42    |
+    And no side effects
+
+  Scenario: Integer attribute + constant
     Given an empty graph
     And having executed:
       """
@@ -83,18 +106,11 @@ Feature: Local
     And having executed:
       """
       MATCH (n)
-      WITH n.id + 1 AS new_id
-      CREATE (:Label {id: new_id})
-      """
-    When executing query:
-      """
-      MATCH (n)
-      RETURN n.id
+      RETURN n.id + 1 AS id
       """
     Then the result should be:
-      | n.id |
-      | 42   |
-      | 43   |
+      | id |
+      | 43 |
     And no side effects
 
 # https://neo4j.com/docs/developer-manual/3.4/cypher/syntax/expressions/#syntax-simple-case
