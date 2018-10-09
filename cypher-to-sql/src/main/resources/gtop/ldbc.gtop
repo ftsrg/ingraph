@@ -3,37 +3,37 @@
 	"abstractionLevel": {
 		"abstractionNodes": [{
 			"types": ["Person"],
-			"attributes": ["id", "creationDate", "firstName", "lastName", "gender", "birthday", "browserUsed", "locationIP"]
+			"attributes": ["id", "firstName", "lastName", "gender", "birthday", "email", "speaks", "browserUsed", "locationIP", "creationDate"]
 		}, {
-			"types": ["University"],
-			"attributes": ["id", "name"]
+			"types": ["Organisation", "University"],
+			"attributes": ["id", "name", "url"]
 		}, {
-			"types": ["Company"],
-			"attributes": ["id", "name"]
+			"types": ["Organisation", "Company"],
+			"attributes": ["id", "name", "url"]
 		}, {
-			"types": ["City"],
-			"attributes": ["id", "name"]
+			"types": ["Place", "City"],
+			"attributes": ["id", "name", "url"]
 		}, {
-			"types": ["Country"],
-			"attributes": ["id", "name"]
+			"types": ["Place", "Country"],
+			"attributes": ["id", "name", "url"]
 		}, {
-			"types": ["Continent"],
-			"attributes": ["id", "name"]
+			"types": ["Place", "Continent"],
+			"attributes": ["id", "name", "url"]
 		}, {
-			"types": ["Comment", "Message"],
+			"types": ["Message", "Comment"],
 			"attributes": ["id", "creationDate", "browserUsed", "locationIP", "content", "length"]
 		}, {
-			"types": ["Post", "Message"],
+			"types": ["Message", "Post"],
 			"attributes": ["id", "creationDate", "browserUsed", "locationIP", "content", "length", "language", "imageFile"]
 		}, {
 			"types": ["Forum"],
 			"attributes": ["id", "title", "creationDate"]
 		}, {
 			"types": ["Tag"],
-			"attributes": ["id", "name"]
+			"attributes": ["id", "name", "url"]
 		}, {
 			"types": ["TagClass"],
-			"attributes": ["id", "name"]
+			"attributes": ["id", "name", "url"]
 		}],
 		"abstractionEdges": [{
 			"types": ["KNOWS"],
@@ -74,13 +74,13 @@
 		}, {
 			"types": ["HAS_TAG"],
 			"attributes": [],
-			"sourceType": ["Post"],
+			"sourceType": ["Message"],
 			"destinationType": ["Tag"],
 			"directed": true
 		}, {
 			"types": ["HAS_TAG"],
 			"attributes": [],
-			"sourceType": ["Comment"],
+			"sourceType": ["Forum"],
 			"destinationType": ["Tag"],
 			"directed": true
 		},{
@@ -92,53 +92,29 @@
 		}, {
 			"types": ["HAS_CREATOR"],
 			"attributes": [],
-			"sourceType": ["Post"],
-			"destinationType": ["Person"],
-			"directed": true
-		}, {
-			"types": ["HAS_CREATOR"],
-			"attributes": [],
-			"sourceType": ["Comment"],
+			"sourceType": ["Message"],
 			"destinationType": ["Person"],
 			"directed": true
 		}, {
 			"types": ["LIKES"],
 			"attributes": ["creationDate"],
 			"sourceType": ["Person"],
-			"destinationType": ["Post"],
-			"directed": true
-		},{
-			"types": ["LIKES"],
-			"attributes": ["creationDate"],
-			"sourceType": ["Person"],
-			"destinationType": ["Comment"],
+			"destinationType": ["Message"],
 			"directed": true
 		}, {
 			"types": ["REPLY_OF"],
 			"attributes": [],
 			"sourceType": ["Comment"],
-			"destinationType": ["Post"],
-			"directed": true
-		},{
-			"types": ["REPLY_OF"],
-			"attributes": [],
-			"sourceType": ["Comment"],
-			"destinationType": ["Comment"],
+			"destinationType": ["Message"],
 			"directed": true
 		}, {
 			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
-			"sourceType": ["Post"],
+			"sourceType": ["Message"],
 			"destinationType": ["Country"],
 			"directed": true
 		}, {
-			"types": ["IS_LOCATED_IN"],
-			"attributes": [],
-			"sourceType": ["Comment"],
-			"destinationType": ["Country"],
-			"directed": true
-		}, {
-			"types": ["WORKS_AT"],
+			"types": ["WORK_AT"],
 			"attributes": ["workFrom"],
 			"sourceType": ["Person"],
 			"destinationType": ["Company"],
@@ -188,58 +164,68 @@
 		},
 		"implementationNodes": [{
 			"types": ["Person"],
-			"tableName": "Person",
+			"tableName": "person",
 			"id": [{
-				"columnName": "id",
+				"columnName": "p_personid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "creationDate",
+				"columnName": "p_creationdate",
 				"dataType": "DATE",
 				"abstractionLevelName": "creationDate"
 			}, {
-				"columnName": "firstName",
+				"columnName": "p_firstname",
 				"dataType": "VARCHAR(100)",
 				"abstractionLevelName": "firstName"
 			}, {
-				"columnName": "lastName",
+				"columnName": "p_lastname",
 				"dataType": "VARCHAR(100)",
 				"abstractionLevelName": "lastName"
 			}, {
-				"columnName": "gender",
+				"columnName": "p_gender",
 				"dataType": "VARCHAR(10)",
 				"abstractionLevelName": "gender"
 			}, {
-				"columnName": "birthday",
+				"columnName": "p_birthday",
 				"dataType": "Date",
 				"abstractionLevelName": "birthday"
 			}, {
-				"columnName": "browserUsed",
+				"columnName": "p_browserused",
 				"dataType": "VARCHAR(40)",
 				"abstractionLevelName": "browserUsed"
 			}, {
-				"columnName": "locationIP",
+				"columnName": "p_locationip",
 				"dataType": "VARCHAR(15)",
 				"abstractionLevelName": "locationIP"
 			}],
 			"restrictions": []
 		}, {
-			"types": ["University"],
-			"tableName": "University",
+			"types": ["Organisation", "University"],
+			"tableName": "organisation",
 			"id": [{
-				"columnName": "id",
+				"columnName": "o_organisationid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "name",
+				"columnName": "o_name",
 				"dataType": "VARCHAR(40)",
 				"abstractionLevelName": "name"
+			}, {
+				"columnName": "o_url",
+				"dataType": "varchar",
+				"abstractionLevelName": "url"
 			}],
-			"restrictions": []
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "organisation",
+					"columnName" : "o_type",
+					"pattern" : "university"
+				} ]
+			} ]
 		}, {
-			"types": ["Company"],
+			"types": ["Organisation", "Company"],
 			"tableName": "Company",
 			"id": [{
 				"columnName": "id",
@@ -247,181 +233,241 @@
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "name",
+				"columnName": "o_name",
 				"dataType": "VARCHAR(40)",
 				"abstractionLevelName": "name"
+			}, {
+				"columnName": "o_url",
+				"dataType": "varchar",
+				"abstractionLevelName": "url"
 			}],
-			"restrictions": []
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "organisation",
+					"columnName" : "o_type",
+					"pattern" : "company"
+				} ]
+			} ]
 		}, {
-			"types": ["City"],
-			"tableName": "City",
+			"types": ["Place", "City"],
+			"tableName": "place",
 			"id": [{
-				"columnName": "id",
+				"columnName": "pl_placeid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "name",
+				"columnName": "pl_name",
 				"dataType": "VARCHAR(40)",
 				"abstractionLevelName": "name"
+			}, {
+				"columnName": "pl_url",
+				"dataType": "varchar",
+				"abstractionLevelName": "url"
 			}],
-			"restrictions": []
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "place",
+					"columnName" : "pl_type",
+					"pattern" : "city"
+				} ]
+			} ]
 		}, {
-			"types": ["Country"],
-			"tableName": "Country",
+			"types": ["Place", "Country"],
+			"tableName": "place",
 			"id": [{
-				"columnName": "id",
+				"columnName": "pl_placeid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "name",
+				"columnName": "pl_name",
 				"dataType": "VARCHAR(40)",
 				"abstractionLevelName": "name"
+			}, {
+				"columnName": "pl_url",
+				"dataType": "varchar",
+				"abstractionLevelName": "url"
 			}],
-			"restrictions": []
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "place",
+					"columnName" : "pl_type",
+					"pattern" : "country"
+				} ]
+			} ]
 		}, {
-			"types": ["Continent"],
-			"tableName": "Continent",
+			"types": ["Place", "Continent"],
+			"tableName": "place",
 			"id": [{
-				"columnName": "id",
+				"columnName": "pl_placeid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "name",
+				"columnName": "pl_name",
 				"dataType": "VARCHAR(40)",
 				"abstractionLevelName": "name"
+			}, {
+				"columnName": "pl_url",
+				"dataType": "varchar",
+				"abstractionLevelName": "url"
 			}],
-			"restrictions": []
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "place",
+					"columnName" : "pl_type",
+					"pattern" : "continent"
+				} ]
+			} ]
 		}, {
 			"types": ["Forum"],
-			"tableName": "Forum",
+			"tableName": "forum",
 			"id": [{
-				"columnName": "id",
+				"columnName": "f_forumid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "title",
+				"columnName": "f_title",
 				"dataType": "VARCHAR(100)",
 				"abstractionLevelName": "title"
 			}, {
-				"columnName": "creationDate",
+				"columnName": "f_creationdate",
 				"dataType": "DATE",
 				"abstractionLevelName": "creationDate"
 			}],
 			"restrictions": []
 		}, {
 			"types": ["Tag"],
-			"tableName": "Tag",
+			"tableName": "tag",
 			"id": [{
-				"columnName": "id",
+				"columnName": "t_tagid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "name",
+				"columnName": "t_name",
 				"dataType": "VARCHAR(40)",
 				"abstractionLevelName": "name"
+			}, {
+				"columnName": "t_url",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "url"
 			}],
 			"restrictions": []
 		}, {
 			"types": ["TagClass"],
-			"tableName": "TagClass",
+			"tableName": "tagclass",
 			"id": [{
-				"columnName": "id",
+				"columnName": "tc_tagclassid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "name",
+				"columnName": "tc_name",
 				"dataType": "VARCHAR(40)",
 				"abstractionLevelName": "name"
+			}, {
+				"columnName": "tc_url",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "url"
 			}],
 			"restrictions": []
 		}, {
-			"types": ["Post", "Message"],
-			"tableName": "Post",
+			"types": ["Message", "Post"],
+			"tableName": "message",
 			"id": [{
-				"columnName": "id",
+				"columnName": "m_messageid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "creationDate",
+				"columnName": "m_creationdate",
 				"dataType": "DATE",
 				"abstractionLevelName": "creationDate"
 			}, {
-				"columnName": "browser",
+				"columnName": "m_browserused",
 				"dataType": "VARCHAR(50)",
-				"abstractionLevelName": "browser"
+				"abstractionLevelName": "browserUsed"
 			}, {
-				"columnName": "locationIP",
+				"columnName": "m_locationip",
 				"dataType": "VARCHAR(100)",
 				"abstractionLevelName": "locationIP"
 			}, {
-				"columnName": "context",
+				"columnName": "m_content",
 				"dataType": "VARCHAR(500)",
-				"abstractionLevelName": "context"
+				"abstractionLevelName": "content"
 			}, {
-				"columnName": "length",
+				"columnName": "m_length",
 				"dataType": "INTEGER",
 				"abstractionLevelName": "length"
 			}, {
-				"columnName": "language",
+				"columnName": "m_ps_language",
 				"dataType": "VARCHAR(2)",
 				"abstractionLevelName": "language"
 			}, {
-				"columnName": "imageFile",
+				"columnName": "m_ps_imagefile",
 				"dataType": "VARCHAR(100)",
 				"abstractionLevelName": "imageFile"
 			}],
-			"restrictions": []
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "message",
+					"columnName" : "m_c_replyof",
+					"pattern" : null
+				} ]
+			} ]
 		}, {
-			"types": ["Comment", "Message"],
-			"tableName": "Comment",
+			"types": ["Message", "Comment"],
+			"tableName": "message",
 			"id": [{
-				"columnName": "id",
+				"columnName": "m_messageid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
 			"attributes": [{
-				"columnName": "creationDate",
+				"columnName": "m_creationdate",
 				"dataType": "DATE",
 				"abstractionLevelName": "creationDate"
 			}, {
-				"columnName": "browserUsed",
-				"dataType": "VARCHAR(40)",
+				"columnName": "m_browserused",
+				"dataType": "VARCHAR(50)",
 				"abstractionLevelName": "browserUsed"
 			}, {
-				"columnName": "locationIP",
-				"dataType": "VARCHAR(15)",
+				"columnName": "m_locationip",
+				"dataType": "VARCHAR(100)",
 				"abstractionLevelName": "locationIP"
 			}, {
-				"columnName": "context",
+				"columnName": "m_content",
 				"dataType": "VARCHAR(500)",
-				"abstractionLevelName": "context"
+				"abstractionLevelName": "content"
 			}, {
-				"columnName": "length",
+				"columnName": "m_length",
 				"dataType": "INTEGER",
 				"abstractionLevelName": "length"
 			}],
-			"restrictions": []
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "message",
+					"columnName" : "m_c_replyof",
+					"pattern" : "[0-9]+"
+				} ]
+			} ]
 		}],
 		"implementationEdges": [{
 				"types": ["KNOWS"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Person",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "person_id",
-						"joinTableName": "person_knows_person",
-						"joinTableDestinationColumn": "other_person_id",
-						"destinationTableName": "Person",
-						"destinationTableColumn": "id",
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_personid",
+						"joinTableSourceColumn": "k_person1id",
+						"joinTableName": "knows",
+						"joinTableDestinationColumn": "k_person2id",
+						"destinationTableName": "person",
+						"destinationTableColumn": "p_personid",
 						"attributes": [{
-							"columnName": "creationDate",
+							"columnName": "k_creationdate",
 							"dataType": "Date",
 							"abstractionLevelName": "creationDate"
 						}]
@@ -431,13 +477,13 @@
 				"types": ["HAS_INTEREST"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Person",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "person_id",
-						"joinTableName": "person_hasInterest_tag",
-						"joinTableDestinationColumn": "tag_id",
-						"destinationTableName": "Tag",
-						"destinationTableColumn": "id",
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_personid",
+						"joinTableSourceColumn": "pt_personid",
+						"joinTableName": "person_tag",
+						"joinTableDestinationColumn": "pt_tagid",
+						"destinationTableName": "tag",
+						"destinationTableColumn": "t_tagid",
 						"attributes": []
 					}]
 				}]
@@ -445,87 +491,57 @@
 				"types": ["HAS_MODERATOR"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Forum",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "forum_id",
-						"joinTableName": "forum_hasModerator_person",
-						"joinTableDestinationColumn": "person_id",
-						"destinationTableName": "Person",
-						"destinationTableColumn": "id",
+						"sourceTableName": "forum",
+						"sourceTableColumn": "f_moderatorid",
+						"destinationTableName": "person",
+						"destinationTableColumn": "p_personid",
 						"attributes": []
 					}]
 				}]
-			},
-
-			{
+			}, {
 				"types": ["HAS_MEMBER"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Forum",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "forum_id",
-						"joinTableName": "forum_hasMember_person",
-						"joinTableDestinationColumn": "person_id",
-						"destinationTableName": "Person",
-						"destinationTableColumn": "id",
+						"sourceTableName": "forum",
+						"sourceTableColumn": "f_forumid",
+						"joinTableSourceColumn": "fp_forumid",
+						"joinTableName": "forum_person",
+						"joinTableDestinationColumn": "fp_personid",
+						"destinationTableName": "person",
+						"destinationTableColumn": "p_personid",
 						"attributes": [{
-							"columnName": "joinDate",
+							"columnName": "fp_creationdate",
 							"dataType": "Date",
 							"abstractionLevelName": "joinDate"
 						}]
 					}]
 				}]
-			},
-
-			{
+			}, {
 				"types": ["LIKES"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Person",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "person_id",
-						"joinTableName": "person_likes_post",
-						"joinTableDestinationColumn": "post_id",
-						"destinationTableName": "Post",
-						"destinationTableColumn": "id",
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_personid",
+						"joinTableSourceColumn": "l_personid",
+						"joinTableName": "likes",
+						"joinTableDestinationColumn": "l_messageid",
+						"destinationTableName": "message",
+						"destinationTableColumn": "m_messageid",
 						"attributes": [{
-							"columnName": "creationDate",
+							"columnName": "l_creationdate",
 							"dataType": "Date",
 							"abstractionLevelName": "creationDate"
 						}]
 					}]
 				}]
-			},
-			{
-				"types": ["LIKES"],
-				"paths": [{
-					"traversalHops": [{
-						"sourceTableName": "Person",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "person_id",
-						"joinTableName": "person_likes_comment",
-						"joinTableDestinationColumn": "comment_id",
-						"destinationTableName": "Comment",
-						"destinationTableColumn": "id",
-						"attributes": [{
-							"columnName": "creationDate",
-							"dataType": "Date",
-							"abstractionLevelName": "creationDate"
-						}]
-					}]
-				}]
-			},
-			{
+			}, {
 				"types": ["HAS_TYPE"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Tag",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "tag_id",
-						"joinTableName": "tag_hasType_tagclass",
-						"joinTableDestinationColumn": "tagclass_id",
-						"destinationTableName": "TagClass",
-						"destinationTableColumn": "id",
+						"sourceTableName": "tag",
+						"sourceTableColumn": "t_tagclassid",
+						"destinationTableName": "tagclass",
+						"destinationTableColumn": "tc_tagclassid",
 						"attributes": []
 					}]
 				}]
@@ -533,13 +549,10 @@
 				"types": ["IS_SUBCLASS_OF"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "TagClass",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "tagclass_id",
-						"joinTableName": "tagclass_isSubclassOf_tagclass",
-						"joinTableDestinationColumn": "other_tagclass_id",
-						"destinationTableName": "TagClass",
-						"destinationTableColumn": "id",
+						"sourceTableName": "tagclass",
+						"sourceTableColumn": "tc_subclassoftagclassid",
+						"destinationTableName": "tagclass",
+						"destinationTableColumn": "tc_tagclassid",
 						"attributes": []
 					}]
 				}]
@@ -547,27 +560,10 @@
 				"types": ["HAS_CREATOR"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Post",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "post_id",
-						"joinTableName": "post_hasCreator_person",
-						"joinTableDestinationColumn": "person_id",
-						"destinationTableName": "Person",
-						"destinationTableColumn": "id",
-						"attributes": []
-					}]
-				}]
-			}, {
-				"types": ["HAS_CREATOR"],
-				"paths": [{
-					"traversalHops": [{
-						"sourceTableName": "Comment",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "comment_id",
-						"joinTableName": "comment_hasCreator_person",
-						"joinTableDestinationColumn": "person_id",
-						"destinationTableName": "Person",
-						"destinationTableColumn": "id",
+						"sourceTableName": "message",
+						"sourceTableColumn": "m_creatorid",
+						"destinationTableName": "person",
+						"destinationTableColumn": "p_personid",
 						"attributes": []
 					}]
 				}]
@@ -575,27 +571,10 @@
 				"types": ["IS_LOCATED_IN"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Comment",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "comment_id",
-						"joinTableName": "comment_isLocatedIn_country",
-						"joinTableDestinationColumn": "country_id",
-						"destinationTableName": "Country",
-						"destinationTableColumn": "id",
-						"attributes": []
-					}]
-				}]
-			},{
-				"types": ["IS_LOCATED_IN"],
-				"paths": [{
-					"traversalHops": [{
-						"sourceTableName": "Post",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "post_id",
-						"joinTableName": "post_isLocatedIn_country",
-						"joinTableDestinationColumn": "country_id",
-						"destinationTableName": "Country",
-						"destinationTableColumn": "id",
+						"sourceTableName": "message",
+						"sourceTableColumn": "m_locationid",
+						"destinationTableName": "place",
+						"destinationTableColumn": "pl_placeid",
 						"attributes": []
 					}]
 				}]
@@ -603,27 +582,10 @@
 				"types": ["REPLY_OF"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Comment",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "comment_id",
-						"joinTableName": "comment_replyOf_post",
-						"joinTableDestinationColumn": "post_id",
-						"destinationTableName": "Post",
-						"destinationTableColumn": "id",
-						"attributes": []
-					}]
-				}]
-			},  {
-				"types": ["REPLY_OF"],
-				"paths": [{
-					"traversalHops": [{
-						"sourceTableName": "Comment",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "comment_id",
-						"joinTableName": "comment_replyOf_comment",
-						"joinTableDestinationColumn": "other_comment_id",
-						"destinationTableName": "Comment",
-						"destinationTableColumn": "id",
+						"sourceTableName": "message",
+						"sourceTableColumn": "m_c_replyof",
+						"destinationTableName": "message",
+						"destinationTableColumn": "m_messageid",
 						"attributes": []
 					}]
 				}]
@@ -631,13 +593,13 @@
 				"types": ["HAS_TAG"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Post",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "post_id",
-						"joinTableName": "post_hasTag_tag",
-						"joinTableDestinationColumn": "tag_id",
-						"destinationTableName": "Tag",
-						"destinationTableColumn": "id",
+						"sourceTableName": "forum",
+						"sourceTableColumn": "f_forumid",
+						"joinTableSourceColumn": "ft_forumid",
+						"joinTableName": "forum_tag",
+						"joinTableDestinationColumn": "ft_tagid",
+						"destinationTableName": "tag",
+						"destinationTableColumn": "t_tagid",
 						"attributes": []
 					}]
 				}]
@@ -645,27 +607,13 @@
 				"types": ["HAS_TAG"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Comment",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "comment_id",
-						"joinTableName": "comment_hasTag_tag",
-						"joinTableDestinationColumn": "tag_id",
-						"destinationTableName": "Tag",
-						"destinationTableColumn": "id",
-						"attributes": []
-					}]
-				}]
-			},{
-				"types": ["IS_LOCATED_IN"],
-				"paths": [{
-					"traversalHops": [{
-						"sourceTableName": "Company",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "company_id",
-						"joinTableName": "company_isLocatedIn_country",
-						"joinTableDestinationColumn": "country_id",
-						"destinationTableName": "Country",
-						"destinationTableColumn": "id",
+						"sourceTableName": "message",
+						"sourceTableColumn": "m_messageid",
+						"joinTableSourceColumn": "mt_messageid",
+						"joinTableName": "message_tag",
+						"joinTableDestinationColumn": "mt_tagid",
+						"destinationTableName": "tag",
+						"destinationTableColumn": "t_tagid",
 						"attributes": []
 					}]
 				}]
@@ -673,78 +621,48 @@
 				"types": ["IS_LOCATED_IN"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "University",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "university_id",
-						"joinTableName": "university_isLocatedIn_city",
-						"joinTableDestinationColumn": "city_id",
-						"destinationTableName": "City",
-						"destinationTableColumn": "id",
-						"attributes": []
-					}]
-				}]
-			},
-
-			{
-				"types": ["IS_PART_OF"],
-				"paths": [{
-					"traversalHops": [{
-						"sourceTableName": "City",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "city_id",
-						"joinTableName": "city_isPartOf_country",
-						"joinTableDestinationColumn": "other_country_id",
-						"destinationTableName": "Country",
-						"destinationTableColumn": "id",
-						"attributes": []
-					}]
-				}]
-			},
-
-			{
-				"types": ["IS_PART_OF"],
-				"paths": [{
-					"traversalHops": [{
-						"sourceTableName": "Country",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "country_id",
-						"joinTableName": "country_isPartOf_continent",
-						"joinTableDestinationColumn": "other_continent_id",
-						"destinationTableName": "Continent",
-						"destinationTableColumn": "id",
-						"attributes": []
-					}]
-				}]
-			},
-
-			{
-				"types": ["IS_LOCATED_IN"],
-				"paths": [{
-					"traversalHops": [{
-						"sourceTableName": "Person",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "person_id",
-						"joinTableName": "person_isLocatedIn_city",
-						"joinTableDestinationColumn": "city_id",
-						"destinationTableName": "City",
-						"destinationTableColumn": "id",
+						"sourceTableName": "organisation",
+						"sourceTableColumn": "o_placeid",
+						"destinationTableName": "place",
+						"destinationTableColumn": "pl_placeid",
 						"attributes": []
 					}]
 				}]
 			}, {
-				"types": ["WORKS_AT"],
+				"types": ["IS_PART_OF"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Person",
-						"sourceTableColumn": "id",
-
-						"joinTableSourceColumn": "person_id",
-						"joinTableName": "person_workAt_company",
-						"joinTableDestinationColumn": "company_id",
-						"destinationTableName": "Company",
-						"destinationTableColumn": "id",
+						"sourceTableName": "place",
+						"sourceTableColumn": "pl_containerplaceid",
+						"destinationTableName": "place",
+						"destinationTableColumn": "pl_placeid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["IS_LOCATED_IN"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_placeid",
+						"destinationTableName": "place",
+						"destinationTableColumn": "pl_placeid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["WORK_AT"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_placeid",
+						"joinTableSourceColumn": "pc_personid",
+						"joinTableName": "person_company",
+						"joinTableDestinationColumn": "pc_organisationid",
+						"destinationTableName": "organisation",
+						"destinationTableColumn": "o_organisationid",
 						"attributes": [{
-							"columnName": "workFrom",
+							"columnName": "pc_workfrom",
 							"dataType": "INTEGER",
 							"abstractionLevelName": "workFrom"
 						}]
@@ -755,17 +673,45 @@
 				"types": ["STUDY_AT"],
 				"paths": [{
 					"traversalHops": [{
-						"sourceTableName": "Person",
-						"sourceTableColumn": "id",
-						"joinTableSourceColumn": "person_id",
-						"joinTableName": "person_studyAt_university",
-						"joinTableDestinationColumn": "university_id",
-						"destinationTableName": "University",
-						"destinationTableColumn": "id",
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_placeid",
+						"joinTableSourceColumn": "pu_personid",
+						"joinTableName": "person_university",
+						"joinTableDestinationColumn": "pu_organisationid",
+						"destinationTableName": "organisation",
+						"destinationTableColumn": "o_organisationid",
 						"attributes": [{
-							"columnName": "classYear",
+							"columnName": "pu_classyear",
 							"dataType": "INTEGER",
 							"abstractionLevelName": "classYear"
+						}]
+					}]
+				}]
+			}, {
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_personid",
+						"joinTableSourceColumn": "pe_personid",
+						"joinTableName": "person_email",
+						"attributes": [{
+							"columnName": "pe_email",
+							"dataType": "varchar",
+							"abstractionLevelName": "email"
+						}]
+					}]
+				}]
+			}, {
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_personid",
+						"joinTableSourceColumn": "plang_personid",
+						"joinTableName": "person_language",
+						"attributes": [{
+							"columnName": "plang_language",
+							"dataType": "varchar",
+							"abstractionLevelName": "speaks"
 						}]
 					}]
 				}]
