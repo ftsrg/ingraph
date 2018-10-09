@@ -4,4 +4,5 @@ rm -rf lib/ bin/
 cp -R tests/build/install/tests/. .
 cp tests/benchmark.sh bin/
 cd bin
+chmod +x benchmark.sh
 ./benchmark.sh

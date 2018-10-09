@@ -240,6 +240,34 @@ class TckCompilerTest extends CompilerTest {
     assert(4 == requiredProperties.length)
   }
 
+  test("Schema inferencing for CREATE - no aliasing") {
+    val stages = compile(
+      """MATCH (n)
+        |CREATE (m:Label {prop: n.id + 1})
+      """.stripMargin)
+    val create = findFirstByType(stages.fplan, classOf[Create])
+    val getVertices = findFirstByType(stages.fplan, classOf[GetVertices])
+
+    assert(2 == getVertices.flatSchema.length)
+    assert(3 == create.flatSchema.length)
+  }
+
+  test("Schema inferencing for CREATE - with aliasing") {
+    val stages = compile(
+      """MATCH (n)
+        |WITH n.id AS new_id
+        |CREATE (m:Label {prop: new_id + 1})
+      """.stripMargin)
+    val getVertices = findFirstByType(stages.fplan, classOf[GetVertices])
+    val create = findFirstByType(stages.fplan, classOf[Create])
+    val createOutputNames = create.flatSchema.map(_.resolvedName.get)
+
+    // n vertex and its n.id attribute should be propagated
+    assert(2 == getVertices.flatSchema.length)
+    // should have distinct output names
+    assert(createOutputNames.size == createOutputNames.toSet.size)
+  }
+
   ignore("Placeholder for debugging plans") {
     val stages = compile(
       """

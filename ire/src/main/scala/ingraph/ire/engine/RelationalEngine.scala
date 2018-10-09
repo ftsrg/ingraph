@@ -11,20 +11,15 @@ import ingraph.ire.messages.Terminator
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
-object RelationalEngine {
-  val system = ActorSystem()
-
-}
 
 abstract class RelationalEngine {
+  val system = ActorSystem()
   lazy val log = system.log
-  val system = RelationalEngine.system
   val timeout = Duration(5, HOURS)
   val production: ActorRef
   val inputLookup: Map[String, ChangeSet => Unit]
   val terminator: Terminator
   val actors = new collection.mutable.MutableList[ActorRef]()
-
 
   def getCounts: Long = {
     implicit val akkaTimeout = Timeout(1 minute)
@@ -54,6 +49,7 @@ abstract class RelationalEngine {
 
   def shutdown(): Unit = {
     actors.foreach(actor => actor ! PoisonPill)
+    system.terminate()
   }
 
   def addListener(listener: ChangeListener) = {

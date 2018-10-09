@@ -180,7 +180,7 @@ case class Create(nnode: nplan.Create,
       )
       TupleEdgeAttribute(tSrc, tTrg, tEdge, dir)
   }
-  override def flatSchema = nnode.output ++ Seq(attribute)
+  override def flatSchema = child.flatSchema ++ Seq(attribute)
 }
 
 case class Delete(nnode: nplan.Delete,

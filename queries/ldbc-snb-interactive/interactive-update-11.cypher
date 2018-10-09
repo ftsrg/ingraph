@@ -1,3 +1,3 @@
 // Interactive update 11
-MATCH (:Person {personId: $personId})-[i:HAS_INTEREST]->(:Tag {tagId: $tagId})
+MATCH (:Person {id: $personId})-[i:HAS_INTEREST]->(:Tag {id: $tagId})
 DELETE i

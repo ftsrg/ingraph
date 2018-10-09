@@ -59,6 +59,8 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
       assert(res1.toSet == Set(tuple(5, 5), tuple(5, 6)))
       val res2 = query2.getResults()
       assert(res2.toSet == Set(tuple(5, 5), tuple(5, 6), tuple(5, 7)))
+      query1.shutdown()
+      query2.shutdown()
     }
   }
 
