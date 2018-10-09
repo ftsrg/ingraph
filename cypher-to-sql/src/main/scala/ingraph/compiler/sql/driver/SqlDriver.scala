@@ -5,20 +5,25 @@ import java.sql.{DriverManager, Statement => sqlStatement}
 
 import ingraph.compiler.sql.Util.withResources
 import ingraph.compiler.sql._
-import ingraph.compiler.sql.driver.SqlDriver.{Database, PostgresDatabase}
+import ingraph.compiler.sql.driver.SqlDriver.{Database, PostgresDatabase, addIdColumnToGTopAttributes}
 import ingraph.driver.{CypherDriver, CypherDriverFactory}
 import org.apache.log4j.{Level, LogManager}
 import org.cytosm.common.gtop.GTop
+import org.cytosm.common.gtop.implementation.relational.Attribute
 import org.neo4j.driver.v1._
 import org.neo4j.driver.v1.exceptions.NoSuchRecordException
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
+
+import scala.collection.JavaConverters._
 
 class SqlDriver(val translateCreateQueries: Boolean = false,
                 val gTop: Option[GTop] = None,
                 val database: Database = new PostgresDatabase,
                 val initializeDb: Boolean = true)
   extends CypherDriver {
+
+  gTop.foreach(addIdColumnToGTopAttributes)
 
   // TODO implement CREATE command instead of using Neo4j
   val backendDriver: Option[CypherDriver] =
@@ -136,4 +141,22 @@ object SqlDriver {
 
   def throwCannotPeekPastLastRecord =
     throw new NoSuchRecordException("Cannot peek past the last record")
+
+  def addIdColumnToGTopAttributes(gTop: GTop): Unit = {
+    val idAttributeName = "id"
+
+    gTop.getAbstractionLevel.getAbstractionNodes.asScala.foreach { node =>
+      val attributes = node.getAttributes
+      if (!attributes.asScala.contains(idAttributeName))
+        attributes.add(idAttributeName)
+    }
+
+    gTop.getImplementationLevel.getImplementationNodes.asScala.foreach { node =>
+      assert(node.getId.size == 1, "Only supports single key")
+      val nodeId = node.getId.get(0)
+
+      if (!node.getAttributes.asScala.exists(_.getAbstractionLevelName == idAttributeName))
+        node.getAttributes.add(new Attribute(nodeId.getColumnName, idAttributeName, nodeId.getDatatype))
+    }
+  }
 }
