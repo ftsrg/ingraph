@@ -112,7 +112,7 @@ object TckTestWithCreate {
     "Matching with many predicates and larger pattern",
     "Missing node property should become null",
     "Missing relationship property should become null",
-//    "Multiple anonymous nodes in a pattern",
+    //    "Multiple anonymous nodes in a pattern",
     "Non-optional matches should not return nulls",
     "OPTIONAL MATCH returns null",
     "OPTIONAL MATCH with previously bound nodes",
@@ -150,7 +150,7 @@ object TckTestWithCreate {
     "OPTIONAL MATCH with labels on the optional end node",
     "Respect predicates on the OPTIONAL MATCH",
     "Return null when no matches due to inline label predicate",
-//    "Return null when no matches due to label predicate in WHERE",
+    //    "Return null when no matches due to label predicate in WHERE",
     "Variable length optional relationships",
     "Variable length optional relationships with bound nodes",
     "Variable length optional relationships with length predicates",
@@ -208,6 +208,8 @@ object TckTestWithCreate {
     "Single WITH using a predicate and aggregation",
     "WHERE after WITH can filter on top of an aggregation",
     "WHERE after WITH should filter results",
+    "Dependant CREATE with single row",
+    "Dependant CREATE with single row - with aliased attribute",
     ""
   ).filter(!_.isEmpty)
 
