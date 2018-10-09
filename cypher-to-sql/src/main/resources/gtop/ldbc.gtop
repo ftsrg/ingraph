@@ -38,146 +38,146 @@
 		"abstractionEdges": [{
 			"types": ["KNOWS"],
 			"attributes": ["creationDate"],
-			"sourceType": ["person"],
-			"destinationType": ["person"],
+			"sourceType": ["Person"],
+			"destinationType": ["Person"],
 			"directed": true
 		}, {
 			"types": ["HAS_INTEREST"],
 			"attributes": [],
-			"sourceType": ["person"],
-			"destinationType": ["tag"],
+			"sourceType": ["Person"],
+			"destinationType": ["Tag"],
 			"directed": true
 		}, {
 			"types": ["HAS_TYPE"],
 			"attributes": [],
-			"sourceType": ["tag"],
-			"destinationType": ["tagclass"],
+			"sourceType": ["Tag"],
+			"destinationType": ["TagClass"],
 			"directed": true
 		}, {
 			"types": ["HAS_MODERATOR"],
 			"attributes": [],
-			"sourceType": ["forum"],
-			"destinationType": ["person"],
+			"sourceType": ["Forum"],
+			"destinationType": ["Person"],
 			"directed": true
 		}, {
 			"types": ["HAS_MEMBER"],
 			"attributes": ["joinDate"],
-			"sourceType": ["forum"],
-			"destinationType": ["person"],
+			"sourceType": ["Forum"],
+			"destinationType": ["Person"],
 			"directed": true
 		}, {
 			"types": ["CONTAINER_OF"],
 			"attributes": [],
-			"sourceType": ["forum"],
-			"destinationType": ["post"],
+			"sourceType": ["Forum"],
+			"destinationType": ["Post"],
 			"directed": true
 		}, {
 			"types": ["HAS_TAG"],
 			"attributes": [],
-			"sourceType": ["post"],
-			"destinationType": ["tag"],
+			"sourceType": ["Post"],
+			"destinationType": ["Tag"],
 			"directed": true
 		}, {
 			"types": ["HAS_TAG"],
 			"attributes": [],
-			"sourceType": ["comment"],
-			"destinationType": ["tag"],
+			"sourceType": ["Comment"],
+			"destinationType": ["Tag"],
 			"directed": true
 		},{
 			"types": ["IS_SUBCLASS_OF"],
 			"attributes": [],
-			"sourceType": ["tagclass"],
-			"destinationType": ["tagclass"],
+			"sourceType": ["TagClass"],
+			"destinationType": ["TagClass"],
 			"directed": true
 		}, {
 			"types": ["HAS_CREATOR"],
 			"attributes": [],
-			"sourceType": ["post"],
-			"destinationType": ["person"],
+			"sourceType": ["Post"],
+			"destinationType": ["Person"],
 			"directed": true
 		}, {
 			"types": ["HAS_CREATOR"],
 			"attributes": [],
-			"sourceType": ["comment"],
-			"destinationType": ["person"],
+			"sourceType": ["Comment"],
+			"destinationType": ["Person"],
 			"directed": true
 		}, {
 			"types": ["LIKES"],
 			"attributes": ["creationDate"],
-			"sourceType": ["person"],
-			"destinationType": ["post"],
+			"sourceType": ["Person"],
+			"destinationType": ["Post"],
 			"directed": true
 		},{
 			"types": ["LIKES"],
 			"attributes": ["creationDate"],
-			"sourceType": ["person"],
-			"destinationType": ["comment"],
+			"sourceType": ["Person"],
+			"destinationType": ["Comment"],
 			"directed": true
 		}, {
 			"types": ["REPLY_OF"],
 			"attributes": [],
-			"sourceType": ["comment"],
-			"destinationType": ["post"],
+			"sourceType": ["Comment"],
+			"destinationType": ["Post"],
 			"directed": true
 		},{
 			"types": ["REPLY_OF"],
 			"attributes": [],
-			"sourceType": ["comment"],
-			"destinationType": ["comment"],
+			"sourceType": ["Comment"],
+			"destinationType": ["Comment"],
 			"directed": true
 		}, {
 			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
-			"sourceType": ["post"],
-			"destinationType": ["country"],
+			"sourceType": ["Post"],
+			"destinationType": ["Country"],
 			"directed": true
 		}, {
 			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
-			"sourceType": ["comment"],
-			"destinationType": ["country"],
+			"sourceType": ["Comment"],
+			"destinationType": ["Country"],
 			"directed": true
 		}, {
 			"types": ["WORKS_AT"],
 			"attributes": ["workFrom"],
-			"sourceType": ["person"],
-			"destinationType": ["company"],
+			"sourceType": ["Person"],
+			"destinationType": ["Company"],
 			"directed": true
 		}, {
 			"types": ["STUDY_AT"],
 			"attributes": ["classYear"],
-			"sourceType": ["person"],
-			"destinationType": ["university"],
+			"sourceType": ["Person"],
+			"destinationType": ["University"],
 			"directed": true
 		}, {
 			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
-			"sourceType": ["university"],
-			"destinationType": ["city"],
+			"sourceType": ["University"],
+			"destinationType": ["City"],
 			"directed": true
 		}, {
 			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
-			"sourceType": ["company"],
-			"destinationType": ["country"],
+			"sourceType": ["Company"],
+			"destinationType": ["Country"],
 			"directed": true
 		}, {
 			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
-			"sourceType": ["person"],
-			"destinationType": ["city"],
+			"sourceType": ["Person"],
+			"destinationType": ["City"],
 			"directed": true
 		}, {
 			"types": ["IS_PART_OF"],
 			"attributes": [],
-			"sourceType": ["city"],
-			"destinationType": ["country"],
+			"sourceType": ["City"],
+			"destinationType": ["Country"],
 			"directed": true
 		}, {
 			"types": ["IS_PART_OF"],
 			"attributes": [],
-			"sourceType": ["country"],
-			"destinationType": ["continent"],
+			"sourceType": ["Country"],
+			"destinationType": ["Continent"],
 			"directed": true
 		}]
 	},
