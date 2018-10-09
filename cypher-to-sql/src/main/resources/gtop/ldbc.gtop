@@ -2,179 +2,179 @@
 	"version": "1.0",
 	"abstractionLevel": {
 		"abstractionNodes": [{
-			"types": ["person"],
+			"types": ["Person"],
 			"attributes": ["id", "creationDate", "firstName", "lastName", "gender", "birthday", "browserUsed", "locationIP"]
 		}, {
-			"types": ["university"],
+			"types": ["University"],
 			"attributes": ["id", "name"]
 		}, {
-			"types": ["company"],
+			"types": ["Company"],
 			"attributes": ["id", "name"]
 		}, {
-			"types": ["city"],
+			"types": ["City"],
 			"attributes": ["id", "name"]
 		}, {
-			"types": ["country"],
+			"types": ["Country"],
 			"attributes": ["id", "name"]
 		}, {
-			"types": ["continent"],
+			"types": ["Continent"],
 			"attributes": ["id", "name"]
 		}, {
-			"types": ["comment", "message"],
+			"types": ["Comment", "Message"],
 			"attributes": ["id", "creationDate", "browserUsed", "locationIP", "content", "length"]
 		}, {
-			"types": ["post", "message"],
+			"types": ["Post", "Message"],
 			"attributes": ["id", "creationDate", "browserUsed", "locationIP", "content", "length", "language", "imageFile"]
 		}, {
-			"types": ["forum"],
+			"types": ["Forum"],
 			"attributes": ["id", "title", "creationDate"]
 		}, {
-			"types": ["tag"],
+			"types": ["Tag"],
 			"attributes": ["id", "name"]
 		}, {
-			"types": ["tagclass"],
+			"types": ["TagClass"],
 			"attributes": ["id", "name"]
 		}],
 		"abstractionEdges": [{
-			"types": ["knows"],
+			"types": ["KNOWS"],
 			"attributes": ["creationDate"],
 			"sourceType": ["person"],
 			"destinationType": ["person"],
 			"directed": true
 		}, {
-			"types": ["has_interest"],
+			"types": ["HAS_INTEREST"],
 			"attributes": [],
 			"sourceType": ["person"],
 			"destinationType": ["tag"],
 			"directed": true
 		}, {
-			"types": ["has_type"],
+			"types": ["HAS_TYPE"],
 			"attributes": [],
 			"sourceType": ["tag"],
 			"destinationType": ["tagclass"],
 			"directed": true
 		}, {
-			"types": ["has_moderator"],
+			"types": ["HAS_MODERATOR"],
 			"attributes": [],
 			"sourceType": ["forum"],
 			"destinationType": ["person"],
 			"directed": true
 		}, {
-			"types": ["has_member"],
+			"types": ["HAS_MEMBER"],
 			"attributes": ["joinDate"],
 			"sourceType": ["forum"],
 			"destinationType": ["person"],
 			"directed": true
 		}, {
-			"types": ["container_of"],
+			"types": ["CONTAINER_OF"],
 			"attributes": [],
 			"sourceType": ["forum"],
 			"destinationType": ["post"],
 			"directed": true
 		}, {
-			"types": ["has_tag"],
+			"types": ["HAS_TAG"],
 			"attributes": [],
 			"sourceType": ["post"],
 			"destinationType": ["tag"],
 			"directed": true
 		}, {
-			"types": ["has_tag"],
+			"types": ["HAS_TAG"],
 			"attributes": [],
 			"sourceType": ["comment"],
 			"destinationType": ["tag"],
 			"directed": true
 		},{
-			"types": ["is_subclass_of"],
+			"types": ["IS_SUBCLASS_OF"],
 			"attributes": [],
 			"sourceType": ["tagclass"],
 			"destinationType": ["tagclass"],
 			"directed": true
 		}, {
-			"types": ["has_creator"],
+			"types": ["HAS_CREATOR"],
 			"attributes": [],
 			"sourceType": ["post"],
 			"destinationType": ["person"],
 			"directed": true
 		}, {
-			"types": ["has_creator"],
+			"types": ["HAS_CREATOR"],
 			"attributes": [],
 			"sourceType": ["comment"],
 			"destinationType": ["person"],
 			"directed": true
 		}, {
-			"types": ["likes"],
+			"types": ["LIKES"],
 			"attributes": ["creationDate"],
 			"sourceType": ["person"],
 			"destinationType": ["post"],
 			"directed": true
 		},{
-			"types": ["likes"],
+			"types": ["LIKES"],
 			"attributes": ["creationDate"],
 			"sourceType": ["person"],
 			"destinationType": ["comment"],
 			"directed": true
 		}, {
-			"types": ["reply_of"],
+			"types": ["REPLY_OF"],
 			"attributes": [],
 			"sourceType": ["comment"],
 			"destinationType": ["post"],
 			"directed": true
 		},{
-			"types": ["reply_of"],
+			"types": ["REPLY_OF"],
 			"attributes": [],
 			"sourceType": ["comment"],
 			"destinationType": ["comment"],
 			"directed": true
 		}, {
-			"types": ["is_located_in"],
+			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
 			"sourceType": ["post"],
 			"destinationType": ["country"],
 			"directed": true
 		}, {
-			"types": ["is_located_in"],
+			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
 			"sourceType": ["comment"],
 			"destinationType": ["country"],
 			"directed": true
 		}, {
-			"types": ["works_at"],
+			"types": ["WORKS_AT"],
 			"attributes": ["workFrom"],
 			"sourceType": ["person"],
 			"destinationType": ["company"],
 			"directed": true
 		}, {
-			"types": ["study_at"],
+			"types": ["STUDY_AT"],
 			"attributes": ["classYear"],
 			"sourceType": ["person"],
 			"destinationType": ["university"],
 			"directed": true
 		}, {
-			"types": ["is_located_in"],
+			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
 			"sourceType": ["university"],
 			"destinationType": ["city"],
 			"directed": true
 		}, {
-			"types": ["is_located_in"],
+			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
 			"sourceType": ["company"],
 			"destinationType": ["country"],
 			"directed": true
 		}, {
-			"types": ["is_located_in"],
+			"types": ["IS_LOCATED_IN"],
 			"attributes": [],
 			"sourceType": ["person"],
 			"destinationType": ["city"],
 			"directed": true
 		}, {
-			"types": ["is_part_of"],
+			"types": ["IS_PART_OF"],
 			"attributes": [],
 			"sourceType": ["city"],
 			"destinationType": ["country"],
 			"directed": true
 		}, {
-			"types": ["is_part_of"],
+			"types": ["IS_PART_OF"],
 			"attributes": [],
 			"sourceType": ["country"],
 			"destinationType": ["continent"],
@@ -225,7 +225,7 @@
 			}],
 			"restrictions": []
 		}, {
-			"types": ["university"],
+			"types": ["University"],
 			"tableName": "University",
 			"id": [{
 				"columnName": "id",
@@ -239,7 +239,7 @@
 			}],
 			"restrictions": []
 		}, {
-			"types": ["company"],
+			"types": ["Company"],
 			"tableName": "Company",
 			"id": [{
 				"columnName": "id",
@@ -253,7 +253,7 @@
 			}],
 			"restrictions": []
 		}, {
-			"types": ["city"],
+			"types": ["City"],
 			"tableName": "City",
 			"id": [{
 				"columnName": "id",
@@ -267,7 +267,7 @@
 			}],
 			"restrictions": []
 		}, {
-			"types": ["country"],
+			"types": ["Country"],
 			"tableName": "Country",
 			"id": [{
 				"columnName": "id",
@@ -281,7 +281,7 @@
 			}],
 			"restrictions": []
 		}, {
-			"types": ["continent"],
+			"types": ["Continent"],
 			"tableName": "Continent",
 			"id": [{
 				"columnName": "id",
@@ -295,7 +295,7 @@
 			}],
 			"restrictions": []
 		}, {
-			"types": ["forum"],
+			"types": ["Forum"],
 			"tableName": "Forum",
 			"id": [{
 				"columnName": "id",
@@ -313,7 +313,7 @@
 			}],
 			"restrictions": []
 		}, {
-			"types": ["tag"],
+			"types": ["Tag"],
 			"tableName": "Tag",
 			"id": [{
 				"columnName": "id",
@@ -327,7 +327,7 @@
 			}],
 			"restrictions": []
 		}, {
-			"types": ["tagclass"],
+			"types": ["TagClass"],
 			"tableName": "TagClass",
 			"id": [{
 				"columnName": "id",
@@ -341,7 +341,7 @@
 			}],
 			"restrictions": []
 		}, {
-			"types": ["post", "message"],
+			"types": ["Post", "Message"],
 			"tableName": "Post",
 			"id": [{
 				"columnName": "id",
@@ -379,7 +379,7 @@
 			}],
 			"restrictions": []
 		}, {
-			"types": ["comment", "message"],
+			"types": ["Comment", "Message"],
 			"tableName": "Comment",
 			"id": [{
 				"columnName": "id",
@@ -410,7 +410,7 @@
 			"restrictions": []
 		}],
 		"implementationEdges": [{
-				"types": ["knows"],
+				"types": ["KNOWS"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Person",
@@ -428,7 +428,7 @@
 					}]
 				}]
 			}, {
-				"types": ["has_interest"],
+				"types": ["HAS_INTEREST"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Person",
@@ -442,7 +442,7 @@
 					}]
 				}]
 			}, {
-				"types": ["has_moderator"],
+				"types": ["HAS_MODERATOR"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Forum",
@@ -458,7 +458,7 @@
 			},
 
 			{
-				"types": ["has_member"],
+				"types": ["HAS_MEMBER"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Forum",
@@ -478,7 +478,7 @@
 			},
 
 			{
-				"types": ["likes"],
+				"types": ["LIKES"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Person",
@@ -497,7 +497,7 @@
 				}]
 			},
 			{
-				"types": ["likes"],
+				"types": ["LIKES"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Person",
@@ -516,7 +516,7 @@
 				}]
 			},
 			{
-				"types": ["has_type"],
+				"types": ["HAS_TYPE"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Tag",
@@ -530,7 +530,7 @@
 					}]
 				}]
 			}, {
-				"types": ["is_subclass_of"],
+				"types": ["IS_SUBCLASS_OF"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "TagClass",
@@ -544,7 +544,7 @@
 					}]
 				}]
 			}, {
-				"types": ["has_creator"],
+				"types": ["HAS_CREATOR"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Post",
@@ -558,7 +558,7 @@
 					}]
 				}]
 			}, {
-				"types": ["has_creator"],
+				"types": ["HAS_CREATOR"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Comment",
@@ -572,7 +572,7 @@
 					}]
 				}]
 			}, {
-				"types": ["is_located_in"],
+				"types": ["IS_LOCATED_IN"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Comment",
@@ -586,7 +586,7 @@
 					}]
 				}]
 			},{
-				"types": ["is_located_in"],
+				"types": ["IS_LOCATED_IN"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Post",
@@ -600,7 +600,7 @@
 					}]
 				}]
 			}, {
-				"types": ["reply_of"],
+				"types": ["REPLY_OF"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Comment",
@@ -614,7 +614,7 @@
 					}]
 				}]
 			},  {
-				"types": ["reply_of"],
+				"types": ["REPLY_OF"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Comment",
@@ -628,7 +628,7 @@
 					}]
 				}]
 			}, {
-				"types": ["has_tag"],
+				"types": ["HAS_TAG"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Post",
@@ -642,7 +642,7 @@
 					}]
 				}]
 			}, {
-				"types": ["has_tag"],
+				"types": ["HAS_TAG"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Comment",
@@ -656,7 +656,7 @@
 					}]
 				}]
 			},{
-				"types": ["is_located_in"],
+				"types": ["IS_LOCATED_IN"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Company",
@@ -670,7 +670,7 @@
 					}]
 				}]
 			}, {
-				"types": ["is_located_in"],
+				"types": ["IS_LOCATED_IN"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "University",
@@ -686,7 +686,7 @@
 			},
 
 			{
-				"types": ["is_part_of"],
+				"types": ["IS_PART_OF"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "City",
@@ -702,7 +702,7 @@
 			},
 
 			{
-				"types": ["is_part_of"],
+				"types": ["IS_PART_OF"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Country",
@@ -718,7 +718,7 @@
 			},
 
 			{
-				"types": ["is_located_in"],
+				"types": ["IS_LOCATED_IN"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Person",
@@ -732,7 +732,7 @@
 					}]
 				}]
 			}, {
-				"types": ["works_at"],
+				"types": ["WORKS_AT"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Person",
@@ -752,7 +752,7 @@
 					}]
 				}]
 			}, {
-				"types": ["study_at"],
+				"types": ["STUDY_AT"],
 				"paths": [{
 					"traversalHops": [{
 						"sourceTableName": "Person",
