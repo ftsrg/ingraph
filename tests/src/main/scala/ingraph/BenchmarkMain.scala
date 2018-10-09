@@ -25,7 +25,7 @@ object BenchmarkMain {
     for (run <- 1 to runs) {
       tool.toLowerCase match {
         case "neo4j" =>
-          val ntr = new Neo4jTestRunner(tc, Some(csvDir))
+          val ntr = new Neo4jTestRunner(tc, Some(dbDir))
           val neo4jResults = ntr.run()
           ntr.close
         case "ingraph" =>
