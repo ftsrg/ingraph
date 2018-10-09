@@ -240,7 +240,7 @@ class TckCompilerTest extends CompilerTest {
     assert(4 == requiredProperties.length)
   }
 
-  test("Schema inferencing for CREATE") {
+  test("Schema inferencing for CREATE - no aliasing") {
     val stages = compile(
       """MATCH (n)
         |CREATE (m:Label {prop: n.id + 1})

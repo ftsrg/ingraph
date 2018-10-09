@@ -57,7 +57,7 @@ object NPlanToFPlan {
       case o: nplan.Production           => fplan.Production          (o, transform(o.child, req))
       // unary DMLs
       case o: nplan.Create               =>
-        val reqOp = extractPropertiesFromInsertion(o.attribute)
+        val reqOp = extractPropertiesFromInsertion(o.attribute).filter(!duplicate(_, o.child.output, req))
         fplan.Create(o, transform(o.child, req ++ reqOp))
       case o: nplan.Delete               => fplan.Delete(o, transform(o.child, req))
       case o: nplan.Merge                =>
