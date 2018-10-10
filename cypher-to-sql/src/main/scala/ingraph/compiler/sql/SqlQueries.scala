@@ -14,27 +14,27 @@ object SqlQueries {
       |
       |CREATE TABLE vertex
       |(
-      |  vertex_id INTEGER PRIMARY KEY
+      |  vertex_id BIGINT PRIMARY KEY
       |);
       |
       |CREATE TABLE edge
       |(
-      |  edge_id INTEGER PRIMARY KEY,
-      |  "from"  INTEGER NOT NULL REFERENCES vertex (vertex_id),
-      |  "to"    INTEGER NOT NULL REFERENCES vertex (vertex_id),
+      |  edge_id BIGINT PRIMARY KEY,
+      |  "from"  BIGINT NOT NULL REFERENCES vertex (vertex_id),
+      |  "to"    BIGINT NOT NULL REFERENCES vertex (vertex_id),
       |  type    TEXT    NOT NULL
       |);
       |
       |CREATE TABLE label
       |(
-      |  parent INTEGER NOT NULL REFERENCES vertex (vertex_id),
+      |  parent BIGINT NOT NULL REFERENCES vertex (vertex_id),
       |  name   TEXT    NOT NULL,
       |  UNIQUE (parent, name)
       |);
       |
       |CREATE TABLE vertex_property
       |(
-      |  parent INTEGER NOT NULL REFERENCES vertex (vertex_id),
+      |  parent BIGINT NOT NULL REFERENCES vertex (vertex_id),
       |  key    TEXT    NOT NULL,
       |  value  jsonb   NOT NULL,
       |  UNIQUE (parent, key)
@@ -42,7 +42,7 @@ object SqlQueries {
       |
       |CREATE TABLE edge_property
       |(
-      |  parent INTEGER NOT NULL REFERENCES edge (edge_id),
+      |  parent BIGINT NOT NULL REFERENCES edge (edge_id),
       |  key    TEXT    NOT NULL,
       |  value  jsonb   NOT NULL,
       |  UNIQUE (parent, key)
@@ -55,7 +55,7 @@ object SqlQueries {
       |LANGUAGE SQL AS
       |'SELECT coalesce(array_length($1, 1), 0) AS array_length;';
       |
-      |CREATE FUNCTION labels(INTEGER)
+      |CREATE FUNCTION labels(BIGINT)
       |  RETURNS TEXT []
       |STRICT
       |IMMUTABLE
@@ -64,7 +64,7 @@ object SqlQueries {
       | FROM label
       | WHERE parent = $1';
       |
-      |CREATE FUNCTION vertex_properties(INTEGER)
+      |CREATE FUNCTION vertex_properties(BIGINT)
       |  RETURNS jsonb
       |STRICT
       |IMMUTABLE
@@ -73,7 +73,7 @@ object SqlQueries {
       | FROM vertex_property
       | WHERE parent = $1';
       |
-      |CREATE FUNCTION edge_properties(INTEGER)
+      |CREATE FUNCTION edge_properties(BIGINT)
       |  RETURNS jsonb
       |STRICT
       |IMMUTABLE
@@ -82,7 +82,7 @@ object SqlQueries {
       | FROM edge_property
       | WHERE parent = $1';
       |
-      |CREATE FUNCTION to_vertex(INTEGER)
+      |CREATE FUNCTION to_vertex(BIGINT)
       |  RETURNS jsonb
       |STRICT
       |IMMUTABLE
@@ -96,8 +96,8 @@ object SqlQueries {
       |                                                                    ''labels'', labels($1),
       |                                                                    ''properties'', vertex_properties($1)))))';
       |
-      |CREATE FUNCTION startNode(INTEGER)
-      |  RETURNS INTEGER
+      |CREATE FUNCTION startNode(BIGINT)
+      |  RETURNS BIGINT
       |STRICT
       |IMMUTABLE
       |LANGUAGE SQL AS
@@ -105,8 +105,8 @@ object SqlQueries {
       | FROM edge
       | WHERE edge_id = $1';
       |
-      |CREATE FUNCTION endNode(INTEGER)
-      |  RETURNS INTEGER
+      |CREATE FUNCTION endNode(BIGINT)
+      |  RETURNS BIGINT
       |STRICT
       |IMMUTABLE
       |LANGUAGE SQL AS
@@ -114,7 +114,7 @@ object SqlQueries {
       | FROM edge
       | WHERE edge_id = $1';
       |
-      |CREATE FUNCTION type_string(INTEGER)
+      |CREATE FUNCTION type_string(BIGINT)
       |  RETURNS TEXT
       |STRICT
       |IMMUTABLE
@@ -123,7 +123,7 @@ object SqlQueries {
       | FROM edge
       | WHERE edge_id = $1';
       |
-      |CREATE FUNCTION type(INTEGER)
+      |CREATE FUNCTION type(BIGINT)
       |  RETURNS jsonb
       |STRICT
       |IMMUTABLE
@@ -132,7 +132,7 @@ object SqlQueries {
       |                           ''value'', jsonb_build_object(
       |                                        ''val'', type_string($1)))';
       |
-      |CREATE FUNCTION to_edge(INTEGER)
+      |CREATE FUNCTION to_edge(BIGINT)
       |  RETURNS jsonb
       |STRICT
       |IMMUTABLE
@@ -148,18 +148,13 @@ object SqlQueries {
       |                                                                    ''type'', type_string($1),
       |                                                                    ''properties'', edge_properties($1)))))';
       |
-      |CREATE EXTENSION intarray;
-      |
-      |-- if needed for other types, check https://stackoverflow.com/q/3994556
-      |CREATE FUNCTION is_unique(INTEGER [])
+      |-- NULL values are filtered by count()
+      |CREATE OR REPLACE FUNCTION is_unique(ANYARRAY)
       |  RETURNS BOOLEAN
       |STRICT
       |IMMUTABLE
       |LANGUAGE SQL AS
-      |'WITH arr AS (SELECT $1 AS arr),
-      |      orig_length AS (SELECT array_length(arr) AS orig_length FROM arr)
-      | SELECT (orig_length <= 1 OR array_length(uniq(sort(arr))) = orig_length) AS is_unique
-      | FROM arr,
-      |      orig_length;';
+      |'SELECT count(val) = count(DISTINCT val)
+      | FROM unnest($1) AS vals (val);';
     """.stripMargin
 }

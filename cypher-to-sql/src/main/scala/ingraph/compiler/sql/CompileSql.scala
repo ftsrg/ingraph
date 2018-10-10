@@ -210,7 +210,7 @@ object CompileSql {
           getSql(propertyAttribute, options) + " IS NOT NULL"
         }
         case FunctionInvocation(Function.TOINTEGER | Function.TOINT, Seq(expr: Expression), false) => {
-          "(" + getSql(expr, options.copy(unwrapJson = true)) + ")::INTEGER"
+          "(" + getSql(expr, options.copy(unwrapJson = true)) + ")::BIGINT"
         }
         case FunctionInvocation(functor@Function.COUNT_ALL, Nil, false) => {
           functor.getPrettyName
