@@ -9,6 +9,7 @@ import org.cytosm.common.gtop.GTop
 import org.cytosm.common.gtop.io.SerializationInterface
 import org.scalatest.FunSuite
 
+import scala.collection.JavaConverters._
 import scala.reflect.io
 
 class LdbcTest extends FunSuite {
@@ -41,7 +42,9 @@ class LdbcTest extends FunSuite {
     }
   }
 
-  (("Simple test", "MATCH (n:Person) RETURN n ORDER BY n.id LIMIT 10") +: ldbcQueries).foreach { case (name, cypherQueryString) =>
+  (Seq(
+    "Simple test" -> "MATCH (n:Person) RETURN n.id ORDER BY n.id LIMIT 10"
+  ) ++ ldbcQueries).foreach { case (name, cypherQueryString) =>
     test(name) {
       withResources(
         new SqlDriver(
@@ -53,7 +56,18 @@ class LdbcTest extends FunSuite {
           withResources(driver.session) { session =>
             withResources(session.beginTransaction()) { tx =>
               try {
-                tx.run(cypherQueryString)
+                val limit = 20
+                val result = tx.run(cypherQueryString).list().asScala
+
+                for (record <- result.take(limit)) {
+                  for ((key, value) <- record.asMap().asScala) {
+                    println(s"""$key = $value""")
+                  }
+                  println("---")
+                }
+
+                println(s"Totally: ${result.size} rows (only first $limit)")
+                println("----------------------------------")
               } catch {
                 case throwable: Throwable if !expectedToSucceed.contains(name) => cancel(name + " has failed. Only warning!", throwable)
               }
