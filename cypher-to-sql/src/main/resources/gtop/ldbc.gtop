@@ -226,7 +226,7 @@
 			} ]
 		}, {
 			"types": ["Organisation", "Company"],
-			"tableName": "Company",
+			"tableName": "organisation",
 			"id": [{
 				"columnName": "id",
 				"datatype": "INTEGER",
