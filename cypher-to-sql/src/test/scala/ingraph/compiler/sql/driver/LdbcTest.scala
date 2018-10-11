@@ -82,6 +82,8 @@ object LdbcTest {
   val ldbcQueriesPath = "/interactive-tests"
 
   val expectedToSucceed: Set[String] = Set(
+    "SQL",
+    "Simple test",
     //    "LdbcQuery2",
     //    "LdbcQuery3",
     //    "LdbcQuery4",
@@ -97,6 +99,7 @@ object LdbcTest {
     //    "LdbcShortQuery5MessageCreator",
     //    "LdbcShortQuery6MessageForum",
     //    "LdbcShortQuery7MessageReplies"
+    ""
   )
 
   val ldbcQueries: Seq[(String, String)] =
