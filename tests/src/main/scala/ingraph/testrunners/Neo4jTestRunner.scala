@@ -55,28 +55,39 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
     }
   }
 
-  def run(): List[Map[String, Any]] = {
-    val sLoad = Stopwatch.createStarted()
-    val results1 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap
+  def executeQuery(gds: GraphDatabaseService, querySpecification: String) = {
+    gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap
       .map {case (k, v) => (k, v match {
         case v: java.util.List[AnyRef] => v.asScala
         case _ => v
       })}
     ).toList
-    val queryTime = sLoad.elapsed(TimeUnit.NANOSECONDS)
+  }
+
+  def run(): (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = {
+    val iStopwatch = Stopwatch.createStarted()
+    val iResult = executeQuery(gds, tc.querySpecification)
+    val iTime = iStopwatch.elapsed(TimeUnit.NANOSECONDS)
 
     val tx = gds.beginTx()
-    val updateTimes = tc.updates.map { updateQuery =>
-      val s = Stopwatch.createStarted()
-      gds.execute(updateQuery)
-      val results2 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
-      s.elapsed(TimeUnit.NANOSECONDS)
-    }.toList
+    val runInfo: (Iterable[Seq[Map[String, Any]]], Iterable[Long]) =
+      (Seq((iResult, iTime)) ++ tc.updates.map { updateQuery =>
+        val uStopwatch = Stopwatch.createStarted()
+        gds.execute(updateQuery)
+        val uResult = executeQuery(gds, tc.querySpecification)
+        val uTime = uStopwatch.elapsed(TimeUnit.NANOSECONDS)
+        (iResult, iTime)
+      }).unzip
+
     tx.failure()
     tx.close()
 
-    println(tc.sf + "," + tc.query + ",neo4j," + queryTime + "," + updateTimes.mkString(","))
-    results1
+    val results = runInfo._1
+    val times = runInfo._2
+    println(tc.sf + "," + tc.query + ",neo4j,times," + times.mkString(","))
+    println(tc.sf + "," + tc.query + ",neo4j,results," + results.map(_.length).mkString(","))
+
+    return runInfo
   }
 
   override def close(): Unit = {

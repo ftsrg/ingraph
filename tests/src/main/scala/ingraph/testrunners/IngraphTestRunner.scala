@@ -14,10 +14,11 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
   val driver = CypherDriverFactory.createIngraphDriver()
   val session = driver.session()
 
-  def run() : List[Map[String, Any]] = {
+  def run(): (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = {
     val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
     val queryHandler = session.registerQuery(tc.name, tc.querySpecification)
-    val sLoad = Stopwatch.createStarted()
+
+    val iStopwatch = Stopwatch.createStarted()
     val listener = new ResultCollectingChangeListener(queryHandler.keys())
     queryHandler.registerDeltaHandler(listener)
     queryHandler.readCsv(
@@ -25,17 +26,24 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
       tc.edgeCsvPaths,
       csvPreference
     )
-    val queryTime = sLoad.elapsed(TimeUnit.NANOSECONDS)
+    val iResult = queryHandler.result()
+    val iTime = iStopwatch.elapsed(TimeUnit.NANOSECONDS)
 
     val indexer = queryHandler.adapter.indexer
-    val updateTimes = tc.updates.map { updateQuery =>
-      val s = Stopwatch.createStarted()
-      update(updateQuery, "upd", indexer, queryHandler, listener)
-      s.elapsed(TimeUnit.NANOSECONDS)
-    }.toList
+    val runInfo: (Iterable[Seq[Map[String, Any]]], Iterable[Long]) =
+      (Seq((iResult, iTime)) ++ tc.updates.map { updateQuery =>
+        val uStopwatch = Stopwatch.createStarted()
+        val uResult = update(updateQuery, "upd", indexer, queryHandler, listener)
+        val uTime = uStopwatch.elapsed(TimeUnit.NANOSECONDS)
+        (uResult, uTime)
+      }).unzip
 
-    println(tc.sf + "," + tc.query + ",ingraph," + queryTime + "," + updateTimes.mkString(","))
-    queryHandler.result()
+    val results = runInfo._1
+    val times = runInfo._2
+    println(tc.sf + "," + tc.query + ",ingraph,times," + times.mkString(","))
+    println(tc.sf + "," + tc.query + ",ingraph,results," + results.map(_.length).mkString(","))
+
+    return runInfo
   }
 
   def update(querySpecification: String,
