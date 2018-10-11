@@ -12,7 +12,8 @@ object GTopExtension {
     def findEdgeTables(edgeLabels: Set[EdgeLabel]): Seq[(ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode])] = {
       gTop
         .getImplementationLevel.getImplementationEdges.asScala
-        .filter(_.getTypes.asScala.toSet.intersect(edgeLabels).nonEmpty)
+        .filter(_.getTypes.asScala.toSet.intersect(edgeLabels).nonEmpty
+          || edgeLabels.isEmpty /* no constraint on edge type */)
         .map { edge =>
           val paths = edge.getPaths
           assert(paths.size == 1, "Only supports one path per edge")
