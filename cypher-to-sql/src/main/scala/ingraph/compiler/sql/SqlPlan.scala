@@ -2,6 +2,7 @@ package ingraph.compiler.sql
 
 import ingraph.compiler.sql.CompileSql.{getQuotedColumnName, getSingleQuotedString, _}
 import ingraph.compiler.sql.Create.graphElementTypeString
+import ingraph.compiler.sql.GTopExtension._
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.Production.{getSqlRecursively, withQueryNamePrefix}
 import ingraph.compiler.sql.SqlNodeCreator._
@@ -13,7 +14,7 @@ import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnary
 import org.apache.spark.sql.catalyst.expressions.Literal
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.cytosm.common.gtop.GTop
-import org.cytosm.common.gtop.implementation.relational.ImplementationNode
+import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, ImplementationNode, TraversalHop}
 
 import scala.Function.tupled
 import scala.collection.JavaConverters._
@@ -199,44 +200,55 @@ class GetEdges(val fNode: fplan.GetEdges,
 
 class GetEdgesWithGTop(val fNode: fplan.GetEdges,
                        val options: CompilerOptions,
-                       val gTop: GTop)
+                       val edgeTuple: (ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode]))
   extends LeafSqlNodeFromFNode[fplan.GetEdges] {
 
-  override def innerSql: String = getGetEdgesSql(fNode, options, gTop)
+  override def innerSql: String = getGetEdgesSql(fNode, options, edgeTuple)
 }
 
 object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
   override def create(fNode: fplan.GetEdges,
                       options: CompilerOptions)
   : (SqlNode, CompilerOptions) = {
-    makeDirected(fNode, options)
+    if (fNode.nnode.directed) {
+      val getEdges: SqlNode =
+        if (options.gTop.isDefined) {
+          val edgeTuples = options.gTop.get.findEdgeTables(fNode.nnode.edge.labels.edgeLabels)
+
+          val firstNode: SqlNode = new GetEdgesWithGTop(fNode, options, edgeTuples.head)
+          edgeTuples.drop(1)
+            .foldLeft(firstNode) {
+              case (lastNode, newTuple) =>
+                UnionAll(lastNode, new GetEdgesWithGTop(fNode, options, newTuple), lastNode.nextOptions)
+            }
+        }
+        else {
+          new GetEdges(fNode, options)
+        }
+
+      getEdges -> getEdges.lastOptions
+    }
+    else {
+      makeDirected(fNode, options)
+    }
   }
 
   private def makeDirected(fNode: fplan.GetEdges, options: CompilerOptions): (SqlNode, CompilerOptions) = {
-    if (fNode.nnode.directed) {
-      val getEdges =
-        if (options.gTop.isDefined)
-        new GetEdgesWithGTop(fNode, options, options.gTop.get)
-      else
-        new GetEdges(fNode, options)
+    assert(!fNode.nnode.directed, "Undirected edge is expected.")
 
-      getEdges->getEdges.lastOptions
-    }
-    else {
-      val sameDirectionNNode = fNode.nnode.copy(directed = true)
-      val oppositeDirectionNNode = sameDirectionNNode
-        .copy(src = sameDirectionNNode.trg)
-        .copy(trg = sameDirectionNNode.src)
+    val sameDirectionNNode = fNode.nnode.copy(directed = true)
+    val oppositeDirectionNNode = sameDirectionNNode
+      .copy(src = sameDirectionNNode.trg)
+      .copy(trg = sameDirectionNNode.src)
 
-      val sameDirectionFNode = fNode.copy(nnode = sameDirectionNNode)
-      val oppositeDirectionFNode = fNode.copy(nnode = oppositeDirectionNNode)
+    val sameDirectionFNode = fNode.copy(nnode = sameDirectionNNode)
+    val oppositeDirectionFNode = fNode.copy(nnode = oppositeDirectionNNode)
 
-      val (left, _) = create(sameDirectionFNode, options)
-      val (right, _) = create(oppositeDirectionFNode, left.nextOptions)
+    val (left, _) = create(sameDirectionFNode, options)
+    val (right, _) = create(oppositeDirectionFNode, left.nextOptions)
 
-      val unionAll = UnionAll(left, right, right.nextOptions)
-      unionAll -> unionAll.lastOptions
-    }
+    val unionAll = UnionAll(left, right, right.nextOptions)
+    unionAll -> unionAll.lastOptions
   }
 }
 

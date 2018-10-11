@@ -10,6 +10,7 @@ import ingraph.model.{fplan, nplan}
 import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Expression, IsNotNull, IsNull, Literal, Not}
 import org.apache.spark.sql.types.{LongType, StringType}
 import org.cytosm.common.gtop.GTop
+import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, ImplementationNode, TraversalHop}
 import org.neo4j.driver.v1.{Value, Values}
 
 import scala.collection.JavaConverters._
@@ -60,23 +61,12 @@ object CompileSql {
        |  FROM $childSql AS subquery"""
   }
 
-  def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions, gTop: GTop): String = {
+  def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions, edgeTuple: (ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode])): String = {
     assert(node.nnode.directed, "Cannot compile undirected GetEdges. Use UnionAll instead.")
+    val (edge, traversalHop, sourceNodes, destinationNodes) = edgeTuple
 
-    val edgeLabels = node.nnode.edge.labels.edgeLabels
-
-    val implEdge = gTop.getImplementationLevel
-      .getImplementationEdges.asScala
-      .find(_.getTypes.asScala.toSet.intersect(edgeLabels).nonEmpty)
-      .get
-
-    val traversalHop = implEdge.getPaths.get(0).getTraversalHops.asScala.head
-    val sourceNode = gTop.getImplementationLevel.getImplementationNodes.asScala
-      .find(_.getTableName == traversalHop.getSourceTableName)
-      .get
-    val destinationNode = gTop.getImplementationLevel.getImplementationNodes.asScala
-      .find(_.getTableName == traversalHop.getDestinationTableName)
-      .get
+    val sourceNode = sourceNodes.head
+    val destinationNode = destinationNodes.head
 
     val edgeTable = getQuotedColumnName(traversalHop.getJoinTableName)
     val fromColumn = getQuotedColumnName(traversalHop.getJoinTableSourceColumn)
