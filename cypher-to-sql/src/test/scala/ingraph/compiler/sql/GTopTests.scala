@@ -14,15 +14,14 @@ import scala.reflect.io
 
 class GTopTests extends FunSuite with TckTestRunner with SharedSqlDriver {
 
-  lazy val gTop: GTop = SerializationInterface.read(new File(getClass.getResource("/gtop/movies.gtop").getFile))
+  // based on
+  //   https://github.com/cytosm/cytosm/blob/41e786f600724358836629fc3f70787834c85270/common/docs/movies.db
+  //   https://github.com/cytosm/cytosm/blob/41e786f600724358836629fc3f70787834c85270/common/docs/movies.gtop
+  val gTop: GTop = SerializationInterface.read(new File(getClass.getResource("/gtop/movies.gtop").getFile))
+  val sqlInitCommands: String = io.File(getClass.getResource("/gtop/movies.sql").getFile).slurp()
 
-  test("Load GTop and data") {
-    // based on
-    //   https://github.com/cytosm/cytosm/blob/41e786f600724358836629fc3f70787834c85270/common/docs/movies.db
-    //   https://github.com/cytosm/cytosm/blob/41e786f600724358836629fc3f70787834c85270/common/docs/movies.gtop
-    gTop
-    val sqlInitCommands = io.File(getClass.getResource("/gtop/movies.sql").getFile).slurp()
-
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
     withResources(session.beginTransaction()) { tx =>
 
       withResources(tx.rawSqlConnection.createStatement()) { statement =>
@@ -32,6 +31,9 @@ class GTopTests extends FunSuite with TckTestRunner with SharedSqlDriver {
       tx.success()
 
     }
+  }
+
+  test("SQL") {
     withResources(session.beginTransaction()) { tx =>
       withResources(tx.rawSqlConnection.createStatement()) { statement =>
         withResources(statement.executeQuery("SELECT title FROM movie")) { resultSet =>
