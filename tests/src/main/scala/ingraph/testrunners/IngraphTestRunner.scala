@@ -30,7 +30,7 @@ class IngraphTestRunner(tc: LdbcSnbTestCase) {
 
     // updates: append
     val aStopwatch = Stopwatch.createStarted()
-    tc.updates.take(4).map { u => update(u, "upd", indexer, queryHandler, listener) }
+    tc.updates.take(20).map { u => update(u, "upd", indexer, queryHandler, listener) }
     val aResult = queryHandler.result()
     val aTime = aStopwatch.elapsed(TimeUnit.NANOSECONDS)
 

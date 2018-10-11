@@ -75,7 +75,7 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
 
     // updates: append
     val aStopwatch = Stopwatch.createStarted()
-    tc.updates.take(4).map { u => gds.execute(u) }
+    tc.updates.take(20).map { u => gds.execute(u) }
     val aResult = executeQuery(gds, tc.querySpecification)
     val aTime = aStopwatch.elapsed(TimeUnit.NANOSECONDS)
 
