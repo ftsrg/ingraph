@@ -65,29 +65,37 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
   }
 
   def run(): (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = {
+    // initial
     val iStopwatch = Stopwatch.createStarted()
     val iResult = executeQuery(gds, tc.querySpecification)
     val iTime = iStopwatch.elapsed(TimeUnit.NANOSECONDS)
 
+    // updates
     val tx = gds.beginTx()
-    val runInfo: (Iterable[Seq[Map[String, Any]]], Iterable[Long]) =
-      (Seq((iResult, iTime)) ++ tc.updates.map { updateQuery =>
-        val uStopwatch = Stopwatch.createStarted()
-        gds.execute(updateQuery)
-        val uResult = executeQuery(gds, tc.querySpecification)
-        val uTime = uStopwatch.elapsed(TimeUnit.NANOSECONDS)
-        (iResult, iTime)
-      }).unzip
 
+    // updates: append
+    val aStopwatch = Stopwatch.createStarted()
+    tc.updates.take(4).map { u => gds.execute(u) }
+    val aResult = executeQuery(gds, tc.querySpecification)
+    val aTime = aStopwatch.elapsed(TimeUnit.NANOSECONDS)
+
+    // updates: delete
+    val dStopwatch = Stopwatch.createStarted()
+    tc.updates.takeRight(3).map { u => gds.execute(u) }
+    val dResult = executeQuery(gds, tc.querySpecification)
+    val dTime = dStopwatch.elapsed(TimeUnit.NANOSECONDS)
+
+    // cleanup
     tx.failure()
     tx.close()
 
-    val results = runInfo._1
-    val times = runInfo._2
-    println(tc.sf + "," + tc.query + ",neo4j,times," + times.mkString(","))
-    println(tc.sf + "," + tc.query + ",neo4j,results," + results.map(_.length).mkString(","))
+    val results = Seq(iResult, aResult, dResult)
+    val times = Seq(iTime, aTime, dTime)
 
-    return runInfo
+    println(tc.sf + "," + tc.query + ",neo4j,results," + results.map(_.length).mkString(","))
+    println(tc.sf + "," + tc.query + ",neo4j,times," + times.mkString(","))
+
+    return (results, times)
   }
 
   override def close(): Unit = {
