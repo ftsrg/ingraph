@@ -65,6 +65,9 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
   }
 
   def run(): (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = {
+    val numberOfNodes = gds.execute("MATCH (n) RETURN count(n) AS numberOfNodes").next().get("numberOfNodes").asInstanceOf[Long]
+    assert(numberOfNodes != 0)
+
     // initial
     val iStopwatch = Stopwatch.createStarted()
     val iResult = executeQuery(gds, tc.querySpecification)
