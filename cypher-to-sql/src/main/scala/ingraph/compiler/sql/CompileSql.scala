@@ -60,12 +60,8 @@ object CompileSql {
        |  FROM $childSql AS subquery"""
   }
 
-  def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions, forcedFromColumnName: Option[String] = None, forcedEdgeColumnName: Option[String] = None, forcedToColumnName: Option[String] = None) = {
+  def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions): String = {
     assert(node.nnode.directed, "Cannot compile undirected GetEdges. Use UnionAll instead.")
-
-    def getColumnName(forcedColumnName: Option[String], originalAttributeProvider: nplan.GetEdges => ResolvableName): String = {
-      forcedColumnName.map(getQuotedColumnName).getOrElse(getQuotedColumnName(originalAttributeProvider(node.nnode)))
-    }
 
     val gTop: Option[GTop] = options.gTop
 
@@ -84,9 +80,9 @@ object CompileSql {
     val toColumn = traversalHop.map(_.getJoinTableDestinationColumn).map(getQuotedColumnName).getOrElse("\"to\"")
     val edgeColumn = traversalHop.map(_ => s"ROW($fromColumn, $toColumn)").getOrElse("edge_id")
 
-    val fromColumnNewName = getColumnName(forcedFromColumnName, _.src)
-    val edgeColumnNewName = getColumnName(forcedEdgeColumnName, _.edge)
-    val toColumnNewName = getColumnName(forcedToColumnName, _.trg)
+    val fromColumnNewName = getQuotedColumnName(node.nnode.src)
+    val edgeColumnNewName = getQuotedColumnName(node.nnode.edge)
+    val toColumnNewName = getQuotedColumnName(node.nnode.trg)
 
     // TODO handle properties from edge lists
 
