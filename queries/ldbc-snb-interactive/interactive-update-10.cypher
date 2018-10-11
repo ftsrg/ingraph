@@ -1,3 +1,3 @@
 // Interactive update 10
-MATCH (n:Forum {id: $forumId})
+MATCH (n:Person {id: $personId})
 DETACH DELETE n

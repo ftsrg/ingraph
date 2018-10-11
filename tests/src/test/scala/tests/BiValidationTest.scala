@@ -19,7 +19,7 @@ class BiValidationTest extends FunSuite {
 
   testCases.foreach {
     tc =>
-      ignore(s"${tc.name}") {
+      test(s"${tc.name}") {
         val ntr = new Neo4jTestRunner(tc, Some(dbDir))
         val neo4jRunInfo: (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = ntr.run()
         val neo4jResults: Iterable[Seq[Map[String, Any]]] = neo4jRunInfo._1

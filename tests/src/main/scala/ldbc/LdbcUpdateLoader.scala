@@ -33,7 +33,7 @@ class LdbcUpdateLoader(val csvDir: String,
         case 7 => Update7AddComment(u(3), u(4), u(5), u(6), u(7), u(8), u(9), u(10), u(11), u(12), u(13))
         case 8 => Update8AddFriendship(u(3), u(4), u(5))
         case 9 => Update9RemovePost(u(3))
-        case 10 => Update10RemoveForum(u(3))
+        case 10 => Update10RemovePerson(u(3))
         case 11 => Update11RemoveHasInterest(u(3), u(4))
       }
     }
@@ -52,7 +52,7 @@ class LdbcUpdateLoader(val csvDir: String,
         case up: Update7AddComment => update(up)
         case up: Update8AddFriendship => update(up)
         case up: Update9RemovePost => update(up)
-        case up: Update10RemoveForum => update(up)
+        case up: Update10RemovePerson => update(up)
         case up: Update11RemoveHasInterest => update(up)
       }
     }
@@ -185,9 +185,9 @@ class LdbcUpdateLoader(val csvDir: String,
     substituteParameters(9, parameters)
   }
 
-  def update(u: Update10RemoveForum): String = {
+  def update(u: Update10RemovePerson): String = {
     val parameters = Map(
-      "forumId" -> u.forumId
+      "personId" -> u.personId
     )
     substituteParameters(10, parameters)
   }
