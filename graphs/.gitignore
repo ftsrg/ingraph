@@ -1,0 +1,2 @@
+# we usually extract database instances from zips
+*.zip
