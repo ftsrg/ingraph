@@ -192,20 +192,36 @@ abstract class BinarySqlNodeFromFNode[+T <: BinaryFNode]
 class GetEdges(val fNode: fplan.GetEdges,
                val options: CompilerOptions)
   extends LeafSqlNodeFromFNode[fplan.GetEdges] {
-  override def innerSql: String = {
-    if (options.gTop.isDefined)
-      getGetEdgesSql(fNode, options, options.gTop.get)
-    else
-      getGetEdgesSql(fNode, options)
-  }
+  assert(options.gTop.isEmpty)
+
+  override def innerSql: String = getGetEdgesSql(fNode, options)
+}
+
+class GetEdgesWithGTop(val fNode: fplan.GetEdges,
+                       val options: CompilerOptions,
+                       val gTop: GTop)
+  extends LeafSqlNodeFromFNode[fplan.GetEdges] {
+
+  override def innerSql: String = getGetEdgesSql(fNode, options, gTop)
 }
 
 object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
   override def create(fNode: fplan.GetEdges,
                       options: CompilerOptions)
   : (SqlNode, CompilerOptions) = {
-    if (fNode.nnode.directed)
-      (new GetEdges(fNode, options), options)
+    makeDirected(fNode, options)
+  }
+
+  private def makeDirected(fNode: fplan.GetEdges, options: CompilerOptions): (SqlNode, CompilerOptions) = {
+    if (fNode.nnode.directed) {
+      val getEdges =
+        if (options.gTop.isDefined)
+        new GetEdgesWithGTop(fNode, options, options.gTop.get)
+      else
+        new GetEdges(fNode, options)
+
+      getEdges->getEdges.lastOptions
+    }
     else {
       val sameDirectionNNode = fNode.nnode.copy(directed = true)
       val oppositeDirectionNNode = sameDirectionNNode
@@ -215,10 +231,11 @@ object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
       val sameDirectionFNode = fNode.copy(nnode = sameDirectionNNode)
       val oppositeDirectionFNode = fNode.copy(nnode = oppositeDirectionNNode)
 
-      val (left, leftOptions) = transformOptions(create(sameDirectionFNode, options))
-      val (right, rightOptions) = transformOptions(create(oppositeDirectionFNode, leftOptions))
+      val (left, _) = create(sameDirectionFNode, options)
+      val (right, _) = create(oppositeDirectionFNode, left.nextOptions)
 
-      UnionAll(left, right, rightOptions) -> rightOptions
+      val unionAll = UnionAll(left, right, right.nextOptions)
+      unionAll -> unionAll.lastOptions
     }
   }
 }

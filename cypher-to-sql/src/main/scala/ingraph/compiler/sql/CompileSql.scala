@@ -65,12 +65,12 @@ object CompileSql {
 
     val edgeLabels = node.nnode.edge.labels.edgeLabels
 
-    val implNode = gTop.getImplementationLevel
+    val implEdge = gTop.getImplementationLevel
       .getImplementationEdges.asScala
       .find(_.getTypes.asScala.toSet.intersect(edgeLabels).nonEmpty)
       .get
 
-    val traversalHop = implNode.getPaths.get(0).getTraversalHops.asScala.head
+    val traversalHop = implEdge.getPaths.get(0).getTraversalHops.asScala.head
     val sourceNode = gTop.getImplementationLevel.getImplementationNodes.asScala
       .find(_.getTableName == traversalHop.getSourceTableName)
       .get
