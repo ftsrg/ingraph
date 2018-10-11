@@ -36,8 +36,8 @@ RETURN
   friend.gender AS friendGender,
   friend.browserUsed AS friendBrowserUsed,
   friend.locationIP AS friendLocationIp,
-  friend.email AS friendEmails,
-  friend.speaks AS friendLanguages,
+  //friend.email AS friendEmails,
+  //friend.speaks AS friendLanguages,
   friendCity.name AS friendCityName,
   unis AS friendUniversities,
   companies AS friendCompanies
