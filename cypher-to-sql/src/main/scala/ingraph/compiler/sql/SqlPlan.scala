@@ -214,6 +214,10 @@ object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
       val getEdges: SqlNode =
         if (options.gTop.isDefined) {
           val edgeTuples = options.gTop.get.findEdgeTables(fNode.nnode.edge.labels.edgeLabels)
+            .filter { case (_, _, sourceNodes, destinationNodes) =>
+              (fNode.nnode.src.labels.vertexLabels.diff(sourceNodes.flatMap(_.getTypes.asScala).toSet).isEmpty
+                && fNode.nnode.trg.labels.vertexLabels.diff(destinationNodes.flatMap(_.getTypes.asScala).toSet).isEmpty)
+            }
 
           makeUnionNodes(options, edgeTuples) {
             case (nextOptions, edge) => new GetEdgesWithGTop(fNode, nextOptions, edge)
@@ -230,15 +234,21 @@ object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
     }
   }
 
-  def makeUnionNodes[S](initialOptions: CompilerOptions, source: Iterable[S])(createFunc: (CompilerOptions, S) => SqlNode): SqlNode = {
-    val firstNode: SqlNode = createFunc(initialOptions, source.head)
+  def makeUnionNodes[S](initialOptions: CompilerOptions,
+                        source: Iterable[S])
+                       (createFunc: (CompilerOptions, S) => SqlNode): SqlNode = {
+    if (source.isEmpty) {
+      NoRows(initialOptions)
+    } else {
+      val firstNode: SqlNode = createFunc(initialOptions, source.head)
 
-    source.drop(1)
-      .foldLeft(firstNode) {
-        case (lastNode, newSource) =>
-          val newNode = createFunc(lastNode.nextOptions, newSource)
-          UnionAll(lastNode, newNode, newNode.nextOptions)
-      }
+      source.drop(1)
+        .foldLeft(firstNode) {
+          case (lastNode, newSource) =>
+            val newNode = createFunc(lastNode.nextOptions, newSource)
+            UnionAll.create(lastNode, newNode, newNode.nextOptions)
+        }
+    }
   }
 
   private def makeDirected(fNode: fplan.GetEdges, options: CompilerOptions): (SqlNode, CompilerOptions) = {
@@ -255,7 +265,7 @@ object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
     val (left, _) = create(sameDirectionFNode, options)
     val (right, _) = create(oppositeDirectionFNode, left.nextOptions)
 
-    val unionAll = UnionAll(left, right, right.nextOptions)
+    val unionAll = UnionAll.create(left, right, right.nextOptions)
     unionAll -> unionAll.lastOptions
   }
 }
@@ -698,6 +708,18 @@ case class UnionAll(override val left: SqlNode,
        |SELECT $columns FROM $rightSql"""
 }
 
+object UnionAll {
+  def create(leftNode: SqlNode,
+             rightNode: SqlNode,
+             options: CompilerOptions): SqlNode =
+    (leftNode, rightNode) match {
+      case (NoRows(_), NoRows(_)) => NoRows(options)
+      case (NoRows(_), right) => right
+      case (left, NoRows(_)) => left
+      case (left, right) => UnionAll(left, right, options)
+    }
+}
+
 case class GenerateId(child: SqlNode,
                       elementTypePrefix: String,
                       override val options: CompilerOptions,
@@ -841,6 +863,10 @@ object Dual extends SqlNodeCreator0[fplan.Dual] {
                       options: CompilerOptions)
   : (Dual, CompilerOptions) =
     (new Dual(options), options)
+}
+
+case class NoRows(options: CompilerOptions) extends LeafSqlNode {
+  override def innerSql: String = ???
 }
 
 class IdentityNode(override val child: SqlNode,
