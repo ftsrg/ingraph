@@ -215,13 +215,9 @@ object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
         if (options.gTop.isDefined) {
           val edgeTuples = options.gTop.get.findEdgeTables(fNode.nnode.edge.labels.edgeLabels)
 
-          val firstNode: SqlNode = new GetEdgesWithGTop(fNode, options, edgeTuples.head)
-          edgeTuples.drop(1)
-            .foldLeft(firstNode) {
-              case (lastNode, newTuple) =>
-                val newNode = new GetEdgesWithGTop(fNode, lastNode.nextOptions, newTuple)
-                UnionAll(lastNode, newNode, newNode.nextOptions)
-            }
+          makeUnionNodes(options, edgeTuples) {
+            case (nextOptions, edge) => new GetEdgesWithGTop(fNode, nextOptions, edge)
+          }
         }
         else {
           new GetEdges(fNode, options)
@@ -232,6 +228,17 @@ object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
     else {
       makeDirected(fNode, options)
     }
+  }
+
+  def makeUnionNodes[S](initialOptions: CompilerOptions, source: Iterable[S])(createFunc: (CompilerOptions, S) => SqlNode): SqlNode = {
+    val firstNode: SqlNode = createFunc(initialOptions, source.head)
+
+    source.drop(1)
+      .foldLeft(firstNode) {
+        case (lastNode, newSource) =>
+          val newNode = createFunc(lastNode.nextOptions, newSource)
+          UnionAll(lastNode, newNode, newNode.nextOptions)
+      }
   }
 
   private def makeDirected(fNode: fplan.GetEdges, options: CompilerOptions): (SqlNode, CompilerOptions) = {
