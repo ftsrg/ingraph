@@ -60,25 +60,28 @@ object CompileSql {
        |  FROM $childSql AS subquery"""
   }
 
-  def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions): String = {
+  def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions, gTop: GTop): String = {
     assert(node.nnode.directed, "Cannot compile undirected GetEdges. Use UnionAll instead.")
-
-    val gTop: Option[GTop] = options.gTop
 
     val edgeLabels = node.nnode.edge.labels.edgeLabels
 
-    val implNode = gTop.flatMap(_.getImplementationLevel
+    val implNode = gTop.getImplementationLevel
       .getImplementationEdges.asScala
-      .find(_.getTypes.asScala.toSet.intersect(edgeLabels).nonEmpty))
+      .find(_.getTypes.asScala.toSet.intersect(edgeLabels).nonEmpty)
+      .get
 
-    val traversalHop = implNode.map(_.getPaths.get(0).getTraversalHops.asScala.head)
-    val sourceNode = traversalHop.flatMap(hop => gTop.get.getImplementationLevel.getImplementationNodes.asScala.find(_.getTableName == hop.getSourceTableName))
-    val destinationNode = traversalHop.flatMap(hop => gTop.get.getImplementationLevel.getImplementationNodes.asScala.find(_.getTableName == hop.getDestinationTableName))
+    val traversalHop = implNode.getPaths.get(0).getTraversalHops.asScala.head
+    val sourceNode = gTop.getImplementationLevel.getImplementationNodes.asScala
+      .find(_.getTableName == traversalHop.getSourceTableName)
+      .get
+    val destinationNode = gTop.getImplementationLevel.getImplementationNodes.asScala
+      .find(_.getTableName == traversalHop.getDestinationTableName)
+      .get
 
-    val edgeTable = traversalHop.map(_.getJoinTableName).map(getQuotedColumnName).getOrElse("edge")
-    val fromColumn = traversalHop.map(_.getJoinTableSourceColumn).map(getQuotedColumnName).getOrElse("\"from\"")
-    val toColumn = traversalHop.map(_.getJoinTableDestinationColumn).map(getQuotedColumnName).getOrElse("\"to\"")
-    val edgeColumn = traversalHop.map(_ => s"ROW($fromColumn, $toColumn)").getOrElse("edge_id")
+    val edgeTable = getQuotedColumnName(traversalHop.getJoinTableName)
+    val fromColumn = getQuotedColumnName(traversalHop.getJoinTableSourceColumn)
+    val toColumn = getQuotedColumnName(traversalHop.getJoinTableDestinationColumn)
+    val edgeColumn = s"ROW($fromColumn, $toColumn)"
 
     val fromColumnNewName = getQuotedColumnName(node.nnode.src)
     val edgeColumnNewName = getQuotedColumnName(node.nnode.edge)
@@ -87,88 +90,101 @@ object CompileSql {
     // TODO handle properties from edge lists
 
     val propertiesWithTables =
-      if (gTop.isEmpty) None
-      else Some(node.requiredProperties.map {
+      node.requiredProperties.map {
         case prop@PropertyAttribute(propName, element, _) => {
           val (vertexTable, tableName, attributes) = element match {
             case vertex: VertexAttribute if vertex.resolvedName == node.nnode.src.resolvedName =>
-              (sourceNode, sourceNode.get.getTableName, sourceNode.get.getAttributes)
+              (Some(sourceNode), sourceNode.getTableName, sourceNode.getAttributes)
             case vertex: VertexAttribute if vertex.resolvedName == node.nnode.trg.resolvedName =>
-              (destinationNode, destinationNode.get.getTableName, destinationNode.get.getAttributes)
+              (Some(destinationNode), destinationNode.getTableName, destinationNode.getAttributes)
             case _: EdgeAttribute =>
-              (None, traversalHop.get.getJoinTableName, traversalHop.get.getAttributes)
+              (None, traversalHop.getJoinTableName, traversalHop.getAttributes)
           }
           val columnName = attributes.asScala.find(_.getAbstractionLevelName == propName).get.getColumnName
           val newName = getQuotedColumnName(prop)
 
           (vertexTable, tableName, columnName, newName)
         }
-      })
+      }
 
-    val extraColumns =
-      propertiesWithTables
-        .map(_.map { case (_, tableName, columnName, newName) =>
-          getQuotedColumnName(tableName) + '.' + getQuotedColumnName(columnName) + " AS " + newName
-        })
-        .getOrElse(node.requiredProperties.map(getSqlForProperty(_, node.nnode)))
+    val extraColumns = propertiesWithTables
+      .map { case (_, tableName, columnName, newName) =>
+        getQuotedColumnName(tableName) + '.' + getQuotedColumnName(columnName) + " AS " + newName
+      }
     val extraColumnsPart = extraColumns.mkString(", ")
     val commaBeforeExtraColumns =
       if (extraColumns.nonEmpty) ","
       else ""
 
     val extraTablesToJoin = propertiesWithTables
-      .map(_.flatMap { case (vertexTable, _, _, _) => vertexTable }.toSet)
-      .getOrElse(Set())
+      .flatMap { case (vertexTable, _, _, _) => vertexTable }
+      .toSet
     val joinVertexTablesPart =
       extraTablesToJoin.map { vertexTable =>
-        val sourceTableName = getQuotedColumnName(traversalHop.get.getSourceTableName)
-        val joinSourceColumn = getQuotedColumnName(traversalHop.get.getJoinTableSourceColumn)
-        val sourceColumn = getQuotedColumnName(traversalHop.get.getSourceTableColumn)
+        val sourceTableName = getQuotedColumnName(traversalHop.getSourceTableName)
+        val joinSourceColumn = getQuotedColumnName(traversalHop.getJoinTableSourceColumn)
+        val sourceColumn = getQuotedColumnName(traversalHop.getSourceTableColumn)
 
-        val destinationTableName = getQuotedColumnName(traversalHop.get.getDestinationTableName)
-        val destinationColumn = getQuotedColumnName(traversalHop.get.getDestinationTableColumn)
-        val joinDestinationColumn = getQuotedColumnName(traversalHop.get.getJoinTableDestinationColumn)
+        val destinationTableName = getQuotedColumnName(traversalHop.getDestinationTableName)
+        val destinationColumn = getQuotedColumnName(traversalHop.getDestinationTableColumn)
+        val joinDestinationColumn = getQuotedColumnName(traversalHop.getJoinTableDestinationColumn)
 
-        if (vertexTable == sourceNode.get)
+        if (vertexTable == sourceNode)
           s"JOIN $sourceTableName ON ($edgeTable.$joinSourceColumn = $sourceTableName.$sourceColumn)"
-        else if (vertexTable == destinationNode.get)
+        else if (vertexTable == destinationNode)
           s"JOIN $destinationTableName ON ($edgeTable.$joinDestinationColumn = $destinationTableName.$destinationColumn)"
         else
           throw new NoSuchElementException("Unexpected table");
       }
         .mkString("\n")
 
+    // TODO handle type constrainsts
+
+    i"""SELECT $fromColumn AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, $toColumn AS $toColumnNewName$commaBeforeExtraColumns
+       |  $extraColumnsPart
+       |  FROM $edgeTable
+       |    $joinVertexTablesPart"""
+  }
+
+  def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions): String = {
+    assert(node.nnode.directed, "Cannot compile undirected GetEdges. Use UnionAll instead.")
+
+    val edgeLabels = node.nnode.edge.labels.edgeLabels
+
+    val edgeTable = "edge"
+    val fromColumn = "\"from\""
+    val toColumn = "\"to\""
+    val edgeColumn = "edge_id"
+
+    val fromColumnNewName = getQuotedColumnName(node.nnode.src)
+    val edgeColumnNewName = getQuotedColumnName(node.nnode.edge)
+    val toColumnNewName = getQuotedColumnName(node.nnode.trg)
+
+    // TODO handle properties from edge lists
+
+    val extraColumns = node.requiredProperties.map(getSqlForProperty(_, node.nnode))
+    val extraColumnsPart = extraColumns.mkString(", ")
+    val commaBeforeExtraColumns =
+      if (extraColumns.nonEmpty) ","
+      else ""
+
     val edgeLabelsEscaped = edgeLabels.map(name => getSingleQuotedString(name))
-    val typeConstraint = if (edgeLabelsEscaped.isEmpty || gTop.isDefined)
-      None
-    else
-      Some(s"type IN (${edgeLabelsEscaped.mkString(", ")})")
+    val typeConstraint =
+      if (edgeLabelsEscaped.isEmpty) None
+      else Some(s"type IN (${edgeLabelsEscaped.mkString(", ")})")
 
     val vertexLabelConstraints =
-      if (gTop.nonEmpty)
-        Seq()
-      else
-        Map(fromColumnNewName -> node.src, toColumnNewName -> node.trg)
-          .mapValues(_.labels)
-          .flatMap { case (columnName, labelSet) => getVertexLabelSqlCondition(labelSet, columnName) }
-          .toSeq
+      Map(fromColumnNewName -> node.src, toColumnNewName -> node.trg)
+        .mapValues(_.labels)
+        .flatMap { case (columnName, labelSet) => getVertexLabelSqlCondition(labelSet, columnName) }
+        .toSeq
 
-    val constraints = vertexLabelConstraints ++ typeConstraint
-    val constraintPart = getWhereClause(constraints)
-
-    if (gTop.isDefined)
-      i"""SELECT $fromColumn AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, $toColumn AS $toColumnNewName$commaBeforeExtraColumns
-         |  $extraColumnsPart
-         |  FROM $edgeTable
-         |    $joinVertexTablesPart
-         |$constraintPart"""
-    else
-      i"""SELECT $fromColumnNewName, $edgeColumnNewName, $toColumnNewName$commaBeforeExtraColumns $extraColumnsPart FROM
-         |  (
-         |    SELECT "from" AS $fromColumnNewName, edge_id AS $edgeColumnNewName, "to" AS $toColumnNewName FROM edge
-         |    ${getWhereClause(typeConstraint)}
-         |  ) subquery
-         |${getWhereClause(vertexLabelConstraints)}"""
+    i"""SELECT $fromColumnNewName, $edgeColumnNewName, $toColumnNewName$commaBeforeExtraColumns $extraColumnsPart FROM
+       |  (
+       |    SELECT "from" AS $fromColumnNewName, edge_id AS $edgeColumnNewName, "to" AS $toColumnNewName FROM edge
+       |    ${getWhereClause(typeConstraint)}
+       |  ) subquery
+       |${getWhereClause(vertexLabelConstraints)}"""
   }
 
   def getWhereClause(constraints: Iterable[String]): String = {

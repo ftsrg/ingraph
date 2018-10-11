@@ -192,7 +192,12 @@ abstract class BinarySqlNodeFromFNode[+T <: BinaryFNode]
 class GetEdges(val fNode: fplan.GetEdges,
                val options: CompilerOptions)
   extends LeafSqlNodeFromFNode[fplan.GetEdges] {
-  override def innerSql: String = getGetEdgesSql(fNode, options)
+  override def innerSql: String = {
+    if (options.gTop.isDefined)
+      getGetEdgesSql(fNode, options, options.gTop.get)
+    else
+      getGetEdgesSql(fNode, options)
+  }
 }
 
 object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
