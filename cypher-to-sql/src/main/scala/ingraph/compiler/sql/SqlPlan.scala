@@ -219,7 +219,8 @@ object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
           edgeTuples.drop(1)
             .foldLeft(firstNode) {
               case (lastNode, newTuple) =>
-                UnionAll(lastNode, new GetEdgesWithGTop(fNode, options, newTuple), lastNode.nextOptions)
+                val newNode = new GetEdgesWithGTop(fNode, lastNode.nextOptions, newTuple)
+                UnionAll(lastNode, newNode, newNode.nextOptions)
             }
         }
         else {
