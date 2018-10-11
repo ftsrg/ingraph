@@ -19,7 +19,7 @@ class BiValidationTest extends FunSuite {
 
   testCases.foreach {
     tc =>
-      test(s"${tc.name}") {
+      ignore(s"${tc.name}") {
         val ntr = new Neo4jTestRunner(tc, Some(dbDir))
         val neo4jRunInfo: (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = ntr.run()
         val neo4jResults: Iterable[Seq[Map[String, Any]]] = neo4jRunInfo._1
@@ -36,7 +36,7 @@ class BiValidationTest extends FunSuite {
         ingraphResults.foreach(
           r => println("ingraph results: " + r.map(x => x.toSeq.sortBy(_._1)))
         )
-//        assert(ingraphResults == neo4jResults)
+        assert(ingraphResults == neo4jResults)
       }
   }
 
