@@ -828,9 +828,10 @@ object Create extends SqlNodeCreator[fplan.Create] {
   }
 }
 
-class Dual(val fNode: fplan.Dual,
-           val options: CompilerOptions)
-  extends LeafSqlNodeFromFNode[fplan.Dual] {
+case class Dual(options: CompilerOptions)
+  extends LeafSqlNode {
+
+  override def output: Seq[ResolvableName] = Seq()
 
   override def innerSql: String = "SELECT"
 }
@@ -839,7 +840,7 @@ object Dual extends SqlNodeCreator0[fplan.Dual] {
   override def create(fNode: fplan.Dual,
                       options: CompilerOptions)
   : (Dual, CompilerOptions) =
-    (new Dual(fNode, options), options)
+    (new Dual(options), options)
 }
 
 class IdentityNode(override val child: SqlNode,
