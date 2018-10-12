@@ -698,6 +698,9 @@ case class UnionAll(override val left: SqlNode,
   // additional constraint here is that the columns must have the same names in each subquery
   assert(left.output.map(_.resolvedName).toSet == right.output.map(_.resolvedName).toSet)
 
+  // TODO: is there any more info to propagate here?
+  override def output: Seq[ResolvableName] = left.output
+
   // explicitly specify columns for the right query
   // to have the same order of columns as in the left query
   private val columns: String = left.output.map(getQuotedColumnName).mkString(", ")
