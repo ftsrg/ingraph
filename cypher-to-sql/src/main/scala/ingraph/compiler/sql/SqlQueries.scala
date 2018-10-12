@@ -156,5 +156,10 @@ object SqlQueries {
       |LANGUAGE SQL AS
       |'SELECT count(val) = count(DISTINCT val)
       | FROM unnest($1) AS vals (val);';
+      |
+      |CREATE TYPE edge_type AS (
+      |  src BIGINT,
+      |  trg BIGINT
+      |);
     """.stripMargin
 }

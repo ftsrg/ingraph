@@ -105,7 +105,8 @@ object CompileSql {
           getQuotedColumnName(traversalHop.getJoinTableSourceColumn),
           getQuotedColumnName(traversalHop.getJoinTableDestinationColumn))
       }
-    val edgeColumn = s"ROW($fromColumn, $toColumn)"
+    // TODO: differentiate edge types too
+    val edgeColumn = s"ROW($fromColumn, $toColumn)::edge_type"
 
     val fromColumnNewName = getQuotedColumnName(node.nnode.src)
     val edgeColumnNewName = getQuotedColumnName(node.nnode.edge)
@@ -288,7 +289,7 @@ object CompileSql {
         }
         case node: ResolvableName => {
           val unwrapPart =
-            if (options.unwrapJson && node.isInstanceOf[PropertyAttribute])
+            if (options.unwrapJson && node.isInstanceOf[PropertyAttribute] && options.gTop.isEmpty)
               "->'value'->>'val'"
             else
               ""
@@ -322,7 +323,7 @@ object CompileSql {
   }
 
   def getSqlForLiteral(literal: Literal, options: CompilerOptions): String = {
-    if (options.unwrapJson) {
+    if (options.unwrapJson || options.gTop.isDefined) {
       val sqlString = literal.dataType match {
         // SQL database cannot parse literal suffix (e.g. 42L)
         case _: LongType => literal.value.toString

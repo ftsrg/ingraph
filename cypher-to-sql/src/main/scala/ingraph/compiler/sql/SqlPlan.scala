@@ -360,13 +360,17 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
     else
       ""
 
+  val edgeType =
+    if (options.gTop.isDefined) "edge_type"
+    else "BIGINT"
+
   override def innerSql: String =
     i"""WITH RECURSIVE recursive_table AS (
        |  (
        |    WITH left_query AS (SELECT * FROM $leftSql)
        |    SELECT
        |      *,
-       |      ARRAY [] :: BIGINT [] AS $edgeListName,
+       |      ARRAY [] :: $edgeType [] AS $edgeListName,
        |      $edgesFromVertexName AS next_from,
        |      $edgesFromVertexName AS $edgesToVertexName
        |    FROM left_query
@@ -597,7 +601,11 @@ class AllDifferent(val fNode: fplan.AllDifferent,
                    override val child: SqlNode,
                    val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.AllDifferent](child) {
-  val edgeIdsArray = ("ARRAY[]::BIGINT[]" +: fNode.nnode.edges.map(getQuotedColumnName)).mkString(" || ")
+  val edgeType =
+    if (options.gTop.isDefined) "edge_type"
+    else "BIGINT"
+
+  val edgeIdsArray = (s"ARRAY[]::$edgeType[]" +: fNode.nnode.edges.map(getQuotedColumnName)).mkString(" || ")
   // only more than 1 node must be checked for uniqueness (edge list can contain more edges)
   val allDifferentNeeded = fNode.nnode.edges.size > 1 || fNode.nnode.edges.exists(_.isInstanceOf[EdgeListAttribute])
 

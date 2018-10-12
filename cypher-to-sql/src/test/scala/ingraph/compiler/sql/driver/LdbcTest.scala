@@ -84,21 +84,15 @@ object LdbcTest {
   val expectedToSucceed: Set[String] = Set(
     "SQL",
     "Simple test",
-    //    "LdbcQuery2",
-    //    "LdbcQuery3",
-    //    "LdbcQuery4",
-    //    "LdbcQuery5",
-    //    "LdbcQuery6",
-    //    "LdbcQuery8",
-    //    "LdbcQuery9",
-    //    "LdbcQuery11",
-    //    "LdbcQuery12",
-    //    "LdbcShortQuery1PersonProfile",
-    //    "LdbcShortQuery3PersonFriends",
-    //    "LdbcShortQuery4MessageContent",
-    //    "LdbcShortQuery5MessageCreator",
-    //    "LdbcShortQuery6MessageForum",
-    //    "LdbcShortQuery7MessageReplies"
+    "LdbcQuery6",
+    "LdbcQuery8",
+    "LdbcQuery11",
+    "LdbcQuery12",
+    "LdbcShortQuery1PersonProfile",
+    "LdbcShortQuery3PersonFriends",
+    "LdbcShortQuery4MessageContent",
+    "LdbcShortQuery5MessageCreator",
+    "LdbcShortQuery7MessageReplies",
     ""
   )
 
