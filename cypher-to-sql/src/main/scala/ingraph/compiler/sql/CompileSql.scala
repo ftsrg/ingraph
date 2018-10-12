@@ -68,9 +68,43 @@ object CompileSql {
     val sourceNode = sourceNodes.head
     val destinationNode = destinationNodes.head
 
-    val edgeTable = getQuotedColumnName(traversalHop.getJoinTableName)
-    val fromColumn = getQuotedColumnName(traversalHop.getJoinTableSourceColumn)
-    val toColumn = getQuotedColumnName(traversalHop.getJoinTableDestinationColumn)
+    assert(sourceNode.getId.size == 1 && destinationNode.getId.size == 1, "No support for composite keys")
+    val sourceIdColumn = sourceNode.getId.get(0).getColumnName
+    val destinationIdColumn = destinationNode.getId.get(0).getColumnName
+
+    val vertexTableBasedJoinTableNode: Option[ImplementationNode] =
+      if (!traversalHop.getJoinTableName.isEmpty)
+        None
+      else {
+        Some(
+          if (traversalHop.getDestinationTableColumn == destinationIdColumn)
+            sourceNode
+          else if (traversalHop.getSourceTableColumn == sourceIdColumn)
+            destinationNode
+          else
+            throw new IllegalArgumentException("Couldn't determine which table has foreign key to the other.")
+        )
+      }
+
+    val (edgeTable, fromColumn, toColumn) =
+      if (traversalHop.getJoinTableName.isEmpty) {
+        val (sourceColumn, destinationColumn) =
+          if (vertexTableBasedJoinTableNode.get == sourceNode)
+            sourceIdColumn -> traversalHop.getSourceTableColumn
+          else
+            traversalHop.getDestinationTableColumn -> destinationIdColumn
+
+        (
+          getQuotedColumnName(vertexTableBasedJoinTableNode.get.getTableName),
+          getQuotedColumnName(sourceColumn),
+          getQuotedColumnName(destinationColumn))
+      }
+      else {
+        (
+          getQuotedColumnName(traversalHop.getJoinTableName),
+          getQuotedColumnName(traversalHop.getJoinTableSourceColumn),
+          getQuotedColumnName(traversalHop.getJoinTableDestinationColumn))
+      }
     val edgeColumn = s"ROW($fromColumn, $toColumn)"
 
     val fromColumnNewName = getQuotedColumnName(node.nnode.src)
@@ -106,18 +140,19 @@ object CompileSql {
       if (extraColumns.nonEmpty) ","
       else ""
 
-    val extraTablesToJoin = propertiesWithTables
+    val extraTablesToJoin = (propertiesWithTables
       .flatMap { case (vertexTable, _, _, _) => vertexTable }
       .toSet
+      -- vertexTableBasedJoinTableNode)
     val joinVertexTablesPart =
       extraTablesToJoin.map { vertexTable =>
         val sourceTableName = getQuotedColumnName(traversalHop.getSourceTableName)
-        val joinSourceColumn = getQuotedColumnName(traversalHop.getJoinTableSourceColumn)
+        val joinSourceColumn = fromColumn
         val sourceColumn = getQuotedColumnName(traversalHop.getSourceTableColumn)
 
         val destinationTableName = getQuotedColumnName(traversalHop.getDestinationTableName)
         val destinationColumn = getQuotedColumnName(traversalHop.getDestinationTableColumn)
-        val joinDestinationColumn = getQuotedColumnName(traversalHop.getJoinTableDestinationColumn)
+        val joinDestinationColumn = toColumn
 
         if (vertexTable == sourceNode)
           s"JOIN $sourceTableName ON ($edgeTable.$joinSourceColumn = $sourceTableName.$sourceColumn)"
