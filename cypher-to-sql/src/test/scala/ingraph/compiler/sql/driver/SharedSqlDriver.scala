@@ -10,7 +10,7 @@ trait SharedSqlDriver extends BeforeAndAfterAll with BeforeAndAfterEach {
 
   def initNewDriver(): SqlDriver = new SqlDriver(translateCreateQueries = true)
 
-  private def init(): Unit = {
+  protected def init(): Unit = {
     driver = initNewDriver()
     session = driver.session()
   }

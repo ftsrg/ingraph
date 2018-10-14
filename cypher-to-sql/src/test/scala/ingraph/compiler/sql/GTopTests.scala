@@ -20,12 +20,12 @@ class GTopTests extends FunSuite with TckTestRunner with SharedSqlDriver {
   val gTop: GTop = SerializationInterface.read(new File(getClass.getResource("/gtop/movies.gtop").getFile))
   val sqlInitCommands: String = io.File(getClass.getResource("/gtop/movies.sql").getFile).slurp()
 
-  override protected def beforeEach(): Unit = {
-    super.beforeEach()
+  override protected def init(): Unit = {
+    super.init()
+
     withResources(session.beginTransaction()) { tx =>
 
       withResources(tx.rawSqlConnection.createStatement()) { statement =>
-        statement.executeUpdate(SqlQueries.purge)
         statement.executeUpdate(sqlInitCommands)
       }
       tx.success()
@@ -47,7 +47,8 @@ class GTopTests extends FunSuite with TckTestRunner with SharedSqlDriver {
     }
   }
 
-  override def initNewDriver(): SqlDriver = new SqlDriver(translateCreateQueries = true, Some(gTop))
+  override def initNewDriver(): SqlDriver =
+    new SqlDriver(translateCreateQueries = true, Some(gTop), initializeDb = false)
 
   runTckTests(() => new TckAdapter(session), scenarioSet)
 }

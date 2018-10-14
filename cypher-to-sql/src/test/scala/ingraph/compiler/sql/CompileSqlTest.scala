@@ -174,6 +174,7 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
 
     withResources(sqlConnection.createStatement)(sqlStatement => {
       sqlStatement.executeUpdate(SqlQueries.createTables)
+      sqlStatement.executeUpdate(SqlQueries.utilityFunctions)
 
       ExportSteps.execute(cypherSession, sqlConnection)
 

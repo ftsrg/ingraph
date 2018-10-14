@@ -35,11 +35,12 @@ class SqlDriver(val translateCreateQueries: Boolean = false,
 
   val url = database.url
 
-  if (initializeDb) {
-    withResources(DriverManager.getConnection(url)) { sqlConnection =>
-      withResources(sqlConnection.createStatement) {
-        _.executeUpdate(SqlQueries.createTables)
-      }
+  withResources(DriverManager.getConnection(url)) { sqlConnection =>
+    withResources(sqlConnection.createStatement) { statement =>
+      if (initializeDb)
+        statement.executeUpdate(SqlQueries.createTables)
+
+      statement.executeUpdate(SqlQueries.utilityFunctions)
     }
   }
 
