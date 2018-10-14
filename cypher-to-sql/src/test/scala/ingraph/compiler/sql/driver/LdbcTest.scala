@@ -56,6 +56,8 @@ class LdbcTest extends FunSuite {
           withResources(driver.session) { session =>
             withResources(session.beginTransaction()) { tx =>
               try {
+                println()
+
                 val limit = 20
                 val result = tx.run(cypherQueryString).list().asScala
 
@@ -84,6 +86,7 @@ object LdbcTest {
   val expectedToSucceed: Set[String] = Set(
     "SQL",
     "Simple test",
+    "LdbcQuery1",
     "LdbcQuery6",
     "LdbcQuery8",
     "LdbcQuery11",

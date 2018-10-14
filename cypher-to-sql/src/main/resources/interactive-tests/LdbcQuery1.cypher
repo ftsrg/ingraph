@@ -10,7 +10,7 @@ WITH
   collect(
     CASE uni.name
       WHEN null THEN null
-      ELSE [uni.name, studyAt.classYear, uniCity.name]
+      ELSE [uni.name, toString(studyAt.classYear), uniCity.name]
     END
   ) AS unis,
   friendCity,
@@ -21,7 +21,7 @@ WITH
   collect(
     CASE company.name
       WHEN null THEN null
-      ELSE [company.name, workAt.workFrom, companyCountry.name]
+      ELSE [company.name, toString(workAt.workFrom), companyCountry.name]
     END
   ) AS companies,
   unis,
