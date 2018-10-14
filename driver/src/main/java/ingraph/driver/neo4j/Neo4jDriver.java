@@ -2,7 +2,6 @@ package ingraph.driver.neo4j;
 
 import ingraph.driver.CypherDriver;
 import org.neo4j.driver.v1.AccessMode;
-import org.neo4j.driver.v1.AuthToken;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
@@ -11,6 +10,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.test.TestGraphDatabaseFactory;
 
 import java.io.File;
+import java.util.concurrent.CompletionStage;
 
 public class Neo4jDriver extends CypherDriver {
 
@@ -96,6 +96,11 @@ public class Neo4jDriver extends CypherDriver {
 	public void close() {
 		driver.close();
 		graphDb.shutdown();
+	}
+
+	@Override
+	public CompletionStage<Void> closeAsync() {
+		throw new UnsupportedOperationException();
 	}
 
 }

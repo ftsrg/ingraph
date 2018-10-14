@@ -1,13 +1,14 @@
 package ingraph.compiler.sql.driver
 
 import java.sql.Connection
+import java.util.concurrent.CompletionStage
 import java.util.{Map => javaMap}
 
 import ingraph.compiler.sql.Util.withResources
 import ingraph.compiler.sql.{CompileSql, ExportSteps}
 import ingraph.model.fplan.Create
 import org.neo4j.driver.v1._
-import org.neo4j.driver.v1.types.TypeSystem
+import org.neo4j.driver.v1.types.{MapAccessor, MapAccessorWithDefaultValue, TypeSystem}
 
 import scala.collection.JavaConverters._
 
@@ -42,7 +43,7 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
 
   override def run(statement: Statement): StatementResult = {
     val cypherQuery = statement.text
-    val sqlCompiler = new CompileSql(cypherQuery, statement.parameters().asMap.asScala.toMap, sqlSession.sqlDriver.gTop)
+    val sqlCompiler = new CompileSql(cypherQuery, (statement.parameters():MapAccessor).asMap.asScala.toMap, sqlSession.sqlDriver.gTop)
 
     withResources(rawSqlConnection.createStatement)(sqlStatement => {
       val translateCreateQueries = sqlSession.sqlDriver.translateCreateQueries
@@ -70,4 +71,18 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
   override def typeSystem(): TypeSystem = sqlSession.typeSystem()
 
   override def isOpen: Boolean = sqlSession.currentTransaction.contains(this)
+
+  override def commitAsync(): CompletionStage[Void] = ???
+
+  override def rollbackAsync(): CompletionStage[Void] = ???
+
+  override def runAsync(statementTemplate: String, parameters: Value): CompletionStage[StatementResultCursor] = ???
+
+  override def runAsync(statementTemplate: String, statementParameters: javaMap[String, AnyRef]): CompletionStage[StatementResultCursor] = ???
+
+  override def runAsync(statementTemplate: String, statementParameters: Record): CompletionStage[StatementResultCursor] = ???
+
+  override def runAsync(statementTemplate: String): CompletionStage[StatementResultCursor] = ???
+
+  override def runAsync(statement: Statement): CompletionStage[StatementResultCursor] = ???
 }

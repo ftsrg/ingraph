@@ -1,6 +1,7 @@
 package ingraph.compiler.sql.driver
 
 import java.sql.{Connection, DriverManager}
+import java.util.concurrent.CompletionStage
 import java.util.{Map => javaMap}
 
 import org.neo4j.driver.v1._
@@ -64,4 +65,22 @@ class SqlSession(val sqlDriver: SqlDriver) extends Session {
   override def typeSystem(): TypeSystem = ???
 
   override def isOpen: Boolean = !sqlConnection.isClosed
+
+  override def beginTransactionAsync(): CompletionStage[Transaction] = ???
+
+  override def readTransactionAsync[T](work: TransactionWork[CompletionStage[T]]): CompletionStage[T] = ???
+
+  override def writeTransactionAsync[T](work: TransactionWork[CompletionStage[T]]): CompletionStage[T] = ???
+
+  override def closeAsync(): CompletionStage[Void] = ???
+
+  override def runAsync(statementTemplate: String, parameters: Value): CompletionStage[StatementResultCursor] = ???
+
+  override def runAsync(statementTemplate: String, statementParameters: javaMap[String, AnyRef]): CompletionStage[StatementResultCursor] = ???
+
+  override def runAsync(statementTemplate: String, statementParameters: Record): CompletionStage[StatementResultCursor] = ???
+
+  override def runAsync(statementTemplate: String): CompletionStage[StatementResultCursor] = ???
+
+  override def runAsync(statement: Statement): CompletionStage[StatementResultCursor] = ???
 }
