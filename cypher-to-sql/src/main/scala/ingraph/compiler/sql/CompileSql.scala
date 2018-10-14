@@ -5,7 +5,7 @@ import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.driver.ValueJsonConversion
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
-import ingraph.model.misc.Function
+import ingraph.model.misc.{Function, FunctionCategory}
 import ingraph.model.{fplan, nplan}
 import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Expression, IsNotNull, IsNull, Literal, Not}
 import org.apache.spark.sql.types.{LongType, StringType}
@@ -247,8 +247,16 @@ object CompileSql {
         case FunctionInvocation(Function.EXISTS, Seq(propertyAttribute: PropertyAttribute), false) => {
           getSql(propertyAttribute, options) + " IS NOT NULL"
         }
-        case FunctionInvocation(Function.TOINTEGER | Function.TOINT, Seq(expr: Expression), false) => {
-          "(" + getSql(expr, options.copy(unwrapJson = true)) + ")::BIGINT"
+        case FunctionInvocation(functor, Seq(expr: Expression), false)
+          if functor.getCategory == FunctionCategory.CONVERSION => {
+
+          val sqlType = functor match {
+            case Function.TOBOOLEAN => "BOOLEAN"
+            case Function.TOINTEGER | Function.TOINT => "BIGINT"
+            case Function.TOFLOAT => "DOUBLE PRECISION"
+            case Function.TOSTRING => "TEXT"
+          }
+          "(" + getSql(expr, options.copy(unwrapJson = true)) + ")::" + sqlType
         }
         case FunctionInvocation(functor@Function.COUNT_ALL, Nil, false) => {
           functor.getPrettyName
