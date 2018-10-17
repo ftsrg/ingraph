@@ -90,19 +90,28 @@ object SqlDriver {
     dump(sqlStatement, "SELECT * FROM " + tablename)
   }
 
-  def dump(sqlStatement: sqlStatement, query: String): Unit = {
+  def dump(sqlStatement: sqlStatement, query: String, limit: Option[Int] = None, printlnFunc: String => Unit = println): Int = {
     withResources(sqlStatement.executeQuery(query))(rs => {
-      println("vvvvvvvvvvv SQL RESULT vvvvvvvvvvv")
+      printlnFunc("vvvvvvvvvvv SQL RESULT vvvvvvvvvvv")
 
       val columnIndices = 1 to rs.getMetaData.getColumnCount
-      columnIndices.foreach(i => println(rs.getMetaData.getColumnName(i) + ": " + rs.getMetaData.getColumnTypeName(i)))
+      columnIndices.foreach(i => printlnFunc(rs.getMetaData.getColumnName(i) + ": " + rs.getMetaData.getColumnTypeName(i)))
+
+      var rowCount = 0
 
       while (rs.next()) {
-        println("---")
-        columnIndices.foreach(i => println(rs.getMetaData.getColumnName(i) + " = " + rs.getObject(i)))
+        if (limit.isEmpty || rowCount < limit.get) {
+          printlnFunc("---")
+          columnIndices.foreach(i => printlnFunc(rs.getMetaData.getColumnName(i) + " = " + rs.getObject(i)))
+        }
+
+        rowCount += 1
       }
 
-      println("----------------------------------")
+      printlnFunc(rowCount + " rows")
+      printlnFunc("----------------------------------")
+
+      rowCount
     })
   }
 

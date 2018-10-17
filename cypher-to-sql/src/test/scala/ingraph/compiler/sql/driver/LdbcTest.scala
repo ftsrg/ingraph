@@ -3,7 +3,7 @@ package ingraph.compiler.sql.driver
 import java.io.File
 
 import ingraph.compiler.sql.Util._
-import ingraph.compiler.sql.driver.LdbcTest.{expectedToSucceed, ldbcQueries}
+import ingraph.compiler.sql.driver.LdbcTest.{expectedToSucceed, ldbcQueries, ldbcSqlQueries}
 import ingraph.compiler.sql.driver.SqlDriver.ExternalDatabase
 import org.cytosm.common.gtop.GTop
 import org.cytosm.common.gtop.io.SerializationInterface
@@ -55,6 +55,19 @@ class LdbcTest extends FunSuite {
         driver =>
           withResources(driver.session) { session =>
             withResources(session.beginTransaction()) { tx =>
+              val limit = 20
+              val referenceSqlQuery = ldbcSqlQueries.find(_._1 == name).map(_._2)
+              val stringBuilder = StringBuilder.newBuilder
+              val printlnFunc: String => Unit = str => {
+                stringBuilder.append(str)
+                stringBuilder.append('\n')
+              }
+
+              val rowCount = referenceSqlQuery.map(query =>
+                withResources(tx.rawSqlConnection.createStatement()) { statement =>
+                  SqlDriver.dump(statement, query, Some(limit), printlnFunc)
+                })
+
               try {
                 println()
 
@@ -70,6 +83,14 @@ class LdbcTest extends FunSuite {
 
                 println(s"Totally: ${result.size} rows (only first $limit)")
                 println("----------------------------------")
+
+                if (referenceSqlQuery.isDefined) {
+                  println("vvvvvv REFERENCE RESULT vvvvvv")
+                  print(stringBuilder)
+
+                  assertResult(rowCount.get)(result.size)
+                }
+
               } catch {
                 case throwable: Throwable if !expectedToSucceed.contains(name) => cancel(name + " has failed. Only warning!", throwable)
               }
@@ -99,7 +120,10 @@ object LdbcTest {
     ""
   )
 
-  val ldbcQueries: Seq[(String, String)] =
+  val ldbcQueries: Seq[(String, String)] = getQueries("cypher")
+  val ldbcSqlQueries: Seq[(String, String)] = getQueries("sql")
+
+  private def getQueries(extension: String): Seq[(String, String)] = {
     new File(getClass.getResource(ldbcQueriesPath).getFile)
       .listFiles()
       .filter(_.isFile)
@@ -109,6 +133,8 @@ object LdbcTest {
         filename.replaceAll("""\d+.*$""", "") -> Integer.parseInt(filename.replaceAll("""\D""", ""))
       }
       .map(io.File(_))
+      .filter(f => f.hasExtension(extension))
       .map(f => f.stripExtension -> f.slurp())
       .toSeq
+  }
 }
