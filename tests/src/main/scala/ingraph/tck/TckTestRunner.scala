@@ -80,11 +80,14 @@ trait TckTestRunner {
       }(pos)
     }
 
+    val coverageMap = scala.collection.mutable.HashMap.empty[String, (Int, Int)]
+
     scenarioSet.allScenariosInSelectedFeatures
       .foreach(scenario => {
         val testName = scenario.toString
 
-        if (scenarioSet.scenarios.contains(scenario))
+        val isActive = scenarioSet.scenarios.contains(scenario)
+        if (isActive)
           test(testName) {
             println(s"vvvvvvvvvvvvvvvv $testName vvvvvvvvvvvvvvvv")
             println()
@@ -98,7 +101,29 @@ trait TckTestRunner {
           }(pos)
         else
           ignore(testName) {}(pos)
+
+        val previousCoverageEntry = coverageMap.getOrElseUpdate(scenario.featureName, (0, 0))
+
+        val activeCount = previousCoverageEntry._1
+        val countOfAll = previousCoverageEntry._2
+        val newCoverageEntry = ((
+          if (isActive) activeCount + 1
+          else activeCount)
+          ->
+          (countOfAll + 1)
+          )
+
+        coverageMap.put(scenario.featureName, newCoverageEntry)
       }
       )
+
+    val sumOfActive = coverageMap.values.map(_._1).sum
+    val sumOfScenariosInSelectedFeatures = coverageMap.values.map(_._2).sum
+    val allScenariosCount = scenarioSet.allScenarios.size
+
+    println(s"--------- $suiteName EXPECTED COVERAGE: $sumOfActive/$sumOfScenariosInSelectedFeatures ($allScenariosCount) ---------")
+    println("featureName\tactive\tall")
+    coverageMap.foreach { case (key, (active, all)) => println(s"$key\t$active\t$all") }
+    println("-------------------------------------------------")
   }
 }
