@@ -124,16 +124,25 @@ object LdbcTest {
   val ldbcSqlQueries: Seq[(String, String)] = getQueries("sql")
 
   private def getQueries(extension: String): Seq[(String, String)] = {
-    new File(getClass.getResource(ldbcQueriesPath).getFile)
+    getQueriesFromResourceFolder(ldbcQueriesPath, extension)
+  }
+
+  def getQueriesFromResourceFolder(folder: String, extension: String): Seq[(String, String)] = {
+    getQueriesFromFolder(folder, extension, getClass.getResource(_).getFile)
+  }
+
+  def getQueriesFromFolder(folder: String, extension: String, resourcePathResolver: String => String = identity)
+  : Seq[(String, String)] = {
+    new File(resourcePathResolver(folder))
       .listFiles()
       .filter(_.isFile)
+      .map(io.File(_))
+      .filter(f => f.hasExtension(extension))
       .sortBy { file =>
-        val filename = file.getName
+        val filename = file.name
         // sort by name then by ID
         filename.replaceAll("""\d+.*$""", "") -> Integer.parseInt(filename.replaceAll("""\D""", ""))
       }
-      .map(io.File(_))
-      .filter(f => f.hasExtension(extension))
       .map(f => f.stripExtension -> f.slurp())
       .toSeq
   }
