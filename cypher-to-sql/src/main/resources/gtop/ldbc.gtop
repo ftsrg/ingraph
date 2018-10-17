@@ -510,7 +510,7 @@
 						"destinationTableName": "person",
 						"destinationTableColumn": "p_personid",
 						"attributes": [{
-							"columnName": "fp_creationdate",
+							"columnName": "fp_joindate",
 							"dataType": "Date",
 							"abstractionLevelName": "joinDate"
 						}]
