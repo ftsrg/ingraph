@@ -311,9 +311,12 @@ object CompileSql {
         }
         case node: Literal => getSqlForLiteral(node, options)
         case node: Not => "NOT(" + getSql(node.child, options) + ")"
-        case node: Parameter => {
+        case node: Parameter if options.inlineParameters => {
           val value = options.parameters(node.name)
           getSqlForLiteral(Literal(value), options)
+        }
+        case node: Parameter if !options.inlineParameters => {
+          ":" + node.name
         }
       }
 
@@ -371,14 +374,14 @@ object CompileSql {
   }
 }
 
-class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map(), gTop: Option[GTop] = None) extends CompilerTest {
+class CompileSql(val cypherQuery: String, val compilerOptions: CompilerOptions = CompilerOptions()) extends CompilerTest {
 
   val stages = compile(cypherQuery)
 
   val fplan = stages.fplan
 
   // TODO don't execute it more than once
-  def sqlNode = SqlNode(fplan, CompilerOptions(parameters, gTop))._1
+  def sqlNode = SqlNode(fplan, compilerOptions)._1
 
   def sql = sqlNode.sql.get
 
@@ -389,7 +392,11 @@ class CompileSql(val cypherQuery: String, val parameters: Map[String, Any] = Map
 
 }
 
-case class CompilerOptions(parameters: Map[String, Any] = Map(), gTop: Option[GTop] = None, nodeId: Int = 0, unwrapJson: Boolean = false) {}
+case class CompilerOptions(parameters: Map[String, Any] = Map(),
+                           gTop: Option[GTop] = None,
+                           nodeId: Int = 0,
+                           unwrapJson: Boolean = false,
+                           inlineParameters: Boolean = true) {}
 
 case class ExpressionWrapper(expr: Expression, options: CompilerOptions) extends ExpressionBase {
   override def children: Seq[Expression] = expr.children
