@@ -24,8 +24,10 @@ class LdbcParameterizedQueriesTest extends FunSuite {
 
         val sqlQuery = sqlCompiler.run()
 
-        withResources(new PrintWriter(new File(outputPath, name + ".sql").getPath)) {
-          _.write(sqlQuery)
+        if (LdbcTest.expectedToSucceed.contains(name)) {
+          withResources(new PrintWriter(new File(outputPath, name + ".sql").getPath)) {
+            _.write(sqlQuery)
+          }
         }
       } catch {
         case throwable: Throwable if !expectedToSucceed.contains(name) => cancel(name + " has failed. Only warning!", throwable)
