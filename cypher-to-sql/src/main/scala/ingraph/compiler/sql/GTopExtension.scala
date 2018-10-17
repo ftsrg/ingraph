@@ -1,12 +1,44 @@
 package ingraph.compiler.sql
 
+import java.io.File
+
 import ingraph.model.expr.types.EdgeLabel
 import org.cytosm.common.gtop.GTop
-import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, ImplementationNode, TraversalHop}
+import org.cytosm.common.gtop.implementation.relational.{Attribute, ImplementationEdge, ImplementationNode, TraversalHop}
+import org.cytosm.common.gtop.io.SerializationInterface
 
 import scala.collection.JavaConverters._
 
 object GTopExtension {
+
+  def loadFromFile(path: String): GTop = {
+    val gTop = SerializationInterface.read(new File(path))
+    addIdColumnToGTopAttributes(gTop)
+
+    gTop
+  }
+
+  def loadFromResource(resourcePath: String): GTop = {
+    loadFromFile(getClass.getResource(resourcePath).getFile)
+  }
+
+  def addIdColumnToGTopAttributes(gTop: GTop): Unit = {
+    val idAttributeName = "id"
+
+    gTop.getAbstractionLevel.getAbstractionNodes.asScala.foreach { node =>
+      val attributes = node.getAttributes
+      if (!attributes.asScala.contains(idAttributeName))
+        attributes.add(idAttributeName)
+    }
+
+    gTop.getImplementationLevel.getImplementationNodes.asScala.foreach { node =>
+      assert(node.getId.size == 1, "Only supports single key")
+      val nodeId = node.getId.get(0)
+
+      if (!node.getAttributes.asScala.exists(_.getAbstractionLevelName == idAttributeName))
+        node.getAttributes.add(new Attribute(nodeId.getColumnName, idAttributeName, nodeId.getDatatype))
+    }
+  }
 
   implicit class Extension(val gTop: GTop) extends AnyVal {
     def findEdgeTables(edgeLabels: Set[EdgeLabel]): Seq[(ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode])] = {

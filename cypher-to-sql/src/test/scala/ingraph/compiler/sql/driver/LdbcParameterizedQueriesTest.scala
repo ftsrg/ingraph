@@ -3,15 +3,14 @@ package ingraph.compiler.sql.driver
 import java.io.{File, PrintWriter}
 
 import ingraph.compiler.sql.Util._
-import ingraph.compiler.sql.{CompileSql, CompilerOptions}
+import ingraph.compiler.sql.{CompileSql, CompilerOptions, GTopExtension}
 import org.cytosm.common.gtop.GTop
-import org.cytosm.common.gtop.io.SerializationInterface
 import org.scalatest.FunSuite
 
 import scala.reflect.io
 
 class LdbcParameterizedQueriesTest extends FunSuite {
-  val gTop: GTop = SerializationInterface.read(new File(getClass.getResource("/gtop/ldbc.gtop").getFile))
+  val gTop: GTop = GTopExtension.loadFromResource("/gtop/ldbc.gtop")
 
   val ldbcParameterizedQueries: Seq[(String, String)] =
     new File("ldbc_snb_implementations/cypher/queries")

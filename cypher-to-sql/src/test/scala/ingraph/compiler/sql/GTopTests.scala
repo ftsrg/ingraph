@@ -1,13 +1,10 @@
 package ingraph.compiler.sql
 
-import java.io.File
-
 import ingraph.compiler.sql.GTopTests._
 import ingraph.compiler.sql.Util._
 import ingraph.compiler.sql.driver.{SharedSqlDriver, SqlDriver, TckAdapter}
 import ingraph.tck.{TckScenarioSet, TckTestRunner}
 import org.cytosm.common.gtop.GTop
-import org.cytosm.common.gtop.io.SerializationInterface
 import org.scalatest.FunSuite
 
 import scala.reflect.io
@@ -17,7 +14,7 @@ class GTopTests extends FunSuite with TckTestRunner with SharedSqlDriver {
   // based on
   //   https://github.com/cytosm/cytosm/blob/41e786f600724358836629fc3f70787834c85270/common/docs/movies.db
   //   https://github.com/cytosm/cytosm/blob/41e786f600724358836629fc3f70787834c85270/common/docs/movies.gtop
-  val gTop: GTop = SerializationInterface.read(new File(getClass.getResource("/gtop/movies.gtop").getFile))
+  val gTop: GTop = GTopExtension.loadFromResource("/gtop/movies.gtop")
   val sqlInitCommands: String = io.File(getClass.getResource("/gtop/movies.sql").getFile).slurp()
 
   override protected def init(): Unit = {

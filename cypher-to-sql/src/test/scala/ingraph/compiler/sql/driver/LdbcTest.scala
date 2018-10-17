@@ -2,18 +2,18 @@ package ingraph.compiler.sql.driver
 
 import java.io.File
 
+import ingraph.compiler.sql.GTopExtension
 import ingraph.compiler.sql.Util._
 import ingraph.compiler.sql.driver.LdbcTest.{expectedToSucceed, ldbcQueries, ldbcSqlQueries}
 import ingraph.compiler.sql.driver.SqlDriver.ExternalDatabase
 import org.cytosm.common.gtop.GTop
-import org.cytosm.common.gtop.io.SerializationInterface
 import org.scalatest.FunSuite
 
 import scala.collection.JavaConverters._
 import scala.reflect.io
 
 class LdbcTest extends FunSuite {
-  val gTop: GTop = SerializationInterface.read(new File(getClass.getResource("/gtop/ldbc.gtop").getFile))
+  val gTop: GTop = GTopExtension.loadFromResource("/gtop/ldbc.gtop")
   val url = "jdbc:postgresql://localhost:5432/ldbcsf1?user=postgres&password=foo"
 
   test("SQL") {
