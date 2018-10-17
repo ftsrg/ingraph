@@ -13,6 +13,6 @@ from
   ) f, person, message
 where
   p_personid = m_creatorid and p_personid = f.k_person2id and
-  m_creationdate < TIMESTAMP 'epoch' + 1346112000000 * INTERVAL '1 ms'
+  m_creationdate < to_bigint(TIMESTAMP 'epoch' + 1346112000000 * INTERVAL '1 ms')
 order by m_creationdate desc, m_messageid asc
 limit 20

@@ -17,14 +17,14 @@ from
       select m_creatorid as m_c_creatorid, count(*) as ct1 from message, place
       where
         m_locationid = pl_placeid and pl_name = 'Puerto_Rico' and
-        m_creationdate >= TIMESTAMP 'epoch' + 1291161600000 * INTERVAL '1 ms' and  m_creationdate < (TIMESTAMP 'epoch' + 1291161600000 * INTERVAL '1 ms' + INTERVAL '1 days' * 30)
+        m_creationdate >= to_bigint(TIMESTAMP 'epoch' + 1291161600000 * INTERVAL '1 ms') and  m_creationdate < to_bigint(TIMESTAMP 'epoch' + 1291161600000 * INTERVAL '1 ms' + INTERVAL '1 days' * 30)
       group by m_c_creatorid
    ) chn,
    (
       select m_creatorid as m_c_creatorid, count(*) as ct2 from message, place
       where
         m_locationid = pl_placeid and pl_name = 'Republic_of_Macedonia' and
-        m_creationdate >= TIMESTAMP 'epoch' + 1291161600000 * INTERVAL '1 ms' and  m_creationdate < (TIMESTAMP 'epoch' + 1291161600000 * INTERVAL '1 ms' + INTERVAL '1 days' * 30)
+        m_creationdate >= to_bigint(TIMESTAMP 'epoch' + 1291161600000 * INTERVAL '1 ms') and  m_creationdate < to_bigint(TIMESTAMP 'epoch' + 1291161600000 * INTERVAL '1 ms' + INTERVAL '1 days' * 30)
       group by m_creatorid --m_c_creatorid
    ) ind
   where CHN.m_c_creatorid = IND.m_c_creatorid

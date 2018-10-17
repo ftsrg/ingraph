@@ -9,7 +9,7 @@ create table message (
      */
     m_messageid bigint not null,
     m_ps_imagefile varchar,
-    m_creationdate timestamp without time zone not null,
+    m_creationdate bigint not null,
     m_locationip varchar not null,
     m_browserused varchar not null,
     m_ps_language varchar,
@@ -24,14 +24,14 @@ create table message (
 create table forum (
    f_forumid bigint not null,
    f_title varchar not null,
-   f_creationdate timestamp without time zone not null,
+   f_creationdate bigint not null,
    f_moderatorid bigint
 );
 
 create table forum_person (
    fp_forumid bigint not null,
    fp_personid bigint not null,
-   fp_joindate timestamp without time zone not null
+   fp_joindate bigint not null
 );
 
 create table forum_tag (
@@ -52,8 +52,8 @@ create table person (
    p_firstname varchar not null,
    p_lastname varchar not null,
    p_gender varchar not null,
-   p_birthday timestamp without time zone not null,
-   p_creationdate timestamp without time zone not null,
+   p_birthday bigint not null,
+   p_creationdate bigint not null,
    p_locationip varchar not null,
    p_browserused varchar not null,
    p_placeid bigint
@@ -73,13 +73,13 @@ create table person_tag (
 create table knows (
    k_person1id bigint not null,
    k_person2id bigint not null,
-   k_creationdate timestamp without time zone not null
+   k_creationdate bigint not null
 );
 
 create table likes (
    l_personid bigint not null,
    l_messageid bigint not null,
-   l_creationdate  timestamp without time zone not null
+   l_creationdate  bigint not null
 );
 
 create table person_language (
