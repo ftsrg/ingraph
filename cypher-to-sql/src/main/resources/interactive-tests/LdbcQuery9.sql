@@ -4,15 +4,15 @@ from
   ( select k_person2id
     from knows
     where
-    k_person1id = :personId
+    k_person1id = 32985348834013
     union
     select k2.k_person2id
     from knows k1, knows k2
     where
-    k1.k_person1id = :personId and k1.k_person2id = k2.k_person1id and k2.k_person2id <> :personId
+    k1.k_person1id = 32985348834013 and k1.k_person2id = k2.k_person1id and k2.k_person2id <> 32985348834013
   ) f, person, message
 where
   p_personid = m_creatorid and p_personid = f.k_person2id and
-  m_creationdate < :maxDate
+  m_creationdate < TIMESTAMP 'epoch' + 1346112000000 * INTERVAL '1 ms'
 order by m_creationdate desc, m_messageid asc
 limit 20

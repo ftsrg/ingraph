@@ -1,7 +1,7 @@
 with recursive cposts(m_messageid, m_content, m_ps_imagefile, m_creationdate, m_c_replyof, m_creatorid) AS (
 	  select m_messageid, m_content, m_ps_imagefile, m_creationdate, m_c_replyof, m_creatorid
 	  from message
-	  where m_creatorid = :personId
+	  where m_creatorid = 32985348833679
 	  order by m_creationdate desc
 	  limit 10
 ), parent(postid,replyof,orig_postid,creator) AS (
