@@ -110,6 +110,7 @@ object LdbcTest {
     "interactive-complex-1",
     "interactive-complex-3",
     "interactive-complex-4",
+    "interactive-complex-5",
     "interactive-complex-6",
     "interactive-complex-8",
     "interactive-complex-9",
