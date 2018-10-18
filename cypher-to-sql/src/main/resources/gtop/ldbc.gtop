@@ -590,6 +590,17 @@
 					}]
 				}]
 			}, {
+				"types": ["CONTAINER_OF"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "forum",
+						"sourceTableColumn": "f_forumid",
+						"destinationTableName": "message",
+						"destinationTableColumn": "m_ps_forumid",
+						"attributes": []
+					}]
+				}]
+            }, {
 				"types": ["HAS_TAG"],
 				"paths": [{
 					"traversalHops": [{
