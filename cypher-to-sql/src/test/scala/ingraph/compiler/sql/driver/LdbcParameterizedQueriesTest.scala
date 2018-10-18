@@ -54,6 +54,7 @@ object LdbcParameterizedQueriesTest {
     "bi-23",
     "bi-24",
     "interactive-complex-1",
+    "interactive-complex-2",
     "interactive-complex-3",
     "interactive-complex-4",
     "interactive-complex-5",
