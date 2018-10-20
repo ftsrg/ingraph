@@ -210,6 +210,7 @@ object TckTestWithCreate {
     "WHERE after WITH should filter results",
     "Dependant CREATE with single row",
     "Dependant CREATE with single row - with aliased attribute",
+    "LDBC SNB small - GetVertices",
     ""
   ).filter(!_.isEmpty)
 
