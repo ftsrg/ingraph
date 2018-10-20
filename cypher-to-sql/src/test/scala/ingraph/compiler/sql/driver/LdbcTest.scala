@@ -11,6 +11,7 @@ import org.scalatest.FunSuite
 
 import scala.collection.JavaConverters._
 import scala.reflect.io
+import scala.util.Try
 
 class LdbcTest extends FunSuite {
   val gTop: GTop = GTopExtension.loadFromResource("/gtop/ldbc.gtop")
@@ -42,9 +43,7 @@ class LdbcTest extends FunSuite {
     }
   }
 
-  (Seq(
-    "Simple test" -> "MATCH (n:Person) RETURN n.id ORDER BY n.id LIMIT 10"
-  ) ++ ldbcQueries).foreach { case (name, cypherQueryString) =>
+  ldbcQueries.foreach { case (name, cypherQueryString) =>
     test(name) {
       withResources(
         new SqlDriver(
@@ -106,7 +105,7 @@ object LdbcTest {
 
   val expectedToSucceed: Set[String] = Set(
     "SQL",
-    "Simple test",
+    "simple-test",
     "interactive-complex-1",
     "interactive-complex-2",
     "interactive-complex-3",
@@ -146,7 +145,8 @@ object LdbcTest {
       .sortBy { file =>
         val filename = file.name
         // sort by name then by ID
-        filename.replaceAll("""\d+.*$""", "") -> Integer.parseInt(filename.replaceAll("""\D""", ""))
+        filename.replaceAll("""\d+.*$""", "") ->
+          Try(Integer.parseInt(filename.replaceAll("""\D""", ""))).getOrElse(0)
       }
       .map(f => f.stripExtension -> f.slurp())
       .toSeq
