@@ -106,6 +106,10 @@ object LdbcTest {
   val expectedToSucceed: Set[String] = Set(
     "SQL",
     "simple-test",
+    //    "getedges-post",
+    //    "getedges-comment",
+    //    "getvertices-post",
+    //    "getvertices-comment",
     "interactive-complex-1",
     "interactive-complex-2",
     "interactive-complex-3",
