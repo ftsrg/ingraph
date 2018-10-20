@@ -177,5 +177,13 @@ object SqlQueries {
       |IMMUTABLE
       |LANGUAGE SQL AS
       |'SELECT to_char($1, ''YYYYMMDDHH24MISSMS'') :: BIGINT';
+      |
+      |CREATE OR REPLACE FUNCTION driver_array(ANYARRAY)
+      |  RETURNS JSONB
+      |STRICT
+      |IMMUTABLE
+      |LANGUAGE SQL AS
+      |'SELECT jsonb_build_object(''type'', ''ListValue'',
+      |                           ''value'', jsonb_build_object(''values'', array_to_json($1)));';
     """.stripMargin
 }

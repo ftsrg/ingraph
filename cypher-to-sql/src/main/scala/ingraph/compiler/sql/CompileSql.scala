@@ -223,7 +223,8 @@ object CompileSql {
       node match {
         case IsNull(child) => IsNull(ExpressionWrapper(child, options)).sql
         case IsNotNull(child) => IsNotNull(ExpressionWrapper(child, options)).sql
-        case ListExpression(list) => "ARRAY[" + list.map(getSql(_, options)).mkString(", ") + "]"
+        case ListExpression(list) =>
+          "driver_array(ARRAY[" + list.map(getSql(_, options)).mkString(", ") + "]::jsonb[])"
         case CaseWhen(branches, elseValue) => {
           val branchesPart = branches
             .map { case (c, v) => getSql(c, options) -> getSql(v, options) }
