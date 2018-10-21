@@ -199,56 +199,63 @@ class GetEdges(val fNode: fplan.GetEdges,
 
 class GetEdgesWithGTop(val fNode: fplan.GetEdges,
                        val options: CompilerOptions,
-                       val edgeTuple: (ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode]))
+                       val edgeTuple: (ImplementationEdge, TraversalHop, ImplementationNode, ImplementationNode))
   extends LeafSqlNodeFromFNode[fplan.GetEdges] {
 
-  override def innerSql: String = getGetEdgesSql(fNode, options, edgeTuple)
+  val (missingProperties, sqlCode) = getGetEdgesSql(fNode, options, edgeTuple)
+  val missingPropertiesCasted: Set[ResolvableName] = missingProperties.toSet
+
+  override def output: Seq[ResolvableName] = super.output.filterNot(missingPropertiesCasted.contains)
+
+  override def innerSql: String = sqlCode
 }
 
 object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
-  override def create(fNode: fplan.GetEdges,
+  override def create(originalFNode: fplan.GetEdges,
                       options: CompilerOptions)
   : (SqlNode, CompilerOptions) = {
-    if (fNode.nnode.directed) {
-      val getEdges: SqlNode =
-        if (options.gTop.isDefined) {
-          val edgeTuples = options.gTop.get.findEdgeTables(fNode.nnode.edge.labels.edgeLabels)
-            .filter { case (_, _, sourceNodes, destinationNodes) =>
-              (fNode.nnode.src.labels.vertexLabels.diff(sourceNodes.flatMap(_.getTypes.asScala).toSet).isEmpty
-                && fNode.nnode.trg.labels.vertexLabels.diff(destinationNodes.flatMap(_.getTypes.asScala).toSet).isEmpty)
-            }
+    val directedFNodes = makeDirected(originalFNode)
 
-          UnionAll.makeUnionNodes(options, edgeTuples) {
-            case (nextOptions, edge) => new GetEdgesWithGTop(fNode, nextOptions, edge)
-          }
-        }
-        else {
-          new GetEdges(fNode, options)
+    val getEdges: SqlNode =
+      if (options.gTop.isDefined) {
+
+        val fNodeAndEdgeTuples = directedFNodes.flatMap { fNode =>
+          val nNode = fNode.nnode
+          options.gTop.get.findEdgeTuples(
+            nNode.edge.labels.edgeLabels,
+            nNode.src.labels.vertexLabels,
+            nNode.trg.labels.vertexLabels)
+            .map(fNode -> _)
         }
 
-      getEdges -> getEdges.lastOptions
-    }
-    else {
-      makeDirected(fNode, options)
-    }
+        UnionAll.makeUnionNodes(options, fNodeAndEdgeTuples, useNullValuesForMissingColumns = true) {
+          case (nextOptions, (fNode, edge)) => new GetEdgesWithGTop(fNode, nextOptions, edge)
+        }
+      }
+      else {
+        UnionAll.makeUnionNodes(options, directedFNodes) {
+          case (nextOptions, fNode) => new GetEdges(fNode, nextOptions)
+        }
+      }
+
+    getEdges -> getEdges.lastOptions
   }
 
-  private def makeDirected(fNode: fplan.GetEdges, options: CompilerOptions): (SqlNode, CompilerOptions) = {
-    assert(!fNode.nnode.directed, "Undirected edge is expected.")
+  private def makeDirected(fNode: fplan.GetEdges): Seq[fplan.GetEdges] = {
+    if (fNode.nnode.directed) {
+      Seq(fNode)
+    }
+    else {
+      val sameDirectionNNode = fNode.nnode.copy(directed = true)
+      val oppositeDirectionNNode = sameDirectionNNode
+        .copy(src = sameDirectionNNode.trg)
+        .copy(trg = sameDirectionNNode.src)
 
-    val sameDirectionNNode = fNode.nnode.copy(directed = true)
-    val oppositeDirectionNNode = sameDirectionNNode
-      .copy(src = sameDirectionNNode.trg)
-      .copy(trg = sameDirectionNNode.src)
+      val sameDirectionFNode = fNode.copy(nnode = sameDirectionNNode)
+      val oppositeDirectionFNode = fNode.copy(nnode = oppositeDirectionNNode)
 
-    val sameDirectionFNode = fNode.copy(nnode = sameDirectionNNode)
-    val oppositeDirectionFNode = fNode.copy(nnode = oppositeDirectionNNode)
-
-    val (left, _) = create(sameDirectionFNode, options)
-    val (right, _) = create(oppositeDirectionFNode, left.nextOptions)
-
-    val unionAll = UnionAll.create(left, right, right.nextOptions)
-    unionAll -> unionAll.lastOptions
+      Seq(sameDirectionFNode, oppositeDirectionFNode)
+    }
   }
 }
 

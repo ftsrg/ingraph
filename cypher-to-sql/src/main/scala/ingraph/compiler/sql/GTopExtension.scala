@@ -42,7 +42,7 @@ object GTopExtension {
   }
 
   implicit class GTopClass(val gTop: GTop) extends AnyVal {
-    def findEdgeTables(edgeLabels: Set[EdgeLabel]): Seq[(ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode])] = {
+    private def findEdgeTables(edgeLabels: Set[EdgeLabel]): Seq[(ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode])] = {
       gTop
         .getImplementationLevel.getImplementationEdges.asScala
         .filter(_.getTypes.asScala.toSet.intersect(edgeLabels).nonEmpty
@@ -64,6 +64,25 @@ object GTopExtension {
 
           (edge, traversalHop, sourceNodes, destinationNodes)
         }
+    }
+
+    def findEdgeTuples(edgeLabels: Set[EdgeLabel],
+                       sourceVertexLabels: Set[VertexLabel],
+                       destinationVertexLabels: Set[VertexLabel]): Seq[(ImplementationEdge, TraversalHop, ImplementationNode, ImplementationNode)] = {
+      val edgeTableTuples = findEdgeTables(edgeLabels)
+
+      val possibleSourceNodes = findVertexTable(sourceVertexLabels)
+      val possibleDestinationNodes = findVertexTable(destinationVertexLabels)
+
+      edgeTableTuples.flatMap { case tuple@(_, _, sourceNodes, destinationNodes) =>
+        sourceNodes.flatMap(sourceNode =>
+          destinationNodes.map(destinationNode =>
+            tuple.copy(_3 = sourceNode, _4 = destinationNode)
+          )
+        )
+      }.filter { case (_, _, sourceNode, destinationNode) =>
+        possibleSourceNodes.contains(sourceNode) && possibleDestinationNodes.contains(destinationNode)
+      }
     }
 
     def findVertexTable(vertexLabelConstraints: Set[VertexLabel]): Seq[ImplementationNode] = {

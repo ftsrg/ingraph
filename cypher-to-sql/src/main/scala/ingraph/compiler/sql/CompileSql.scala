@@ -1,6 +1,7 @@
 package ingraph.compiler.sql
 
 import ingraph.compiler.sql.CompileSql.getSql
+import ingraph.compiler.sql.GTopExtension._
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.driver.ValueJsonConversion
 import ingraph.compiler.test.CompilerTest
@@ -61,12 +62,12 @@ object CompileSql {
        |  FROM $childSql AS subquery"""
   }
 
-  def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions, edgeTuple: (ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode])): String = {
+  /** (missing properties, SQL code) */
+  def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions,
+                     edgeTuple: (ImplementationEdge, TraversalHop, ImplementationNode, ImplementationNode))
+  : (Set[PropertyAttribute], String) = {
     assert(node.nnode.directed, "Cannot compile undirected GetEdges. Use UnionAll instead.")
-    val (edge, traversalHop, sourceNodes, destinationNodes) = edgeTuple
-
-    val sourceNode = sourceNodes.head
-    val destinationNode = destinationNodes.head
+    val (edge, traversalHop, sourceNode, destinationNode) = edgeTuple
 
     assert(sourceNode.getId.size == 1 && destinationNode.getId.size == 1, "No support for composite keys")
     val sourceIdColumn = sourceNode.getId.get(0).getColumnName
@@ -112,28 +113,34 @@ object CompileSql {
     val edgeColumnNewName = getQuotedColumnName(node.nnode.edge)
     val toColumnNewName = getQuotedColumnName(node.nnode.trg)
 
-    // TODO handle properties from edge lists
-
-    val propertiesWithTables =
+    val propertiesWithTablesAndMissing =
       node.requiredProperties.map {
         case prop@PropertyAttribute(propName, element, _) => {
-          val (vertexTable, tableName, attributes) = element match {
+          val (tableName, attributes) = element match {
             case vertex: VertexAttribute if vertex.resolvedName == node.nnode.src.resolvedName =>
-              (Some(sourceNode), sourceNode.getTableName, sourceNode.getAttributes)
+              (sourceNode.getTableName, sourceNode.getAttributes)
             case vertex: VertexAttribute if vertex.resolvedName == node.nnode.trg.resolvedName =>
-              (Some(destinationNode), destinationNode.getTableName, destinationNode.getAttributes)
+              (destinationNode.getTableName, destinationNode.getAttributes)
             case _: EdgeAttribute =>
-              (None, traversalHop.getJoinTableName, traversalHop.getAttributes)
+              (traversalHop.getJoinTableName, traversalHop.getAttributes)
           }
-          val columnName = attributes.asScala.find(_.getAbstractionLevelName == propName).get.getColumnName
-          val newName = getQuotedColumnName(prop)
+          val attributeInTableIfExists = attributes.asScala.find(_.getAbstractionLevelName == propName)
 
-          (vertexTable, tableName, columnName, newName)
+          if (attributeInTableIfExists.isEmpty) {
+            prop -> None
+          } else {
+            val columnName = attributeInTableIfExists.get.getColumnName
+            val newName = getQuotedColumnName(prop)
+
+            prop -> Some(tableName, columnName, newName)
+          }
         }
-      }
+      }.toMap
+    val propertiesWithTables = propertiesWithTablesAndMissing.values.flatten
+    val missingProperties = propertiesWithTablesAndMissing.filter(_._2.isEmpty).keySet
 
     val extraColumns = propertiesWithTables
-      .map { case (_, tableName, columnName, newName) =>
+      .map { case (tableName, columnName, newName) =>
         getQuotedColumnName(tableName) + '.' + getQuotedColumnName(columnName) + " AS " + newName
       }
     val extraColumnsPart = extraColumns.mkString(", ")
@@ -141,12 +148,20 @@ object CompileSql {
       if (extraColumns.nonEmpty) ","
       else ""
 
-    val extraTablesToJoin = (propertiesWithTables
-      .flatMap { case (vertexTable, _, _, _) => vertexTable }
+    val (sourceRequiredTables, sourceRestrictions) = sourceNode.getRestrictions.createConstraint()
+    val (destinationRequiredTables, destinationRestrictions) = destinationNode.getRestrictions.createConstraint()
+    val restrictions: String = getWhereClauseOrEmpty(sourceRestrictions ++ destinationRestrictions)
+
+    val extraTablesToJoin = ((propertiesWithTables
+      .map { case (tableName, _, _) => tableName }
       .toSet
-      -- vertexTableBasedJoinTableNode)
+      ++ sourceRequiredTables
+      ++ destinationRequiredTables)
+      .map(getQuotedColumnName)
+      // We already have the edgeTable. No need to join again.
+      - edgeTable)
     val joinVertexTablesPart =
-      extraTablesToJoin.map { vertexTable =>
+      extraTablesToJoin.map { vertexTableNameEscaped =>
         val sourceTableName = getQuotedColumnName(traversalHop.getSourceTableName)
         val joinSourceColumn = fromColumn
         val sourceColumn = getQuotedColumnName(traversalHop.getSourceTableColumn)
@@ -155,21 +170,23 @@ object CompileSql {
         val destinationColumn = getQuotedColumnName(traversalHop.getDestinationTableColumn)
         val joinDestinationColumn = toColumn
 
-        if (vertexTable == sourceNode)
+        if (vertexTableNameEscaped == sourceTableName)
           s"JOIN $sourceTableName ON ($edgeTable.$joinSourceColumn = $sourceTableName.$sourceColumn)"
-        else if (vertexTable == destinationNode)
+        else if (vertexTableNameEscaped == destinationTableName)
           s"JOIN $destinationTableName ON ($edgeTable.$joinDestinationColumn = $destinationTableName.$destinationColumn)"
         else
-          throw new NoSuchElementException("Unexpected table");
+          throw new NoSuchElementException("Unexpected table: " + vertexTableNameEscaped);
       }
         .mkString("\n")
 
-    // TODO handle type constrainsts
+    val sql =
+      i"""SELECT $fromColumn AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, $toColumn AS $toColumnNewName$commaBeforeExtraColumns
+         |  $extraColumnsPart
+         |  FROM $edgeTable
+         |    $joinVertexTablesPart
+         |$restrictions"""
 
-    i"""SELECT $fromColumn AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, $toColumn AS $toColumnNewName$commaBeforeExtraColumns
-       |  $extraColumnsPart
-       |  FROM $edgeTable
-       |    $joinVertexTablesPart"""
+    missingProperties -> sql
   }
 
   def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions): String = {
