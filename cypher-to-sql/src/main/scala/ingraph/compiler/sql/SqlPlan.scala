@@ -274,22 +274,8 @@ class GetVertices(val fNode: fplan.GetVertices,
                   val options: CompilerOptions)
   extends LeafSqlNodeFromFNode[fplan.GetVertices] {
 
-  val gTop: Option[GTop] = options.gTop
-
-  val vertexLabelConstraints = fNode.nnode.v.labels.vertexLabels
-  // TODO support more source tables
-  private val implNode: Option[ImplementationNode] = gTop
-    .map(_.getImplementationLevel
-      .getImplementationNodes.asScala
-      .find(node =>
-        // all vertex label constraints from the pattern must be satisfied,
-        // i.e. the implementation nodes should contain all of them
-        // empty = {vertex label constraints} \ {types in the table}
-        vertexLabelConstraints.diff(node.getTypes.asScala.toSet).isEmpty)
-      .get)
-  val vertexTable = implNode.map(_.getTableName).getOrElse("vertex")
-  // TODO support complex primary key
-  val vertexIdColumn = implNode.map(_.getId.get(0).getColumnName).getOrElse("vertex_id")
+  val vertexTable = "vertex"
+  val vertexIdColumn = "vertex_id"
 
   val columns =
     (
@@ -300,21 +286,14 @@ class GetVertices(val fNode: fplan.GetVertices,
           .filterNot(_.isInstanceOf[NodeHasLabelsAttribute])
           .map { prop =>
             // TODO insert NULL if no column with that name
-            val propertyValuePart = implNode
-              .map(_.getAttributes.asScala
-                .find(prop.name == _.getAbstractionLevelName)
-                .map(_.getColumnName)
-                .map(getQuotedColumnName)
-                .get)
-              .getOrElse(
-                s"(SELECT value FROM vertex_property WHERE parent = $vertexIdColumn AND key = ${getSingleQuotedString(prop.name)})")
+            val propertyValuePart =
+              s"(SELECT value FROM vertex_property WHERE parent = $vertexIdColumn AND key = ${getSingleQuotedString(prop.name)})"
 
             propertyValuePart + s" AS ${getQuotedColumnName(prop)}"
           })
       .mkString(",\n")
 
   val labelConstraint = getVertexLabelSqlCondition(fNode.nnode.v.labels, vertexIdColumn)
-    .filter(_ => gTop.isEmpty) // no need for constraint if GTop is available
     .map("WHERE " + _)
     .getOrElse("")
 
@@ -325,11 +304,62 @@ class GetVertices(val fNode: fplan.GetVertices,
        |$labelConstraint"""
 }
 
+class GetVerticesWithGTop(val fNode: fplan.GetVertices,
+                          val options: CompilerOptions,
+                          val gTop: GTop)
+  extends LeafSqlNodeFromFNode[fplan.GetVertices] {
+
+  val vertexLabelConstraints = fNode.nnode.v.labels.vertexLabels
+  // TODO support more source tables
+  private val implNode: ImplementationNode = gTop.getImplementationLevel
+    .getImplementationNodes.asScala
+    .find(node =>
+      // all vertex label constraints from the pattern must be satisfied,
+      // i.e. the implementation nodes should contain all of them
+      // empty = {vertex label constraints} \ {types in the table}
+      vertexLabelConstraints.diff(node.getTypes.asScala.toSet).isEmpty)
+    .get
+  val vertexTable = implNode.getTableName
+  // TODO support complex primary key
+  val vertexIdColumn = implNode.getId.get(0).getColumnName
+
+  val columns =
+    (
+      s"""$vertexIdColumn AS ${getQuotedColumnName(fNode.nnode.v)}""" +:
+        fNode.requiredProperties
+          // skip NodeHasLabelsAttribute since it has no resolvedName to use as column name
+          // TODO use NodeHasLabelsAttribute
+          .filterNot(_.isInstanceOf[NodeHasLabelsAttribute])
+          .map { prop =>
+            // TODO insert NULL if no column with that name
+            val propertyValuePart = implNode.getAttributes.asScala
+              .find(prop.name == _.getAbstractionLevelName)
+              .map(_.getColumnName)
+              .map(getQuotedColumnName)
+              .get
+
+            propertyValuePart + s" AS ${getQuotedColumnName(prop)}"
+          })
+      .mkString(",\n")
+
+  override def innerSql: String =
+    i"""SELECT
+       |  $columns
+       |FROM $vertexTable"""
+}
+
 object GetVertices extends SqlNodeCreator0[fplan.GetVertices] {
   override def create(fNode: fplan.GetVertices,
                       options: CompilerOptions)
-  : (GetVertices, CompilerOptions) =
-    (new GetVertices(fNode, options), options)
+  : (SqlNode, CompilerOptions) = {
+    val getVertices =
+      if (options.gTop.isDefined)
+        new GetVerticesWithGTop(fNode, options, options.gTop.get)
+      else
+        new GetVertices(fNode, options)
+
+    getVertices -> getVertices.lastOptions
+  }
 }
 
 class TransitiveJoin(val fNode: fplan.TransitiveJoin,
