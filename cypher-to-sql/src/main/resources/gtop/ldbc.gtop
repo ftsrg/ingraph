@@ -228,7 +228,7 @@
 			"types": ["Organisation", "Company"],
 			"tableName": "organisation",
 			"id": [{
-				"columnName": "id",
+				"columnName": "o_organisationid",
 				"datatype": "INTEGER",
 				"concatenationPosition": 1
 			}],
