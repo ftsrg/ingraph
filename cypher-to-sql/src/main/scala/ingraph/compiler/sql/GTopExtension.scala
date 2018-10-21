@@ -2,9 +2,10 @@ package ingraph.compiler.sql
 
 import java.io.File
 
-import ingraph.model.expr.types.EdgeLabel
+import ingraph.compiler.sql.CompileSql.{getQuotedColumnName, getSingleQuotedString}
+import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
 import org.cytosm.common.gtop.GTop
-import org.cytosm.common.gtop.implementation.relational.{Attribute, ImplementationEdge, ImplementationNode, TraversalHop}
+import org.cytosm.common.gtop.implementation.relational._
 import org.cytosm.common.gtop.io.SerializationInterface
 
 import scala.collection.JavaConverters._
@@ -40,7 +41,7 @@ object GTopExtension {
     }
   }
 
-  implicit class Extension(val gTop: GTop) extends AnyVal {
+  implicit class GTopClass(val gTop: GTop) extends AnyVal {
     def findEdgeTables(edgeLabels: Set[EdgeLabel]): Seq[(ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode])] = {
       gTop
         .getImplementationLevel.getImplementationEdges.asScala
@@ -63,6 +64,64 @@ object GTopExtension {
 
           (edge, traversalHop, sourceNodes, destinationNodes)
         }
+    }
+
+    def findVertexTable(vertexLabelConstraints: Set[VertexLabel]): Seq[ImplementationNode] = {
+      gTop.getImplementationLevel
+        .getImplementationNodes.asScala
+        .filter(node =>
+          // all vertex label constraints from the pattern must be satisfied,
+          // i.e. the implementation nodes should contain all of them
+          // empty = {vertex label constraints} \ {types in the table}
+          vertexLabelConstraints.diff(node.getTypes.asScala.toSet).isEmpty)
+    }
+  }
+
+  implicit class RestrictionClauseClass(val restrictionClause: RestrictionClause) extends AnyVal {
+    /** (tableName, constraint) */
+    def createConstraint(): (String, String) = {
+      val customSqlPrefix = "SQL:"
+      val pattern = restrictionClause.getPattern
+      val condition =
+        if (pattern == null) "IS NULL"
+        else if (pattern.startsWith(customSqlPrefix)) pattern.substring(customSqlPrefix.length)
+        else ":: text ~ " + getSingleQuotedString(pattern)
+
+
+      val tableNameQuoted = getQuotedColumnName(restrictionClause.getTableName)
+      val columnNameQuoted = getQuotedColumnName(restrictionClause.getColumnName)
+
+      restrictionClause.getTableName -> s"$tableNameQuoted.$columnNameQuoted $condition"
+    }
+  }
+
+  implicit class RestrictionClausesClass(val restrictionClauses: RestrictionClauses) extends AnyVal {
+    /** (required tables, constraint) */
+    def createConstraint(): (Set[String], String) = {
+      val tableConstraintPairs = restrictionClauses.getRestrictionClause.asScala.map(_.createConstraint())
+      val requiredTables = tableConstraintPairs.map(_._1).toSet
+      val constraints = tableConstraintPairs.map(_._2)
+      val combinedConstraint = '(' + constraints.mkString(" OR ") + ')'
+
+      requiredTables -> combinedConstraint
+    }
+  }
+
+  implicit class MultipleRestrictionClausesClass(val multipleClauses: Iterable[RestrictionClauses]) extends AnyVal {
+    /** (required tables, constraints to be conjuncted) */
+    def createConstraint(): (Set[String], Seq[String]) = {
+      val tablesConstraintPairs = multipleClauses.map(_.createConstraint())
+      val requiredTables = tablesConstraintPairs.flatMap(_._1).toSet
+      val constraints = tablesConstraintPairs.map(_._2).toSeq
+
+      requiredTables -> constraints
+    }
+  }
+
+  implicit class MultipleRestrictionClausesJavaClass(val multipleClauses: java.lang.Iterable[RestrictionClauses]) extends AnyVal {
+    /** (required tables, constraints to be conjuncted) */
+    def createConstraint(): (Set[String], Seq[String]) = {
+      multipleClauses.asScala.createConstraint()
     }
   }
 

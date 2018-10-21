@@ -13,7 +13,6 @@ import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
 import org.apache.spark.sql.catalyst.expressions.Literal
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.cytosm.common.gtop.GTop
 import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, ImplementationNode, TraversalHop}
 
 import scala.Function.tupled
@@ -219,7 +218,7 @@ object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
                 && fNode.nnode.trg.labels.vertexLabels.diff(destinationNodes.flatMap(_.getTypes.asScala).toSet).isEmpty)
             }
 
-          makeUnionNodes(options, edgeTuples) {
+          UnionAll.makeUnionNodes(options, edgeTuples) {
             case (nextOptions, edge) => new GetEdgesWithGTop(fNode, nextOptions, edge)
           }
         }
@@ -231,23 +230,6 @@ object GetEdges extends SqlNodeCreator0[fplan.GetEdges] {
     }
     else {
       makeDirected(fNode, options)
-    }
-  }
-
-  def makeUnionNodes[S](initialOptions: CompilerOptions,
-                        source: Iterable[S])
-                       (createFunc: (CompilerOptions, S) => SqlNode): SqlNode = {
-    if (source.isEmpty) {
-      NoRows(initialOptions)
-    } else {
-      val firstNode: SqlNode = createFunc(initialOptions, source.head)
-
-      source.drop(1)
-        .foldLeft(firstNode) {
-          case (lastNode, newSource) =>
-            val newNode = createFunc(lastNode.nextOptions, newSource)
-            UnionAll.create(lastNode, newNode, newNode.nextOptions)
-        }
     }
   }
 
@@ -306,32 +288,34 @@ class GetVertices(val fNode: fplan.GetVertices,
 
 class GetVerticesWithGTop(val fNode: fplan.GetVertices,
                           val options: CompilerOptions,
-                          val gTop: GTop)
+                          val implNode: ImplementationNode)
   extends LeafSqlNodeFromFNode[fplan.GetVertices] {
 
-  val vertexLabelConstraints = fNode.nnode.v.labels.vertexLabels
-  // TODO support more source tables
-  private val implNode: ImplementationNode = gTop.getImplementationLevel
-    .getImplementationNodes.asScala
-    .find(node =>
-      // all vertex label constraints from the pattern must be satisfied,
-      // i.e. the implementation nodes should contain all of them
-      // empty = {vertex label constraints} \ {types in the table}
-      vertexLabelConstraints.diff(node.getTypes.asScala.toSet).isEmpty)
-    .get
   val vertexTable = implNode.getTableName
   // TODO support complex primary key
   val vertexIdColumn = implNode.getId.get(0).getColumnName
 
+  val missingRequiredProperties: Set[ResolvableName] =
+    fNode.requiredProperties
+      // skip NodeHasLabelsAttribute since it has no resolvedName to use as column name
+      // TODO use NodeHasLabelsAttribute
+      .filter(prop => prop.isInstanceOf[NodeHasLabelsAttribute]
+      ||
+      // skip properties which are not present in the current table
+      !implNode.getAttributes.asScala.exists(prop.name == _.getAbstractionLevelName))
+      .toSet
+
+  override def output: Seq[ResolvableName] =
+    super.output.filterNot(missingRequiredProperties.contains)
+
+  val filteredRequiredProperties: Seq[ResolvableName] =
+    fNode.requiredProperties.filterNot(missingRequiredProperties.contains)
+
   val columns =
     (
       s"""$vertexIdColumn AS ${getQuotedColumnName(fNode.nnode.v)}""" +:
-        fNode.requiredProperties
-          // skip NodeHasLabelsAttribute since it has no resolvedName to use as column name
-          // TODO use NodeHasLabelsAttribute
-          .filterNot(_.isInstanceOf[NodeHasLabelsAttribute])
+        filteredRequiredProperties
           .map { prop =>
-            // TODO insert NULL if no column with that name
             val propertyValuePart = implNode.getAttributes.asScala
               .find(prop.name == _.getAbstractionLevelName)
               .map(_.getColumnName)
@@ -341,11 +325,15 @@ class GetVerticesWithGTop(val fNode: fplan.GetVertices,
             propertyValuePart + s" AS ${getQuotedColumnName(prop)}"
           })
       .mkString(",\n")
+  val (requiredTables, restrictionConstraints) = implNode.getRestrictions.createConstraint()
+  assert(requiredTables subsetOf Set(implNode.getTableName))
+  val restrictions: String = getWhereClauseOrEmpty(restrictionConstraints)
 
   override def innerSql: String =
     i"""SELECT
        |  $columns
-       |FROM $vertexTable"""
+       |FROM $vertexTable
+       |$restrictions"""
 }
 
 object GetVertices extends SqlNodeCreator0[fplan.GetVertices] {
@@ -353,8 +341,18 @@ object GetVertices extends SqlNodeCreator0[fplan.GetVertices] {
                       options: CompilerOptions)
   : (SqlNode, CompilerOptions) = {
     val getVertices =
-      if (options.gTop.isDefined)
-        new GetVerticesWithGTop(fNode, options, options.gTop.get)
+      if (options.gTop.isDefined) {
+        val implNodes = options.gTop.get.findVertexTable(fNode.nnode.v.labels.vertexLabels)
+
+        val unionAll = UnionAll.makeUnionNodes(options, implNodes, useNullValuesForMissingColumns = true) {
+          case (nextOptions, implNode) => new GetVerticesWithGTop(fNode, nextOptions, implNode)
+        }
+
+        assert(fNode.flatSchema.map(_.resolvedName) == unionAll.output.map(_.resolvedName),
+          "All columns should be find in one of the input tables.")
+
+        unionAll
+      }
       else
         new GetVertices(fNode, options)
 
@@ -729,36 +727,71 @@ object Grouping extends SqlNodeCreator1[fplan.Grouping] {
 
 case class UnionAll(override val left: SqlNode,
                     override val right: SqlNode,
-                    options: CompilerOptions)
+                    options: CompilerOptions,
+                    useNullValuesForMissingColumns: Boolean)
   extends BinarySqlNode(left, right) {
 
-  // the children must have the same number of columns and their types must match
-  // additional constraint here is that the columns must have the same names in each subquery
-  assert(left.output.map(_.resolvedName).toSet == right.output.map(_.resolvedName).toSet)
+  if (!useNullValuesForMissingColumns) {
 
-  // TODO: is there any more info to propagate here?
-  override def output: Seq[ResolvableName] = left.output
+    assert(left.output.map(_.resolvedName).toSet == right.output.map(_.resolvedName).toSet)
+  }
 
-  // explicitly specify columns for the right query
-  // to have the same order of columns as in the left query
-  private val columns: String = left.output.map(getQuotedColumnName).mkString(", ")
+  val leftColumns: Seq[String] = left.output.map(getQuotedColumnName)
+  val rightColumns: Seq[String] = right.output.map(getQuotedColumnName)
+
+  // TODO: somehow merge information coming from two sides
+  override def output: Seq[ResolvableName] =
+    left.output ++ right.output.filterNot(rightColumn => leftColumns.contains(getQuotedColumnName(rightColumn)))
+
+  private def getOrderColumns(existingColumns: Seq[String]): Seq[String] = {
+    output.map(getQuotedColumnName).map { column =>
+      if (existingColumns.contains(column)) column
+      else if (useNullValuesForMissingColumns) "NULL AS " + column
+      // the children must have the same number of columns and their types must match
+      // additional constraint here is that the columns must have the same names in each subquery
+      else
+        throw new IllegalArgumentException("Missing columns in UnionAll");
+    }
+  }
+
+  val leftColumnsOrderedPart: String = getOrderColumns(leftColumns).mkString(", ")
+  val rightColumnsOrderedPart: String = getOrderColumns(rightColumns).mkString(", ")
 
   override protected def innerSql: String =
-    i"""SELECT * FROM $leftSql
+    i"""SELECT $leftColumnsOrderedPart FROM $leftSql
        |UNION ALL
-       |SELECT $columns FROM $rightSql"""
+       |SELECT $rightColumnsOrderedPart FROM $rightSql"""
 }
 
 object UnionAll {
   def create(leftNode: SqlNode,
              rightNode: SqlNode,
-             options: CompilerOptions): SqlNode =
+             options: CompilerOptions,
+             useNullValuesForMissingColumns: Boolean = false): SqlNode =
     (leftNode, rightNode) match {
       case (NoRows(_), NoRows(_)) => NoRows(options)
       case (NoRows(_), right) => right
       case (left, NoRows(_)) => left
-      case (left, right) => UnionAll(left, right, options)
+      case (left, right) => UnionAll(left, right, options, useNullValuesForMissingColumns)
     }
+
+  def makeUnionNodes[S](initialOptions: CompilerOptions,
+                        source: Iterable[S],
+                        useNullValuesForMissingColumns: Boolean = false)
+                       (createFunc: (CompilerOptions, S) => SqlNode): SqlNode = {
+    if (source.isEmpty) {
+      NoRows(initialOptions)
+    } else {
+      val firstNode: SqlNode = createFunc(initialOptions, source.head)
+
+      source.drop(1)
+        .foldLeft(firstNode) {
+          case (lastNode, newSource) =>
+            val newNode = createFunc(lastNode.nextOptions, newSource)
+            UnionAll.create(lastNode, newNode, newNode.nextOptions, useNullValuesForMissingColumns)
+        }
+    }
+  }
 }
 
 case class GenerateId(child: SqlNode,

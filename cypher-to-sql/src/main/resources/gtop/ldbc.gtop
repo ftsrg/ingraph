@@ -451,7 +451,7 @@
 				"restrictionClause" : [ {
 					"tableName" : "message",
 					"columnName" : "m_c_replyof",
-					"pattern" : "[0-9]+"
+					"pattern" : "SQL:IS NOT NULL"
 				} ]
 			} ]
 		}],

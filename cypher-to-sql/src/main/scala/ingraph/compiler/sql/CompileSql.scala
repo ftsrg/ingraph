@@ -208,14 +208,14 @@ object CompileSql {
     i"""SELECT $fromColumnNewName, $edgeColumnNewName, $toColumnNewName$commaBeforeExtraColumns $extraColumnsPart FROM
        |  (
        |    SELECT "from" AS $fromColumnNewName, edge_id AS $edgeColumnNewName, "to" AS $toColumnNewName FROM edge
-       |    ${getWhereClause(typeConstraint)}
+       |    ${getWhereClauseOrEmpty(typeConstraint)}
        |  ) subquery
-       |${getWhereClause(vertexLabelConstraints)}"""
+       |${getWhereClauseOrEmpty(vertexLabelConstraints)}"""
   }
 
-  def getWhereClause(constraints: Iterable[String]): String = {
-    if (constraints.isEmpty) ""
-    else i"WHERE ${constraints.mkString(" AND\n")}"
+  def getWhereClauseOrEmpty(conjunctiveConstraints: Iterable[String]): String = {
+    if (conjunctiveConstraints.isEmpty) ""
+    else i"WHERE ${conjunctiveConstraints.mkString(" AND\n")}"
   }
 
   def getSql(node: Any, options: CompilerOptions): String = {
