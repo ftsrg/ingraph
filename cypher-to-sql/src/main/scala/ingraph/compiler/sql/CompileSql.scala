@@ -240,7 +240,11 @@ object CompileSql {
       node match {
         case IsNull(child) => IsNull(ExpressionWrapper(child, options)).sql
         case IsNotNull(child) => IsNotNull(ExpressionWrapper(child, options)).sql
-        case ListExpression(list) =>
+        case ListExpression(list) if options.gTop.isDefined =>
+          // use Postgres array if GTop is present
+          // TODO: make array types consistent
+          "ARRAY[" + list.map(getSql(_, options)).mkString(", ") + "]"
+        case ListExpression(list) if options.gTop.isEmpty =>
           "driver_array(ARRAY[" + list.map(getSql(_, options)).mkString(", ") + "]::jsonb[])"
         case CaseWhen(branches, elseValue) => {
           val branchesPart = branches
