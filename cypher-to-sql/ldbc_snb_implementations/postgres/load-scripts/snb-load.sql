@@ -21,7 +21,7 @@ COPY person_tag FROM 'PATHVAR/person_hasInterest_tag_0_0.csv' WITH DELIMITER '|'
 
 -- Populate knows table
 COPY knows ( k_person1id, k_person2id, k_creationdate) FROM 'PATHVAR/person_knows_person_0_0.csv' WITH DELIMITER '|' CSV HEADER;
-COPY knows ( k_person2id, k_person1id, k_creationdate) FROM 'PATHVAR/person_knows_person_0_0.csv' WITH DELIMITER '|' CSV HEADER;
+-- COPY knows ( k_person2id, k_person1id, k_creationdate) FROM 'PATHVAR/person_knows_person_0_0.csv' WITH DELIMITER '|' CSV HEADER;
 
 -- Populate likes table
 COPY likes FROM 'PATHVAR/person_likes_post_0_0.csv' WITH DELIMITER '|' CSV HEADER;
