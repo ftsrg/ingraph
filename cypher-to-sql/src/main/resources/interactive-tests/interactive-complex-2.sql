@@ -3,7 +3,7 @@ from person, message, knows
 where
     p_personid = m_creatorid and
     m_creationdate <= to_bigint(TIMESTAMP 'epoch' + 1354060800000 * INTERVAL '1 ms') and
-    k_person1id = 19791209300143 and
+    k_person1id = 8796093022220 and
     k_person2id = p_personid
 order by m_creationdate desc, m_messageid asc
 limit 20
