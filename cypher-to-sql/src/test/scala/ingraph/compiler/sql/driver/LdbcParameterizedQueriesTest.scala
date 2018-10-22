@@ -2,9 +2,9 @@ package ingraph.compiler.sql.driver
 
 import java.io.{File, PrintWriter}
 
+import ingraph.compiler.sql.SqlQueries.getQueriesFromFolder
 import ingraph.compiler.sql.Util._
 import ingraph.compiler.sql.driver.LdbcParameterizedQueriesTest.expectedToSucceed
-import ingraph.compiler.sql.driver.LdbcTest.getQueriesFromFolder
 import ingraph.compiler.sql.{CompileSql, CompilerOptions, GTopExtension}
 import org.cytosm.common.gtop.GTop
 import org.scalatest.FunSuite

@@ -1,17 +1,13 @@
 package ingraph.compiler.sql.driver
 
-import java.io.File
-
-import ingraph.compiler.sql.GTopExtension
 import ingraph.compiler.sql.Util._
 import ingraph.compiler.sql.driver.LdbcTest.{expectedToSucceed, ldbcQueries, ldbcSqlQueries}
 import ingraph.compiler.sql.driver.SqlDriver.ExternalDatabase
+import ingraph.compiler.sql.{GTopExtension, SqlQueries}
 import org.cytosm.common.gtop.GTop
 import org.scalatest.FunSuite
 
 import scala.collection.JavaConverters._
-import scala.reflect.io
-import scala.util.Try
 
 class LdbcTest extends FunSuite {
   val gTop: GTop = GTopExtension.loadFromResource("/gtop/ldbc.gtop")
@@ -134,27 +130,6 @@ object LdbcTest {
   val ldbcSqlQueries: Seq[(String, String)] = getQueries("sql")
 
   private def getQueries(extension: String): Seq[(String, String)] = {
-    getQueriesFromResourceFolder(ldbcQueriesPath, extension)
-  }
-
-  def getQueriesFromResourceFolder(folder: String, extension: String): Seq[(String, String)] = {
-    getQueriesFromFolder(folder, extension, getClass.getResource(_).getFile)
-  }
-
-  def getQueriesFromFolder(folder: String, extension: String, resourcePathResolver: String => String = identity)
-  : Seq[(String, String)] = {
-    new File(resourcePathResolver(folder))
-      .listFiles()
-      .filter(_.isFile)
-      .map(io.File(_))
-      .filter(f => f.hasExtension(extension))
-      .sortBy { file =>
-        val filename = file.name
-        // sort by name then by ID
-        filename.replaceAll("""\d+.*$""", "") ->
-          Try(Integer.parseInt(filename.replaceAll("""\D""", ""))).getOrElse(0)
-      }
-      .map(f => f.stripExtension -> f.slurp())
-      .toSeq
+    SqlQueries.getQueriesFromResourceFolder(ldbcQueriesPath, extension)
   }
 }
