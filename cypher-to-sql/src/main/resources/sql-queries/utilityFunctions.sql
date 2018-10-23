@@ -16,13 +16,14 @@ LANGUAGE SQL AS
 
 DROP TYPE IF EXISTS edge_type;
 CREATE TYPE edge_type AS (
+  edge_type_id SMALLINT,
   src BIGINT,
   trg BIGINT
 );
 
 DROP TYPE IF EXISTS vertex_type;
 CREATE TYPE vertex_type AS (
-  vertex_table SMALLINT,
+  vertex_table_id SMALLINT,
   id BIGINT
 );
 

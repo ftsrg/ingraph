@@ -50,11 +50,27 @@ object GTopExtension {
       tables.zipWithIndex.toMap
     }
 
+    def getEdgeTypeIdMap: Map[String, Int] = {
+      // distinct is needed since the same edge type can connect multiple node types,
+      // therefore it can be listed multiple times
+      val edgeTypes: Seq[String] = gTop.getAbstractionLevel.getAbstractionEdges.asScala
+        .flatMap(_.getTypes.asScala)
+        .distinct
+
+      edgeTypes.zipWithIndex.toMap
+    }
+
     private def findEdgeTables(edgeLabels: Set[EdgeLabel]): Seq[(ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode])] = {
       gTop
         .getImplementationLevel.getImplementationEdges.asScala
-        .filter(_.getTypes.asScala.toSet.intersect(edgeLabels).nonEmpty
-          || edgeLabels.isEmpty /* no constraint on edge type */)
+        // GTop extension for attributes stored in join tables
+        .filterNot(_.getTypes.size == 0)
+        .filter { implEdge =>
+          assert(implEdge.getTypes.size == 1)
+
+          implEdge.getTypes.asScala.toSet.intersect(edgeLabels).nonEmpty ||
+            edgeLabels.isEmpty // no constraint on edge type
+        }
         .map { edge =>
           val paths = edge.getPaths
           assert(paths.size == 1, "Only supports one path per edge")

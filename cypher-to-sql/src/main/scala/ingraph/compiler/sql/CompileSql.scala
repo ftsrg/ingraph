@@ -111,8 +111,9 @@ object CompileSql {
           getQuotedColumnName(traversalHop.getJoinTableSourceColumn),
           getQuotedColumnName(traversalHop.getJoinTableDestinationColumn))
       }
-    // TODO: differentiate edge types too
-    val edgeColumn = s"ROW($edgeTableAlias.$fromColumn, $edgeTableAlias.$toColumn)::edge_type"
+
+    val edgeTypeId = options.gTop.get.getEdgeTypeIdMap(edgeTuple._1.getTypes.get(0))
+    val edgeColumn = s"ROW($edgeTypeId, $edgeTableAlias.$fromColumn, $edgeTableAlias.$toColumn)::edge_type"
 
     val fromColumnNewName = getQuotedColumnName(node.nnode.src)
     val edgeColumnNewName = getQuotedColumnName(node.nnode.edge)
