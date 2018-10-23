@@ -75,24 +75,22 @@ object CompileSql {
 
     val fromTableAlias = "fromTable"
     val toTableAlias = "toTable"
-    val edgeTableAlias = "edgeTable"
 
-    /** in case of a 1-to-n relation,
-      * if the edge is represented by a column in one of the vertex tables
-      */
-    val vertexTableBasedEdgeTableNode: Option[ImplementationNode] =
-      if (!traversalHop.getJoinTableName.isEmpty)
-        None
-      else {
-        Some(
-          if (traversalHop.getDestinationTableColumn == destinationIdColumn)
-            sourceNode
-          else if (traversalHop.getSourceTableColumn == sourceIdColumn)
-            destinationNode
-          else
-            throw new IllegalArgumentException("Couldn't determine which table has foreign key to the other.")
-        )
-      }
+    // in case of a 1-to-n relation,
+    // if the edge is represented by a column in one of the vertex tables
+    val (vertexTableBasedEdgeTableNode, edgeTableAliasOverride) =
+    if (!traversalHop.getJoinTableName.isEmpty)
+      None -> None
+    else {
+      if (traversalHop.getDestinationTableColumn == destinationIdColumn)
+        Some(sourceNode) -> Some(fromTableAlias)
+      else if (traversalHop.getSourceTableColumn == sourceIdColumn)
+        Some(destinationNode) -> Some(toTableAlias)
+      else
+        throw new IllegalArgumentException("Couldn't determine which table has foreign key to the other.")
+    }
+
+    val edgeTableAlias = edgeTableAliasOverride.getOrElse("edgeTable")
 
     val (edgeTable, fromColumn, toColumn) =
       if (traversalHop.getJoinTableName.isEmpty) {
