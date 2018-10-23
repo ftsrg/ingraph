@@ -41,3 +41,8 @@ SELECT edge_id,
         WHERE parent = edge_id) AS properties
 FROM edge;
 ```
+
+## Debug WITH-queries
+```sql
+dummy AS (SELECT) SELECT * FROM q
+```
