@@ -17,10 +17,10 @@ select p_personid, p_firstname, p_lastname,
        p_gender, pl_name
 from person, place,
  ( select distinct k2.k_person2id
-   from knows k1, knows k2
+   from knows_undirected k1, knows_undirected k2
    where
    k1.k_person1id = 30786325579101 and k1.k_person2id = k2.k_person1id and k2.k_person2id <> 30786325579101 and
-   not exists (select * from knows where k_person1id = 30786325579101 and k_person2id = k2.k_person2id)
+   not exists (select * from knows_undirected where k_person1id = 30786325579101 and k_person2id = k2.k_person2id)
  ) f
 where
 p_placeid = pl_placeid and

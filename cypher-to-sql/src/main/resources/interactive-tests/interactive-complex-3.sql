@@ -1,12 +1,12 @@
 select p_personid, p_firstname, p_lastname, ct1, ct2, total
 from
  ( select k_person2id
-   from knows
+   from knows_undirected
    where
    k_person1id = 15393162790207
    union
    select k2.k_person2id
-   from knows k1, knows k2
+   from knows_undirected k1, knows_undirected k2
    where
    k1.k_person1id = 15393162790207 and k1.k_person2id = k2.k_person1id and k2.k_person2id <> 15393162790207
  ) f,  person, place p1, place p2,

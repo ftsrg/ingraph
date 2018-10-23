@@ -14,13 +14,13 @@ select
        (select array_agg(ARRAY[o3.o_name, pc_workfrom::text, p3.pl_name]) from person_company, organisation o3, place p3 where pc_personid = id and pc_organisationid = o3.o_organisationid and o3.o_placeid = p3.pl_placeid group by pc_personid) as company
 from
     (
-    select k_person2id as id, 1 as dist from knows, person where k_person1id = 30786325579101 and p_personid = k_person2id and p_firstname = 'Ian'
+    select k_person2id as id, 1 as dist from knows_undirected, person where k_person1id = 30786325579101 and p_personid = k_person2id and p_firstname = 'Ian'
     union all
-    select b.k_person2id as id, 2 as dist from knows a, knows b, person
+    select b.k_person2id as id, 2 as dist from knows_undirected a, knows_undirected b, person
     where
       a.k_person1id = 30786325579101 and b.k_person1id = a.k_person2id and p_personid = b.k_person2id and p_firstname = 'Ian'
     union all
-    select c.k_person2id as id, 3 as dist from knows a, knows b, knows c, person
+    select c.k_person2id as id, 3 as dist from knows_undirected a, knows_undirected b, knows_undirected c, person
     where
       a.k_person1id = 30786325579101 and b.k_person1id = a.k_person2id and b.k_person2id = c.k_person1id and p_personid = c.k_person2id and p_firstname = 'Ian'
     ) tmp, person, place p1

@@ -8,7 +8,7 @@ select * from (
 	      UNION ALL
 	        (WITH sg(link,depth) as (select * from search_graph)
 	        SELECT distinct k_person2id, x.depth + 1,path || ARRAY[[x.link, k_person2id]]
-	        FROM knows, sg x
+	        FROM knows_undirected, sg x
 	        WHERE x.link = k_person1id and not exists(select * from sg y where y.link = 2199023256862::bigint) and not exists( select * from sg y where y.link=k_person2id)
 	        )
 	),

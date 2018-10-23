@@ -1,12 +1,12 @@
 select t_name, count(*)
 from tag, message_tag, message,
  ( select k_person2id
-   from knows
+   from knows_undirected
    where
    k_person1id = 30786325579101
    union
    select k2.k_person2id
-   from knows k1, knows k2
+   from knows_undirected k1, knows_undirected k2
    where
    k1.k_person1id = 30786325579101 and k1.k_person2id = k2.k_person1id and k2.k_person2id <> 30786325579101
  ) f

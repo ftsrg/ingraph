@@ -38,6 +38,7 @@ script:
   - cp ../test-data/*.csv $PG_CSV_DIR
   - ./convert-csvs.sh
   - ./load.sh
+  - ./load-knows_undirected-table.sh
   - cd ../../../..
   # Postgres ^^^
   - ./gradlew test --continue --stacktrace
