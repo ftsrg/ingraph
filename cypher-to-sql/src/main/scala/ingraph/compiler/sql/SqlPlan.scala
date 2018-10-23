@@ -332,8 +332,7 @@ class GetVerticesWithGTop(val fNode: fplan.GetVertices,
             propertyValuePart + s" AS ${getQuotedColumnName(prop)}"
           })
       .mkString(",\n")
-  val (requiredTables, restrictionConstraints) = implNode.getRestrictions.createConstraint()
-  assert(requiredTables subsetOf Set(implNode.getTableName))
+  val restrictionConstraints = implNode.getRestrictions.createConstraint(vertexTable)
   val restrictions: String = getWhereClauseOrEmpty(restrictionConstraints)
 
   override def innerSql: String =

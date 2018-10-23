@@ -102,6 +102,7 @@ object LdbcTest {
   val expectedToSucceed: Set[String] = Set(
     "SQL",
     "simple-test",
+    "knows-undirected",
     //    "getedges-post",
     //    "getedges-comment",
     "getedges-message",

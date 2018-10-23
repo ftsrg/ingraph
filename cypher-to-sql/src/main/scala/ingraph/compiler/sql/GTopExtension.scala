@@ -98,7 +98,7 @@ object GTopExtension {
 
   implicit class RestrictionClauseClass(val restrictionClause: RestrictionClause) extends AnyVal {
     /** (tableName, constraint) */
-    def createConstraint(): (String, String) = {
+    def createConstraint(tableAlias: String): String = {
       val customSqlPrefix = "SQL:"
       val pattern = restrictionClause.getPattern
       val condition =
@@ -106,41 +106,33 @@ object GTopExtension {
         else if (pattern.startsWith(customSqlPrefix)) pattern.substring(customSqlPrefix.length)
         else ":: text ~ " + getSingleQuotedString(pattern)
 
-
-      val tableNameQuoted = getQuotedColumnName(restrictionClause.getTableName)
       val columnNameQuoted = getQuotedColumnName(restrictionClause.getColumnName)
 
-      restrictionClause.getTableName -> s"$tableNameQuoted.$columnNameQuoted $condition"
+      s"$tableAlias.$columnNameQuoted $condition"
     }
   }
 
   implicit class RestrictionClausesClass(val restrictionClauses: RestrictionClauses) extends AnyVal {
     /** (required tables, constraint) */
-    def createConstraint(): (Set[String], String) = {
-      val tableConstraintPairs = restrictionClauses.getRestrictionClause.asScala.map(_.createConstraint())
-      val requiredTables = tableConstraintPairs.map(_._1).toSet
-      val constraints = tableConstraintPairs.map(_._2)
+    def createConstraint(tableAlias: String): String = {
+      val constraints = restrictionClauses.getRestrictionClause.asScala.map(_.createConstraint(tableAlias))
       val combinedConstraint = '(' + constraints.mkString(" OR ") + ')'
 
-      requiredTables -> combinedConstraint
+      combinedConstraint
     }
   }
 
   implicit class MultipleRestrictionClausesClass(val multipleClauses: Iterable[RestrictionClauses]) extends AnyVal {
     /** (required tables, constraints to be conjuncted) */
-    def createConstraint(): (Set[String], Seq[String]) = {
-      val tablesConstraintPairs = multipleClauses.map(_.createConstraint())
-      val requiredTables = tablesConstraintPairs.flatMap(_._1).toSet
-      val constraints = tablesConstraintPairs.map(_._2).toSeq
-
-      requiredTables -> constraints
+    def createConstraint(tableAlias: String): Seq[String] = {
+      multipleClauses.map(_.createConstraint(tableAlias)).toSeq
     }
   }
 
   implicit class MultipleRestrictionClausesJavaClass(val multipleClauses: java.lang.Iterable[RestrictionClauses]) extends AnyVal {
     /** (required tables, constraints to be conjuncted) */
-    def createConstraint(): (Set[String], Seq[String]) = {
-      multipleClauses.asScala.createConstraint()
+    def createConstraint(tableAlias: String): Seq[String] = {
+      multipleClauses.asScala.createConstraint(tableAlias)
     }
   }
 

@@ -73,7 +73,14 @@ object CompileSql {
     val sourceIdColumn = sourceNode.getId.get(0).getColumnName
     val destinationIdColumn = destinationNode.getId.get(0).getColumnName
 
-    val vertexTableBasedJoinTableNode: Option[ImplementationNode] =
+    val fromTableAlias = "fromTable"
+    val toTableAlias = "toTable"
+    val edgeTableAlias = "edgeTable"
+
+    /** in case of a 1-to-n relation,
+      * if the edge is represented by a column in one of the vertex tables
+      */
+    val vertexTableBasedEdgeTableNode: Option[ImplementationNode] =
       if (!traversalHop.getJoinTableName.isEmpty)
         None
       else {
@@ -90,13 +97,13 @@ object CompileSql {
     val (edgeTable, fromColumn, toColumn) =
       if (traversalHop.getJoinTableName.isEmpty) {
         val (sourceColumn, destinationColumn) =
-          if (vertexTableBasedJoinTableNode.get == sourceNode)
+          if (vertexTableBasedEdgeTableNode.get == sourceNode)
             sourceIdColumn -> traversalHop.getSourceTableColumn
           else
             traversalHop.getDestinationTableColumn -> destinationIdColumn
 
         (
-          getQuotedColumnName(vertexTableBasedJoinTableNode.get.getTableName),
+          getQuotedColumnName(vertexTableBasedEdgeTableNode.get.getTableName),
           getQuotedColumnName(sourceColumn),
           getQuotedColumnName(destinationColumn))
       }
@@ -107,7 +114,7 @@ object CompileSql {
           getQuotedColumnName(traversalHop.getJoinTableDestinationColumn))
       }
     // TODO: differentiate edge types too
-    val edgeColumn = s"ROW($fromColumn, $toColumn)::edge_type"
+    val edgeColumn = s"ROW($edgeTableAlias.$fromColumn, $edgeTableAlias.$toColumn)::edge_type"
 
     val fromColumnNewName = getQuotedColumnName(node.nnode.src)
     val edgeColumnNewName = getQuotedColumnName(node.nnode.edge)
@@ -118,11 +125,11 @@ object CompileSql {
         case prop@PropertyAttribute(propName, element, _) => {
           val (tableName, attributes) = element match {
             case vertex: VertexAttribute if vertex.resolvedName == node.nnode.src.resolvedName =>
-              (sourceNode.getTableName, sourceNode.getAttributes)
+              (fromTableAlias, sourceNode.getAttributes)
             case vertex: VertexAttribute if vertex.resolvedName == node.nnode.trg.resolvedName =>
-              (destinationNode.getTableName, destinationNode.getAttributes)
+              (toTableAlias, destinationNode.getAttributes)
             case _: EdgeAttribute =>
-              (traversalHop.getJoinTableName, traversalHop.getAttributes)
+              (edgeTableAlias, traversalHop.getAttributes)
           }
           val attributeInTableIfExists = attributes.asScala.find(_.getAbstractionLevelName == propName)
 
@@ -140,28 +147,27 @@ object CompileSql {
     val missingProperties = propertiesWithTablesAndMissing.filter(_._2.isEmpty).keySet
 
     val extraColumns = propertiesWithTables
-      .map { case (tableName, columnName, newName) =>
-        getQuotedColumnName(tableName) + '.' + getQuotedColumnName(columnName) + " AS " + newName
+      .map { case (tableAlias, columnName, newName) =>
+        tableAlias + '.' + getQuotedColumnName(columnName) + " AS " + newName
       }
     val extraColumnsPart = extraColumns.mkString(", ")
     val commaBeforeExtraColumns =
       if (extraColumns.nonEmpty) ","
       else ""
 
-    val (sourceRequiredTables, sourceRestrictions) = sourceNode.getRestrictions.createConstraint()
-    val (destinationRequiredTables, destinationRestrictions) = destinationNode.getRestrictions.createConstraint()
+    val sourceRestrictions = sourceNode.getRestrictions.createConstraint(fromTableAlias)
+    val destinationRestrictions = destinationNode.getRestrictions.createConstraint(toTableAlias)
     val restrictions: String = getWhereClauseOrEmpty(sourceRestrictions ++ destinationRestrictions)
 
-    val extraTablesToJoin = ((propertiesWithTables
+    val extraTablesToJoin = (propertiesWithTables
       .map { case (tableName, _, _) => tableName }
       .toSet
-      ++ sourceRequiredTables
-      ++ destinationRequiredTables)
-      .map(getQuotedColumnName)
+      ++ (if (sourceRestrictions.nonEmpty) Some(fromTableAlias) else None)
+      ++ (if (destinationRestrictions.nonEmpty) Some(toTableAlias) else None)
       // We already have the edgeTable. No need to join again.
-      - edgeTable)
+      - edgeTableAlias)
     val joinVertexTablesPart =
-      extraTablesToJoin.map { vertexTableNameEscaped =>
+      extraTablesToJoin.map { tableAlias =>
         val sourceTableName = getQuotedColumnName(traversalHop.getSourceTableName)
         val joinSourceColumn = fromColumn
         val sourceColumn = getQuotedColumnName(traversalHop.getSourceTableColumn)
@@ -170,19 +176,19 @@ object CompileSql {
         val destinationColumn = getQuotedColumnName(traversalHop.getDestinationTableColumn)
         val joinDestinationColumn = toColumn
 
-        if (vertexTableNameEscaped == sourceTableName)
-          s"JOIN $sourceTableName ON ($edgeTable.$joinSourceColumn = $sourceTableName.$sourceColumn)"
-        else if (vertexTableNameEscaped == destinationTableName)
-          s"JOIN $destinationTableName ON ($edgeTable.$joinDestinationColumn = $destinationTableName.$destinationColumn)"
+        if (tableAlias == fromTableAlias)
+          s"JOIN $sourceTableName $fromTableAlias ON ($fromTableAlias.$sourceColumn = $edgeTableAlias.$joinSourceColumn)"
+        else if (tableAlias == toTableAlias)
+          s"JOIN $destinationTableName $toTableAlias ON ($edgeTableAlias.$joinDestinationColumn = $toTableAlias.$destinationColumn)"
         else
-          throw new NoSuchElementException("Unexpected table: " + vertexTableNameEscaped);
+          throw new NoSuchElementException("Unexpected table: " + tableAlias);
       }
         .mkString("\n")
 
     val sql =
-      i"""SELECT $fromColumn AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, $toColumn AS $toColumnNewName$commaBeforeExtraColumns
+      i"""SELECT $edgeTableAlias.$fromColumn AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, $edgeTableAlias.$toColumn AS $toColumnNewName$commaBeforeExtraColumns
          |  $extraColumnsPart
-         |  FROM $edgeTable
+         |  FROM $edgeTable $edgeTableAlias
          |    $joinVertexTablesPart
          |$restrictions"""
 
