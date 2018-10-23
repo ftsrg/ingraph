@@ -299,6 +299,7 @@ class GetVerticesWithGTop(val fNode: fplan.GetVertices,
   extends LeafSqlNodeFromFNode[fplan.GetVertices] {
 
   val vertexTable = implNode.getTableName
+  val vertexTableId = options.gTop.get.getVertexTableIdMap(vertexTable)
   // TODO support complex primary key
   val vertexIdColumn = implNode.getId.get(0).getColumnName
 
@@ -320,7 +321,7 @@ class GetVerticesWithGTop(val fNode: fplan.GetVertices,
 
   val columns =
     (
-      s"""$vertexIdColumn AS ${getQuotedColumnName(fNode.nnode.v)}""" +:
+      s"""ROW($vertexTableId, $vertexIdColumn)::vertex_type AS ${getQuotedColumnName(fNode.nnode.v)}""" +:
         filteredRequiredProperties
           .map { prop =>
             val propertyValuePart = implNode.getAttributes.asScala

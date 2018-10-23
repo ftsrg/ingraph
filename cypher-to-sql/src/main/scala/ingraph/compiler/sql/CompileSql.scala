@@ -183,8 +183,12 @@ object CompileSql {
       }
         .mkString("\n")
 
+    val vertexTableIdMap = options.gTop.get.getVertexTableIdMap
+    val fromTableId = vertexTableIdMap(traversalHop.getSourceTableName)
+    val toTableId = vertexTableIdMap(traversalHop.getDestinationTableName)
+
     val sql =
-      i"""SELECT $edgeTableAlias.$fromColumn AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, $edgeTableAlias.$toColumn AS $toColumnNewName$commaBeforeExtraColumns
+      i"""SELECT ROW($fromTableId, $edgeTableAlias.$fromColumn)::vertex_type AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, ROW($toTableId, $edgeTableAlias.$toColumn)::vertex_type AS $toColumnNewName$commaBeforeExtraColumns
          |  $extraColumnsPart
          |  FROM $edgeTable $edgeTableAlias
          |    $joinVertexTablesPart

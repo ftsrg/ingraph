@@ -42,6 +42,14 @@ object GTopExtension {
   }
 
   implicit class GTopClass(val gTop: GTop) extends AnyVal {
+    def getVertexTableIdMap: Map[String, Int] = {
+      val tables: Seq[String] = gTop.getImplementationLevel.getImplementationNodes.asScala
+        .map(_.getTableName)
+        .distinct
+
+      tables.zipWithIndex.toMap
+    }
+
     private def findEdgeTables(edgeLabels: Set[EdgeLabel]): Seq[(ImplementationEdge, TraversalHop, Seq[ImplementationNode], Seq[ImplementationNode])] = {
       gTop
         .getImplementationLevel.getImplementationEdges.asScala

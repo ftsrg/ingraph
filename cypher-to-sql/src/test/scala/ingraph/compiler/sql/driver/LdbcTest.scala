@@ -103,7 +103,7 @@ object LdbcTest {
     "SQL",
     "simple-test",
     "knows-undirected",
-    //    "tag-tagclass",
+    "tag-tagclass",
     "getedges-post",
     "getedges-comment",
     "getedges-message",
