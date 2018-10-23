@@ -11,8 +11,9 @@ CREATE OR REPLACE FUNCTION is_unique(ANYARRAY)
 STRICT
 IMMUTABLE
 LANGUAGE SQL AS
-'SELECT count(val) = count(DISTINCT val)
- FROM unnest($1) AS vals (val);';
+'WITH q AS (SELECT * FROM unnest(array_remove($1, NULL))),
+      distinct_q AS (SELECT DISTINCT * FROM q)
+ SELECT (SELECT count(*) FROM distinct_q) = (SELECT count(*) FROM q)';
 
 DROP TYPE IF EXISTS edge_type;
 CREATE TYPE edge_type AS (
