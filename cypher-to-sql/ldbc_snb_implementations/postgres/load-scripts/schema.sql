@@ -13,7 +13,7 @@ create table message (
     m_locationip varchar not null,
     m_browserused varchar not null,
     m_ps_language varchar,
-    m_content text not null,
+    m_content text,
     m_length int not null,
     m_creatorid bigint,
     m_locationid bigint,

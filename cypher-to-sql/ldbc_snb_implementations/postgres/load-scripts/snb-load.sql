@@ -43,6 +43,10 @@ COPY place FROM 'PATHVAR/place_0_0.csv' WITH DELIMITER '|' CSV HEADER;
 COPY message_tag FROM 'PATHVAR/post_hasTag_tag_0_0.csv' WITH DELIMITER '|' CSV HEADER;
 COPY message_tag FROM 'PATHVAR/comment_hasTag_tag_0_0.csv' WITH DELIMITER '|' CSV HEADER;
 
+UPDATE message
+SET m_content = NULL
+WHERE m_content = '';
+
 -- Populate tagclass table
 COPY tagclass FROM 'PATHVAR/tagclass_0_0.csv' WITH DELIMITER '|' CSV HEADER;
 
