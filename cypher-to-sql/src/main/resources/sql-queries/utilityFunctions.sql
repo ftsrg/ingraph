@@ -49,3 +49,10 @@ IMMUTABLE
 LANGUAGE SQL AS
 'SELECT jsonb_build_object(''type'', ''ListValue'',
                            ''value'', jsonb_build_object(''values'', array_to_json($1)));';
+
+CREATE OR REPLACE FUNCTION unnest(JSONB)
+  RETURNS SETOF JSONB
+STRICT
+IMMUTABLE
+LANGUAGE SQL AS
+'SELECT jsonb_array_elements($1->''value''->''values'');';

@@ -175,33 +175,6 @@ Feature: Local
       | 1      |
     And no side effects
 
-  Scenario: LDBC SNB small - GetVertices
-    Given an empty graph
-    And having executed:
-      """
-      CREATE
-      (:Person {id: 'b', name: 'Bob', age: 53, speaks: ['en', 'de']})
-      <-[:KNOWS {id: 1, since: 2014}]-
-      (:Person:Student {id: 'a', name: 'Alice', age: 24, speaks: ['en']})
-      -[:INTEREST {id: 2, level: 4}]->
-      (:Tag {id: 'c', topic: 'Neofolk'})
-      -[:CLASS {id: 3}]->
-      (:Class {id: 'd', subject: 'Folk'})
-      -[:SUBCLASS_OF {id: 4}]->
-      (:Class {id: 'e', subject: 'Music'})
-      -[:SUBCLASS_OF {id: 5}]->
-      (:Class {id: 'f', subject: 'Art'})
-      """
-    When executing query:
-      """
-      MATCH (p:Person:Student)
-      RETURN p.id AS p, p.name
-      """
-    Then the result should be:
-      | p   | p.name  |
-      | 'a' | 'Alice' |
-    And no side effects
-
   Scenario: OPTIONAL MATCH and WHERE
     And having executed:
       """
@@ -267,4 +240,60 @@ Feature: Local
       | (:X {val: 1}) | (:Y {val: 2}) | (:Z {val: 3}) |
       | (:X {val: 4}) | (:Y {val: 5}) | null          |
       | (:X {val: 6}) | null          | null          |
+    And no side effects
+
+  Scenario: LDBC SNB small - GetVertices
+    Given an empty graph
+    And having executed:
+      """
+      CREATE
+      (:Person {id: 'b', name: 'Bob', age: 53, speaks: ['en', 'de']})
+      <-[:KNOWS {id: 1, since: 2014}]-
+      (:Person:Student {id: 'a', name: 'Alice', age: 24, speaks: ['en']})
+      -[:INTEREST {id: 2, level: 4}]->
+      (:Tag {id: 'c', topic: 'Neofolk'})
+      -[:CLASS {id: 3}]->
+      (:Class {id: 'd', subject: 'Folk'})
+      -[:SUBCLASS_OF {id: 4}]->
+      (:Class {id: 'e', subject: 'Music'})
+      -[:SUBCLASS_OF {id: 5}]->
+      (:Class {id: 'f', subject: 'Art'})
+      """
+    When executing query:
+      """
+      MATCH (p:Person:Student)
+      RETURN p.id AS p, p.name
+      """
+    Then the result should be:
+      | p   | p.name  |
+      | 'a' | 'Alice' |
+    And no side effects
+
+  Scenario: LDBC SNB small - Unwind
+    Given an empty graph
+    And having executed:
+      """
+      CREATE
+      (:Person {id: 'b', name: 'Bob', age: 53, speaks: ['en', 'de']})
+      <-[:KNOWS {id: 1, since: 2014}]-
+      (:Person:Student {id: 'a', name: 'Alice', age: 24, speaks: ['en']})
+      -[:INTEREST {id: 2, level: 4}]->
+      (:Tag {id: 'c', topic: 'Neofolk'})
+      -[:CLASS {id: 3}]->
+      (:Class {id: 'd', subject: 'Folk'})
+      -[:SUBCLASS_OF {id: 4}]->
+      (:Class {id: 'e', subject: 'Music'})
+      -[:SUBCLASS_OF {id: 5}]->
+      (:Class {id: 'f', subject: 'Art'})
+      """
+    When executing query:
+      """
+      MATCH (p:Person) WITH p
+      UNWIND p.speaks AS lang
+      RETURN lang, count(p) AS speakers
+      """
+    Then the result should be:
+      | lang | speakers |
+      | 'en' | 2        |
+      | 'de' | 1        |
     And no side effects

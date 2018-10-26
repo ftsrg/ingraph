@@ -120,6 +120,7 @@ object SqlNode {
       Projection,
       DuplicateElimination,
       Grouping,
+      Unwind,
       AllDifferent,
       Create,
 
@@ -730,6 +731,28 @@ object Grouping extends SqlNodeCreator1[fplan.Grouping] {
                       options: CompilerOptions)
   : (Grouping, CompilerOptions) =
     (new Grouping(fNode, child, options), options)
+}
+
+class Unwind(val fNode: fplan.Unwind,
+             override val child: SqlNode,
+             val options: CompilerOptions)
+  extends UnarySqlNodeFromFNode[fplan.Unwind](child) {
+
+  val renamePairs: Seq[(String, String)] = fNode.nnode.output.map {
+    case unwindAttribute: UnwindAttribute =>
+      ("unnest(" + getSql(unwindAttribute.list, options) + ")", getQuotedColumnName(unwindAttribute))
+    case column => (getQuotedColumnName(column), getQuotedColumnName(column))
+  }
+
+  override def innerSql: String = getProjectionSql(renamePairs, childSql, options)
+}
+
+object Unwind extends SqlNodeCreator1[fplan.Unwind] {
+  override def create(fNode: fplan.Unwind,
+                      child: SqlNode,
+                      options: CompilerOptions)
+  : (Unwind, CompilerOptions) =
+    (new Unwind(fNode, child, options), options)
 }
 
 case class UnionAll(override val left: SqlNode,

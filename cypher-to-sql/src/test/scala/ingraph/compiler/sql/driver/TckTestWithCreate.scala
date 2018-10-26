@@ -211,6 +211,7 @@ object TckTestWithCreate {
     "Dependant CREATE with single row",
     "Dependant CREATE with single row - with aliased attribute",
     "LDBC SNB small - GetVertices",
+    "LDBC SNB small - Unwind",
     ""
   ).filter(!_.isEmpty)
 
