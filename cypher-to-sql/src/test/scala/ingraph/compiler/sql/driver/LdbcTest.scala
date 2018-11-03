@@ -3,7 +3,7 @@ package ingraph.compiler.sql.driver
 import ingraph.compiler.sql.Util._
 import ingraph.compiler.sql.driver.LdbcTest.{expectedToSucceed, ldbcQueries, ldbcSqlQueries}
 import ingraph.compiler.sql.driver.SqlDriver.ExternalDatabase
-import ingraph.compiler.sql.{GTopExtension, SqlQueries}
+import ingraph.compiler.sql.{CompilerOptions, GTopExtension, SqlQueries}
 import org.cytosm.common.gtop.GTop
 import org.scalatest.FunSuite
 
@@ -46,7 +46,8 @@ class LdbcTest extends FunSuite {
           translateCreateQueries = true,
           gTop = Some(gTop),
           database = ExternalDatabase(url),
-          initializeDb = false)) {
+          initializeDb = false,
+          initialCompilerOptions = CompilerOptions(trimSql = true))) {
         driver =>
           withResources(driver.session) { session =>
             withResources(session.beginTransaction()) { tx =>

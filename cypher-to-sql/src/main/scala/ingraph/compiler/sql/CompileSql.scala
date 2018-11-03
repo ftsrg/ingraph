@@ -416,7 +416,14 @@ class CompileSql(val cypherQuery: String, compilerOptions: CompilerOptions = Com
   // TODO don't execute it more than once
   def sqlNode = SqlNode(fPlan, modifiedCompilerOptions)._1
 
-  def sql = sqlNode.sql.get
+  def sql = {
+    val sqlString = sqlNode.sql.get
+
+    if (compilerOptions.trimSql)
+      sqlString.replaceAll("""(?m)^\s+""", "")
+    else
+      sqlString
+  }
 
   def run(): String = {
     println(sql)
@@ -430,7 +437,8 @@ case class CompilerOptions(parameters: Map[String, Any] = Map(),
                            nodeId: Int = 0,
                            unwrapJson: Boolean = false,
                            inlineParameters: Boolean = true,
-                           useSubQueries: Boolean = true) {}
+                           useSubQueries: Boolean = true,
+                           trimSql: Boolean = false) {}
 
 case class ExpressionWrapper(expr: Expression, options: CompilerOptions) extends ExpressionBase {
   override def children: Seq[Expression] = expr.children

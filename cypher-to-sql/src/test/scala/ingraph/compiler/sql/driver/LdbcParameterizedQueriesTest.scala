@@ -20,7 +20,7 @@ class LdbcParameterizedQueriesTest extends FunSuite {
   ldbcParameterizedQueries.foreach { case (name, cypherQueryString) =>
     test(name) {
       try {
-        val sqlCompiler = new CompileSql(cypherQueryString, CompilerOptions(gTop = Some(gTop), inlineParameters = false))
+        val sqlCompiler = new CompileSql(cypherQueryString, CompilerOptions(gTop = Some(gTop), inlineParameters = false, trimSql = true))
 
         val sqlQuery = sqlCompiler.run()
 

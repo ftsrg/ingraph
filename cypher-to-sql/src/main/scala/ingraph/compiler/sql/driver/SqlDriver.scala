@@ -17,7 +17,8 @@ import org.postgresql.util.PGobject
 class SqlDriver(val translateCreateQueries: Boolean = false,
                 val gTop: Option[GTop] = None,
                 val database: Database = new PostgresDatabase,
-                val initializeDb: Boolean = true)
+                val initializeDb: Boolean = true,
+                val initialCompilerOptions: CompilerOptions = CompilerOptions())
   extends CypherDriver {
 
   // TODO implement CREATE command instead of using Neo4j

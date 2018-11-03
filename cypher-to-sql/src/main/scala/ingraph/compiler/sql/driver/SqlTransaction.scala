@@ -5,7 +5,7 @@ import java.util.concurrent.CompletionStage
 import java.util.{Map => javaMap}
 
 import ingraph.compiler.sql.Util.withResources
-import ingraph.compiler.sql.{CompileSql, CompilerOptions, ExportSteps}
+import ingraph.compiler.sql.{CompileSql, ExportSteps}
 import ingraph.model.fplan.Create
 import org.neo4j.driver.v1._
 import org.neo4j.driver.v1.types.{MapAccessor, TypeSystem}
@@ -43,8 +43,11 @@ class SqlTransaction(val sqlSession: SqlSession) extends Transaction {
 
   override def run(statement: Statement): StatementResult = {
     val cypherQuery = statement.text
-    val sqlCompiler = new CompileSql(cypherQuery,
-      CompilerOptions((statement.parameters(): MapAccessor).asMap.asScala.toMap, sqlSession.sqlDriver.gTop))
+    val compilerOptions = sqlSession.sqlDriver.initialCompilerOptions
+      .copy(
+        parameters = (statement.parameters(): MapAccessor).asMap.asScala.toMap,
+        gTop = sqlSession.sqlDriver.gTop)
+    val sqlCompiler = new CompileSql(cypherQuery, compilerOptions)
 
     withResources(rawSqlConnection.createStatement)(sqlStatement => {
       val translateCreateQueries = sqlSession.sqlDriver.translateCreateQueries
