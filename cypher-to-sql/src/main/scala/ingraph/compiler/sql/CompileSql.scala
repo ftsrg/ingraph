@@ -430,7 +430,7 @@ case class CompilerOptions(parameters: Map[String, Any] = Map(),
                            nodeId: Int = 0,
                            unwrapJson: Boolean = false,
                            inlineParameters: Boolean = true,
-                           useSubQueries: Boolean = false) {}
+                           useSubQueries: Boolean = true) {}
 
 case class ExpressionWrapper(expr: Expression, options: CompilerOptions) extends ExpressionBase {
   override def children: Seq[Expression] = expr.children
