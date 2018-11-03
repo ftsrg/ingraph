@@ -38,9 +38,12 @@ trait SqlNode extends LogicalPlan {
 
   val nodeType: String = getClass.getSimpleName
 
-  def sql: Option[String] = Some(
-    s"""-- $nodeType
-       |$innerSql""".stripMargin)
+  def prefixQueryWithComments(query: String): String = {
+    s"""-- $nodeType ($originalSqlQueryName)
+       |$query""".stripMargin
+  }
+
+  def sql: Option[String] = Some(prefixQueryWithComments(innerSql))
 
   def sqlQueryNameToReferOrSubquery: String =
     if (options.useSubQueries) "(" + sql.get + ")"
@@ -177,9 +180,9 @@ abstract class UnarySqlNode(val child: SqlNode)
     if (options.useSubQueries)
       "(" +
         sql.getOrElse(
-          i"""-- $nodeType
-             |SELECT *
-             |FROM ${child.sqlQueryNameToReferOrSubquery} AS child""") +
+          prefixQueryWithComments(
+            i"""SELECT *
+               |FROM ${child.sqlQueryNameToReferOrSubquery} AS child""")) +
         ")"
     else
       super.sqlQueryNameToReferOrSubquery
