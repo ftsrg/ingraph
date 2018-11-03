@@ -1,6 +1,6 @@
 package ingraph.compiler.sql
 
-import ingraph.compiler.sql.CompileSql.getSql
+import ingraph.compiler.sql.CompileSql.{getNodes, getSql}
 import ingraph.compiler.sql.GTopExtension._
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.driver.ValueJsonConversion
@@ -31,8 +31,7 @@ object CompileSql {
     getQuotedColumnName(resolvableName.resolvedName.get.resolvedName)
 
   def getNodes(plan: fplan.FNode): Seq[fplan.FNode] = {
-    if (plan.isInstanceOf[fplan.LeafFNode]) plan :: Nil
-    else plan.children.flatMap(x => getNodes(x)) :+ plan
+    plan.children.flatMap(getNodes) :+ plan
   }
 
   def getSqlForProperty(requiredPropety: ResolvableName, nnode: nplan.GetEdges): String = {
@@ -405,14 +404,17 @@ object CompileSql {
   }
 }
 
-class CompileSql(val cypherQuery: String, val compilerOptions: CompilerOptions = CompilerOptions()) extends CompilerTest {
+class CompileSql(val cypherQuery: String, compilerOptions: CompilerOptions = CompilerOptions()) extends CompilerTest {
 
   val stages = compile(cypherQuery)
 
-  val fplan = stages.fplan
+  val fPlan = stages.fplan
+
+  val modifiedCompilerOptions = compilerOptions
+    .copy(useSubQueries = compilerOptions.useSubQueries && !getNodes(fPlan).exists(_.isInstanceOf[fplan.Create]))
 
   // TODO don't execute it more than once
-  def sqlNode = SqlNode(fplan, compilerOptions)._1
+  def sqlNode = SqlNode(fPlan, modifiedCompilerOptions)._1
 
   def sql = sqlNode.sql.get
 
@@ -427,7 +429,8 @@ case class CompilerOptions(parameters: Map[String, Any] = Map(),
                            gTop: Option[GTop] = None,
                            nodeId: Int = 0,
                            unwrapJson: Boolean = false,
-                           inlineParameters: Boolean = true) {}
+                           inlineParameters: Boolean = true,
+                           useSubQueries: Boolean = false) {}
 
 case class ExpressionWrapper(expr: Expression, options: CompilerOptions) extends ExpressionBase {
   override def children: Seq[Expression] = expr.children

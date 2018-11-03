@@ -167,16 +167,22 @@ abstract class UnarySqlNode(val child: SqlNode)
     if (sql.isDefined) super.sqlQueryNameToRefer
     else child.sqlQueryNameToRefer
 
-  val childSql = child.sqlQueryNameToRefer
+  val childSql =
+    if (options.useSubQueries) child.sql.get
+    else child.sqlQueryNameToRefer
 }
 
 abstract class BinarySqlNode
 (val left: SqlNode, val right: SqlNode)
   extends GenericBinaryNode[SqlNode] with SqlNode {
 
-  def leftSql = left.sqlQueryNameToRefer
+  def leftSql =
+    if (options.useSubQueries) left.sql.get
+    else left.sqlQueryNameToRefer
 
-  def rightSql = right.sqlQueryNameToRefer
+  def rightSql =
+    if (options.useSubQueries) right.sql.get
+    else right.sqlQueryNameToRefer
 }
 
 abstract class LeafSqlNodeFromFNode[+T <: LeafFNode]
