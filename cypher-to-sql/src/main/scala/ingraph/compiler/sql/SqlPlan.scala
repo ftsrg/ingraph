@@ -199,13 +199,13 @@ abstract class BinarySqlNode
   def leftSql: String = left.sqlQueryNameToReferOrSubquery
 
   def leftSqlNamedIfSubquery: String =
-    if (options.useSubQueries) left.sqlQueryNameToReferOrSubquery + " AS left"
+    if (options.useSubQueries) left.sqlQueryNameToReferOrSubquery + " AS left_query"
     else left.sqlQueryNameToReferOrSubquery
 
   def rightSql: String = right.sqlQueryNameToReferOrSubquery
 
   def rightSqlNamedIfSubquery: String =
-    if (options.useSubQueries) right.sqlQueryNameToReferOrSubquery + " AS right"
+    if (options.useSubQueries) right.sqlQueryNameToReferOrSubquery + " AS right_query"
     else right.sqlQueryNameToReferOrSubquery
 }
 
