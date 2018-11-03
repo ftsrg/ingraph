@@ -38,7 +38,9 @@ trait SqlNode extends LogicalPlan {
 
   val nodeType: String = getClass.getSimpleName
 
-  def sql: Option[String] = Some(innerSql)
+  def sql: Option[String] = Some(
+    s"""-- $nodeType
+       |$innerSql""".stripMargin)
 
   def sqlQueryNameToReferOrSubquery: String =
     if (options.useSubQueries) "(" + sql.get + ")"
@@ -175,7 +177,8 @@ abstract class UnarySqlNode(val child: SqlNode)
     if (options.useSubQueries)
       "(" +
         sql.getOrElse(
-          i"""SELECT *
+          i"""-- $nodeType
+             |SELECT *
              |FROM ${child.sqlQueryNameToReferOrSubquery} AS child""") +
         ")"
     else
@@ -601,8 +604,7 @@ class Production(val fNode: fplan.Production,
 
             if (sqlNode.sql.isDefined)
               i"""${sqlNode.sqlQueryNameToRefer} AS
-                 | (-- ${sqlNode.nodeType}
-                 |  ${sqlNode.sql.get})$commaIfNeeded"""
+                 | (${sqlNode.sql.get})$commaIfNeeded"""
             else
               s"-- ${sqlNode.originalSqlQueryName} (${sqlNode.nodeType}): ${sqlNode.sqlQueryNameToRefer}"
           }.mkString("\n")
