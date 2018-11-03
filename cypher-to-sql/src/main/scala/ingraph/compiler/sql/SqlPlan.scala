@@ -39,6 +39,10 @@ trait SqlNode extends LogicalPlan {
   val nodeType: String = getClass.getSimpleName
 
   def sql: Option[String] = Some(innerSql)
+
+  def sqlQueryNameToReferOrSubquery: String =
+    if (options.useSubQueries) "(" + sql.get + ")"
+    else sqlQueryNameToRefer
 }
 
 abstract class SqlNodeCreator[-FPlanType <: FNode](implicit fPlanTag: ClassTag[FPlanType]) {
@@ -167,22 +171,39 @@ abstract class UnarySqlNode(val child: SqlNode)
     if (sql.isDefined) super.sqlQueryNameToRefer
     else child.sqlQueryNameToRefer
 
-  val childSql =
-    if (options.useSubQueries) child.sql.get
-    else child.sqlQueryNameToRefer
+  override def sqlQueryNameToReferOrSubquery: String = {
+    if (options.useSubQueries)
+      "(" +
+        sql.getOrElse(
+          i"""SELECT *
+             |FROM ${child.sqlQueryNameToReferOrSubquery} AS child""") +
+        ")"
+    else
+      super.sqlQueryNameToReferOrSubquery
+  }
+
+  val childSql: String = child.sqlQueryNameToReferOrSubquery
+
+  val childSqlNamedIfSubquery: String =
+    if (options.useSubQueries) childSql + " AS child"
+    else childSql
 }
 
 abstract class BinarySqlNode
 (val left: SqlNode, val right: SqlNode)
   extends GenericBinaryNode[SqlNode] with SqlNode {
 
-  def leftSql =
-    if (options.useSubQueries) left.sql.get
-    else left.sqlQueryNameToRefer
+  def leftSql: String = left.sqlQueryNameToReferOrSubquery
 
-  def rightSql =
-    if (options.useSubQueries) right.sql.get
-    else right.sqlQueryNameToRefer
+  def leftSqlNamedIfSubquery: String =
+    if (options.useSubQueries) left.sqlQueryNameToReferOrSubquery + " AS left"
+    else left.sqlQueryNameToReferOrSubquery
+
+  def rightSql: String = right.sqlQueryNameToReferOrSubquery
+
+  def rightSqlNamedIfSubquery: String =
+    if (options.useSubQueries) right.sqlQueryNameToReferOrSubquery + " AS right"
+    else right.sqlQueryNameToReferOrSubquery
 }
 
 abstract class LeafSqlNodeFromFNode[+T <: LeafFNode]
@@ -409,7 +430,7 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
   override def innerSql: String =
     i"""WITH RECURSIVE recursive_table AS (
        |  (
-       |    WITH left_query AS (SELECT * FROM $leftSql)
+       |    WITH left_query AS (SELECT * FROM $leftSqlNamedIfSubquery)
        |    SELECT
        |      *,
        |      ARRAY [] :: $edgeType [] AS $edgeListName,
@@ -423,7 +444,7 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
        |    ($edgeListName|| $edgeIdColumnName) AS $edgeListName,
        |    edges.$edgesToVertexName AS nextFrom,
        |    edges.$edgesToVertexName
-       |  FROM (SELECT * FROM $edgesSql) edges
+       |  FROM $edgesSql AS edges
        |    INNER JOIN recursive_table
        |      ON $edgeIdColumnName <> ALL ($edgeListName) -- edge uniqueness
        |         AND next_from = $currentFromColumnName
@@ -554,36 +575,42 @@ class Production(val fNode: fplan.Production,
                  override val child: SqlNode,
                  val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.Production](child) {
-  val renamePairs = fNode.output.zip(fNode.outputNames)
-    .map {
-      case (attribute, outputName) =>
-        convertAttributeAtProductionNode(attribute) -> getQuotedColumnName(outputName)
+
+  val renamePairs: Seq[(String, String)] =
+    fNode.output.zip(fNode.outputNames)
+      .map {
+        case (attribute, outputName) =>
+          convertAttributeAtProductionNode(attribute) -> getQuotedColumnName(outputName)
+      }
+
+  val projectionSql: String = getProjectionSql(renamePairs, childSql, options)
+
+  override def innerSql: String =
+    if (options.useSubQueries)
+      projectionSql
+    else {
+      val children = getSqlRecursively(child)
+      val emptyQueriesAtEndCount = children.reverse.takeWhile(_.sql.isEmpty).size
+      val queriesAtEndWithoutComma = children.takeRight(emptyQueriesAtEndCount + 1).toSet
+      val withQueries =
+        children
+          .map { sqlNode =>
+            val commaIfNeeded =
+              if (queriesAtEndWithoutComma.contains(sqlNode)) ""
+              else ","
+
+            if (sqlNode.sql.isDefined)
+              i"""${sqlNode.sqlQueryNameToRefer} AS
+                 | (-- ${sqlNode.nodeType}
+                 |  ${sqlNode.sql.get})$commaIfNeeded"""
+            else
+              s"-- ${sqlNode.originalSqlQueryName} (${sqlNode.nodeType}): ${sqlNode.sqlQueryNameToRefer}"
+          }.mkString("\n")
+
+      s"""WITH
+         |$withQueries
+         |$projectionSql""".stripMargin
     }
-
-  override def innerSql: String = {
-    val children = getSqlRecursively(child)
-    val emptyQueriesAtEndCount = children.reverse.takeWhile(_.sql.isEmpty).size
-    val queriesAtEndWithoutComma = children.takeRight(emptyQueriesAtEndCount + 1).toSet
-    val withQueries =
-      children
-        .map { sqlNode =>
-          val commaIfNeeded =
-            if (queriesAtEndWithoutComma.contains(sqlNode)) ""
-            else ","
-
-          if (sqlNode.sql.isDefined)
-            i"""${sqlNode.sqlQueryNameToRefer} AS
-               | (-- ${sqlNode.nodeType}
-               |  ${sqlNode.sql.get})$commaIfNeeded"""
-          else
-            s"-- ${sqlNode.originalSqlQueryName} (${sqlNode.nodeType}): ${sqlNode.sqlQueryNameToRefer}"
-        }.mkString("\n")
-
-    val projectionSql = getProjectionSql(renamePairs, childSql, options)
-    s"""WITH
-       |$withQueries
-       |$projectionSql""".stripMargin
-  }
 }
 
 object Production extends SqlNodeCreator1[fplan.Production] {
@@ -794,9 +821,9 @@ case class UnionAll(override val left: SqlNode,
   val rightColumnsOrderedPart: String = getOrderColumns(rightColumns).mkString(", ")
 
   override protected def innerSql: String =
-    i"""SELECT $leftColumnsOrderedPart FROM $leftSql
+    i"""SELECT $leftColumnsOrderedPart FROM $leftSqlNamedIfSubquery
        |UNION ALL
-       |SELECT $rightColumnsOrderedPart FROM $rightSql"""
+       |SELECT $rightColumnsOrderedPart FROM $rightSqlNamedIfSubquery"""
 }
 
 object UnionAll {
