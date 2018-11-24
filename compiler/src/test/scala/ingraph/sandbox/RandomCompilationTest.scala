@@ -545,6 +545,33 @@ class RandomCompilationTest extends CompilerTest {
       })
     )
   }
+
+  test("AllDifferent operator that require edges of different types to be different should be removed upon beautification.") {
+    val stages = compile(
+      """MATCH (p1:Person)-[:KNOWS]-(p2:Person)-[:INTEREST|MASTER_OF]->(t:Topic)-[:CLASS]->(c1:Class)-[:SUBCLASS_OF]->(c2:Class)
+        |RETURN p1.name AS p1_name, p2.name as p2_name
+        |""".stripMargin)
+
+    assert( !nodeExistByType(stages.gplan, classOf[gplan.AllDifferent]) )
+  }
+
+  test("AllDifferent operator for edge lists should be retained.") {
+    val stages = compile(
+      """MATCH (p1:Person)-[:KNOWS]-(p2:Person)-[:INTEREST|MASTER_OF]->(t:Topic)-[:CLASS]->(c1:Class)-[:SUBCLASS_OF*1..]->(c2:Class)
+        |RETURN p1.name AS p1_name, p2.name as p2_name
+        |""".stripMargin)
+
+    assert( nodeExistByType(stages.gplan, classOf[gplan.AllDifferent]) )
+  }
+
+  test("AllDifferent operator on overlapping edge types should be retained.") {
+    val stages = compile(
+      """MATCH (p1:Person)-[:KNOWS]-(p2:Person)-[:KNOWS|FRIEND]-(p3:Person)
+        |RETURN p1.name AS p1_name, p2.name as p2_name, p3.name as p3_name
+        |""".stripMargin)
+
+    assert( nodeExistByType(stages.gplan, classOf[gplan.AllDifferent]) )
+  }
 }
 
 /** Random compiler tests that must stop after GPlan compilation.

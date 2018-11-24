@@ -135,6 +135,10 @@ abstract class CompilerTest extends FunSuite with BeforeAndAfter {
     findRoot.find( p => clazz.isInstance(p) ).get.asInstanceOf[T]
   }
 
+  def nodeExistByType[T <: LogicalPlan](findRoot: LogicalPlan, clazz: Class[T]): Boolean = {
+    findRoot.find( p => clazz.isInstance(p) ).isDefined
+  }
+
   /** Override println hack. Use printlnSuppressIfIngraph() instead") */
   @Deprecated
   def println(x: Any) = printlnSuppressIfIngraph(x.toString)
