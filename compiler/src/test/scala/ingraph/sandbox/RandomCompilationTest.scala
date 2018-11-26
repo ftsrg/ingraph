@@ -489,8 +489,8 @@ class RandomCompilationTest extends CompilerTest {
     val sortOp = productionOp.child.asInstanceOf[gplan.Sort]
     val returnProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
     val withProjectionOp = returnProjectionOp.child.asInstanceOf[gplan.Projection]
-    val alldifferentOp = withProjectionOp.child.asInstanceOf[gplan.AllDifferent]
-    assert( Option(alldifferentOp).isDefined )
+    val getverticesOp = withProjectionOp.child.asInstanceOf[gplan.GetVertices]
+    assert( Option(getverticesOp).isDefined )
     // last projection and the sorting has a single item...
     assert( returnProjectionOp.projectList.length == 1)
     assert( sortOp.order.length == 1)
@@ -510,8 +510,8 @@ class RandomCompilationTest extends CompilerTest {
     val productionOp = stages.gplan.asInstanceOf[gplan.Production]
     val sortOp = productionOp.child.asInstanceOf[gplan.Sort]
     val returnProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
-    val alldifferentOp = returnProjectionOp.child.asInstanceOf[gplan.AllDifferent]
-    assert( Option(alldifferentOp).isDefined )
+    val getverticesOp = returnProjectionOp.child.asInstanceOf[gplan.GetVertices]
+    assert( Option(getverticesOp).isDefined )
     // last projection and the sorting has a single item...
     assert( returnProjectionOp.projectList.length == 1)
     assert( sortOp.order.length == 1)
@@ -533,8 +533,8 @@ class RandomCompilationTest extends CompilerTest {
     val topOp = returnProjectionOp.child.asInstanceOf[gplan.Top]
     val sortOp = topOp.child.asInstanceOf[gplan.Sort]
     val introducedProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
-    val alldifferentOp = introducedProjectionOp.child.asInstanceOf[gplan.AllDifferent]
-    assert( Option(alldifferentOp).isDefined )
+    val getverticesOp = introducedProjectionOp.child.asInstanceOf[gplan.GetVertices]
+    assert( Option(getverticesOp).isDefined )
     // last projection and the sorting has a single item and the introduced has 2 items
     assert( returnProjectionOp.projectList.length == 1)
     assert( sortOp.order.length == 1)

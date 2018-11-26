@@ -115,7 +115,7 @@ class NPlanToFPlanTest extends FunSuite {
       case
         Production(_,
           Projection(_, _,
-           AllDifferent(_, v: GetVertices)
+           v: GetVertices
           )) =>
         assert(v.flatSchema.map(_.name) == Seq("segment", "length"))
     }
@@ -133,8 +133,8 @@ class NPlanToFPlanTest extends FunSuite {
         Production(_,
           Projection(_, _,
             Selection(_,
-              AllDifferent(_, v: GetVertices
-            )))) =>
+              v: GetVertices
+            ))) =>
         assert(v.flatSchema.map(_.name) == Seq("segment", "length"))
     }
   }
@@ -162,9 +162,9 @@ class NPlanToFPlanTest extends FunSuite {
         |  -[:monitoredBy]->(sensor:Sensor)
         |RETURN route, sensor, swP, sw
         |""".stripMargin)
-    assert(fp.children(0).children(0).children(0).flatSchema.size == 7)
-    assert(fp.children(0).children(0).children(0).children(0).flatSchema.size == 5)
-    assert(fp.children(0).children(0).children(0).children(1).flatSchema.size == 3)
+    assert(fp.children(0).children(0).flatSchema.size == 7)
+    assert(fp.children(0).children(0).children(0).flatSchema.size == 5)
+    assert(fp.children(0).children(0).children(1).flatSchema.size == 3)
   }
 
   test("infer schema for SwitchMonitored") {
