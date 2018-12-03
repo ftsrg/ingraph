@@ -426,7 +426,7 @@ class CompileSql(val cypherQuery: String, compilerOptions: CompilerOptions = Com
   }
 
   def run(): String = {
-    println(sql)
+    printlnSuppressIfIngraph(sql)
     sql
   }
 

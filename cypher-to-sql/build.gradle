@@ -4,6 +4,7 @@ plugins {
 
 test {
   maxParallelForks = 1
+  environment('INGRAPH_COMPILER_TEST_SUPPRESS_PRINTLN', '1')
 }
 
 dependencies {
