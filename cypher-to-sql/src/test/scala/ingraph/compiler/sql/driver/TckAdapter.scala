@@ -6,12 +6,11 @@ import org.opencypher.tools.tck.values.CypherValue
 
 import scala.collection.JavaConverters._
 
-class TckAdapter(session: Session) extends Graph {
+class TckAdapter(session: Session, disableSideEffectQuery: Boolean = false) extends Graph {
   private val transaction: Transaction = session.beginTransaction()
 
   override def cypher(query: String, params: Map[String, CypherValue], meta: QueryType): Result = {
-    // TODO
-    if (meta == SideEffectQuery)
+    if (meta == SideEffectQuery && disableSideEffectQuery)
       CypherValueRecords.empty
     else {
       var result: StatementResult = null
@@ -19,7 +18,7 @@ class TckAdapter(session: Session) extends Graph {
         result = transaction.run(query, params.map { case (k, v) => k -> TckValueToDriver(v) }.asJava)
       } catch {
         case exception: Exception => {
-          // avoid using errored connection for further tests
+          // avoid using failed connection for further tests
           session.close()
           throw exception
         }

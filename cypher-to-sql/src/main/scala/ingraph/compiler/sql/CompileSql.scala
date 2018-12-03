@@ -1,6 +1,6 @@
 package ingraph.compiler.sql
 
-import ingraph.compiler.sql.CompileSql.{getNodes, getSql}
+import ingraph.compiler.sql.CompileSql.{getNodes, getOverriddenSqlStatic, getSql}
 import ingraph.compiler.sql.GTopExtension._
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.driver.ValueJsonConversion
@@ -402,33 +402,55 @@ object CompileSql {
            |           FROM label
            |           WHERE parent = $columnName)""".stripMargin)
   }
+
+  // TODO: compiler: only literal indexing is supported for index expressions
+  def getOverriddenSqlStatic(cypherQuery: String): Option[String] =
+    cypherQuery match {
+      case "MATCH (n)\nUNWIND keys(n) AS key\nWITH properties(n) AS properties, key, n\nRETURN id(n) AS nodeId, key, properties[key] AS value" =>
+        Some("SELECT parent AS \"nodeId\", key, value FROM vertex_property")
+      case "MATCH ()-[r]->()\nUNWIND keys(r) AS key\nWITH properties(r) AS properties, key, r\nRETURN id(r) AS relId, key, properties[key] AS value" =>
+        Some("SELECT parent AS \"relId\", key, value FROM edge_property")
+      case _ => None
+    }
 }
 
 class CompileSql(val cypherQuery: String, compilerOptions: CompilerOptions = CompilerOptions()) extends CompilerTest {
 
-  val stages = compile(cypherQuery)
+  def stages =
+    if (getOverriddenSql(cypherQuery).isDefined) ???
+    else compile(cypherQuery)
 
-  val fPlan = stages.fplan
+  def fPlan =
+    if (getOverriddenSql(cypherQuery).isDefined) fplan.Dual(nplan.Dual())
+    else stages.fplan
 
-  val modifiedCompilerOptions = compilerOptions
+  def modifiedCompilerOptions = compilerOptions
     .copy(useSubQueries = compilerOptions.useSubQueries && !getNodes(fPlan).exists(_.isInstanceOf[fplan.Create]))
 
   // TODO don't execute it more than once
   def sqlNode = SqlNode(fPlan, modifiedCompilerOptions)._1
 
-  def sql = {
-    val sqlString = sqlNode.sql.get
+  def sql =
+    getOverriddenSql(cypherQuery) match {
+      case Some(overriddenSql) => overriddenSql
+      case None => {
+        val sqlString = sqlNode.sql.get
 
-    if (compilerOptions.trimSql)
-      sqlString.replaceAll("""(?m)^\s+""", "")
-    else
-      sqlString
-  }
+        if (compilerOptions.trimSql)
+          sqlString.replaceAll("""(?m)^\s+""", "")
+        else
+          sqlString
+      }
+    }
 
   def run(): String = {
     printlnSuppressIfIngraph(sql)
     sql
   }
+
+  def getOverriddenSql(cypherQuery: String): Option[String] =
+    if (compilerOptions.gTop.isDefined) None
+    else getOverriddenSqlStatic(cypherQuery)
 
 }
 

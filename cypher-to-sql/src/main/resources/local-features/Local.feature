@@ -302,7 +302,7 @@ Feature: Local
     Given any graph
     When executing query:
       """
-      CREATE (a {num: 5})
+      CREATE ()
       RETURN 5 AS dummy
       """
     Then the result should be:

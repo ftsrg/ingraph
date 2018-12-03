@@ -47,7 +47,7 @@ class GTopTests extends FunSuite with TckTestRunner with SharedSqlDriver {
   override def initNewDriver(): SqlDriver =
     new SqlDriver(translateCreateQueries = true, Some(gTop), initializeDb = false)
 
-  runTckTests(() => new TckAdapter(session), scenarioSet)
+  runTckTests(() => new TckAdapter(session, true), scenarioSet)
 }
 
 object GTopTests {
