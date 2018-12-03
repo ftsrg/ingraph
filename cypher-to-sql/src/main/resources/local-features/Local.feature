@@ -297,3 +297,16 @@ Feature: Local
       | 'en' | 2        |
       | 'de' | 1        |
     And no side effects
+
+  Scenario: Creating a node with property and return the property
+    Given any graph
+    When executing query:
+      """
+      CREATE (a {num: 5})
+      RETURN 5 AS dummy
+      """
+    Then the result should be:
+      | dummy |
+      | 5     |
+    And the side effects should be:
+      | +nodes | 1 |
