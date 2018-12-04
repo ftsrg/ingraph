@@ -298,7 +298,7 @@ Feature: Local
       | 'de' | 1        |
     And no side effects
 
-  Scenario: Creating a node with property and return the property
+  Scenario: Creating a node and return a dummy value
     Given any graph
     When executing query:
       """

@@ -28,7 +28,7 @@ object TckTestWithCreate {
     "Cope with shadowed variables",
     "Count nodes",
     "Count non-null values",
-    "Creating a node with property and return the property",
+    "Creating a node and return a dummy value",
     "Creating node without label",
     "Dependant CREATE with single row",
     "Dependant CREATE with single row - with aliased attribute",
