@@ -1,11 +1,12 @@
 package ingraph.compiler.sql
 
-import ingraph.compiler.sql.CompileSql.{getNodes, getOverriddenSqlStatic, getSql}
+import ingraph.compiler.sql.CompileSql.{getNodes, getSql}
 import ingraph.compiler.sql.GTopExtension._
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.driver.ValueJsonConversion
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
+import ingraph.model.fplan.FNode
 import ingraph.model.misc.{Function, FunctionCategory}
 import ingraph.model.{fplan, nplan}
 import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Expression, IsNotNull, IsNull, Literal, Not}
@@ -424,44 +425,40 @@ object CompileSql {
     }
 }
 
-class CompileSql(val cypherQuery: String, compilerOptions: CompilerOptions = CompilerOptions()) extends CompilerTest {
+class CompileSql(val cypherQuery: String, compilerOptions: CompilerOptions)
+  extends CompilerTest with SqlCompiler {
 
-  def stages =
-    if (getOverriddenSql(cypherQuery).isDefined) ???
-    else compile(cypherQuery)
+  override def stages: CompilationStages = compile(cypherQuery)
 
-  def fPlan =
-    if (getOverriddenSql(cypherQuery).isDefined) fplan.Dual(nplan.Dual())
-    else stages.fplan
+  override def fPlan: FNode = stages.fplan
 
-  def modifiedCompilerOptions = compilerOptions
+  def modifiedCompilerOptions: CompilerOptions = compilerOptions
     .copy(useSubQueries = compilerOptions.useSubQueries && !getNodes(fPlan).exists(_.isInstanceOf[fplan.Create]))
 
   // TODO don't execute it more than once
-  def sqlNode = SqlNode(fPlan, modifiedCompilerOptions)._1
+  override def sqlNode: SqlNode = SqlNode(fPlan, modifiedCompilerOptions)._1
 
-  def sql =
-    getOverriddenSql(cypherQuery) match {
-      case Some(overriddenSql) => overriddenSql
-      case None => {
-        val sqlString = sqlNode.sql.get
+  override def sql: String = {
+    val sqlString = sqlNode.sql.get
 
-        if (compilerOptions.trimSql)
-          sqlString.replaceAll("""(?m)^\s+""", "")
-        else
-          sqlString
-      }
-    }
-
-  def run(): String = {
-    printlnSuppressIfIngraph(sql)
-    sql
+    if (compilerOptions.trimSql)
+      sqlString.replaceAll("""(?m)^\s+""", "")
+    else
+      sqlString
   }
 
-  def getOverriddenSql(cypherQuery: String): Option[String] =
-    if (compilerOptions.gTop.isDefined) None
-    else getOverriddenSqlStatic(cypherQuery)
+  printlnSuppressIfIngraph(sql)
+}
 
+class OverriddenCompileSql(val overriddenSqlQuery: String) extends CompilerTest with SqlCompiler {
+
+  override def stages: CompilationStages = ???
+
+  override def fPlan: FNode = fplan.Dual(nplan.Dual())
+
+  override def sqlNode: SqlNode = SqlNode(fPlan, CompilerOptions())._1
+
+  override def sql: String = overriddenSqlQuery
 }
 
 case class CompilerOptions(parameters: Map[String, Any] = Map(),

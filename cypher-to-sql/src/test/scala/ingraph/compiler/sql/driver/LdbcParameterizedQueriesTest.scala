@@ -5,7 +5,7 @@ import java.io.{File, PrintWriter}
 import ingraph.compiler.sql.SqlQueries.getQueriesFromFolder
 import ingraph.compiler.sql.Util._
 import ingraph.compiler.sql.driver.LdbcParameterizedQueriesTest.expectedToSucceed
-import ingraph.compiler.sql.{CompileSql, CompilerOptions, GTopExtension}
+import ingraph.compiler.sql.{CompilerOptions, GTopExtension, SqlCompiler}
 import org.cytosm.common.gtop.GTop
 import org.scalatest.FunSuite
 
@@ -20,9 +20,9 @@ class LdbcParameterizedQueriesTest extends FunSuite {
   ldbcParameterizedQueries.foreach { case (name, cypherQueryString) =>
     test(name) {
       try {
-        val sqlCompiler = new CompileSql(cypherQueryString, CompilerOptions(gTop = Some(gTop), inlineParameters = false, trimSql = true))
+        val sqlCompiler = SqlCompiler(cypherQueryString, CompilerOptions(gTop = Some(gTop), inlineParameters = false, trimSql = true))
 
-        val sqlQuery = sqlCompiler.run()
+        val sqlQuery = sqlCompiler.sql
 
         if (LdbcTest.expectedToSucceed.contains(name)) {
           withResources(new PrintWriter(new File(outputPath, name + ".sql").getPath)) {

@@ -69,7 +69,7 @@ class CompileSqlTest extends FunSuite with Neo4jConnection with PostgresConnecti
     println(createCypherQuery)
     println()
 
-    val selectSqlQuery = new CompileSql(selectCypherQuery).run()
+    val selectSqlQuery = SqlCompiler(selectCypherQuery).sql
 
     runGraphQuery(createCypherQuery, selectCypherQuery, selectSqlQuery, orderedResults)
   }
