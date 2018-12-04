@@ -589,7 +589,14 @@ class Production(val fNode: fplan.Production,
           convertAttributeAtProductionNode(attribute) -> getQuotedColumnName(outputName)
       }
 
-  val projectionSql: String = getProjectionSql(renamePairs, childSql, options)
+  val projectionSql: String = {
+    // if there is a Create child of the Production node then there should be no output
+    // TODO solve this at FPlan level
+    if (child.isInstanceOf[Create])
+      "SELECT WHERE FALSE"
+    else
+      getProjectionSql(renamePairs, childSql, options)
+  }
 
   override def innerSql: String =
     if (options.useSubQueries)
