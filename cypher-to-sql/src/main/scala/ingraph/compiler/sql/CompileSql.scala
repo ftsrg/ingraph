@@ -428,17 +428,16 @@ object CompileSql {
 class CompileSql(val cypherQuery: String, compilerOptions: CompilerOptions)
   extends CompilerTest with SqlCompiler {
 
-  override def stages: CompilationStages = compile(cypherQuery)
+  override val stages: CompilationStages = compile(cypherQuery)
 
-  override def fPlan: FNode = stages.fplan
+  override val fPlan: FNode = stages.fplan
 
-  def modifiedCompilerOptions: CompilerOptions = compilerOptions
+  val modifiedCompilerOptions: CompilerOptions = compilerOptions
     .copy(useSubQueries = compilerOptions.useSubQueries && !getNodes(fPlan).exists(_.isInstanceOf[fplan.Create]))
 
-  // TODO don't execute it more than once
-  override def sqlNode: SqlNode = SqlNode(fPlan, modifiedCompilerOptions)._1
+  override val sqlNode: SqlNode = SqlNode(fPlan, modifiedCompilerOptions)._1
 
-  override def sql: String = {
+  override val sql: String = {
     val sqlString = sqlNode.sql.get
 
     if (compilerOptions.trimSql)
