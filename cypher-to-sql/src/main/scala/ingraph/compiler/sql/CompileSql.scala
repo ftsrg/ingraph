@@ -13,6 +13,7 @@ import org.apache.spark.sql.types.{LongType, StringType}
 import org.cytosm.common.gtop.GTop
 import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, ImplementationNode, TraversalHop}
 import org.neo4j.driver.v1.{Value, Values}
+import org.opencypher.tools.tck.constants.TCKQueries
 
 import scala.collection.JavaConverters._
 
@@ -403,13 +404,22 @@ object CompileSql {
            |           WHERE parent = $columnName)""".stripMargin)
   }
 
-  // TODO: compiler: only literal indexing is supported for index expressions
   def getOverriddenSqlStatic(cypherQuery: String): Option[String] =
     cypherQuery match {
-      case "MATCH (n)\nUNWIND keys(n) AS key\nWITH properties(n) AS properties, key, n\nRETURN id(n) AS nodeId, key, properties[key] AS value" =>
+      case TCKQueries.NODES_QUERY =>
+        Some("SELECT vertex_id AS \"id(n)\" FROM vertex")
+      case TCKQueries.RELS_QUERY =>
+        Some("SELECT edge_id AS \"id(r)\" FROM edge")
+
+      case TCKQueries.LABELS_QUERY =>
+        Some("SELECT DISTINCT name AS label FROM label")
+
+      // TODO: compiler: only literal indexing is supported for index expressions
+      case TCKQueries.NODE_PROPS_QUERY =>
         Some("SELECT parent AS \"nodeId\", key, value FROM vertex_property")
-      case "MATCH ()-[r]->()\nUNWIND keys(r) AS key\nWITH properties(r) AS properties, key, r\nRETURN id(r) AS relId, key, properties[key] AS value" =>
+      case TCKQueries.REL_PROPS_QUERY =>
         Some("SELECT parent AS \"relId\", key, value FROM edge_property")
+
       case _ => None
     }
 }
