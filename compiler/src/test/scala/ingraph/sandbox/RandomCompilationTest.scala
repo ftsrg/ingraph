@@ -572,6 +572,15 @@ class RandomCompilationTest extends CompilerTest {
 
     assert( nodeExistByType(stages.gplan, classOf[gplan.AllDifferent]) )
   }
+
+  test("AllDifferent operator should be retained since edge without edge type overlaps every edge type.") {
+    val stages = compile(
+      """MATCH (p1:Person)-[:KNOWS]-(p2:Person)-[]-(p3:Person)
+        |RETURN p1.name AS p1_name, p2.name as p2_name, p3.name as p3_name
+        |""".stripMargin)
+
+    assert( nodeExistByType(stages.gplan, classOf[gplan.AllDifferent]) )
+  }
 }
 
 /** Random compiler tests that must stop after GPlan compilation.
