@@ -6,7 +6,7 @@ import org.scalatest.FunSuite
 
 class BiValidationTest extends FunSuite {
 
-  val sf = "tiny"
+  val sf = "01"
   val csvDir = s"../graphs/ldbc-snb-bi/csv-sf${sf}/"
   val dbDir = s"../graphs/ldbc-snb-bi/db-sf${sf}/graph.db"
 
@@ -21,14 +21,21 @@ class BiValidationTest extends FunSuite {
     tc =>
       ignore(s"${tc.name}") {
         val ntr = new Neo4jTestRunner(tc, Some(dbDir))
-        val neo4jResults = ntr.run()
+        val neo4jRunInfo: (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = ntr.run()
+        val neo4jResults: Iterable[Seq[Map[String, Any]]] = neo4jRunInfo._1
         ntr.close()
 
         val itr = new IngraphTestRunner(tc)
-        val ingraphResults = itr.run()
+        val ingraphRunInfo: (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = itr.run()
+        val ingraphResults: Iterable[Seq[Map[String, Any]]] = ingraphRunInfo._1
+        itr.close()
 
-        println("neo4j   results: " + neo4jResults.map(x => x.toSeq.sortBy(_._1)))
-        println("ingraph results: " + ingraphResults.map(x => x.toSeq.sortBy(_._1)))
+        neo4jResults.foreach(
+          r => println("neo4j   results: " + r.map(x => x.toSeq.sortBy(_._1)))
+        )
+        ingraphResults.foreach(
+          r => println("ingraph results: " + r.map(x => x.toSeq.sortBy(_._1)))
+        )
         assert(ingraphResults == neo4jResults)
       }
   }

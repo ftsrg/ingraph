@@ -55,28 +55,50 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
     }
   }
 
-  def run(): List[Map[String, Any]] = {
-    val sLoad = Stopwatch.createStarted()
-    val results1 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap
+  def executeQuery(gds: GraphDatabaseService, querySpecification: String) = {
+    gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap
       .map {case (k, v) => (k, v match {
         case v: java.util.List[AnyRef] => v.asScala
         case _ => v
       })}
     ).toList
-    val queryTime = sLoad.elapsed(TimeUnit.NANOSECONDS)
+  }
 
+  def run(): (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = {
+    val numberOfNodes = gds.execute("MATCH (n) RETURN count(n) AS numberOfNodes").next().get("numberOfNodes").asInstanceOf[Long]
+    assert(numberOfNodes != 0)
+
+    // initial
+    val iStopwatch = Stopwatch.createStarted()
+    val iResult = executeQuery(gds, tc.querySpecification)
+    val iTime = iStopwatch.elapsed(TimeUnit.NANOSECONDS)
+
+    // updates
     val tx = gds.beginTx()
-    val updateTimes = tc.updates.map { updateQuery =>
-      val s = Stopwatch.createStarted()
-      gds.execute(updateQuery)
-      val results2 = gds.execute(tc.querySpecification).asScala.map(_.asScala.toMap).toList
-      s.elapsed(TimeUnit.NANOSECONDS)
-    }.toList
+
+    // updates: append
+    val aStopwatch = Stopwatch.createStarted()
+    tc.updates.take(20).map { u => gds.execute(u) }
+    val aResult = executeQuery(gds, tc.querySpecification)
+    val aTime = aStopwatch.elapsed(TimeUnit.NANOSECONDS)
+
+    // updates: delete
+    val dStopwatch = Stopwatch.createStarted()
+    tc.updates.takeRight(3).map { u => gds.execute(u) }
+    val dResult = executeQuery(gds, tc.querySpecification)
+    val dTime = dStopwatch.elapsed(TimeUnit.NANOSECONDS)
+
+    // cleanup
     tx.failure()
     tx.close()
 
-    println(tc.sf + "," + tc.query + ",neo4j," + queryTime + "," + updateTimes.mkString(","))
-    results1
+    val results = Seq(iResult, aResult, dResult)
+    val times = Seq(iTime, aTime, dTime)
+
+    println(tc.sf + "," + tc.query + ",neo4j,results," + results.map(_.length).mkString(","))
+    println(tc.sf + "," + tc.query + ",neo4j,times," + times.mkString(","))
+
+    return (results, times)
   }
 
   override def close(): Unit = {

@@ -31,3 +31,17 @@ Follow these steps:
    ```bash
    ./convert-to-graphml.sh
    ```
+
+## Producing update streams for benchmarking
+
+Grep the parameters for Interactive updates 2, 3, 5, and 8, use the following command. Adjust the scale factor and the parameter of `head` to the desired values:
+
+```console
+cat csv-sf01/updateStream_0_0_forum.csv | grep -E "^[0-9]+?\|[0-9]+?\|(2|3|5|8)\|" | head -n 20
+```
+
+or an alternative solution (with different results):
+
+```console
+for Q in 2 3 5 8; do cat csv-sf01/updateStream_0_0_forum.csv | grep -E "^[0-9]+?\|[0-9]+?\|$Q\|" | head -n 5; done
+```
