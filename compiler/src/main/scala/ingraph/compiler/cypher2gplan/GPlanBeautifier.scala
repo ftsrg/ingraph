@@ -18,13 +18,23 @@ object GPlanBeautifier {
   def beautifyResolvedGPlan(resolvedQueryPlan: gplan.GNode): gplan.GNode = {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
-    /*
-     * FIXME: duplicated transform call is to allow for antijoin beautification.
-     * This should be done dynamically
-     */
-    val beautiful = resolvedQueryPlan.transform(commonBeautifier).transform(commonBeautifier)
+    val beautiful = transformUpToNTimes(resolvedQueryPlan, commonBeautifier, 7)
 
     beautiful.asInstanceOf[gplan.GNode]
+  }
+
+  /**
+    * Transforms the plan using rule once. After that, it repeats transformation up to n times until plan does not change.
+    */
+  def transformUpToNTimes(plan: LogicalPlan, rule: PartialFunction[LogicalPlan, LogicalPlan], n: Int): LogicalPlan = {
+    // transformUp yields stable plan usually faster
+    val transformed = plan.transformUp(rule)
+
+    if (n <= 0 || (plan fastEquals transformed)) {
+      transformed
+    } else {
+      transformUpToNTimes(transformed, rule, n-1)
+    }
   }
 
   def beautifyUnresolvedGPlan(unresolvedQueryPlan: gplan.GNode): gplan.GNode = {
