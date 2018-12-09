@@ -2,7 +2,8 @@ package ingraph.compiler.cypher2gplan
 
 import ingraph.compiler.cypher2gplan.builders.AttributeBuilder
 import ingraph.compiler.exceptions.ExpandChainException
-import ingraph.model.expr.ElementAttribute
+import ingraph.model.expr.types.EdgeLabel
+import ingraph.model.expr.{AbstractEdgeAttribute, ElementAttribute}
 import ingraph.model.{expr, gplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.expressions.Expression
@@ -17,13 +18,23 @@ object GPlanBeautifier {
   def beautifyResolvedGPlan(resolvedQueryPlan: gplan.GNode): gplan.GNode = {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
-    /*
-     * FIXME: duplicated transform call is to allow for antijoin beautification.
-     * This should be done dynamically
-     */
-    val beautiful = resolvedQueryPlan.transform(commonBeautifier).transform(commonBeautifier)
+    val beautiful = transformUpToNTimes(resolvedQueryPlan, commonBeautifier, 7)
 
     beautiful.asInstanceOf[gplan.GNode]
+  }
+
+  /**
+    * Transforms the plan using rule once. After that, it repeats transformation up to n times until plan does not change.
+    */
+  def transformUpToNTimes(plan: LogicalPlan, rule: PartialFunction[LogicalPlan, LogicalPlan], n: Int): LogicalPlan = {
+    // transformUp yields stable plan usually faster
+    val transformed = plan.transformUp(rule)
+
+    if (n <= 0 || (plan fastEquals transformed)) {
+      transformed
+    } else {
+      transformUpToNTimes(transformed, rule, n-1)
+    }
   }
 
   def beautifyUnresolvedGPlan(unresolvedQueryPlan: gplan.GNode): gplan.GNode = {
@@ -47,6 +58,7 @@ object GPlanBeautifier {
     case gplan.Selection(cExpr.Not(e), gplan.LeftOuterJoin(filter, base)) if checkForAntijoin(e, filter) => gplan.AntiJoin(base, filter)
     case gplan.Selection(cExpr.Literal(true, BooleanType), child) => child
     case gplan.Selection(condition, child) => gplan.Selection(condition.transform(expressionBeautifier), child)
+    case gplan.AllDifferent(edges, child) if edgeLabelSetsAreDistinct(edges) => child
   }
 
   val expressionBeautifier: PartialFunction[Expression, Expression] = {
@@ -109,5 +121,28 @@ object GPlanBeautifier {
     if (!check3) return false
 
     return check1 && check2 && check3
+  }
+
+  /**
+    * This checks whether all the edges are structurally different.
+    *
+    * Checks performed:
+    *  1. each of them describe a single edge, and has non-empty egde label (type) constraints
+    *  2. each edge label constraint is non-overlapping to all the previous ones
+    */
+  protected def edgeLabelSetsAreDistinct(edges: Seq[AbstractEdgeAttribute]): Boolean = {
+    val check1 = edges.foldLeft[Boolean](true)( (acc, edge) => acc && edge.labels.edgeLabels.nonEmpty && edge.isInstanceOf[expr.EdgeAttribute] )
+    if (!check1) return false
+
+    var check2=true
+    val unionOfEdgeLabels: Set[EdgeLabel] = edges.foldLeft(Set[EdgeLabel]())( (acc, edge) =>  {
+      if (acc.intersect(edge.labels.edgeLabels).nonEmpty) {
+        check2 = false
+      }
+      acc.union(edge.labels.edgeLabels)
+    })
+    if (!check2) return false
+
+    return check1 && check2
   }
 }

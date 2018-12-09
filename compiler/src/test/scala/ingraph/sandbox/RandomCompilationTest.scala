@@ -489,8 +489,8 @@ class RandomCompilationTest extends CompilerTest {
     val sortOp = productionOp.child.asInstanceOf[gplan.Sort]
     val returnProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
     val withProjectionOp = returnProjectionOp.child.asInstanceOf[gplan.Projection]
-    val alldifferentOp = withProjectionOp.child.asInstanceOf[gplan.AllDifferent]
-    assert( Option(alldifferentOp).isDefined )
+    val getverticesOp = withProjectionOp.child.asInstanceOf[gplan.GetVertices]
+    assert( Option(getverticesOp).isDefined )
     // last projection and the sorting has a single item...
     assert( returnProjectionOp.projectList.length == 1)
     assert( sortOp.order.length == 1)
@@ -510,8 +510,8 @@ class RandomCompilationTest extends CompilerTest {
     val productionOp = stages.gplan.asInstanceOf[gplan.Production]
     val sortOp = productionOp.child.asInstanceOf[gplan.Sort]
     val returnProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
-    val alldifferentOp = returnProjectionOp.child.asInstanceOf[gplan.AllDifferent]
-    assert( Option(alldifferentOp).isDefined )
+    val getverticesOp = returnProjectionOp.child.asInstanceOf[gplan.GetVertices]
+    assert( Option(getverticesOp).isDefined )
     // last projection and the sorting has a single item...
     assert( returnProjectionOp.projectList.length == 1)
     assert( sortOp.order.length == 1)
@@ -533,8 +533,8 @@ class RandomCompilationTest extends CompilerTest {
     val topOp = returnProjectionOp.child.asInstanceOf[gplan.Top]
     val sortOp = topOp.child.asInstanceOf[gplan.Sort]
     val introducedProjectionOp = sortOp.child.asInstanceOf[gplan.Projection]
-    val alldifferentOp = introducedProjectionOp.child.asInstanceOf[gplan.AllDifferent]
-    assert( Option(alldifferentOp).isDefined )
+    val getverticesOp = introducedProjectionOp.child.asInstanceOf[gplan.GetVertices]
+    assert( Option(getverticesOp).isDefined )
     // last projection and the sorting has a single item and the introduced has 2 items
     assert( returnProjectionOp.projectList.length == 1)
     assert( sortOp.order.length == 1)
@@ -544,6 +544,42 @@ class RandomCompilationTest extends CompilerTest {
         acc || (pi.child.asInstanceOf[expr.ResolvableName].resolvedName == sortOp.order(0).child.asInstanceOf[expr.ResolvableName].resolvedName)
       })
     )
+  }
+
+  test("AllDifferent operator that require edges of different types to be different should be removed upon beautification.") {
+    val stages = compile(
+      """MATCH (p1:Person)-[:KNOWS]-(p2:Person)-[:INTEREST|MASTER_OF]->(t:Topic)-[:CLASS]->(c1:Class)-[:SUBCLASS_OF]->(c2:Class)
+        |RETURN p1.name AS p1_name, p2.name as p2_name
+        |""".stripMargin)
+
+    assert( !nodeExistByType(stages.gplan, classOf[gplan.AllDifferent]) )
+  }
+
+  test("AllDifferent operator for edge lists should be retained.") {
+    val stages = compile(
+      """MATCH (p1:Person)-[:KNOWS]-(p2:Person)-[:INTEREST|MASTER_OF]->(t:Topic)-[:CLASS]->(c1:Class)-[:SUBCLASS_OF*1..]->(c2:Class)
+        |RETURN p1.name AS p1_name, p2.name as p2_name
+        |""".stripMargin)
+
+    assert( nodeExistByType(stages.gplan, classOf[gplan.AllDifferent]) )
+  }
+
+  test("AllDifferent operator on overlapping edge types should be retained.") {
+    val stages = compile(
+      """MATCH (p1:Person)-[:KNOWS]-(p2:Person)-[:KNOWS|FRIEND]-(p3:Person)
+        |RETURN p1.name AS p1_name, p2.name as p2_name, p3.name as p3_name
+        |""".stripMargin)
+
+    assert( nodeExistByType(stages.gplan, classOf[gplan.AllDifferent]) )
+  }
+
+  test("AllDifferent operator should be retained since edge without edge type overlaps every edge type.") {
+    val stages = compile(
+      """MATCH (p1:Person)-[:KNOWS]-(p2:Person)-[]-(p3:Person)
+        |RETURN p1.name AS p1_name, p2.name as p2_name, p3.name as p3_name
+        |""".stripMargin)
+
+    assert( nodeExistByType(stages.gplan, classOf[gplan.AllDifferent]) )
   }
 }
 
