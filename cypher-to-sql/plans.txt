@@ -1,0 +1,474 @@
+=============================================================================
+Query:
+------
+MATCH (n)
+RETURN n
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#0)), None, (n#0))]
+   +- 'AllDifferent
+      +- 'GetVertices v(n, {}, false, (n#0))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#0)), None, (n#0))]
+   +- 'AllDifferent
+      +- 'GetVertices v(n, {}, false, (n#0))
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+Production
++- Projection [ret(v(n, {}, false, (n#0)), None, (n#0))]
+   +- AllDifferent
+      +- GetVertices v(n, {}, false, (n#0))
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+MATCH (n {name: 'John'})
+RETURN n
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#1)), None, (n#1))]
+   +- 'AllDifferent
+      +- 'Selection (p(name, v(n, {}, false, (n#1)), (n$name#0)) = John)
+         +- 'GetVertices v(n, {}, (name,John), false, (n#1))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#1)), None, (n#1))]
+   +- 'AllDifferent
+      +- 'Selection (p(name, v(n, {}, false, (n#1)), (n$name#0)) = John)
+         +- 'GetVertices v(n, {}, (name,John), false, (n#1))
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#1)), None, (n#1))]
+   +- 'AllDifferent
+      +- 'Selection (p(name, v(n, {}, false, (n#1)), (n$name#0)) = John)
+         +- 'GetVertices [p(name, v(n, {}, false, (n#1)), (n$name#0))], 'GetVertices v(n, {}, (name,John), false, (n#1))
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+MATCH (n)-[:REL {prop: 'value'}]->(m)
+RETURN n, m
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#2)), None, (n#2)), ret(v(m, {}, false, (m#0)), None, (m#0))]
+   +- 'AllDifferent
+      +- 'Selection (p(prop, e(_e0, {}, true, (_e0#0)), (_e0$prop#0)) = value)
+         +- 'Expand v(n, {}, false, (n#2)), v(m, {}, false, (m#0)), e(_e0, {REL}, (prop,value), true, (_e0#0)), Out
+            +- 'GetVertices v(n, {}, false, (n#2))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#2)), None, (n#2)), ret(v(m, {}, false, (m#0)), None, (m#0))]
+   +- 'AllDifferent
+      +- 'Selection (p(prop, e(_e0, {}, true, (_e0#0)), (_e0$prop#0)) = value)
+         +- 'GetEdges v(n, {}, false, (n#2)), v(m, {}, false, (m#0)), e(_e0, {REL}, (prop,value), true, (_e0#0)), true
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#2)), None, (n#2)), ret(v(m, {}, false, (m#0)), None, (m#0))]
+   +- 'AllDifferent
+      +- 'Selection (p(prop, e(_e0, {}, true, (_e0#0)), (_e0$prop#0)) = value)
+         +- 'GetEdges [p(prop, e(_e0, {}, true, (_e0#0)), (_e0$prop#0))], 'GetEdges v(n, {}, false, (n#2)), v(m, {}, false, (m#0)), e(_e0, {REL}, (prop,value), true, (_e0#0)), true
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+CREATE ({value: 1}),
+  ({value: 2}),
+  ({value: 3})
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Create [v(_e1, {}, (value,1), true, (_e1#0)), v(_e2, {}, (value,2), true, (_e2#0)), v(_e3, {}, (value,3), true, (_e3#0))]
+   +- Dual
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Create v(_e3, {}, (value,3), true, (_e3#0))
+   +- 'Create v(_e2, {}, (value,2), true, (_e2#0))
+      +- 'Create v(_e1, {}, (value,1), true, (_e1#0))
+         +- Dual
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+Production
++- Create v(_e3, {}, (value,3), true, (_e3#0))
+   +- Create v(_e2, {}, (value,2), true, (_e2#0))
+      +- Create v(_e1, {}, (value,1), true, (_e1#0))
+         +- Dual Dual
+
+-----------------------------------------------------------------------------
+CompilationStages('Production
++- 'Create [vertexattribute(_e1, vertexlabelset(Empty), (value,1), true, Some(_e1#0)), vertexattribute(_e2, vertexlabelset(Empty), (value,2), true, Some(_e2#0)), vertexattribute(_e3, vertexlabelset(Empty), (value,3), true, Some(_e3#0))]
+   +- Dual
+,'Production
++- 'Create vertexattribute(_e3, vertexlabelset(Empty), (value,3), true, Some(_e3#0))
+   +- 'Create vertexattribute(_e2, vertexlabelset(Empty), (value,2), true, Some(_e2#0))
+      +- 'Create vertexattribute(_e1, vertexlabelset(Empty), (value,1), true, Some(_e1#0))
+         +- Dual
+,Production 'Production
++- Create 'Create vertexattribute(_e3, vertexlabelset(Empty), (value,3), true, Some(_e3#0))
+   +- Create 'Create vertexattribute(_e2, vertexlabelset(Empty), (value,2), true, Some(_e2#0))
+      +- Create 'Create vertexattribute(_e1, vertexlabelset(Empty), (value,1), true, Some(_e1#0))
+         +- Dual Dual
+)
+=============================================================================
+Query:
+------
+MATCH (n), (m)
+RETURN n.value AS n, m.value AS m
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(p(value, v(n, {}, false, (n#3)), (n$value#0)), (n), (n#4)), ret(p(value, v(m, {}, false, (m#1)), (m$value#0)), (m), (m#2))]
+   +- 'AllDifferent
+      +- 'Join
+         :- 'GetVertices v(n, {}, false, (n#3))
+         +- 'GetVertices v(m, {}, false, (m#1))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(p(value, v(n, {}, false, (n#3)), (n$value#0)), (n), (n#4)), ret(p(value, v(m, {}, false, (m#1)), (m$value#0)), (m), (m#2))]
+   +- 'AllDifferent
+      +- 'Join Left()
+         :- 'GetVertices v(n, {}, false, (n#3))
+         +- 'GetVertices v(m, {}, false, (m#1))
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+'Production
++- 'Projection [ret(p(value, v(n, {}, false, (n#3)), (n$value#0)), (n), (n#4)), ret(p(value, v(m, {}, false, (m#1)), (m$value#0)), (m), (m#2))]
+   +- 'AllDifferent
+      +- 'Join Left()
+         :- 'GetVertices [p(value, v(n, {}, false, (n#3)), (n$value#0))], 'GetVertices v(n, {}, false, (n#3))
+         +- 'GetVertices [p(value, v(m, {}, false, (m#1)), (m$value#0))], 'GetVertices v(m, {}, false, (m#1))
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+MATCH ()-[rel:X]-(a)
+WHERE a.name = 'Andres'
+RETURN a
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(v(a, {}, false, (a#0)), None, (a#0))]
+   +- 'Selection (p(name, v(a, {}, false, (a#0)), (a$name#0)) = Andres)
+      +- 'AllDifferent
+         +- 'Expand v(_e4, {}, true, (_e4#0)), v(a, {}, false, (a#0)), e(rel, {X}, false, (rel#0)), Both
+            +- 'GetVertices v(_e4, {}, true, (_e4#0))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(v(a, {}, false, (a#0)), None, (a#0))]
+   +- 'Selection (p(name, v(a, {}, false, (a#0)), (a$name#0)) = Andres)
+      +- 'AllDifferent
+         +- 'GetEdges v(_e4, {}, true, (_e4#0)), v(a, {}, false, (a#0)), e(rel, {X}, false, (rel#0)), false
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+'Production
++- 'Projection [ret(v(a, {}, false, (a#0)), None, (a#0))]
+   +- 'Selection (p(name, v(a, {}, false, (a#0)), (a$name#0)) = Andres)
+      +- 'AllDifferent
+         +- 'GetEdges [p(name, v(a, {}, false, (a#0)), (a$name#0))], 'GetEdges v(_e4, {}, true, (_e4#0)), v(a, {}, false, (a#0)), e(rel, {X}, false, (rel#0)), false
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+MATCH (node)-[r:KNOWS]->(a)
+WHERE r.name = 'monkey'
+RETURN a
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(v(a, {}, false, (a#1)), None, (a#1))]
+   +- 'Selection (p(name, e(r, {}, false, (r#0)), (r$name#0)) = monkey)
+      +- 'AllDifferent
+         +- 'Expand v(node, {}, false, (node#0)), v(a, {}, false, (a#1)), e(r, {KNOWS}, false, (r#0)), Out
+            +- 'GetVertices v(node, {}, false, (node#0))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(v(a, {}, false, (a#1)), None, (a#1))]
+   +- 'Selection (p(name, e(r, {}, false, (r#0)), (r$name#0)) = monkey)
+      +- 'AllDifferent
+         +- 'GetEdges v(node, {}, false, (node#0)), v(a, {}, false, (a#1)), e(r, {KNOWS}, false, (r#0)), true
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+'Production
++- 'Projection [ret(v(a, {}, false, (a#1)), None, (a#1))]
+   +- 'Selection (p(name, e(r, {}, false, (r#0)), (r$name#0)) = monkey)
+      +- 'AllDifferent
+         +- 'GetEdges [p(name, e(r, {}, false, (r#0)), (r$name#0))], 'GetEdges v(node, {}, false, (node#0)), v(a, {}, false, (a#1)), e(r, {KNOWS}, false, (r#0)), true
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+MATCH (n1)-[rel:KNOWS]->(n2)
+RETURN n1, n2
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(v(n1, {}, false, (n1#0)), None, (n1#0)), ret(v(n2, {}, false, (n2#0)), None, (n2#0))]
+   +- 'AllDifferent
+      +- 'Expand v(n1, {}, false, (n1#0)), v(n2, {}, false, (n2#0)), e(rel, {KNOWS}, false, (rel#1)), Out
+         +- 'GetVertices v(n1, {}, false, (n1#0))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(v(n1, {}, false, (n1#0)), None, (n1#0)), ret(v(n2, {}, false, (n2#0)), None, (n2#0))]
+   +- 'AllDifferent
+      +- 'GetEdges v(n1, {}, false, (n1#0)), v(n2, {}, false, (n2#0)), e(rel, {KNOWS}, false, (rel#1)), true
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+Production
++- Projection [ret(v(n1, {}, false, (n1#0)), None, (n1#0)), ret(v(n2, {}, false, (n2#0)), None, (n2#0))]
+   +- AllDifferent
+      +- GetEdges v(n1, {}, false, (n1#0)), v(n2, {}, false, (n2#0)), e(rel, {KNOWS}, false, (rel#1)), true
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+MATCH ()-[rel:KNOWS]->(x)
+RETURN x
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(v(x, {}, false, (x#0)), None, (x#0))]
+   +- 'AllDifferent
+      +- 'Expand v(_e5, {}, true, (_e5#0)), v(x, {}, false, (x#0)), e(rel, {KNOWS}, false, (rel#2)), Out
+         +- 'GetVertices v(_e5, {}, true, (_e5#0))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(v(x, {}, false, (x#0)), None, (x#0))]
+   +- 'AllDifferent
+      +- 'GetEdges v(_e5, {}, true, (_e5#0)), v(x, {}, false, (x#0)), e(rel, {KNOWS}, false, (rel#2)), true
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+Production
++- Projection [ret(v(x, {}, false, (x#0)), None, (x#0))]
+   +- AllDifferent
+      +- GetEdges v(_e5, {}, true, (_e5#0)), v(x, {}, false, (x#0)), e(rel, {KNOWS}, false, (rel#2)), true
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+MATCH (n)-->(a)-->(b)
+RETURN b
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(v(b, {}, false, (b#0)), None, (b#0))]
+   +- 'AllDifferent
+      +- 'Expand v(a, {}, false, (a#2)), v(b, {}, false, (b#0)), e(_e7, {}, true, (_e7#0)), Out
+         +- 'Expand v(n, {}, false, (n#5)), v(a, {}, false, (a#2)), e(_e6, {}, true, (_e6#0)), Out
+            +- 'GetVertices v(n, {}, false, (n#5))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(v(b, {}, false, (b#0)), None, (b#0))]
+   +- 'AllDifferent
+      +- 'Join Left()
+         :- 'GetEdges v(n, {}, false, (n#5)), v(a, {}, false, (a#2)), e(_e6, {}, true, (_e6#0)), true
+         +- 'GetEdges v(a, {}, false, (a#2)), v(b, {}, false, (b#0)), e(_e7, {}, true, (_e7#0)), true
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+Production
++- Projection [ret(v(b, {}, false, (b#0)), None, (b#0))]
+   +- AllDifferent
+      +- Join Left()
+         :- GetEdges v(n, {}, false, (n#5)), v(a, {}, false, (a#2)), e(_e6, {}, true, (_e6#0)), true
+         +- GetEdges v(a, {}, false, (a#2)), v(b, {}, false, (b#0)), e(_e7, {}, true, (_e7#0)), true
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+MATCH (n)-[rel]->(x)
+WHERE n.animal = x.animal
+RETURN n, x
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#6)), None, (n#6)), ret(v(x, {}, false, (x#1)), None, (x#1))]
+   +- 'Selection (p(animal, v(n, {}, false, (n#6)), (n$animal#0)) = p(animal, v(x, {}, false, (x#1)), (x$animal#0)))
+      +- 'AllDifferent
+         +- 'Expand v(n, {}, false, (n#6)), v(x, {}, false, (x#1)), e(rel, {}, false, (rel#3)), Out
+            +- 'GetVertices v(n, {}, false, (n#6))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#6)), None, (n#6)), ret(v(x, {}, false, (x#1)), None, (x#1))]
+   +- 'Selection (p(animal, v(n, {}, false, (n#6)), (n$animal#0)) = p(animal, v(x, {}, false, (x#1)), (x$animal#0)))
+      +- 'AllDifferent
+         +- 'GetEdges v(n, {}, false, (n#6)), v(x, {}, false, (x#1)), e(rel, {}, false, (rel#3)), true
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#6)), None, (n#6)), ret(v(x, {}, false, (x#1)), None, (x#1))]
+   +- 'Selection (p(animal, v(n, {}, false, (n#6)), (n$animal#0)) = p(animal, v(x, {}, false, (x#1)), (x$animal#0)))
+      +- 'AllDifferent
+         +- 'GetEdges [p(animal, v(n, {}, false, (n#6)), (n$animal#0)), p(animal, v(x, {}, false, (x#1)), (x$animal#0))], 'GetEdges v(n, {}, false, (n#6)), v(x, {}, false, (x#1)), e(rel, {}, false, (rel#3)), true
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+MATCH (n)
+WHERE n.p1 = 12 OR n.p2 = 13
+RETURN n
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#7)), None, (n#7))]
+   +- 'Selection ((p(p1, v(n, {}, false, (n#7)), (n$p1#0)) = 12) || (p(p2, v(n, {}, false, (n#7)), (n$p2#0)) = 13))
+      +- 'AllDifferent
+         +- 'GetVertices v(n, {}, false, (n#7))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#7)), None, (n#7))]
+   +- 'Selection ((p(p1, v(n, {}, false, (n#7)), (n$p1#0)) = 12) || (p(p2, v(n, {}, false, (n#7)), (n$p2#0)) = 13))
+      +- 'AllDifferent
+         +- 'GetVertices v(n, {}, false, (n#7))
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+'Production
++- 'Projection [ret(v(n, {}, false, (n#7)), None, (n#7))]
+   +- 'Selection ((p(p1, v(n, {}, false, (n#7)), (n$p1#0)) = 12) || (p(p2, v(n, {}, false, (n#7)), (n$p2#0)) = 13))
+      +- 'AllDifferent
+         +- 'GetVertices [p(p1, v(n, {}, false, (n#7)), (n$p1#0)), p(p2, v(n, {}, false, (n#7)), (n$p2#0))], 'GetVertices v(n, {}, false, (n#7))
+
+-----------------------------------------------------------------------------
+=============================================================================
+Query:
+------
+MATCH (a:Start)-[r:REL*2..2]-(b)
+RETURN r
+      
+-----------------------------------------------------------------------------
+QPlan:
+------
+'Production
++- 'Projection [ret(edgelistattribute(r, {}, false, (2), (2), (r#1)), None, (r#1))]
+   +- 'AllDifferent
+      +- 'Expand v(a, {Start}, false, (a#3)), v(b, {}, false, (b#1)), edgelistattribute(r, {REL}, false, (2), (2), (r#1)), Both
+         +- 'GetVertices v(a, {Start}, false, (a#3))
+
+-----------------------------------------------------------------------------
+JPlan:
+------
+'Production
++- 'Projection [ret(edgelistattribute(r, {}, false, (2), (2), (r#1)), None, (r#1))]
+   +- 'AllDifferent
+      +- 'Join Right()
+         :- 'TransitiveJoin edgelistattribute(r, {REL}, false, (2), (2), (r#1))
+         :  :- 'GetVertices v(a, {Start}, false, (a#3))
+         :  +- 'GetEdges v(a, {}, false, (a#3)), v(b, {}, false, (b#1)), e(r, {REL}, false, (r#1)), false
+         +- 'GetVertices v(b, {}, false, (b#1))
+
+-----------------------------------------------------------------------------
+FPlan:
+------
+Production
++- Projection [ret(edgelistattribute(r, {}, false, (2), (2), (r#1)), None, (r#1))]
+   +- AllDifferent
+      +- Join Right()
+         :- TransitiveJoin edgelistattribute(r, {REL}, false, (2), (2), (r#1))
+         :  :- GetVertices v(a, {Start}, false, (a#3))
+         :  +- GetEdges v(a, {}, false, (a#3)), v(b, {}, false, (b#1)), e(r, {REL}, false, (r#1)), false
+         +- GetVertices v(b, {}, false, (b#1))
+
+-----------------------------------------------------------------------------
+
+Test Ignored
+
+Test Ignored
+
+Process finished with exit code 0

@@ -1,0 +1,21 @@
+plugins {
+  id 'com.github.maiflai.scalatest' version '0.22'
+}
+
+test {
+  maxParallelForks = 1
+  environment('INGRAPH_COMPILER_TEST_SUPPRESS_PRINTLN', '1')
+}
+
+dependencies {
+  compile project(':driver')
+  compile project(':compiler')
+  compile 'ru.yandex.qatools.embed:postgresql-embedded:2.9'
+  compile 'org.postgresql:postgresql:42.2.4'
+  compile 'com.github.cytosm.cytosm:common:master-SNAPSHOT'
+  compile group: 'org.opencypher', name: 'tck', version: opencypherVersion
+  compile group: 'org.opencypher', name: 'tck-api', version: opencypherVersion
+
+  testCompile group: 'junit', name: 'junit', version: junitVersion
+  testCompile project(':tests')
+}

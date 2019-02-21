@@ -92,7 +92,7 @@ case class AntiJoin(left: NNode, right: NNode) extends BinaryNNode with JoinLike
 
 case class Join(left: NNode, right: NNode, override val inputPreference: Side = Left()) extends BinaryNNode with EquiJoinLike with TJoin {}
 
-case class TransitiveJoin(left: NNode, right: NNode, edgeList: EdgeListAttribute) extends BinaryNNode with EquiJoinLike with TTransitiveJoin {}
+case class TransitiveJoin(left: NNode, right: GetEdges, edgeList: EdgeListAttribute) extends BinaryNNode with EquiJoinLike with TTransitiveJoin {}
 
 case class LeftOuterJoin(left: NNode, right: NNode) extends BinaryNNode with EquiJoinLike with TLeftOuterJoin {}
 
