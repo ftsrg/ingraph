@@ -6,7 +6,7 @@ import org.scalatest.FunSuite
 
 class BiValidationTest extends FunSuite {
 
-  val sf = "01"
+  val sf = "tiny"
   val csvDir = s"../graphs/ldbc-snb-bi/csv-sf${sf}/"
   val dbDir = s"../graphs/ldbc-snb-bi/db-sf${sf}/graph.db"
 
@@ -19,7 +19,7 @@ class BiValidationTest extends FunSuite {
 
   testCases.foreach {
     tc =>
-      test(s"${tc.name}") {
+      ignore(s"${tc.name}") {
         val ntr = new Neo4jTestRunner(tc, Some(dbDir))
         val neo4jRunInfo: (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = ntr.run()
         val neo4jResults: Iterable[Seq[Map[String, Any]]] = neo4jRunInfo._1

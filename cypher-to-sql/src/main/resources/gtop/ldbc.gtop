@@ -1,0 +1,732 @@
+{
+	"version": "1.0",
+	"abstractionLevel": {
+		"abstractionNodes": [{
+			"types": ["Person"],
+			"attributes": ["id", "firstName", "lastName", "gender", "birthday", "email", "speaks", "browserUsed", "locationIP", "creationDate"]
+		}, {
+			"types": ["Organisation", "University"],
+			"attributes": ["id", "name", "url"]
+		}, {
+			"types": ["Organisation", "Company"],
+			"attributes": ["id", "name", "url"]
+		}, {
+			"types": ["Place", "City"],
+			"attributes": ["id", "name", "url"]
+		}, {
+			"types": ["Place", "Country"],
+			"attributes": ["id", "name", "url"]
+		}, {
+			"types": ["Place", "Continent"],
+			"attributes": ["id", "name", "url"]
+		}, {
+			"types": ["Message", "Comment"],
+			"attributes": ["id", "creationDate", "browserUsed", "locationIP", "content", "length"]
+		}, {
+			"types": ["Message", "Post"],
+			"attributes": ["id", "creationDate", "browserUsed", "locationIP", "content", "length", "language", "imageFile"]
+		}, {
+			"types": ["Forum"],
+			"attributes": ["id", "title", "creationDate"]
+		}, {
+			"types": ["Tag"],
+			"attributes": ["id", "name", "url"]
+		}, {
+			"types": ["TagClass"],
+			"attributes": ["id", "name", "url"]
+		}],
+		"abstractionEdges": [{
+			"types": ["KNOWS"],
+			"attributes": ["creationDate"],
+			"sourceType": ["Person"],
+			"destinationType": ["Person"],
+			"directed": true
+		}, {
+			"types": ["HAS_INTEREST"],
+			"attributes": [],
+			"sourceType": ["Person"],
+			"destinationType": ["Tag"],
+			"directed": true
+		}, {
+			"types": ["HAS_TYPE"],
+			"attributes": [],
+			"sourceType": ["Tag"],
+			"destinationType": ["TagClass"],
+			"directed": true
+		}, {
+			"types": ["HAS_MODERATOR"],
+			"attributes": [],
+			"sourceType": ["Forum"],
+			"destinationType": ["Person"],
+			"directed": true
+		}, {
+			"types": ["HAS_MEMBER"],
+			"attributes": ["joinDate"],
+			"sourceType": ["Forum"],
+			"destinationType": ["Person"],
+			"directed": true
+		}, {
+			"types": ["CONTAINER_OF"],
+			"attributes": [],
+			"sourceType": ["Forum"],
+			"destinationType": ["Post"],
+			"directed": true
+		}, {
+			"types": ["HAS_TAG"],
+			"attributes": [],
+			"sourceType": ["Message"],
+			"destinationType": ["Tag"],
+			"directed": true
+		}, {
+			"types": ["HAS_TAG"],
+			"attributes": [],
+			"sourceType": ["Forum"],
+			"destinationType": ["Tag"],
+			"directed": true
+		},{
+			"types": ["IS_SUBCLASS_OF"],
+			"attributes": [],
+			"sourceType": ["TagClass"],
+			"destinationType": ["TagClass"],
+			"directed": true
+		}, {
+			"types": ["HAS_CREATOR"],
+			"attributes": [],
+			"sourceType": ["Message"],
+			"destinationType": ["Person"],
+			"directed": true
+		}, {
+			"types": ["LIKES"],
+			"attributes": ["creationDate"],
+			"sourceType": ["Person"],
+			"destinationType": ["Message"],
+			"directed": true
+		}, {
+			"types": ["REPLY_OF"],
+			"attributes": [],
+			"sourceType": ["Comment"],
+			"destinationType": ["Message"],
+			"directed": true
+		}, {
+			"types": ["IS_LOCATED_IN"],
+			"attributes": [],
+			"sourceType": ["Message"],
+			"destinationType": ["Country"],
+			"directed": true
+		}, {
+			"types": ["WORK_AT"],
+			"attributes": ["workFrom"],
+			"sourceType": ["Person"],
+			"destinationType": ["Company"],
+			"directed": true
+		}, {
+			"types": ["STUDY_AT"],
+			"attributes": ["classYear"],
+			"sourceType": ["Person"],
+			"destinationType": ["University"],
+			"directed": true
+		}, {
+			"types": ["IS_LOCATED_IN"],
+			"attributes": [],
+			"sourceType": ["University"],
+			"destinationType": ["City"],
+			"directed": true
+		}, {
+			"types": ["IS_LOCATED_IN"],
+			"attributes": [],
+			"sourceType": ["Company"],
+			"destinationType": ["Country"],
+			"directed": true
+		}, {
+			"types": ["IS_LOCATED_IN"],
+			"attributes": [],
+			"sourceType": ["Person"],
+			"destinationType": ["City"],
+			"directed": true
+		}, {
+			"types": ["IS_PART_OF"],
+			"attributes": [],
+			"sourceType": ["City"],
+			"destinationType": ["Country"],
+			"directed": true
+		}, {
+			"types": ["IS_PART_OF"],
+			"attributes": [],
+			"sourceType": ["Country"],
+			"destinationType": ["Continent"],
+			"directed": true
+		}]
+	},
+	"implementationLevel": {
+		"graphMetadata": {
+			"storageLayout": "IGNORETIME",
+			"backendSystem" : "RELATIONAL"
+		},
+		"implementationNodes": [{
+			"types": ["Person"],
+			"tableName": "person",
+			"id": [{
+				"columnName": "p_personid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "p_creationdate",
+				"dataType": "DATE",
+				"abstractionLevelName": "creationDate"
+			}, {
+				"columnName": "p_firstname",
+				"dataType": "VARCHAR(100)",
+				"abstractionLevelName": "firstName"
+			}, {
+				"columnName": "p_lastname",
+				"dataType": "VARCHAR(100)",
+				"abstractionLevelName": "lastName"
+			}, {
+				"columnName": "p_gender",
+				"dataType": "VARCHAR(10)",
+				"abstractionLevelName": "gender"
+			}, {
+				"columnName": "p_birthday",
+				"dataType": "Date",
+				"abstractionLevelName": "birthday"
+			}, {
+				"columnName": "p_browserused",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "browserUsed"
+			}, {
+				"columnName": "p_locationip",
+				"dataType": "VARCHAR(15)",
+				"abstractionLevelName": "locationIP"
+			}],
+			"restrictions": []
+		}, {
+			"types": ["Organisation", "University"],
+			"tableName": "organisation",
+			"id": [{
+				"columnName": "o_organisationid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "o_name",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "name"
+			}, {
+				"columnName": "o_url",
+				"dataType": "varchar",
+				"abstractionLevelName": "url"
+			}],
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "organisation",
+					"columnName" : "o_type",
+					"pattern" : "university"
+				} ]
+			} ]
+		}, {
+			"types": ["Organisation", "Company"],
+			"tableName": "organisation",
+			"id": [{
+				"columnName": "o_organisationid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "o_name",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "name"
+			}, {
+				"columnName": "o_url",
+				"dataType": "varchar",
+				"abstractionLevelName": "url"
+			}],
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "organisation",
+					"columnName" : "o_type",
+					"pattern" : "company"
+				} ]
+			} ]
+		}, {
+			"types": ["Place", "City"],
+			"tableName": "place",
+			"id": [{
+				"columnName": "pl_placeid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "pl_name",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "name"
+			}, {
+				"columnName": "pl_url",
+				"dataType": "varchar",
+				"abstractionLevelName": "url"
+			}],
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "place",
+					"columnName" : "pl_type",
+					"pattern" : "city"
+				} ]
+			} ]
+		}, {
+			"types": ["Place", "Country"],
+			"tableName": "place",
+			"id": [{
+				"columnName": "pl_placeid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "pl_name",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "name"
+			}, {
+				"columnName": "pl_url",
+				"dataType": "varchar",
+				"abstractionLevelName": "url"
+			}],
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "place",
+					"columnName" : "pl_type",
+					"pattern" : "country"
+				} ]
+			} ]
+		}, {
+			"types": ["Place", "Continent"],
+			"tableName": "place",
+			"id": [{
+				"columnName": "pl_placeid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "pl_name",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "name"
+			}, {
+				"columnName": "pl_url",
+				"dataType": "varchar",
+				"abstractionLevelName": "url"
+			}],
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "place",
+					"columnName" : "pl_type",
+					"pattern" : "continent"
+				} ]
+			} ]
+		}, {
+			"types": ["Forum"],
+			"tableName": "forum",
+			"id": [{
+				"columnName": "f_forumid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "f_title",
+				"dataType": "VARCHAR(100)",
+				"abstractionLevelName": "title"
+			}, {
+				"columnName": "f_creationdate",
+				"dataType": "DATE",
+				"abstractionLevelName": "creationDate"
+			}],
+			"restrictions": []
+		}, {
+			"types": ["Tag"],
+			"tableName": "tag",
+			"id": [{
+				"columnName": "t_tagid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "t_name",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "name"
+			}, {
+				"columnName": "t_url",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "url"
+			}],
+			"restrictions": []
+		}, {
+			"types": ["TagClass"],
+			"tableName": "tagclass",
+			"id": [{
+				"columnName": "tc_tagclassid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "tc_name",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "name"
+			}, {
+				"columnName": "tc_url",
+				"dataType": "VARCHAR(40)",
+				"abstractionLevelName": "url"
+			}],
+			"restrictions": []
+		}, {
+			"types": ["Message", "Post"],
+			"tableName": "message",
+			"id": [{
+				"columnName": "m_messageid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "m_creationdate",
+				"dataType": "DATE",
+				"abstractionLevelName": "creationDate"
+			}, {
+				"columnName": "m_browserused",
+				"dataType": "VARCHAR(50)",
+				"abstractionLevelName": "browserUsed"
+			}, {
+				"columnName": "m_locationip",
+				"dataType": "VARCHAR(100)",
+				"abstractionLevelName": "locationIP"
+			}, {
+				"columnName": "m_content",
+				"dataType": "VARCHAR(500)",
+				"abstractionLevelName": "content"
+			}, {
+				"columnName": "m_length",
+				"dataType": "INTEGER",
+				"abstractionLevelName": "length"
+			}, {
+				"columnName": "m_ps_language",
+				"dataType": "VARCHAR(2)",
+				"abstractionLevelName": "language"
+			}, {
+				"columnName": "m_ps_imagefile",
+				"dataType": "VARCHAR(100)",
+				"abstractionLevelName": "imageFile"
+			}],
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "message",
+					"columnName" : "m_c_replyof",
+					"pattern" : null
+				} ]
+			} ]
+		}, {
+			"types": ["Message", "Comment"],
+			"tableName": "message",
+			"id": [{
+				"columnName": "m_messageid",
+				"datatype": "INTEGER",
+				"concatenationPosition": 1
+			}],
+			"attributes": [{
+				"columnName": "m_creationdate",
+				"dataType": "DATE",
+				"abstractionLevelName": "creationDate"
+			}, {
+				"columnName": "m_browserused",
+				"dataType": "VARCHAR(50)",
+				"abstractionLevelName": "browserUsed"
+			}, {
+				"columnName": "m_locationip",
+				"dataType": "VARCHAR(100)",
+				"abstractionLevelName": "locationIP"
+			}, {
+				"columnName": "m_content",
+				"dataType": "VARCHAR(500)",
+				"abstractionLevelName": "content"
+			}, {
+				"columnName": "m_length",
+				"dataType": "INTEGER",
+				"abstractionLevelName": "length"
+			}],
+			"restrictions" : [ {
+				"restrictionClause" : [ {
+					"tableName" : "message",
+					"columnName" : "m_c_replyof",
+					"pattern" : "SQL:IS NOT NULL"
+				} ]
+			} ]
+		}],
+		"implementationEdges": [{
+				"types": ["KNOWS"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_personid",
+						"joinTableSourceColumn": "k_person1id",
+						"joinTableName": "knows",
+						"joinTableDestinationColumn": "k_person2id",
+						"destinationTableName": "person",
+						"destinationTableColumn": "p_personid",
+						"attributes": [{
+							"columnName": "k_creationdate",
+							"dataType": "Date",
+							"abstractionLevelName": "creationDate"
+						}]
+					}]
+				}]
+			}, {
+				"types": ["HAS_INTEREST"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_personid",
+						"joinTableSourceColumn": "pt_personid",
+						"joinTableName": "person_tag",
+						"joinTableDestinationColumn": "pt_tagid",
+						"destinationTableName": "tag",
+						"destinationTableColumn": "t_tagid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["HAS_MODERATOR"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "forum",
+						"sourceTableColumn": "f_moderatorid",
+						"destinationTableName": "person",
+						"destinationTableColumn": "p_personid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["HAS_MEMBER"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "forum",
+						"sourceTableColumn": "f_forumid",
+						"joinTableSourceColumn": "fp_forumid",
+						"joinTableName": "forum_person",
+						"joinTableDestinationColumn": "fp_personid",
+						"destinationTableName": "person",
+						"destinationTableColumn": "p_personid",
+						"attributes": [{
+							"columnName": "fp_joindate",
+							"dataType": "Date",
+							"abstractionLevelName": "joinDate"
+						}]
+					}]
+				}]
+			}, {
+				"types": ["LIKES"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_personid",
+						"joinTableSourceColumn": "l_personid",
+						"joinTableName": "likes",
+						"joinTableDestinationColumn": "l_messageid",
+						"destinationTableName": "message",
+						"destinationTableColumn": "m_messageid",
+						"attributes": [{
+							"columnName": "l_creationdate",
+							"dataType": "Date",
+							"abstractionLevelName": "creationDate"
+						}]
+					}]
+				}]
+			}, {
+				"types": ["HAS_TYPE"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "tag",
+						"sourceTableColumn": "t_tagclassid",
+						"destinationTableName": "tagclass",
+						"destinationTableColumn": "tc_tagclassid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["IS_SUBCLASS_OF"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "tagclass",
+						"sourceTableColumn": "tc_subclassoftagclassid",
+						"destinationTableName": "tagclass",
+						"destinationTableColumn": "tc_tagclassid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["HAS_CREATOR"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "message",
+						"sourceTableColumn": "m_creatorid",
+						"destinationTableName": "person",
+						"destinationTableColumn": "p_personid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["IS_LOCATED_IN"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "message",
+						"sourceTableColumn": "m_locationid",
+						"destinationTableName": "place",
+						"destinationTableColumn": "pl_placeid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["REPLY_OF"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "message",
+						"sourceTableColumn": "m_c_replyof",
+						"destinationTableName": "message",
+						"destinationTableColumn": "m_messageid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["CONTAINER_OF"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "forum",
+						"sourceTableColumn": "f_forumid",
+						"destinationTableName": "message",
+						"destinationTableColumn": "m_ps_forumid",
+						"attributes": []
+					}]
+				}]
+            }, {
+				"types": ["HAS_TAG"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "forum",
+						"sourceTableColumn": "f_forumid",
+						"joinTableSourceColumn": "ft_forumid",
+						"joinTableName": "forum_tag",
+						"joinTableDestinationColumn": "ft_tagid",
+						"destinationTableName": "tag",
+						"destinationTableColumn": "t_tagid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["HAS_TAG"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "message",
+						"sourceTableColumn": "m_messageid",
+						"joinTableSourceColumn": "mt_messageid",
+						"joinTableName": "message_tag",
+						"joinTableDestinationColumn": "mt_tagid",
+						"destinationTableName": "tag",
+						"destinationTableColumn": "t_tagid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["IS_LOCATED_IN"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "organisation",
+						"sourceTableColumn": "o_placeid",
+						"destinationTableName": "place",
+						"destinationTableColumn": "pl_placeid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["IS_PART_OF"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "place",
+						"sourceTableColumn": "pl_containerplaceid",
+						"destinationTableName": "place",
+						"destinationTableColumn": "pl_placeid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["IS_LOCATED_IN"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_placeid",
+						"destinationTableName": "place",
+						"destinationTableColumn": "pl_placeid",
+						"attributes": []
+					}]
+				}]
+			}, {
+				"types": ["WORK_AT"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_placeid",
+						"joinTableSourceColumn": "pc_personid",
+						"joinTableName": "person_company",
+						"joinTableDestinationColumn": "pc_organisationid",
+						"destinationTableName": "organisation",
+						"destinationTableColumn": "o_organisationid",
+						"attributes": [{
+							"columnName": "pc_workfrom",
+							"dataType": "INTEGER",
+							"abstractionLevelName": "workFrom"
+						}]
+
+					}]
+				}]
+			}, {
+				"types": ["STUDY_AT"],
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_placeid",
+						"joinTableSourceColumn": "pu_personid",
+						"joinTableName": "person_university",
+						"joinTableDestinationColumn": "pu_organisationid",
+						"destinationTableName": "organisation",
+						"destinationTableColumn": "o_organisationid",
+						"attributes": [{
+							"columnName": "pu_classyear",
+							"dataType": "INTEGER",
+							"abstractionLevelName": "classYear"
+						}]
+					}]
+				}]
+			}, {
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_personid",
+						"joinTableSourceColumn": "pe_personid",
+						"joinTableName": "person_email",
+						"attributes": [{
+							"columnName": "pe_email",
+							"dataType": "varchar",
+							"abstractionLevelName": "email"
+						}]
+					}]
+				}]
+			}, {
+				"paths": [{
+					"traversalHops": [{
+						"sourceTableName": "person",
+						"sourceTableColumn": "p_personid",
+						"joinTableSourceColumn": "plang_personid",
+						"joinTableName": "person_language",
+						"attributes": [{
+							"columnName": "plang_language",
+							"dataType": "varchar",
+							"abstractionLevelName": "speaks"
+						}]
+					}]
+				}]
+			}
+		]
+	}
+}

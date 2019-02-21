@@ -8,6 +8,7 @@ import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.Statement;
 import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.StatementResultCursor;
 import org.neo4j.driver.v1.Transaction;
 import org.neo4j.driver.v1.TransactionWork;
 import org.neo4j.driver.v1.Value;
@@ -16,6 +17,7 @@ import org.neo4j.driver.v1.types.TypeSystem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
 
 public class IngraphSession implements Session {
 
@@ -33,10 +35,20 @@ public class IngraphSession implements Session {
 	}
 
 	@Override
+	public CompletionStage<StatementResultCursor> runAsync(String statementTemplate, Value parameters) {
+		return null;
+	}
+
+	@Override
 	public StatementResult run(String statementTemplate, Map<String, Object> statementParameters) {
 		final OneTimeQueryAdapter adapter = new OneTimeQueryAdapter(statementTemplate, "onetime" + oneTimeQueryIndex, indexer);
 		oneTimeQueryIndex++;
 		adapter.results();
+		return null;
+	}
+
+	@Override
+	public CompletionStage<StatementResultCursor> runAsync(String statementTemplate, Map<String, Object> statementParameters) {
 		return null;
 	}
 
@@ -46,13 +58,28 @@ public class IngraphSession implements Session {
 	}
 
 	@Override
+	public CompletionStage<StatementResultCursor> runAsync(String statementTemplate, Record statementParameters) {
+		return null;
+	}
+
+	@Override
 	public StatementResult run(String statementTemplate) {
 		return run(statementTemplate, Collections.emptyMap());
 	}
 
 	@Override
+	public CompletionStage<StatementResultCursor> runAsync(String statementTemplate) {
+		return null;
+	}
+
+	@Override
 	public StatementResult run(Statement statement) {
 		return run(statement.text(), statement.parameters());
+	}
+
+	@Override
+	public CompletionStage<StatementResultCursor> runAsync(Statement statement) {
+		return null;
 	}
 
 	@Override
@@ -71,13 +98,28 @@ public class IngraphSession implements Session {
 	}
 
 	@Override
+	public CompletionStage<Transaction> beginTransactionAsync() {
+		throw new UnsupportedOperationException("unimplemented");
+	}
+
+	@Override
 	public <T> T readTransaction(TransactionWork<T> work) {
 		throw new UnsupportedOperationException("Operation not supported.");
 	}
 
 	@Override
+	public <T> CompletionStage<T> readTransactionAsync(TransactionWork<CompletionStage<T>> work) {
+		throw new UnsupportedOperationException("unimplemented");
+	}
+
+	@Override
 	public <T> T writeTransaction(TransactionWork<T> work) {
 		throw new UnsupportedOperationException("Operation not supported.");
+	}
+
+	@Override
+	public <T> CompletionStage<T> writeTransactionAsync(TransactionWork<CompletionStage<T>> work) {
+		throw new UnsupportedOperationException("unimplemented");
 	}
 
 	@Override
@@ -95,6 +137,11 @@ public class IngraphSession implements Session {
 		for (IncrementalQueryAdapter adapter : adapters) {
 			adapter.engine().shutdown();
 		}
+	}
+
+	@Override
+	public CompletionStage<Void> closeAsync() {
+		throw new UnsupportedOperationException("unimplemented");
 	}
 
 	private ArrayList<IncrementalQueryAdapter> adapters = new ArrayList<>();

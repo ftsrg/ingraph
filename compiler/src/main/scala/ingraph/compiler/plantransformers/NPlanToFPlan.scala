@@ -14,6 +14,8 @@ object NPlanToFPlan {
     transform(nnode, Seq())
   }
 
+  private def transform(getEdges: nplan.GetEdges, req: Seq[ResolvableName]): fplan.GetEdges = fplan.GetEdges(req, getEdges)
+
   private def transform(nnode: nplan.NNode, req: Seq[ResolvableName]): fplan.FNode = {
 
     /**
@@ -27,7 +29,7 @@ object NPlanToFPlan {
 
     nnode match {
       // leaf
-      case o: nplan.GetEdges     => fplan.GetEdges(req, o)
+      case o: nplan.GetEdges     => transform(o, req)
       case o: nplan.GetVertices  => fplan.GetVertices(req, o)
       case o: nplan.Dual         =>
         if (req.nonEmpty) {
@@ -104,7 +106,7 @@ object NPlanToFPlan {
           case o: nplan.ThetaLeftOuterJoin =>
             val reqOp = extractProperties(o.condition).filter(!duplicate(_, o.left.output ++ o.right.output, rpTotal))
             fplan.ThetaLeftOuterJoin(o, left, right)
-          case o: nplan.TransitiveJoin => fplan.TransitiveJoin(o, left, right)
+          case o: nplan.TransitiveJoin => fplan.TransitiveJoin(o, left, transform(o.right, rpRight)) // to keep the type of the right node
         }
       }
       case o: nplan.Union => fplan.Union(o,
