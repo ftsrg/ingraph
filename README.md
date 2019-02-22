@@ -27,7 +27,7 @@ We recommend using IntelliJ for developing ingraph. Make sure you install the [S
   * Tick **Auto import**.
   * ~~Untick **Create separate module per source set**.~~ Until this [IntelliJ issue](https://youtrack.jetbrains.com/issue/SCL-12718) is resolved, tick **Create separate module per source set**.
   * Pick **Use default gradle wrapper** as your Gradle installation.
-* After importing, add the Scala SDK (version 2.11) to the module. (If you did not use Scala before, download it from the dialog box provided by IntelliJ).
+  * If you get errors while trying to run tests, perform a manual build.
 
 ## Third-party dependencies
 
