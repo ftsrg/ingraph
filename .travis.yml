@@ -41,6 +41,7 @@ script:
   - ./load-knows_undirected-table.sh
   - cd ../../../..
   # Postgres ^^^
+  - unzip graphs/ldbc-snb-bi/db-sftiny.zip -d graphs/ldbc-snb-bi/
   - ./gradlew test --continue --stacktrace
 notifications:
   slack:
