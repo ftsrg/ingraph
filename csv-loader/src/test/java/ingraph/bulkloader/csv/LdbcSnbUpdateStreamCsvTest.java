@@ -13,7 +13,7 @@ public class LdbcSnbUpdateStreamCsvTest {
 	@Test
 	public void testLoad() throws IOException {
 		final LdbcUpdateStreamCsvLoader loader = new LdbcUpdateStreamCsvLoader(CSV_DIR);
-		Assert.assertEquals(7, loader.getUpdates().size());
+		Assert.assertEquals(23, loader.getUpdates().size());
 	}
 
 }
