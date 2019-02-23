@@ -20,6 +20,15 @@ To run the tests, issue the following command:
 
 We recommend using IntelliJ for developing ingraph. Make sure you install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala).
 
+### Initializing test data
+
+Clean any data that might left over and unzip the test data set:
+
+```console
+rm -rf graphs/ldbc-snb-bi/db-sftiny/graph.db/
+unzip graphs/ldbc-snb-bi/db-sftiny.zip -d graphs/ldbc-snb-bi/
+```
+
 ### Importing the projects
 
 * Import the projects using **New** | **Project from Existing Sources...** (or simply click **Import Project** on the welcome screen).
