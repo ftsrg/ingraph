@@ -1,6 +1,7 @@
 package ingraph
 
-import ingraph.testrunners.{IngraphTestRunner, Neo4jTestRunner}
+import ingraph.compiler.sql.Util._
+import ingraph.testrunners.{C2STestRunner, IngraphTestRunner, Neo4jTestRunner}
 import ingraph.tests.LdbcSnbTestCase
 
 object BenchmarkMain {
@@ -10,6 +11,7 @@ object BenchmarkMain {
     * args(1): scale factor
     * args(2): query
     * args(3): tool
+    *
     * @param args
     */
   def main(args: Array[String]): Unit = {
@@ -23,15 +25,14 @@ object BenchmarkMain {
     val tc = new LdbcSnbTestCase("bi", sf, query, csvDir)
 
     for (run <- 1 to runs) {
-      tool.toLowerCase match {
-        case "neo4j" =>
-          val ntr = new Neo4jTestRunner(tc, Some(dbDir))
-          val neo4jResults = ntr.run()
-          ntr.close
-        case "ingraph" =>
-          val itr = new IngraphTestRunner(tc)
-          val ingraphResults = itr.run()
-          itr.close
+      val testRunner = tool.toLowerCase match {
+        case "neo4j" => new Neo4jTestRunner(tc, Some(dbDir))
+        case "ingraph" => new IngraphTestRunner(tc)
+        case "c2s" => new C2STestRunner(tc)
+      }
+
+      withResources(testRunner) {
+        _.run()
       }
     }
   }

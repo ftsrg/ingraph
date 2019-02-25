@@ -20,7 +20,7 @@ import scala.collection.JavaConverters._
   * @param tc test case
   * @param neo4jDir Neo4j database to use. If set to None, the test will fire up a new ImpermanentDatabase.
   */
-class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends AutoCloseable {
+class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends TestRunner {
 
   val bolt = GraphDatabaseSettings.boltConnector("0")
   val gdsBuilder = if (neo4jDir.isDefined) {
@@ -64,7 +64,7 @@ class Neo4jTestRunner(tc: LdbcSnbTestCase, neo4jDir: Option[String]) extends Aut
     ).toList
   }
 
-  def run(): (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = {
+  def run(): (Seq[Seq[Map[String, Any]]], Seq[Long]) = {
     val numberOfNodes = gds.execute("MATCH (n) RETURN count(n) AS numberOfNodes").next().get("numberOfNodes").asInstanceOf[Long]
     assert(numberOfNodes != 0)
 

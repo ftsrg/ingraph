@@ -8,14 +8,16 @@ import ldbc.LdbcUpdateLoader
 
 import scala.collection.JavaConverters._
 
-object LdbcSnbTestCase  {
+object LdbcSnbTestCase {
   private val gson = new Gson()
 }
 
 class LdbcSnbTestCase(val workload: String,
                       val sf: String,
                       val query: Int,
-                      val csvDir: String
+                      val csvDir: String,
+                      val testIngraph: Boolean = true,
+                      val testC2S: Boolean = true
                      ) extends TestCase with CSVData {
   val updateQueryPrefix: String = "../queries/ldbc-snb-interactive/interactive-update-"
   val updateQueryPostfix: String = ".cypher"
@@ -60,6 +62,8 @@ class LdbcSnbTestCase(val workload: String,
 
   override def edgeCsvPaths: Map[String, EdgeMetaData] = {
     Map(
+      // formatter markers: https://stackoverflow.com/a/19492318
+      // @formatter:off
       "comment_hasCreator_person"      -> EdgeMetaData("Message",      "HAS_CREATOR",    "Person"),
       "comment_isLocatedIn_place"      -> EdgeMetaData("Message",      "IS_LOCATED_IN",  "Place"),
       "comment_replyOf_comment"        -> EdgeMetaData("Message",      "REPLY_OF",       "Message"),
@@ -83,6 +87,7 @@ class LdbcSnbTestCase(val workload: String,
       "organisation_isLocatedIn_place" -> EdgeMetaData("Organisation", "IS_LOCATED_IN",  "Place"),
       "person_studyAt_organisation"    -> EdgeMetaData("Person",       "STUDY_OF",       "Organisation"),
       "person_workAt_organisation"     -> EdgeMetaData("Person",       "WORK_AT",        "Organisation")
+      // @formatter:on
     ) map {
       case (file, labels) => (csvDir + file + csvPostfix) -> labels
     }

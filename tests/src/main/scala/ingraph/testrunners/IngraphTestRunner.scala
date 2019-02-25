@@ -9,12 +9,12 @@ import ingraph.ire.{Indexer, OneTimeQueryAdapter}
 import ingraph.tests.LdbcSnbTestCase
 import org.supercsv.prefs.CsvPreference
 
-class IngraphTestRunner(tc: LdbcSnbTestCase) {
+class IngraphTestRunner(tc: LdbcSnbTestCase) extends TestRunner {
 
   val driver = CypherDriverFactory.createIngraphDriver()
   val session = driver.session()
 
-  def run(): (Iterable[Seq[Map[String, Any]]], Iterable[Long]) = {
+  def run(): (Seq[Seq[Map[String, Any]]], Seq[Long]) = {
     val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
     val queryHandler = session.registerQuery(tc.name, tc.querySpecification)
 
