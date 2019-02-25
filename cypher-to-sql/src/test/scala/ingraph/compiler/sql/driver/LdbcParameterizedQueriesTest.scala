@@ -10,8 +10,6 @@ import org.cytosm.common.gtop.GTop
 import org.scalatest.FunSuite
 
 class LdbcParameterizedQueriesTest extends FunSuite {
-  val gTop: GTop = GTopExtension.loadFromResource("/gtop/ldbc.gtop")
-
   val ldbcParameterizedQueries: Seq[(String, String)] =
     getQueriesFromFolder("ldbc_snb_implementations/cypher/queries", "cypher")
 
@@ -20,7 +18,8 @@ class LdbcParameterizedQueriesTest extends FunSuite {
   ldbcParameterizedQueries.foreach { case (name, cypherQueryString) =>
     test(name) {
       try {
-        val sqlCompiler = SqlCompiler(cypherQueryString, CompilerOptions(gTop = Some(gTop), inlineParameters = false, trimSql = true))
+        val sqlCompiler = SqlCompiler(cypherQueryString,
+          CompilerOptions(gTop = Some(LdbcTestResources.gTop), inlineParameters = false, trimSql = true))
 
         val sqlQuery = sqlCompiler.sql
 

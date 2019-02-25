@@ -10,15 +10,12 @@ import org.scalatest.FunSuite
 import scala.collection.JavaConverters._
 
 class LdbcTest extends FunSuite {
-  val gTop: GTop = GTopExtension.loadFromResource("/gtop/ldbc.gtop")
-  val url = "jdbc:postgresql://localhost:5432/ldbcsf1?user=postgres&password=foo"
-
   test("SQL") {
     withResources(
       new SqlDriver(
         translateCreateQueries = true,
-        gTop = Some(gTop),
-        database = ExternalDatabase(url),
+        gTop = Some(LdbcTestResources.gTop),
+        database = ExternalDatabase(LdbcTestResources.url),
         initializeDb = false)) {
       driver =>
         withResources(driver.session) { session =>
@@ -44,8 +41,8 @@ class LdbcTest extends FunSuite {
       withResources(
         new SqlDriver(
           translateCreateQueries = true,
-          gTop = Some(gTop),
-          database = ExternalDatabase(url),
+          gTop = Some(LdbcTestResources.gTop),
+          database = ExternalDatabase(LdbcTestResources.url),
           initializeDb = false,
           initialCompilerOptions = CompilerOptions(trimSql = true))) {
         driver =>
