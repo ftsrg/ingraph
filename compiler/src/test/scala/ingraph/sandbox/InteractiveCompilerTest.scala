@@ -46,4 +46,12 @@ class InteractiveCompilerTest extends CompilerTest {
     val stages=compileFromFile("interactive-update-8")
   }
 
+  test("Parse nested list literals") {
+    val stages = compile(
+      """UNWIND [[1, 2], [3, 4]] AS x
+        |RETURN x[0]
+      """.stripMargin
+    )
+  }
+
 }
