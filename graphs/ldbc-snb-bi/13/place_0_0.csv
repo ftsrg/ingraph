@@ -1,0 +1,3 @@
+id:ID(Place)|name:STRING|url:STRING|:LABEL
+99|India|http://dbpedia.org/resource/India|Country
+88|New Delhi|http://dbpedia.org/resource/New_Delhi|City

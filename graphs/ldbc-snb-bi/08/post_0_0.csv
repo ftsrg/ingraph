@@ -1,0 +1,2 @@
+id:ID(Post)|imageFile:STRING|creationDate:LONG|locationIP:STRING|browserUsed:STRING|language:STRING|content:STRING|length:INT
+77||20110817060540595|1.2.3.4|Firefox|en|My favourite is Eine Kleine Nachtmusik|38

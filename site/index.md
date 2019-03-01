@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Project proposal
+# ingraph – project proposal
 
 The aim of the [ingraph project](https://github.com/FTSRG/ingraph) is to evaluate [openCypher](http://www.opencypher.org/) graph queries incrementally. Our long-term goal is to provide a horizontally scalable graph query engine, which is able to perform complex graph queries on graphs with 100M+ elements.
 
@@ -32,7 +32,7 @@ ingraph is suited for the following technical challenges:
 
 ingraph is not efficient/expressive enough for the following technical challenges:
 
-* Queries that are evaluated only evaluated once or infrequently (i.e. batch processing, daily analysis) [our main goal for the summer of 2017 is to resolve this issue, so stay tuned]
+* Queries that are evaluated only evaluated once or infrequently (i.e. batch processing, daily analysis)
 * Graph analytics involving PageRank, community detection, etc.
 
 Currently, the ingraph project is not mature enough for production use. Instead, it should be used in prototypes and performance experiments.
@@ -44,7 +44,7 @@ Candidates for primary use cases of incremental openCypher queries are:
 * Model validation ([IncQuery-D paper](pub/models2014-incqueryd.pdf), [Train Benchmark paper](https://inf.mit.bme.hu/research/publications/train-benchmark-cross-technology-performance-evaluation-continuous-model-valid))
 * Static analysis of source code repositories (thesis work [#1](pub/stein-daniel-msc.pdf), [#2](pub/lucz-soma-bsc.pdf))
 * Fraud detection ([Neo4j white paper](https://neo4j.com/use-cases/fraud-detection/))
-* Model simulation and analysis of runtime models
+* Model simulation and analysis of runtime models ([SDL paper](pub/sdl2017-opencypher-mde.pdf))
 
 Incremental openCypher queries can also be beneficial for:
 
@@ -54,12 +54,14 @@ Incremental openCypher queries can also be beneficial for:
 # Related projects
 
 * [Grapflow](http://graphflow.io/) also aims to provide "continuous subgraph queries", based their extension of the openCypher query language, openCypher++.
+* [Strider](https://github.com/renxiangnan/strider) supports incremental queries on distributed RDF data.
 
 # Publications
 
 ## Papers
 
 * J. Marton, G. Szárnyas, D. Varró: [Formalising openCypher Graph Queries in Relational Algebra](https://arxiv.org/abs/1705.02844) (ADBIS 2017)
+* J. Marton, G. Szárnyas, M. Búr: [Model-driven engineering of an openCypher engine: using graph queries to compile graph queries](pub/sdl2017-opencypher-mde.pdf) (SDL 2017) Corresponding ingraph revision is [tagged as ingraph-compiler-based-on-emf-viatra](https://github.com/FTSRG/ingraph/releases/tag/ingraph-compiler-based-on-emf-viatra)
 * G. Szárnyas, B. Izsó, I. Ráth, D. Varró: [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Validation](http://link.springer.com/article/10.1007/s10270-016-0571-8) (Software and Systems Modeling Journal, 2017)
 * G. Szárnyas, B. Izsó, I. Ráth, D. Harmath, G. Bergmann, D. Varró: [IncQuery-D: A Distributed Incremental Model Query Framework in the Cloud](pub/models2014-incqueryd.pdf) (MODELS 2014)
 * G. Szárnyas, J. Maginecz, D. Varró: [Evaluation of Optimization Strategies for Incremental Graph Queries](https://pp.bme.hu/eecs/article/view/9769) (Periodica Polytechnica 2017)
@@ -71,6 +73,7 @@ Incremental openCypher queries can also be beneficial for:
 * [The ingraph project and incremental evaluation of Cypher queries](https://s3.amazonaws.com/artifacts.opencypher.org/website/ocim2/slides/ocim2-ingraph.pdf), 2nd openCypher Implementers Meeting
 * [Incremental Graph Queries for Cypher](https://s3.amazonaws.com/artifacts.opencypher.org/website/ocim1/slides/ocim2017-incremental-opencypher.pdf), 1st openCypher Implementers Meeting
 * [Incremental Graph Queries with openCypher](https://fosdem.org/2017/schedule/event/graph_incremental_queries_open_cypher/), FOSDEM 2017, Graph devroom
+* [Social Network Benchmark: Business Intelligence workload](http://wiki.ldbcouncil.org/display/TUC/Tenth+TUC+Meeting%2C+TU+Munich+at+VLDB2017), Linked Data Benchmark Council, 10th TUC meeting
 * [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Queries](http://wiki.ldbcouncil.org/pages/viewpage.action?pageId=59277315), Linked Data Benchmark Council, 9th TUC meeting
 
 # Related projects on GitHub

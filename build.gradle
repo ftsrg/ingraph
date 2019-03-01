@@ -1,20 +1,37 @@
-plugins {
-  id 'com.jfrog.bintray' version '1.7.1' apply false
-}
-
 allprojects {
   group = 'ingraph'
-  version = '0.2.0-SNAPSHOT'
+  version = '0.4.0-SNAPSHOT'
+}
+
+ext {
+  akkaVersion = '2.4.20'
+  commonsExecVersion = '1.3'
+  commonsIoVersion = '2.5'
+  commonsMathVersion = '3.6.1'
+  gsonVersion = '2.8.5'
+  guavaVersion = '22.0'
+  junitVersion = '4.12'
+  log4jVersion = '1.2.17'
+  neo4jDriverVersion = '1.6.3'
+  neo4jVersion = '3.3.5'
+  neo4jApocVersion = '3.3.0.4'
+  opencypherVersion = '1.0.0-M10'
+  pegdownVersion = '1.6.0'
+  scalaShortVersion = '2.11'
+  scalaTestVersion = '3.0.5'
+  scalaVersion = '2.11.12'
+  sparkVersion = '2.3.0'
+  slizaaVersion = '9.11.0-SNAPSHOT'
+  xtextVersion = '2.12.0'
 }
 
 subprojects {
   apply plugin: 'java'
-  apply plugin: 'eclipse'
-  apply plugin: 'com.jfrog.bintray'
+  apply plugin: 'scala'
   apply plugin: 'maven-publish'
-
   jar {
     from sourceSets.main.allJava
+    from sourceSets.main.allScala
   }
 
   sourceCompatibility = 1.8
@@ -23,13 +40,16 @@ subprojects {
   repositories {
     jcenter()
     maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
-    maven { url 'https://repo.eclipse.org/content/groups/viatra2/' }
-    maven { url 'http://docs.inf.mit.bme.hu/ingraph-deps' }
+    maven { url 'https://repo.eclipse.org/content/groups/viatra2' }
+    maven { url 'https://docs.inf.mit.bme.hu/ingraph-deps' }
+    maven { url 'https://dl.bintray.com/ldbc/snb' }
+    maven { url 'https://jitpack.io' }
   }
 
-  // disable warnings for Scala projects
-  tasks.withType(ScalaCompile) {
-    scalaCompileOptions.additionalParameters = ["-nowarn"]
+  dependencies {
+    compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
+    testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
+    testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
   }
 
   configurations.all { exclude group: 'asm' }
@@ -47,33 +67,4 @@ subprojects {
       }
     }
   }
-
-  bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publish = true
-    override = true
-    publications = ['mavenJava']
-  }
-}
-
-ext {
-  commonsIoVersion = '2.5'
-  commonsMathVersion = '3.6.1'
-  emfVersion = '2.10.1'
-  guavaVersion = '15.0' // do not upgrade to 21.0 as VIATRA currently uses the ToStringHelper class (https://google.github.io/guava/releases/20.0/api/docs/com/google/common/base/Objects.ToStringHelper.html)
-  jmhVersion = '1.17.5'
-  junitVersion = '4.12'
-  log4jVersion = '1.2.17'
-  neo4jDriverVersion = '1.2.1'
-  pegdownVersion = '1.6.0'
-  scalaShortVersion = '2.12'
-  scalaTestVersion = '3.0.1'
-  scalaVersion = '2.12.2'
-  slizaaVersion = '1.0.0-SNAPSHOT'
-  viatraMinorVersion = '.0.M3'
-  viatraDseVersion = '0.16' + viatraMinorVersion
-  viatraVersion = '1.6' + viatraMinorVersion
-  xtendVersion = '2.10.0'
-  xtextVersion = xtendVersion
 }

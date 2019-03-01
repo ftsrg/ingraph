@@ -1,0 +1,5 @@
+id:ID(Place)|name:STRING|url:STRING|:LABEL
+0|India|http://dbpedia.org/resource/India|Country
+1|China|http://dbpedia.org/resource/China|Country
+2|New Delhi|http://dbpedia.org/resource/New_Delhi|City
+3|Beijing|http://dbpedia.org/resource/Beijing|City

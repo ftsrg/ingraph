@@ -1,0 +1,4 @@
+id:ID(Person)|firstName:STRING|lastName:STRING|gender:STRING|birthday:LONG|creationDate:LONG|locationIP:STRING|browserUsed:STRING
+99|Mahinda|Perera|male|19891203|20100214153210447|119.235.7.103|Firefox
+88|Carmen|Lepland|female|19840218|20100128063958781|195.20.151.175|Internet Explorer
+77|Hồ Chí|Do|male|19881014|20100215004617657|103.2.223.188|Internet Explorer

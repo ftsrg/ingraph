@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<key id="birthday" for="node" attr.name="birthday" attr.type="long"/>
+<key id="lastName" for="node" attr.name="lastName" attr.type="string"/>
+<key id="gender" for="node" attr.name="gender" attr.type="string"/>
+<key id="browserUsed" for="node" attr.name="browserUsed" attr.type="string"/>
+<key id="length" for="node" attr.name="length" attr.type="int"/>
+<key id="language" for="node" attr.name="language" attr.type="string"/>
+<key id="title" for="node" attr.name="title" attr.type="string"/>
+<key id="creationDate" for="node" attr.name="creationDate" attr.type="long"/>
+<key id="url" for="node" attr.name="url" attr.type="string"/>
+<key id="content" for="node" attr.name="content" attr.type="string"/>
+<key id="firstName" for="node" attr.name="firstName" attr.type="string"/>
+<key id="name" for="node" attr.name="name" attr.type="string"/>
+<key id="locationIP" for="node" attr.name="locationIP" attr.type="string"/>
+<key id="id" for="node" attr.name="id" attr.type="long"/>
+<graph id="G" edgedefault="directed">
+<node id="n0" labels=":Forum"><data key="labels">:Forum</data><data key="id">99</data><data key="title">Classical music</data><data key="creationDate">20100214153220447</data></node>
+<node id="n1" labels=":Person"><data key="labels">:Person</data><data key="id">88</data><data key="firstName">Hans</data><data key="lastName">X</data><data key="gender">male</data><data key="birthday">19891203</data><data key="creationDate">20100214153210447</data><data key="locationIP">1.2.3.4</data><data key="browserUsed">Firefox</data></node>
+<node id="n2" labels=":Country:Place"><data key="labels">:Country:Place</data><data key="id">77</data><data key="name">Austria</data><data key="url">http://dbpedia.org/resource/Austria</data></node>
+<node id="n3" labels=":City:Place"><data key="labels">:City:Place</data><data key="id">66</data><data key="name">Vienna</data><data key="url">http://dbpedia.org/resource/Vienna</data></node>
+<node id="n4" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">55</data><data key="creationDate">20110817060540595</data><data key="locationIP">1.2.3.4</data><data key="browserUsed">Firefox</data><data key="language">en</data><data key="content">My favourite is Eine Kleine Nachtmusik</data><data key="length">38</data></node>
+<node id="n5" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">44</data><data key="creationDate">20120817060540595</data><data key="locationIP">2.3.4.5</data><data key="browserUsed">Chrome</data><data key="language">de</data><data key="content">Ich liebe Beethoven</data><data key="length">19</data></node>
+<node id="n6" labels=":TagClass"><data key="labels">:TagClass</data><data key="id">11</data><data key="name">Person</data><data key="url">http://dbpedia.org/ontology/Person</data></node>
+<node id="n7" labels=":Tag"><data key="labels">:Tag</data><data key="id">33</data><data key="name">Wolfgang_Amadeus_Mozart</data><data key="url">http://dbpedia.org/resource/Wolfgang_Amadeus_Mozart</data></node>
+<node id="n8" labels=":Tag"><data key="labels">:Tag</data><data key="id">22</data><data key="name">Ludwig_van_Beethoven</data><data key="url">http://dbpedia.org/resource/Ludwig_van_Beethoven</data></node>
+<edge id="e0" source="n0" target="n4" label="CONTAINER_OF"><data key="label">CONTAINER_OF</data></edge>
+<edge id="e1" source="n0" target="n5" label="CONTAINER_OF"><data key="label">CONTAINER_OF</data></edge>
+<edge id="e2" source="n0" target="n1" label="HAS_MODERATOR"><data key="label">HAS_MODERATOR</data></edge>
+<edge id="e3" source="n1" target="n3" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
+<edge id="e4" source="n3" target="n2" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
+<edge id="e5" source="n4" target="n7" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e6" source="n5" target="n8" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e7" source="n7" target="n6" label="HAS_TYPE"><data key="label">HAS_TYPE</data></edge>
+<edge id="e8" source="n8" target="n6" label="HAS_TYPE"><data key="label">HAS_TYPE</data></edge>
+</graph>
+</graphml>

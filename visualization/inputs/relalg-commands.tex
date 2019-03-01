@@ -259,7 +259,7 @@
 \newcommand{\alldifferent}[1]{\alldifferentop_{#1}}
 \newcommand{\duplicateelimination}{\duplicateeliminationop}
 \newcommand{\sort}[1]{\sortop_{#1}}
-\newcommand{\projection}[2]{\projectionop_{#1}^{#2}}
+\newcommand{\projection}[1]{\projectionop_{#1}}
 \newcommand{\create}[1]{\createop_{#1}}
 % delete: #1: '*' in case of DETACH DELETE, otherwise empty. #2: variable list to delete
 \newcommand{\delete}[2]{\deleteop_{#2}^{#1}}
@@ -284,9 +284,11 @@
 
 % colors
 
+% colors based on the Set1 color palette of ColorBrewer 2.0
+% http://colorbrewer2.org/#type=qualitative&scheme=Set1&n=5
 \definecolor{red}{HTML}{e41a1c}
 \definecolor{blue}{HTML}{377eb8}
-\definecolor{green}{HTML}{4daf4a}
+\definecolor{green}{HTML}{4DAF4A}
 \definecolor{lilac}{HTML}{984ea3}
 
 \definecolor{progressbargreen}{HTML}{008000}

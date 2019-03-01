@@ -19,7 +19,7 @@ catalog-v*.xml
 .Rhistory
 .RData
 .Rproj.user
-
+.#*
 
 ### Gradle ###
 .gradle
@@ -41,8 +41,16 @@ gen/
 xtend-gen
 generated/
 
-/out/
+*.class
+out/
 .tmpBin/
 hs_err_pid*.log
 *.~*
 *.*~
+*.xtendbin
+*.swp
+lib/
+*.tex
+*.pdf
+*.log
+*.aux

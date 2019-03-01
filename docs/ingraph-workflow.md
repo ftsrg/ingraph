@@ -2,22 +2,29 @@
 
 ![](opencypher-to-incremental-queries-workflow.png)
 
-## Processes (yellow)
+## Initial query compilation
 
-* **query parser:** [Xtext](https://eclipse.org/Xtext/)-based parser.
-* **Cypher to relational algebra transformer:** [Xtend](http://www.eclipse.org/xtend/)-based transformation from syntax graph to a relational algebra tree.
-* **relational algebra optimizer:** query optimizer using graph rewriting with [VIATRA-DSE](https://wiki.eclipse.org/VIATRA/DSE).
-* **relational algebra to Rete network transformer:** transforms the relational algebra tree to a Rete network using [VIATRA Query](https://wiki.eclipse.org/VIATRA/Query) patterns.
-* **incremental relational query engine:** a query engine that is able to instantiate a Rete network and continuously maintain its state. The implementation uses the  [IRE](https://github.com/FTSRG/ire) library.
+* :page_facing_up: `openCypher query specification`: the query as a string.
+* :hourglass_flowing_sand: `query parser`: an [Xtext](https://eclipse.org/Xtext/)-based parser, using the [openCypher grammar of the Slizaa project](https://github.com/slizaa/slizaa-opencypher-xtext).
+* :page_facing_up: `query syntax graph`: the abstract syntax graph of the query, represented in an EMF model.
+* :hourglass_flowing_sand: `compiler`: transforms the syntax graph to a query plan.
+* :page_facing_up: `gplan [unresolved]`: a query plan in relational graph algebra without resolved variables for aliases (e.g. in `WITH x AS y RETURN y.a AS b`).
+* :hourglass_flowing_sand: `resolver`: resolves unresolved variables by tracking aliases.
+* :page_facing_up: `gplan [resolved]`: a query plan in relational graph algebra with resolved variables.
 
-## Artifacts (blue)
 
-* **openCypher query specification:** the query as a string.
-* **query syntax graph:** the abstract syntax graph of the query.
-* **relational algebra model:** query model using the extended operators of relational algebra, defined in [Xcore](https://wiki.eclipse.org/Xcore). For the operators, see our [openCypher report](http://docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf).
-* **Rete network model:** a [Rete network](https://inf.mit.bme.hu/en/research/publications/incquery-d-distributed-incremental-model-query-framework-cloud) for incremental query evaluation defined in [Xcore](https://wiki.eclipse.org/Xcore). Also see our [openCypher report](docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf) for details.
-* **Rete network:** a continuously operating Rete network, using the [Akka](http://akka.io/) distributed asynchronous framework.
+## Engine-specific query compilation and execution
 
-## Example
-
-![](opencypher-to-incremental-queries-instances.png)
+* relational engines:
+  * :hourglass_flowing_sand: `gplan to nplan transformer`: transforms the query plan to a join-based plan that can be evaluated with relational techniques.
+  * :page_facing_up: `nplan`: a query plan in join-based algebra.
+  * :hourglass_flowing_sand: `schema inferencer`: transformations a join-based plan to a flat plan that contains properties required for computations.
+  * :page_facing_up: `fplan`: a query plan in (join-based) flat relational algebra.
+    * :hourglass_flowing_sand: `ire`: incremental relational engine.
+    * :hourglass_flowing_sand: `nre`: a naive relational engine.
+* search-based engine:
+  * :hourglass_flowing_sand: `gplan to constraints transformer`: transforms the query plan to a set of constraints.
+  * :page_facing_up: `constraints`: Datalog-style constraints that describe the query.
+  * :hourglass_flowing_sand: `planner`: transforms the query plan to a list of operations.
+  * :page_facing_up: `operations`: operations that define the search plan for the local search engine.
+  * :hourglass_flowing_sand: `local search engine`: an executor for local search.

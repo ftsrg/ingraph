@@ -1,0 +1,58 @@
+CREATE OR REPLACE FUNCTION array_length(ANYARRAY)
+  RETURNS INTEGER
+STRICT
+IMMUTABLE
+LANGUAGE SQL AS
+'SELECT coalesce(array_length($1, 1), 0) AS array_length;';
+
+-- NULL values are filtered by count()
+CREATE OR REPLACE FUNCTION is_unique(ANYARRAY)
+  RETURNS BOOLEAN
+STRICT
+IMMUTABLE
+LANGUAGE SQL AS
+'WITH q AS (SELECT * FROM unnest(array_remove($1, NULL))),
+      distinct_q AS (SELECT DISTINCT * FROM q)
+ SELECT (SELECT count(*) FROM distinct_q) = (SELECT count(*) FROM q)';
+
+DROP TYPE IF EXISTS edge_type;
+CREATE TYPE edge_type AS (
+  edge_type_id SMALLINT,
+  src BIGINT,
+  trg BIGINT
+);
+
+DROP TYPE IF EXISTS vertex_type;
+CREATE TYPE vertex_type AS (
+  vertex_table_id SMALLINT,
+  id BIGINT
+);
+
+CREATE OR REPLACE FUNCTION TO_TIMESTAMP(BIGINT)
+  RETURNS TIMESTAMP WITHOUT TIME ZONE
+STRICT
+IMMUTABLE
+LANGUAGE SQL AS
+'SELECT TO_TIMESTAMP($1 :: text, ''YYYYMMDDHH24MISSMS'') :: TIMESTAMP WITHOUT TIME ZONE';
+
+CREATE OR REPLACE FUNCTION TO_BIGINT(TIMESTAMP WITHOUT TIME ZONE)
+  RETURNS BIGINT
+STRICT
+IMMUTABLE
+LANGUAGE SQL AS
+'SELECT to_char($1, ''YYYYMMDDHH24MISSMS'') :: BIGINT';
+
+CREATE OR REPLACE FUNCTION driver_array(ANYARRAY)
+  RETURNS JSONB
+STRICT
+IMMUTABLE
+LANGUAGE SQL AS
+'SELECT jsonb_build_object(''type'', ''ListValue'',
+                           ''value'', jsonb_build_object(''values'', array_to_json($1)));';
+
+CREATE OR REPLACE FUNCTION unnest(JSONB)
+  RETURNS SETOF JSONB
+STRICT
+IMMUTABLE
+LANGUAGE SQL AS
+'SELECT jsonb_array_elements($1->''value''->''values'');';
