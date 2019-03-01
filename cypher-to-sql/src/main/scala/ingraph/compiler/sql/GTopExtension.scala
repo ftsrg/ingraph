@@ -3,12 +3,14 @@ package ingraph.compiler.sql
 import java.io.File
 
 import ingraph.compiler.sql.CompileSql.{getQuotedColumnName, getSingleQuotedString}
+import ingraph.compiler.sql.Util._
 import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
 import org.cytosm.common.gtop.GTop
 import org.cytosm.common.gtop.implementation.relational._
 import org.cytosm.common.gtop.io.SerializationInterface
 
 import scala.collection.JavaConverters._
+import scala.io.Source
 
 object GTopExtension {
 
@@ -20,7 +22,14 @@ object GTopExtension {
   }
 
   def loadFromResource(resourcePath: String): GTop = {
-    loadFromFile(getClass.getResource(resourcePath).getFile)
+    withResources(getClass.getResourceAsStream(resourcePath)) {
+      stream =>
+        val gTopStr = Source.fromInputStream(stream).mkString
+        val gTop = SerializationInterface.read(gTopStr)
+        addIdColumnToGTopAttributes(gTop)
+
+        gTop
+    }
   }
 
   def addIdColumnToGTopAttributes(gTop: GTop): Unit = {
