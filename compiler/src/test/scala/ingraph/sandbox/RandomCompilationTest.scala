@@ -618,6 +618,13 @@ scala.MatchError: 'Unwind unwindattribute(listexpression(1, 2, 3), li, Some(li#0
       """.stripMargin)
   }
 
+  test("Random: compile map literal") {
+    compile(
+      """MATCH (person1)<-[:HAS_CREATOR]-(m:Message)<-[:LIKES]-()
+        |RETURN {person: person1, message: m} AS c
+      """.stripMargin)
+  }
+
   test("Complex create query") {
     compile(
       """MATCH (c:City {id:1226})

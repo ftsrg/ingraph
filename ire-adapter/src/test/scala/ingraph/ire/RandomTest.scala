@@ -161,4 +161,26 @@ class RandomTest extends FunSuite {
     adapter.results()
   }
 
+  test("CREATE using nested lists") {
+    val indexer = new Indexer()
+    val createAdapter = new OneTimeQueryAdapter(
+      """UNWIND [[1, 2], [3, 4]] AS t
+        |CREATE (n:Node {x: t[0], y: t[1]})
+        |""".stripMargin,
+      "",
+      indexer
+    )
+
+    createAdapter.results()
+    val queryAdapter = new IncrementalQueryAdapter(
+      """MATCH (n:Node)
+        |RETURN n.x, n.y
+        |ORDER BY n.x
+        |""".stripMargin,
+      "",
+      indexer
+    )
+    assert(queryAdapter.results() == List(Vector(1, 2), Vector(3, 4)))
+  }
+
 }

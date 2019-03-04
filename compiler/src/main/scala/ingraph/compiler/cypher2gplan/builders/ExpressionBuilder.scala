@@ -44,6 +44,7 @@ object ExpressionBuilder {
       case e: oc.EndsWithExpression => UnresolvedFunction(Function.ENDS_WITH.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false) //cExpr.EndsWith
       case e: oc.RegExpMatchingExpression => UnresolvedFunction(Function.REGEX_LIKE.getPrettyName, Seq[Expression]( buildExpressionNoJoinAllowed(e.getLeft), buildExpressionNoJoinAllowed(e.getRight)), isDistinct=false)
       // End string predicates
+      case e: oc.MapLiteral => LiteralBuilder.buildMapLiteral(e)
       case e: oc.NumberLiteral => LiteralBuilder.buildNumberLiteral(e)
       case e: oc.Parameter => buildParameter(e)
       case e: oc.StringLiteral => LiteralBuilder.buildStringLiteral(e)

@@ -143,6 +143,16 @@ case class ExpressionAttribute(expr: Expression, override val name: String,
 // this is the attribute built by unwinding a list
 case class UnwindAttribute(list: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName
 
+/** Represents a map literal.
+  *
+  * Note: Catalyst Literal does not support collections
+  *
+  * @param map the map to encapsulate
+  */
+case class MapLiteral(map: TPropertyMap) extends ExpressionBase {
+  override def children: Seq[Expression] = map.values.toSeq
+}
+
 /** Represents a list expression.
   *
   * In openCypher, list is a first class citizen among data types,
