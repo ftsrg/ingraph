@@ -19,6 +19,9 @@ import org.opencypher.tools.tck.constants.TCKQueries
 import scala.collection.JavaConverters._
 
 object CompileSql {
+  val vertexTypeSqlName = "vertex_type"
+  val edgeTypeSqlName = "edge_type"
+
   def escapeQuotes(name: String, toBeDoubled: String = "\"") = name.replace(toBeDoubled, toBeDoubled + toBeDoubled)
 
   def escapeSingleQuotes(string: String) = escapeQuotes(string, "'")
@@ -114,7 +117,7 @@ object CompileSql {
       }
 
     val edgeTypeId = options.gTop.get.getEdgeTypeIdMap(edgeTuple._1.getTypes.get(0))
-    val edgeColumn = s"ROW($edgeTypeId, $edgeTableAlias.$fromColumn, $edgeTableAlias.$toColumn)::edge_type"
+    val edgeColumn = s"ROW($edgeTypeId, $edgeTableAlias.$fromColumn, $edgeTableAlias.$toColumn)::$edgeTypeSqlName"
 
     val fromColumnNewName = getQuotedColumnName(node.nnode.src)
     val edgeColumnNewName = getQuotedColumnName(node.nnode.edge)
@@ -190,7 +193,7 @@ object CompileSql {
     val toTableId = vertexTableIdMap(traversalHop.getDestinationTableName)
 
     val sql =
-      i"""SELECT ROW($fromTableId, $edgeTableAlias.$fromColumn)::vertex_type AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, ROW($toTableId, $edgeTableAlias.$toColumn)::vertex_type AS $toColumnNewName$commaBeforeExtraColumns
+      i"""SELECT ROW($fromTableId, $edgeTableAlias.$fromColumn)::$vertexTypeSqlName AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, ROW($toTableId, $edgeTableAlias.$toColumn)::$vertexTypeSqlName AS $toColumnNewName$commaBeforeExtraColumns
          |  $extraColumnsPart
          |  FROM $edgeTable $edgeTableAlias
          |    $joinVertexTablesPart

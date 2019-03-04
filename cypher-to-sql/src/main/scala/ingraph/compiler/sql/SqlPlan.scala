@@ -18,6 +18,7 @@ import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, Imp
 import scala.Function.tupled
 import scala.collection.JavaConverters._
 import scala.reflect.ClassTag
+import CompileSql.{vertexTypeSqlName, edgeTypeSqlName}
 
 trait SqlNode extends LogicalPlan {
   def options: CompilerOptions
@@ -355,7 +356,7 @@ class GetVerticesWithGTop(val fNode: fplan.GetVertices,
 
   val columns =
     (
-      s"""ROW($vertexTableId, $vertexIdColumn)::vertex_type AS ${getQuotedColumnName(fNode.nnode.v)}""" +:
+      s"""ROW($vertexTableId, $vertexIdColumn)::$vertexTypeSqlName AS ${getQuotedColumnName(fNode.nnode.v)}""" +:
         filteredRequiredProperties
           .map { prop =>
             val propertyValuePart = implNode.getAttributes.asScala
@@ -430,7 +431,7 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
       ""
 
   val edgeType =
-    if (options.gTop.isDefined) "edge_type"
+    if (options.gTop.isDefined) edgeTypeSqlName
     else "BIGINT"
 
   override def innerSql: String =
@@ -683,7 +684,7 @@ class AllDifferent(val fNode: fplan.AllDifferent,
                    val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.AllDifferent](child) {
   val edgeType =
-    if (options.gTop.isDefined) "edge_type"
+    if (options.gTop.isDefined) edgeTypeSqlName
     else "BIGINT"
 
   val edgeIdsArray = (s"ARRAY[]::$edgeType[]" +: fNode.nnode.edges.map(getQuotedColumnName)).mkString(" || ")
