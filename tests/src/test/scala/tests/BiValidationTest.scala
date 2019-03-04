@@ -16,7 +16,7 @@ class BiValidationTest extends FunSuite {
   // formatter markers: https://stackoverflow.com/a/19492318
   // @formatter:off
   val ingraphQueries = Set(2, 3, 4, 6, 7, 8, 9, 12, 15,             22, 23, 24)
-  val c2sQueries     = Set(      4, 6, 7, 8, 9, 12, 15, 16, 17, 19            )
+  val c2sQueries     = Set(2, 3, 4, 6, 7, 8, 9, 12, 15, 16, 17, 19,     23, 24)
   // @formatter:on
 
   val testCases: Seq[LdbcSnbTestCase] = queryRange

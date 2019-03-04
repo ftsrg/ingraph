@@ -9,8 +9,8 @@ import ingraph.model.expr._
 import ingraph.model.fplan.FNode
 import ingraph.model.misc.{Function, FunctionCategory}
 import ingraph.model.{fplan, nplan}
-import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Expression, IsNotNull, IsNull, Literal, Not}
-import org.apache.spark.sql.types.{LongType, StringType}
+import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Expression, IsNotNull, IsNull, Literal, Not, Pmod}
+import org.apache.spark.sql.types.{DoubleType, LongType, StringType}
 import org.cytosm.common.gtop.GTop
 import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, ImplementationNode, TraversalHop}
 import org.neo4j.driver.v1.{Value, Values}
@@ -316,7 +316,11 @@ object CompileSql {
 
           val leftSql = getSql(node.left, options.copy(unwrapJson = localUnwrapJson))
           val rightSql = getSql(node.right, options.copy(unwrapJson = localUnwrapJson))
-          val operator = node.sqlOperator
+          val operator =
+            node match {
+              case Pmod(_, _) => "%"
+              case _ => node.sqlOperator
+            }
 
           if (Seq(leftSql, rightSql).exists(_.contains("\n")))
             i"""(
@@ -368,8 +372,8 @@ object CompileSql {
   def getSqlForLiteral(literal: Literal, options: CompilerOptions): String = {
     if (options.unwrapJson || options.gTop.isDefined) {
       val sqlString = literal.dataType match {
-        // SQL database cannot parse literal suffix (e.g. 42L)
-        case _: LongType => literal.value.toString
+        // SQL database cannot parse literal suffix (e.g. 42L, 5.0D)
+        case _: LongType | DoubleType => literal.value.toString
         case _ => literal.sql
       }
 
