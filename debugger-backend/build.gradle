@@ -1,0 +1,7 @@
+dependencies {
+  compile group: 'com.typesafe.akka', name: 'akka-http_2.12',   version: '10.1.7'
+  compile group: 'com.typesafe.akka', name: 'akka-stream_2.12', version: '2.5.19'
+  compile group: 'com.typesafe.akka', name: 'akka-http-spray-json_2.12', version: '10.1.7'
+
+  compile project(':driver')
+}

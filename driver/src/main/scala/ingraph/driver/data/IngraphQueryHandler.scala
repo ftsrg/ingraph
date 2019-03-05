@@ -12,6 +12,13 @@ class IngraphQueryHandler(val adapter: IncrementalQueryAdapter) extends AutoClos
     adapter.addListener(listener)
   }
 
+  def readCsv(vertexFilenames: java.util.Map[String, List[String]],
+              edgeFilenames: java.util.Map[String, EdgeMetaData],
+              csvPreference: CsvPreference) {
+    //adapter.readCsv(vertexFilenames.asScala(), edgeFilenames.asScala(), csvPreference)
+    adapter.results()
+  }
+
   def readCsv(vertexFilenames: Map[String, List[String]],
               edgeFilenames: Map[String, EdgeMetaData],
               csvPreference: CsvPreference) {
