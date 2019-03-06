@@ -524,7 +524,12 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
     else
       joinConditions.tail.fold(joinConditions.head)(And)
 
-  val joinConditionPart = i"ON ${getSql(conjunctedConditions, options)}"
+  // TODO: remove "ON TRUE" if possible
+  val joinConditionPart =
+    if (joinConditions.isEmpty)
+      "ON TRUE"
+    else
+      i"ON ${getSql(conjunctedConditions, options)}"
 
   val joinType = fNode match {
     case _: fplan.Join => "INNER"
