@@ -9,8 +9,8 @@ import ingraph.model.expr._
 import ingraph.model.fplan.FNode
 import ingraph.model.misc.{Function, FunctionCategory}
 import ingraph.model.{fplan, nplan}
-import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Expression, IsNotNull, IsNull, Literal, Not, Pmod}
-import org.apache.spark.sql.types.{DoubleType, LongType, StringType}
+import org.apache.spark.sql.catalyst.expressions.{AttributeReference, BinaryComparison, BinaryOperator, CaseWhen, Expression, IsNotNull, IsNull, Literal, Not, Pmod}
+import org.apache.spark.sql.types.{DataType, DoubleType, LongType, StringType}
 import org.cytosm.common.gtop.GTop
 import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, ImplementationNode, TraversalHop}
 import org.neo4j.driver.v1.{Value, Values}
@@ -342,6 +342,11 @@ object CompileSql {
               ""
           getQuotedColumnName(node) + unwrapPart
         }
+        case ref: AttributeReference => {
+          val prefix = ref.qualifier.map(getQuotedColumnName(_) + ".").getOrElse("")
+
+          s"$prefix${getQuotedColumnName(ref.name)}"
+        }
         case node: IndexLookupExpression => {
           // TODO support indexing of SQL arrays too
           // JSON indexing
@@ -430,6 +435,14 @@ object CompileSql {
 
       case _ => None
     }
+
+  def createAttributeReference(attrName: String, qualifier: Option[String], dataType: DataType): AttributeReference = {
+    AttributeReference(attrName, dataType)(qualifier = qualifier)
+  }
+
+  def createAttributeReference(attr: ResolvableName, qualifier: String): AttributeReference = {
+    createAttributeReference(attr.resolvedName.get.resolvedName, Some(qualifier), null)
+  }
 }
 
 class CompileSql(val cypherQuery: String, compilerOptions: CompilerOptions)

@@ -1,7 +1,8 @@
 package ingraph.compiler.sql
 
-import ingraph.compiler.sql.CompileSql.{getQuotedColumnName, getSingleQuotedString, _}
+import ingraph.compiler.sql.CompileSql._
 import ingraph.compiler.sql.Create.graphElementTypeString
+import ingraph.compiler.sql.EquiJoinLike.{leftQueryName, rightQueryName}
 import ingraph.compiler.sql.GTopExtension._
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.Production.{getSqlRecursively, withQueryNamePrefix}
@@ -11,14 +12,13 @@ import ingraph.model.expr._
 import ingraph.model.fplan
 import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
-import org.apache.spark.sql.catalyst.expressions.Literal
+import org.apache.spark.sql.catalyst.expressions.{And, EqualTo, Literal}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, ImplementationNode, TraversalHop}
 
 import scala.Function.tupled
 import scala.collection.JavaConverters._
 import scala.reflect.ClassTag
-import CompileSql.{vertexTypeSqlName, edgeTypeSqlName}
 
 trait SqlNode extends LogicalPlan {
   def options: CompilerOptions
@@ -503,24 +503,28 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
 
   val leftColumns = fNode.left.flatSchema.map(getQuotedColumnName)
   val rightColumns = fNode.right.flatSchema.map(getQuotedColumnName)
+
   // prefer columns from  the left query, because in left outer join the right ones may contain NULL
   val resultColumns =
-    (leftColumns.map("left_query." + _) ++
-      (rightColumns.toSet -- leftColumns).map("right_query." + _))
+    (leftColumns.map(leftQueryName + "." + _) ++
+      (rightColumns.toSet -- leftColumns).map(rightQueryName + "." + _))
       .mkString(", ")
 
-  val columnConditions = fNode.commonAttributes
-    .map(getQuotedColumnName)
-    .map(name => s"left_query.$name = right_query.$name")
-  val joinConditions = fNode match {
-    case node: fplan.ThetaLeftOuterJoin => columnConditions :+ getSql(node.nnode.condition, options)
-    case _ => columnConditions
+  val thetaCondition = fNode match {
+    case node: fplan.ThetaLeftOuterJoin => Some(node.nnode.condition)
+    case _ => None
   }
+  val columnConditions = fNode.commonAttributes
+    .map(attr => EqualTo(createAttributeReference(attr, leftQueryName), createAttributeReference(attr, rightQueryName)))
+  val joinConditions = columnConditions ++ thetaCondition
 
-  val joinConditionPart = if (joinConditions.isEmpty)
-    "ON TRUE"
-  else
-    i"ON ${joinConditions.mkString(" AND\n")}"
+  val conjunctedConditions =
+    if (joinConditions.isEmpty)
+      Literal.TrueLiteral
+    else
+      joinConditions.tail.fold(joinConditions.head)(And)
+
+  val joinConditionPart = i"ON ${getSql(conjunctedConditions, options)}"
 
   val joinType = fNode match {
     case _: fplan.Join => "INNER"
@@ -530,13 +534,17 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
 
   override def innerSql: String =
     i"""SELECT $resultColumns FROM
-       |  $leftSql AS left_query
+       |  $leftSql AS $leftQueryName
        |  $joinType JOIN
-       |  $rightSql AS right_query
+       |  $rightSql AS $rightQueryName
        |$joinConditionPart"""
 }
 
 object EquiJoinLike extends SqlNodeCreator2[fplan.EquiJoinLike] {
+
+  private val leftQueryName = "left_query"
+  private val rightQueryName = "right_query"
+
   override def create(fNode: fplan.EquiJoinLike,
                       left: SqlNode,
                       right: SqlNode,
