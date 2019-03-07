@@ -560,7 +560,8 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
     case _ => None
   }
   val columnConditions = fNode.commonAttributes
-    .map(attr => EqualTo(createAttributeReference(attr, leftQueryName), createAttributeReference(attr, rightQueryName)))
+    .map(attr =>
+      EqualTo(SubqueryAttributeReference(leftQueryName, attr), SubqueryAttributeReference(rightQueryName, attr)))
   val joinConditions = columnConditions ++ thetaCondition
 
   val conjunctedConditions =
