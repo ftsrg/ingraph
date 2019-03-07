@@ -7,7 +7,8 @@ import ingraph.compiler.sql.GTopExtension._
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.Production.{getSqlRecursively, withQueryNamePrefix}
 import ingraph.compiler.sql.SqlNodeCreator._
-import ingraph.compiler.sql.TransitiveJoin.{currentFromColumnName, edgeIdColumnName}
+import ingraph.compiler.sql.TransitiveJoin.{currentFromColumnName, currentFromColumnResolvedName, edgeIdColumnName, edgeIdColumnResolvedName}
+import ingraph.compiler.sql.UnarySqlNodeFromFNode.getChildColumnsExtendedWithFlatSchema
 import ingraph.model.expr._
 import ingraph.model.fplan
 import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
@@ -148,9 +149,6 @@ trait WithFNodeOrigin[+T <: FNode] extends Equals with Product1[T] {
   this: SqlNode =>
   def fNode: T
 
-  // TODO rework this to contain SQL specific output with type
-  override def output: Seq[ResolvableName] = fNode.flatSchema
-
   override def _1: T = fNode
 
   override def canEqual(that: Any): Boolean =
@@ -172,6 +170,8 @@ abstract class LeafSqlNode
 
 abstract class UnarySqlNode(val child: SqlNode)
   extends GenericUnaryNode[SqlNode] with SqlNode {
+
+  override def output: Seq[ResolvableName] = child.output
 
   override def sqlQueryNameToRefer: String =
     if (sql.isDefined) super.sqlQueryNameToRefer
@@ -218,7 +218,28 @@ abstract class LeafSqlNodeFromFNode[+T <: LeafFNode]
 
 abstract class UnarySqlNodeFromFNode[+T <: UnaryFNode]
 (child: SqlNode)
-  extends UnarySqlNode(child) with WithFNodeOrigin[T] {}
+  extends UnarySqlNode(child) with WithFNodeOrigin[T] {
+
+  protected def childColumnsExtendedWithFlatSchema: Seq[ResolvableName] =
+    getChildColumnsExtendedWithFlatSchema(child, fNode)
+}
+
+object UnarySqlNodeFromFNode {
+  def getChildColumnsFilteredByFlatSchema(child: SqlNode, fNode: FNode): Seq[ResolvableName] = {
+    val fNodeNames = fNode.flatSchema.map(_.resolvedName)
+
+    child.output.filter(childColumn => fNodeNames.contains(childColumn.resolvedName))
+  }
+
+  def getChildColumnsExtendedWithFlatSchema(child: SqlNode, fNode: FNode): Seq[ResolvableName] = {
+    val childColumnsFilteredByFlatSchema = getChildColumnsFilteredByFlatSchema(child, fNode)
+    val childFilteredNames = childColumnsFilteredByFlatSchema.map(_.resolvedName)
+
+    // use attributes from child and add remaining from FNode
+    childColumnsFilteredByFlatSchema ++
+      fNode.flatSchema.filterNot(fNodeColumn => childFilteredNames.contains(fNodeColumn.resolvedName))
+  }
+}
 
 abstract class BinarySqlNodeFromFNode[+T <: BinaryFNode]
 (left: SqlNode, right: SqlNode)
@@ -227,7 +248,10 @@ abstract class BinarySqlNodeFromFNode[+T <: BinaryFNode]
 class GetEdges(val fNode: fplan.GetEdges,
                val options: CompilerOptions)
   extends LeafSqlNodeFromFNode[fplan.GetEdges] {
+
   assert(options.gTop.isEmpty)
+
+  override def output: Seq[ResolvableName] = fNode.flatSchema
 
   override def innerSql: String = getGetEdgesSql(fNode, options)
 }
@@ -240,7 +264,7 @@ class GetEdgesWithGTop(val fNode: fplan.GetEdges,
   val (missingProperties, sqlCode) = getGetEdgesSql(fNode, options, edgeTuple)
   val missingPropertiesCasted: Set[ResolvableName] = missingProperties.toSet
 
-  override def output: Seq[ResolvableName] = super.output.filterNot(missingPropertiesCasted.contains)
+  override def output: Seq[ResolvableName] = fNode.flatSchema.filterNot(missingPropertiesCasted.contains)
 
   override def innerSql: String = sqlCode
 }
@@ -298,6 +322,8 @@ class GetVertices(val fNode: fplan.GetVertices,
                   val options: CompilerOptions)
   extends LeafSqlNodeFromFNode[fplan.GetVertices] {
 
+  override def output: Seq[ResolvableName] = fNode.flatSchema
+
   val vertexTable = "vertex"
   val vertexIdColumn = "vertex_id"
 
@@ -349,7 +375,7 @@ class GetVerticesWithGTop(val fNode: fplan.GetVertices,
       .toSet
 
   override def output: Seq[ResolvableName] =
-    super.output.filterNot(missingRequiredProperties.contains)
+    fNode.flatSchema.filterNot(missingRequiredProperties.contains)
 
   val filteredRequiredProperties: Seq[ResolvableName] =
     fNode.requiredProperties.filterNot(missingRequiredProperties.contains)
@@ -407,10 +433,11 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
                      override val right: SqlNode,
                      val options: CompilerOptions)
   extends BinarySqlNodeFromFNode[fplan.TransitiveJoin](left, right) {
+
   val edgesFNode = fNode.right
   val edgesSql = rightSql
 
-  val edgeListAttribute = fNode.nnode.edgeList
+  val edgeListAttribute = fNode.edgeList
   val edgeListName = getQuotedColumnName(edgesFNode.nnode.edge)
   val edgesFromVertexName = getQuotedColumnName(edgesFNode.nnode.src)
   val edgesToVertexName = getQuotedColumnName(edgesFNode.nnode.trg)
@@ -423,6 +450,17 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
       s"WHERE array_length($edgeListName) >= $lowerBound"
     else
       ""
+
+  override def output: Seq[ResolvableName] = {
+    val leftNamesAndExcludedName =
+      left.output.map(_.resolvedName) :+
+        edgeListAttribute.resolvedName :+
+        currentFromColumnResolvedName :+
+        edgeIdColumnResolvedName
+
+    (left.output :+ edgeListAttribute) ++
+      right.output.filterNot(rightCol => leftNamesAndExcludedName.contains(rightCol.resolvedName))
+  }
 
   val upperBoundConstraint =
     if (edgeListAttribute.maxHops.isDefined)
@@ -465,7 +503,9 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
 
 object TransitiveJoin extends SqlNodeCreator2[fplan.TransitiveJoin] {
   val currentFromColumnName = "current_from"
+  val currentFromColumnResolvedName = Some(types.TResolvedNameValue(currentFromColumnName, currentFromColumnName))
   val edgeIdColumnName = "edge_id"
+  val edgeIdColumnResolvedName = Some(types.TResolvedNameValue(edgeIdColumnName, edgeIdColumnName))
 
   override def create(fNode: fplan.TransitiveJoin,
                       left: SqlNode,
@@ -480,9 +520,9 @@ object TransitiveJoin extends SqlNodeCreator2[fplan.TransitiveJoin] {
     val origNNode = origFNode.nnode
 
     val origSrc = origNNode.src.copy(name = currentFromColumnName,
-      resolvedName = Some(types.TResolvedNameValue(currentFromColumnName, currentFromColumnName)))
+      resolvedName = currentFromColumnResolvedName)
     val origEdge = origNNode.edge.copy(name = edgeIdColumnName,
-      resolvedName = Some(types.TResolvedNameValue(edgeIdColumnName, edgeIdColumnName)))
+      resolvedName = edgeIdColumnResolvedName)
 
     val getEdgesNNode = origNNode.copy(src = origSrc, edge = origEdge)
     val getEdgesFNode = origFNode.copy(nnode = getEdgesNNode)
@@ -501,11 +541,16 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
                    val options: CompilerOptions)
   extends BinarySqlNodeFromFNode[fplan.EquiJoinLike](left, right) {
 
-  val leftColumns = fNode.left.flatSchema.map(getQuotedColumnName)
-  val rightColumns = fNode.right.flatSchema.map(getQuotedColumnName)
+  val leftColumns = left.output.map(getQuotedColumnName)
+  val rightColumns = right.output.map(getQuotedColumnName)
 
   // prefer columns from  the left query, because in left outer join the right ones may contain NULL
-  val resultColumns =
+  override def output: Seq[ResolvableName] = {
+    val leftNames = left.output.map(_.resolvedName)
+    left.output ++ right.output.filterNot(rightCol => leftNames.contains(rightCol.resolvedName))
+  }
+
+  val resultColumnsPart =
     (leftColumns.map(leftQueryName + "." + _) ++
       (rightColumns.toSet -- leftColumns).map(rightQueryName + "." + _))
       .mkString(", ")
@@ -538,7 +583,7 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
   }
 
   override def innerSql: String =
-    i"""SELECT $resultColumns FROM
+    i"""SELECT $resultColumnsPart FROM
        |  $leftSql AS $leftQueryName
        |  $joinType JOIN
        |  $rightSql AS $rightQueryName
@@ -659,6 +704,9 @@ class Projection(val fNode: fplan.Projection,
                  override val child: SqlNode,
                  val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.Projection](child) {
+
+  override def output: Seq[ResolvableName] = childColumnsExtendedWithFlatSchema
+
   val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
 
   override def innerSql: String =
@@ -771,6 +819,8 @@ class Grouping(val fNode: fplan.Grouping,
                val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.Grouping](child) {
 
+  override def output: Seq[ResolvableName] = childColumnsExtendedWithFlatSchema
+
   val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
   val projectionSql = getProjectionSql(renamePairs, childSql, options)
   val groupByColumns = (fNode.nnode.aggregationCriteria ++ fNode.requiredProperties).map(getSql(_, options))
@@ -796,6 +846,8 @@ class Unwind(val fNode: fplan.Unwind,
              override val child: SqlNode,
              val options: CompilerOptions)
   extends UnarySqlNodeFromFNode[fplan.Unwind](child) {
+
+  override def output: Seq[ResolvableName] = childColumnsExtendedWithFlatSchema
 
   val renamePairs: Seq[(String, String)] = fNode.nnode.output.map {
     case unwindAttribute: UnwindAttribute =>
@@ -929,6 +981,8 @@ class Create(val fNode: fplan.Create,
   val attribute = fNode.nnode.attribute.asInstanceOf[ElementAttribute]
   val typePrefix: String = graphElementTypeString(attribute)
   val newElementColumnName = getQuotedColumnName(attribute)
+
+  override def output: Seq[ResolvableName] = child.output :+ attribute
 
   val generateId = GenerateId(child, typePrefix, options, newElementColumnName)
   val genVertexIdQueryName: String = generateId.sqlQueryNameToRefer
