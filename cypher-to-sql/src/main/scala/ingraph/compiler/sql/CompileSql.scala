@@ -9,7 +9,7 @@ import ingraph.model.expr._
 import ingraph.model.fplan.FNode
 import ingraph.model.misc.{Function, FunctionCategory}
 import ingraph.model.{fplan, nplan}
-import org.apache.spark.sql.catalyst.expressions.{BinaryComparison, BinaryOperator, CaseWhen, Expression, IsNotNull, IsNull, Literal, Not, Pmod}
+import org.apache.spark.sql.catalyst.expressions.{And, BinaryComparison, BinaryOperator, CaseWhen, EqualTo, Expression, IsNotNull, IsNull, Literal, Not, Pmod}
 import org.apache.spark.sql.types.{DoubleType, LongType, StringType}
 import org.cytosm.common.gtop.GTop
 import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, ImplementationNode, TraversalHop}
@@ -19,7 +19,7 @@ import org.opencypher.tools.tck.constants.TCKQueries
 import scala.collection.JavaConverters._
 
 object CompileSql {
-  val vertexTypeSqlName = "vertex_type"
+  val vertexTableIdPostfix = "_type"
   val edgeTypeSqlName = "edge_type"
 
   def escapeQuotes(name: String, toBeDoubled: String = "\"") = name.replace(toBeDoubled, toBeDoubled + toBeDoubled)
@@ -33,7 +33,10 @@ object CompileSql {
     '"' + escapeQuotes(name) + '"'
 
   def getQuotedColumnName(resolvableName: ResolvableName): String =
-    getQuotedColumnName(resolvableName.resolvedName.get.resolvedName)
+    getQuotedColumnName(resolvableName, "")
+
+  def getQuotedColumnName(resolvableName: ResolvableName, postfix: String): String =
+    getQuotedColumnName(resolvableName.resolvedName.get.resolvedName + postfix)
 
   def getNodes(plan: fplan.FNode): Seq[fplan.FNode] = {
     plan.children.flatMap(getNodes) :+ plan
@@ -66,11 +69,12 @@ object CompileSql {
        |  FROM $childSql AS subquery"""
   }
 
-  /** (missing properties, SQL code) */
-  def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions,
-                     edgeTuple: (ImplementationEdge, TraversalHop, ImplementationNode, ImplementationNode))
-  : (Set[PropertyAttribute], String) = {
-    assert(node.nnode.directed, "Cannot compile undirected GetEdges. Use UnionAll instead.")
+  /** (output columns, missing properties, SQL code) */
+  def getGetEdgesSql(fNode: fplan.GetEdges, options: CompilerOptions,
+                     edgeTuple: (ImplementationEdge, TraversalHop, ImplementationNode, ImplementationNode),
+                     fNodeOutputs: Seq[ResolvableName])
+  : (Seq[ResolvableName], String) = {
+    assert(fNode.nnode.directed, "Cannot compile undirected GetEdges. Use UnionAll instead.")
     val (edge, traversalHop, sourceNode, destinationNode) = edgeTuple
 
     assert(sourceNode.getId.size == 1 && destinationNode.getId.size == 1, "No support for composite keys")
@@ -119,17 +123,19 @@ object CompileSql {
     val edgeTypeId = options.gTop.get.getEdgeTypeIdMap(edgeTuple._1.getTypes.get(0))
     val edgeColumn = s"ROW($edgeTypeId, $edgeTableAlias.$fromColumn, $edgeTableAlias.$toColumn)::$edgeTypeSqlName"
 
-    val fromColumnNewName = getQuotedColumnName(node.nnode.src)
-    val edgeColumnNewName = getQuotedColumnName(node.nnode.edge)
-    val toColumnNewName = getQuotedColumnName(node.nnode.trg)
+    val fromColumnNewName = getQuotedColumnName(fNode.nnode.src)
+    val fromTableIdColumnName = getQuotedColumnName(fNode.nnode.src, vertexTableIdPostfix)
+    val edgeColumnNewName = getQuotedColumnName(fNode.nnode.edge)
+    val toColumnNewName = getQuotedColumnName(fNode.nnode.trg)
+    val toTableIdColumnName = getQuotedColumnName(fNode.nnode.trg, vertexTableIdPostfix)
 
     val propertiesWithTablesAndMissing =
-      node.requiredProperties.map {
+      fNode.requiredProperties.map {
         case prop@PropertyAttribute(propName, element, _) => {
           val (tableName, attributes) = element match {
-            case vertex: VertexAttribute if vertex.resolvedName == node.nnode.src.resolvedName =>
+            case vertex: VertexAttribute if vertex.resolvedName == fNode.nnode.src.resolvedName =>
               (fromTableAlias, sourceNode.getAttributes)
-            case vertex: VertexAttribute if vertex.resolvedName == node.nnode.trg.resolvedName =>
+            case vertex: VertexAttribute if vertex.resolvedName == fNode.nnode.trg.resolvedName =>
               (toTableAlias, destinationNode.getAttributes)
             case _: EdgeAttribute =>
               (edgeTableAlias, traversalHop.getAttributes)
@@ -169,37 +175,53 @@ object CompileSql {
       ++ (if (destinationRestrictions.nonEmpty) Some(toTableAlias) else None)
       // We already have the edgeTable. No need to join again.
       - edgeTableAlias)
+
+    val fromTableName = traversalHop.getSourceTableName
+    val toTableName = traversalHop.getDestinationTableName
+
     val joinVertexTablesPart =
       extraTablesToJoin.map { tableAlias =>
-        val sourceTableName = getQuotedColumnName(traversalHop.getSourceTableName)
+        val sourceTableNameEscaped = getQuotedColumnName(fromTableName)
         val joinSourceColumn = fromColumn
         val sourceColumn = getQuotedColumnName(traversalHop.getSourceTableColumn)
 
-        val destinationTableName = getQuotedColumnName(traversalHop.getDestinationTableName)
+        val destinationTableNameEscaped = getQuotedColumnName(toTableName)
         val destinationColumn = getQuotedColumnName(traversalHop.getDestinationTableColumn)
         val joinDestinationColumn = toColumn
 
         if (tableAlias == fromTableAlias)
-          s"JOIN $sourceTableName $fromTableAlias ON ($fromTableAlias.$sourceColumn = $edgeTableAlias.$joinSourceColumn)"
+          s"JOIN $sourceTableNameEscaped $fromTableAlias ON ($fromTableAlias.$sourceColumn = $edgeTableAlias.$joinSourceColumn)"
         else if (tableAlias == toTableAlias)
-          s"JOIN $destinationTableName $toTableAlias ON ($edgeTableAlias.$joinDestinationColumn = $toTableAlias.$destinationColumn)"
+          s"JOIN $destinationTableNameEscaped $toTableAlias ON ($edgeTableAlias.$joinDestinationColumn = $toTableAlias.$destinationColumn)"
         else
           throw new NoSuchElementException("Unexpected table: " + tableAlias);
       }
         .mkString("\n")
 
     val vertexTableIdMap = options.gTop.get.getVertexTableIdMap
-    val fromTableId = vertexTableIdMap(traversalHop.getSourceTableName)
-    val toTableId = vertexTableIdMap(traversalHop.getDestinationTableName)
+    val fromTableId = vertexTableIdMap(fromTableName)
+    val toTableId = vertexTableIdMap(toTableName)
 
     val sql =
-      i"""SELECT ROW($fromTableId, $edgeTableAlias.$fromColumn)::$vertexTypeSqlName AS $fromColumnNewName, $edgeColumn AS $edgeColumnNewName, ROW($toTableId, $edgeTableAlias.$toColumn)::$vertexTypeSqlName AS $toColumnNewName$commaBeforeExtraColumns
+      i"""SELECT $edgeTableAlias.$fromColumn AS $fromColumnNewName, $fromTableId AS $fromTableIdColumnName, $edgeColumn AS $edgeColumnNewName, $edgeTableAlias.$toColumn AS $toColumnNewName, $toTableId AS $toTableIdColumnName$commaBeforeExtraColumns
          |  $extraColumnsPart
          |  FROM $edgeTable $edgeTableAlias
          |    $joinVertexTablesPart
          |$restrictions"""
 
-    missingProperties -> sql
+    val outputColumns = fNodeOutputs
+      .filterNot(missingProperties.toSet[ResolvableName].contains)
+      .flatMap {
+        _ match {
+          case fNode.src =>
+            VertexColumnWithSeparateTableId(fNode.src, VertexTableIdColumn(fNode.src, fromTableName, fromTableId)).getBothColumns
+          case fNode.trg =>
+            VertexColumnWithSeparateTableId(fNode.trg, VertexTableIdColumn(fNode.trg, toTableName, toTableId)).getBothColumns
+          case column => Seq(column)
+        }
+      }
+
+    outputColumns -> sql
   }
 
   def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions): String = {
@@ -307,6 +329,24 @@ object CompileSql {
           val distinctPart = if (node.isDistinct) "DISTINCT " else ""
 
           functionName + "(" + distinctPart + parametersString + ")"
+        }
+        case EqualTo(VertexColumnWithSeparateTableId(v1, idColumn1), VertexColumnWithSeparateTableId(v2, idColumn2)) => {
+          getSql(And(EqualTo(idColumn1, idColumn2), EqualTo(v1, v2)), options)
+        }
+        case EqualTo
+          (
+          SubqueryAttributeReference(subquery1, VertexColumnWithSeparateTableId(v1, idColumn1)),
+          SubqueryAttributeReference(subquery2, VertexColumnWithSeparateTableId(v2, idColumn2)))
+        => {
+          getSql(
+            And(
+              EqualTo(
+                SubqueryAttributeReference(subquery1, idColumn1),
+                SubqueryAttributeReference(subquery2, idColumn2)),
+              EqualTo(
+                SubqueryAttributeReference(subquery1, v1),
+                SubqueryAttributeReference(subquery2, v2))),
+            options)
         }
         case node: BinaryOperator => {
           // convert Literals to JSON only if they are compared to JSON results
