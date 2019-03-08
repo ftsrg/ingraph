@@ -7,7 +7,7 @@ import ingraph.compiler.sql.GTopExtension._
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.Production.{getSqlRecursively, withQueryNamePrefix}
 import ingraph.compiler.sql.SqlNodeCreator._
-import ingraph.compiler.sql.TransitiveJoin._
+import ingraph.compiler.sql.TransitiveJoinConstants._
 import ingraph.compiler.sql.UnarySqlNodeFromFNode.getChildColumnsExtendedWithFlatSchema
 import ingraph.compiler.sql.VertexColumnWithSeparateTableId.ensureVertexAndIdColumnsBothPresent
 import ingraph.model.expr._
@@ -514,13 +514,15 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
        |$lowerBoundConstraint"""
 }
 
-object TransitiveJoin extends SqlNodeCreator2[fplan.TransitiveJoin] {
+object TransitiveJoinConstants {
   val currentFromColumnName = "current_from"
   val currentFromColumnResolvedName = Some(types.TResolvedNameValue(currentFromColumnName, currentFromColumnName))
   val edgeIdColumnName = "edge_id"
   val edgeIdColumnResolvedName = Some(types.TResolvedNameValue(edgeIdColumnName, edgeIdColumnName))
   val nextFromColumnName = "next_from"
+}
 
+object TransitiveJoin extends SqlNodeCreator2[fplan.TransitiveJoin] {
   override def create(fNode: fplan.TransitiveJoin,
                       left: SqlNode,
                       right: SqlNode,
