@@ -22,4 +22,14 @@ object Database {
 
     id
   }
+
+  def asd(id: String): Unit = {
+
+    val session: IngraphQueryHandler = sessionStore.get(id)
+    session.registerDeltaHandler {
+      
+    }
+
+    return
+  }
 }

@@ -1,21 +1,25 @@
 package ingraph.debugger.backend
 
 import akka.actor.ActorSystem
+import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.ExceptionHandler
 import akka.stream.ActorMaterializer
-import ingraph.compiler.exceptions.CompilerException
+import akka.stream.scaladsl.Source
 import ingraph.debugger.Database
-import spray.json.{DefaultJsonProtocol, PrettyPrinter, RootJsonFormat}
+import spray.json.{DefaultJsonProtocol, RootJsonFormat}
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.io.StdIn
 
 // Required trait to make JSON serialization/deserialization automatic
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit val registerSuccessMessageFormat: RootJsonFormat[RegisterSuccessMessage] = jsonFormat1(RegisterSuccessMessage)
-  implicit val errorMessageFormat: RootJsonFormat[ErrorMessage] = jsonFormat1(ErrorMessage)
+  implicit val registerMessage: RootJsonFormat[RegisterMessage] = jsonFormat1(RegisterMessage)
+  implicit val registerSuccessMessageFormat: RootJsonFormat[RegisterSuccessMessage] = jsonFormat2(RegisterSuccessMessage)
+  implicit val errorMessageFormat: RootJsonFormat[ErrorMessage] = jsonFormat2(ErrorMessage)
 }
 
 object Webserver extends JsonSupport {
@@ -27,20 +31,41 @@ object Webserver extends JsonSupport {
 
     println("Starting server")
 
-    val route = {
+    val exceptionHandler: ExceptionHandler = ExceptionHandler {
+      case e: Exception =>
+        println(e.getMessage)
+        complete(ErrorMessage("FAIL", e.getMessage))
+    }
+
+    val registerPath = {
       path("registerQuery") {
-        parameter("query") { query =>
-          try {
-            val id = Database.registerQuery(query)
-            complete(RegisterSuccessMessage(id))
-          } catch {
-            case ex: CompilerException => complete(ErrorMessage(ex.message))
+        post {
+          entity(as[RegisterMessage]) { reg =>
+            println(s"Registration request for ${reg.definition}")
+            val id = Database.registerQuery(reg.definition)
+            complete(RegisterSuccessMessage("OK", id))
           }
         }
       }
     }
 
-    val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
+    val notificationPath = {
+      path("notification") {
+        parameter('id, 'id) { id =>
+          Database.asd(id)
+
+          Source.
+        }
+      }
+    }
+
+    val route: Route = cors() {
+      handleExceptions(exceptionHandler) {
+        registerPath
+      }
+    }
+
+    val bindingFuture = Http().bindAndHandle(route, "localhost", 8081)
     StdIn.readLine()
 
     bindingFuture
