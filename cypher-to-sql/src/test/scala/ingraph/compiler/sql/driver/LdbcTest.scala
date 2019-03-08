@@ -103,6 +103,7 @@ object LdbcTest {
     "cities-with-residents",
     "knows-undirected",
     "tag-tagclass",
+    "transitive-join",
     "getedges-post",
     "getedges-comment",
     "getedges-message",
