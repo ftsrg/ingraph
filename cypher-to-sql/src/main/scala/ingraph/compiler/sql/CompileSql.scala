@@ -6,6 +6,7 @@ import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
 import ingraph.compiler.sql.driver.ValueJsonConversion
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
+import ingraph.model.expr.types.TResolvedNameValue
 import ingraph.model.fplan.FNode
 import ingraph.model.misc.{Function, FunctionCategory}
 import ingraph.model.{fplan, nplan}
@@ -36,7 +37,10 @@ object CompileSql {
     getQuotedColumnName(resolvableName, "")
 
   def getQuotedColumnName(resolvableName: ResolvableName, postfix: String): String =
-    getQuotedColumnName(resolvableName.resolvedName.get.resolvedName + postfix)
+    getQuotedColumnName(resolvableName.resolvedName.get, postfix)
+
+  def getQuotedColumnName(resolvedNameValue: TResolvedNameValue, postfix: String = ""): String =
+    getQuotedColumnName(resolvedNameValue.resolvedName + postfix)
 
   def getNodes(plan: fplan.FNode): Seq[fplan.FNode] = {
     plan.children.flatMap(getNodes) :+ plan
@@ -69,13 +73,12 @@ object CompileSql {
        |  FROM $childSql AS subquery"""
   }
 
-  /** (output columns, missing properties, SQL code) */
   def getGetEdgesSql(fNode: fplan.GetEdges, options: CompilerOptions,
                      edgeTuple: (ImplementationEdge, TraversalHop, ImplementationNode, ImplementationNode),
                      fNodeOutputs: Seq[ResolvableName])
-  : (Seq[ResolvableName], String) = {
+  : (VertexColumnWithSeparateTableId, EdgeAttribute, VertexColumnWithSeparateTableId, Seq[ResolvableName], String) = {
     assert(fNode.nnode.directed, "Cannot compile undirected GetEdges. Use UnionAll instead.")
-    val (edge, traversalHop, sourceNode, destinationNode) = edgeTuple
+    val (implEdge, traversalHop, sourceNode, destinationNode) = edgeTuple
 
     assert(sourceNode.getId.size == 1 && destinationNode.getId.size == 1, "No support for composite keys")
     val sourceIdColumn = sourceNode.getId.get(0).getColumnName
@@ -209,19 +212,23 @@ object CompileSql {
          |    $joinVertexTablesPart
          |$restrictions"""
 
+    val src = VertexColumnWithSeparateTableId(fNode.src, VertexTableIdColumn(fNode.src, fromTableName, fromTableId))
+    val trg = VertexColumnWithSeparateTableId(fNode.trg, VertexTableIdColumn(fNode.trg, toTableName, toTableId))
+    val edge = fNode.edge
+
     val outputColumns = fNodeOutputs
       .filterNot(missingProperties.toSet[ResolvableName].contains)
       .flatMap {
         _ match {
           case fNode.src =>
-            VertexColumnWithSeparateTableId(fNode.src, VertexTableIdColumn(fNode.src, fromTableName, fromTableId)).getBothColumns
+            src.getBothColumns
           case fNode.trg =>
-            VertexColumnWithSeparateTableId(fNode.trg, VertexTableIdColumn(fNode.trg, toTableName, toTableId)).getBothColumns
+            trg.getBothColumns
           case column => Seq(column)
         }
       }
 
-    outputColumns -> sql
+    (src, edge, trg, outputColumns, sql)
   }
 
   def getGetEdgesSql(node: fplan.GetEdges, options: CompilerOptions): String = {
@@ -275,6 +282,10 @@ object CompileSql {
       node match {
         case IsNull(child) => IsNull(ExpressionWrapper(child, options)).sql
         case IsNotNull(child) => IsNotNull(ExpressionWrapper(child, options)).sql
+        case EmptyArray(dataTypeString) =>
+          s"ARRAY[]::$dataTypeString[]"
+        case ConcatArray(left, right) =>
+          s"(${getSql(left, options)} || ${getSql(right, options)})"
         case ListExpression(list) if options.gTop.isDefined =>
           // use Postgres array if GTop is present
           // TODO: make array types consistent
@@ -296,6 +307,8 @@ object CompileSql {
              |END"""
         }
         case node: ReturnItem => getSql(node.child, options)
+        case AliasWithResolvableName(child, newResolvedName, false) =>
+          getSql(child, options) + " AS " + getQuotedColumnName(newResolvedName)
         case FunctionInvocation(Function.LENGTH, Seq(edgeListAttribute: EdgeListAttribute), false) =>
           "array_length(" + getSql(edgeListAttribute, options) + ")"
         case FunctionInvocation(Function.NODE_HAS_LABELS, (vertexColumn: VertexAttribute) :: (vertexLabelSet: VertexLabelSet) :: Nil, false) => {

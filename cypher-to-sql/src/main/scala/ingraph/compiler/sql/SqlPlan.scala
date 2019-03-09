@@ -11,6 +11,7 @@ import ingraph.compiler.sql.TransitiveJoinConstants._
 import ingraph.compiler.sql.UnarySqlNodeFromFNode.getChildColumnsExtendedWithFlatSchema
 import ingraph.compiler.sql.VertexColumnWithSeparateTableId.ensureVertexAndIdColumnsBothPresent
 import ingraph.model.expr._
+import ingraph.model.expr.types.TResolvedNameValue
 import ingraph.model.fplan
 import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
@@ -248,23 +249,33 @@ abstract class BinarySqlNodeFromFNode[+T <: BinaryFNode]
 (left: SqlNode, right: SqlNode)
   extends BinarySqlNode(left, right) with WithFNodeOrigin[T] {}
 
+trait GetEdgesCommon extends LeafSqlNode {
+  val src: ResolvableName
+  val edge: EdgeAttribute
+  val trg: ResolvableName
+}
+
 class GetEdges(val fNode: fplan.GetEdges,
                val options: CompilerOptions)
-  extends LeafSqlNodeFromFNode[fplan.GetEdges] {
+  extends LeafSqlNodeFromFNode[fplan.GetEdges] with GetEdgesCommon {
 
   assert(options.gTop.isEmpty)
 
   override def originalOutputColumns: Seq[ResolvableName] = fNode.flatSchema
 
   override def innerSql: String = getGetEdgesSql(fNode, options)
+
+  override val src: VertexAttribute = fNode.src
+  override val edge: EdgeAttribute = fNode.edge
+  override val trg: VertexAttribute = fNode.trg
 }
 
 class GetEdgesWithGTop(val fNode: fplan.GetEdges,
                        val options: CompilerOptions,
                        val edgeTuple: (ImplementationEdge, TraversalHop, ImplementationNode, ImplementationNode))
-  extends LeafSqlNodeFromFNode[fplan.GetEdges] {
+  extends LeafSqlNodeFromFNode[fplan.GetEdges] with GetEdgesCommon {
 
-  val (outputColumns, sqlCode) = getGetEdgesSql(fNode, options, edgeTuple, fNode.flatSchema)
+  val (src, edge, trg, outputColumns, sqlCode) = getGetEdgesSql(fNode, options, edgeTuple, fNode.flatSchema)
 
   override def originalOutputColumns: Seq[ResolvableName] = outputColumns
 
@@ -454,7 +465,6 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
   val edgeListName = getQuotedColumnName(edgesFNode.nnode.edge)
   val edgesFromVertexName = getQuotedColumnName(edgesFNode.nnode.src)
   val edgesToVertexName = getQuotedColumnName(edgesFNode.nnode.trg)
-  val leftNodeColumnNames = left.output.map(getQuotedColumnName).mkString(", ")
   val joinNodeColumnNames = output.map(getQuotedColumnName).mkString(",\n")
 
   val lowerBound = edgeListAttribute.minHops.getOrElse(1)
@@ -468,6 +478,7 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
     val leftNamesAndExcludedName =
       left.output.map(_.resolvedName) :+
         edgeListAttribute.resolvedName :+
+        // exclude temporary columns from GetEdges
         currentFromColumnResolvedName :+
         edgeIdColumnResolvedName
 
@@ -485,24 +496,39 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
     if (options.gTop.isDefined) edgeTypeSqlName
     else "BIGINT"
 
+  val rightSrcOriginal = originalOutputColumns.find(_.resolvedName == edgesFNode.src.resolvedName).get
+  val rightEdgeOriginal = originalOutputColumns.find(_.resolvedName == edgeListAttribute.resolvedName).get
+  val rightEdgeRenamed = right.output.find(_.resolvedName == edgeIdColumnResolvedName).get
+  val rightTrg = originalOutputColumns.find(_.resolvedName == edgesFNode.trg.resolvedName).get
+
+  private val edgesTrgFromSubquery = SubqueryAttributeReference(edgesSubqueryName, rightTrg)
+
+  val nonRecursiveColumns =
+    (left.output
+      :+ AliasWithResolvableName(EmptyArray(edgeType), edgeListAttribute.resolvedName.get, alreadySubstituted = false)
+      :+ AliasWithResolvableName(rightSrcOriginal, TResolvedNameValue(nextFromColumnName, nextFromColumnName), alreadySubstituted = false)
+      :+ AliasWithResolvableName(rightSrcOriginal, rightTrg.resolvedName.get, alreadySubstituted = false))
+  val nonRecursiveColumnsPart = nonRecursiveColumns.map(getSql(_, options)).mkString(",\n")
+
+  val recursiveColumns =
+    (left.output
+      :+ AliasWithResolvableName(ConcatArray(edgeListAttribute, rightEdgeRenamed), edgeListAttribute.resolvedName.get, alreadySubstituted = false)
+      :+ AliasWithResolvableName(edgesTrgFromSubquery, TResolvedNameValue(nextFromColumnName, nextFromColumnName), alreadySubstituted = false)
+      :+ edgesTrgFromSubquery)
+  val recursiveColumnsPart = recursiveColumns.map(getSql(_, options)).mkString(",\n")
+
   override def innerSql: String =
     i"""WITH RECURSIVE recursive_table AS (
        |  (
        |    WITH left_query AS (SELECT * FROM $leftSqlNamedIfSubquery)
        |    SELECT
-       |      *,
-       |      ARRAY [] :: $edgeType [] AS $edgeListName,
-       |      $edgesFromVertexName AS $nextFromColumnName,
-       |      $edgesFromVertexName AS $edgesToVertexName
+       |      $nonRecursiveColumnsPart
        |    FROM left_query
        |  )
        |  UNION ALL
        |  SELECT
-       |    $leftNodeColumnNames,
-       |    ($edgeListName|| $edgeIdColumnName) AS $edgeListName,
-       |    edges.$edgesToVertexName AS $nextFromColumnName,
-       |    edges.$edgesToVertexName
-       |  FROM $edgesSql AS edges
+       |    $recursiveColumnsPart
+       |  FROM $edgesSql AS $edgesSubqueryName
        |    INNER JOIN recursive_table
        |      ON $edgeIdColumnName <> ALL ($edgeListName) -- edge uniqueness
        |         AND $nextFromColumnName = $currentFromColumnName
@@ -519,6 +545,7 @@ object TransitiveJoinConstants {
   val currentFromColumnResolvedName = Some(types.TResolvedNameValue(currentFromColumnName, currentFromColumnName))
   val edgeIdColumnName = "edge_id"
   val edgeIdColumnResolvedName = Some(types.TResolvedNameValue(edgeIdColumnName, edgeIdColumnName))
+  val edgesSubqueryName = "edges"
   val nextFromColumnName = "next_from"
 }
 
