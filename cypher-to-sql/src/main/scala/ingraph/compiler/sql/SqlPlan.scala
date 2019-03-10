@@ -2,9 +2,9 @@ package ingraph.compiler.sql
 
 import ingraph.compiler.sql.CompileSql._
 import ingraph.compiler.sql.Create.graphElementTypeString
-import ingraph.compiler.sql.EquiJoinLike.{leftQueryName, rightQueryName}
 import ingraph.compiler.sql.GTopExtension._
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
+import ingraph.compiler.sql.JoinLike.{leftQueryName, rightQueryName}
 import ingraph.compiler.sql.Production.{getSqlRecursively, withQueryNamePrefix}
 import ingraph.compiler.sql.SqlNodeCreator._
 import ingraph.compiler.sql.TransitiveJoinConstants._
@@ -15,7 +15,7 @@ import ingraph.model.expr.types.TResolvedNameValue
 import ingraph.model.fplan
 import ingraph.model.fplan.{BinaryFNode, FNode, LeafFNode, UnaryFNode}
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
-import org.apache.spark.sql.catalyst.expressions.{And, EqualTo, Literal}
+import org.apache.spark.sql.catalyst.expressions.{And, EqualTo, Expression, Literal}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.cytosm.common.gtop.implementation.relational.{ImplementationEdge, ImplementationNode, TraversalHop}
 
@@ -585,19 +585,54 @@ object TransitiveJoin extends SqlNodeCreator2[fplan.TransitiveJoin] {
   }
 }
 
+trait JoinLike extends BinarySqlNode {
+  // TODO: apply for TransitiveJoin?
+
+  val leftNames = left.output.map(_.resolvedName).toSet
+  val rightNames = right.output.map(_.resolvedName).toSet
+  val commonNames = leftNames intersect rightNames
+
+  val columnConditions: Set[Expression] = commonNames
+    .map { attrName =>
+      val leftAttr = left.output.find(_.resolvedName == attrName).get
+      val rightAttr = right.output.find(_.resolvedName == attrName).get
+
+      EqualTo(SubqueryAttributeReference(leftQueryName, leftAttr), SubqueryAttributeReference(rightQueryName, rightAttr))
+    }
+
+  def joinConditions: Set[Expression] = columnConditions
+
+  def conjunctedConditions =
+    if (joinConditions.isEmpty)
+      Literal.TrueLiteral
+    else
+      joinConditions.tail.fold(joinConditions.head)(And)
+
+  // TODO: remove "ON TRUE" if possible
+  def joinConditionPart =
+    if (joinConditions.isEmpty)
+      "TRUE"
+    else
+      getSql(conjunctedConditions, options)
+}
+
+object JoinLike {
+  val leftQueryName = "left_query"
+  val rightQueryName = "right_query"
+}
+
 // EquiJoinLike nodes except TransitiveJoin
 class EquiJoinLike(val fNode: fplan.EquiJoinLike,
                    override val left: SqlNode,
                    override val right: SqlNode,
                    val options: CompilerOptions)
-  extends BinarySqlNodeFromFNode[fplan.EquiJoinLike](left, right) {
+  extends BinarySqlNodeFromFNode[fplan.EquiJoinLike](left, right) with JoinLike {
 
   val leftColumns = left.output.map(getQuotedColumnName)
   val rightColumns = right.output.map(getQuotedColumnName)
 
   // prefer columns from  the left query, because in left outer join the right ones may contain NULL
   override def originalOutputColumns: Seq[ResolvableName] = {
-    val leftNames = left.output.map(_.resolvedName)
     left.output ++ right.output.filterNot(rightCol => leftNames.contains(rightCol.resolvedName))
   }
 
@@ -606,27 +641,13 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
       (rightColumns.toSet -- leftColumns).map(rightQueryName + "." + _))
       .mkString(", ")
 
+  // TODO: Should attributes in theta condition be replaced with their SQL counterpart?
   val thetaCondition = fNode match {
     case node: fplan.ThetaLeftOuterJoin => Some(node.nnode.condition)
     case _ => None
   }
-  val columnConditions = fNode.commonAttributes
-    .map(attr =>
-      EqualTo(SubqueryAttributeReference(leftQueryName, attr), SubqueryAttributeReference(rightQueryName, attr)))
-  val joinConditions = columnConditions ++ thetaCondition
 
-  val conjunctedConditions =
-    if (joinConditions.isEmpty)
-      Literal.TrueLiteral
-    else
-      joinConditions.tail.fold(joinConditions.head)(And)
-
-  // TODO: remove "ON TRUE" if possible
-  val joinConditionPart =
-    if (joinConditions.isEmpty)
-      "ON TRUE"
-    else
-      i"ON ${getSql(conjunctedConditions, options)}"
+  override def joinConditions = super.joinConditions ++ thetaCondition
 
   val joinType = fNode match {
     case _: fplan.Join => "INNER"
@@ -639,14 +660,10 @@ class EquiJoinLike(val fNode: fplan.EquiJoinLike,
        |  $leftSql AS $leftQueryName
        |  $joinType JOIN
        |  $rightSql AS $rightQueryName
-       |$joinConditionPart"""
+       |ON $joinConditionPart"""
 }
 
 object EquiJoinLike extends SqlNodeCreator2[fplan.EquiJoinLike] {
-
-  private val leftQueryName = "left_query"
-  private val rightQueryName = "right_query"
-
   override def create(fNode: fplan.EquiJoinLike,
                       left: SqlNode,
                       right: SqlNode,
@@ -659,18 +676,9 @@ class AntiJoin(val fNode: fplan.AntiJoin,
                override val left: SqlNode,
                override val right: SqlNode,
                val options: CompilerOptions)
-  extends BinarySqlNodeFromFNode[fplan.AntiJoin](left, right) {
+  extends BinarySqlNodeFromFNode[fplan.AntiJoin](left, right) with JoinLike {
 
   override def originalOutputColumns: Seq[ResolvableName] = left.output
-
-  val columnConditions = fNode.commonAttributes
-    .map(getQuotedColumnName)
-    .map(name => s"left_query.$name = right_query.$name")
-
-  val conditionPart = if (columnConditions.isEmpty)
-    "TRUE"
-  else
-    columnConditions.mkString(" AND\n")
 
   override def innerSql: String =
     i"""SELECT * FROM
@@ -678,7 +686,7 @@ class AntiJoin(val fNode: fplan.AntiJoin,
        |WHERE NOT EXISTS(
        |  SELECT * FROM
        |    $rightSql AS right_query
-       |  WHERE $conditionPart
+       |  WHERE $joinConditionPart
        |  )"""
 }
 
