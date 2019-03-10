@@ -9,7 +9,7 @@ import ingraph.compiler.sql.Production.{getSqlRecursively, withQueryNamePrefix}
 import ingraph.compiler.sql.SqlNodeCreator._
 import ingraph.compiler.sql.TransitiveJoinConstants._
 import ingraph.compiler.sql.UnarySqlNodeFromFNode.getChildColumnsExtendedWithFlatSchema
-import ingraph.compiler.sql.VertexColumnWithSeparateTableId.ensureVertexAndIdColumnsBothPresent
+import ingraph.compiler.sql.VertexColumnWithSeparateTableId.{ensureVertexAndIdColumnsBothPresent, ensureVertexAndIdColumnsBothPresentInExpression}
 import ingraph.model.expr._
 import ingraph.model.expr.types.TResolvedNameValue
 import ingraph.model.fplan
@@ -504,17 +504,19 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
   private val edgesTrgFromSubquery = SubqueryAttributeReference(edgesSubqueryName, rightTrg)
 
   val nonRecursiveColumns =
-    (left.output
-      :+ AliasWithResolvableName(EmptyArray(edgeType), edgeListAttribute.resolvedName.get, alreadySubstituted = false)
-      :+ AliasWithResolvableName(rightSrcOriginal, TResolvedNameValue(nextFromColumnName, nextFromColumnName), alreadySubstituted = false)
-      :+ AliasWithResolvableName(rightSrcOriginal, rightTrg.resolvedName.get, alreadySubstituted = false))
+    ensureVertexAndIdColumnsBothPresentInExpression(
+      left.output
+        :+ AliasWithNewResolvableName(EmptyArray(edgeType), edgeListAttribute.resolvedName.get)
+        :+ AliasWithNewResolvableName(rightSrcOriginal, TResolvedNameValue(nextFromColumnName, nextFromColumnName))
+        :+ AliasWithNewResolvableName(rightSrcOriginal, rightTrg.resolvedName.get))
   val nonRecursiveColumnsPart = nonRecursiveColumns.map(getSql(_, options)).mkString(",\n")
 
   val recursiveColumns =
-    (left.output
-      :+ AliasWithResolvableName(ConcatArray(edgeListAttribute, rightEdgeRenamed), edgeListAttribute.resolvedName.get, alreadySubstituted = false)
-      :+ AliasWithResolvableName(edgesTrgFromSubquery, TResolvedNameValue(nextFromColumnName, nextFromColumnName), alreadySubstituted = false)
-      :+ edgesTrgFromSubquery)
+    ensureVertexAndIdColumnsBothPresentInExpression(
+      left.output
+        :+ AliasWithNewResolvableName(ConcatArray(edgeListAttribute, rightEdgeRenamed), edgeListAttribute.resolvedName.get)
+        :+ AliasWithNewResolvableName(edgesTrgFromSubquery, TResolvedNameValue(nextFromColumnName, nextFromColumnName))
+        :+ edgesTrgFromSubquery)
   val recursiveColumnsPart = recursiveColumns.map(getSql(_, options)).mkString(",\n")
 
   override def innerSql: String =

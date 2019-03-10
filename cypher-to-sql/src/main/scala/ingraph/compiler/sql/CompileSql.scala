@@ -307,7 +307,7 @@ object CompileSql {
              |END"""
         }
         case node: ReturnItem => getSql(node.child, options)
-        case AliasWithResolvableName(child, newResolvedName, false) =>
+        case AliasWithNewResolvableName(child, newResolvedName) =>
           getSql(child, options) + " AS " + getQuotedColumnName(newResolvedName)
         case FunctionInvocation(Function.LENGTH, Seq(edgeListAttribute: EdgeListAttribute), false) =>
           "array_length(" + getSql(edgeListAttribute, options) + ")"

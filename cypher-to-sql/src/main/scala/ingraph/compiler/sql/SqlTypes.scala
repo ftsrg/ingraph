@@ -5,7 +5,7 @@ import ingraph.model.expr.types.{TResolvedName, TResolvedNameValue}
 import ingraph.model.expr.{AttributeBase, ExpressionBase, ResolvableName, VertexAttribute}
 import org.apache.spark.sql.catalyst.expressions.{BinaryExpression, Expression, LeafExpression, UnaryExpression}
 
-abstract class SqlColumnWrapper
+trait SqlColumnWrapper
   extends AttributeBase with ResolvableName
 
 case class VertexColumnWithSeparateTableId(vertexAttribute: VertexAttribute, vertexTableIdColumn: VertexTableIdColumn)
@@ -19,14 +19,53 @@ case class VertexColumnWithSeparateTableId(vertexAttribute: VertexAttribute, ver
 }
 
 object VertexColumnWithSeparateTableId {
-  def ensureVertexAndIdColumnsBothPresent(columns: Seq[ResolvableName]): Seq[ResolvableName] = {
-    // remove id columns without vertex column
-    // add id columns for every vertex column
-    columns.flatMap {
+  val postfixPattern = "_[^_]+$".r
+
+  def replaceColumn(column: ResolvableName): Seq[ResolvableName] =
+    column match {
+      // remove id columns without vertex column
+      // add id columns for every vertex column
       case vertexColumn@VertexColumnWithSeparateTableId(_, idColumn) => Seq(vertexColumn, idColumn)
       case _: VertexTableIdColumn => Seq()
       case col => Seq(col)
     }
+
+  private def replaceAliasOfResolvableName(alias: AliasWithNewResolvableName): Seq[AliasWithNewResolvableName] = {
+    alias match {
+      case AliasWithNewResolvableName(column: ResolvableName, newResolvedName) => {
+        val newColumns = replaceColumn(column)
+
+        newColumns.map { newCol =>
+          val postfix = postfixPattern.findFirstIn(newCol.resolvedName.get.resolvedName).getOrElse("")
+
+          alias.copy(child = newCol,
+            newResolvedName = TResolvedNameValue(newResolvedName.baseName + postfix, newResolvedName.resolvedName + postfix))
+        }
+      }
+    }
+  }
+
+  def replaceExpression(expr: Expression): Seq[Expression] =
+    expr match {
+      case resolvableName: ResolvableName => replaceColumn(resolvableName)
+      case alias@AliasWithNewResolvableName(subqueryRef: SubqueryAttributeReference, newResolvedName) =>
+        // unwrap subquery reference, transform, and wrap back
+        replaceAliasOfResolvableName(alias.copy(child = subqueryRef.child))
+          .map(newAlias =>
+            newAlias.copy(child = subqueryRef.copy(child = newAlias.child.asInstanceOf[ResolvableName])))
+      case alias@AliasWithNewResolvableName(_: ResolvableName, _) =>
+        replaceAliasOfResolvableName(alias)
+      case attrRef: SubqueryAttributeReference =>
+        replaceColumn(attrRef.child).map(newCol => attrRef.copy(child = newCol))
+      case _ => Seq(expr)
+    }
+
+  def ensureVertexAndIdColumnsBothPresent(columns: Seq[ResolvableName]): Seq[ResolvableName] = {
+    columns.flatMap(replaceColumn)
+  }
+
+  def ensureVertexAndIdColumnsBothPresentInExpression(columns: Seq[Expression]): Seq[Expression] = {
+    columns.flatMap(replaceExpression)
   }
 }
 
@@ -42,11 +81,8 @@ case class VertexTableIdColumn(vertexAttribute: VertexAttribute,
 case class SubqueryAttributeReference(subqueryName: String, child: ResolvableName)
   extends UnaryExpression with ExpressionBase
 
-case class AliasWithResolvableName(child: Expression, newResolvedName: TResolvedNameValue, alreadySubstituted: Boolean) extends SqlColumnWrapper {
-  override def resolvedName: TResolvedName = Some(newResolvedName)
-
-  override def name: String = newResolvedName.baseName
-}
+case class AliasWithNewResolvableName(child: Expression, newResolvedName: TResolvedNameValue)
+  extends UnaryExpression with ExpressionBase
 
 case class EmptyArray(dataTypeString: String) extends LeafExpression with ExpressionBase
 
