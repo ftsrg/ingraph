@@ -21,14 +21,38 @@ case class VertexColumnWithSeparateTableId(vertexAttribute: VertexAttribute, ver
 object VertexColumnWithSeparateTableId {
   val postfixPattern = "_[^_]+$".r
 
+  def replaceWithVertexAttribute(columns: Seq[ResolvableName]): Seq[ResolvableName] = {
+    columns.map { originalCol =>
+      val unwrappedCol = RenamedColumn.unwrap(originalCol)
+
+      unwrappedCol match {
+        case v: VertexColumnWithSeparateTableId => RenamedColumn.rename(v.vertexAttribute, originalCol)
+        case _ => originalCol
+      }
+    }
+  }
+
   def replaceColumn(column: ResolvableName): Seq[ResolvableName] =
     column match {
       // remove id columns without vertex column
       // add id columns for every vertex column
-      case vertexColumn@VertexColumnWithSeparateTableId(_, idColumn) => Seq(vertexColumn, idColumn)
+      case vertexColumn@VertexColumnWithSeparateTableId(_, idColumn) => Seq(idColumn, vertexColumn)
       case _: VertexTableIdColumn => Seq()
+      case renamedColumn: RenamedColumn => replaceRenamedColumn(renamedColumn)
       case col => Seq(col)
     }
+
+  def replaceRenamedColumn(renamedColumn: RenamedColumn): Seq[ResolvableName] = {
+    val newName = renamedColumn.resolvedName.get
+    val unwrappedColumn = RenamedColumn.unwrap(renamedColumn)
+    val newColumns = replaceColumn(unwrappedColumn)
+
+    newColumns.map { newCol =>
+      val postfix = postfixPattern.findFirstIn(newCol.resolvedName.get.resolvedName).getOrElse("")
+
+      RenamedColumn.rename(newCol, TResolvedNameValue(newName.baseName + postfix, newName.resolvedName + postfix))
+    }
+  }
 
   private def replaceAliasOfResolvableName(alias: AliasWithNewResolvableName): Seq[AliasWithNewResolvableName] = {
     alias match {
@@ -83,6 +107,33 @@ case class SubqueryAttributeReference(subqueryName: String, child: ResolvableNam
 
 case class AliasWithNewResolvableName(child: Expression, newResolvedName: TResolvedNameValue)
   extends UnaryExpression with ExpressionBase
+
+case class RenamedColumn(originalColumn: ResolvableName, override val name: String, override val resolvedName: TResolvedName)
+  extends SqlColumnWrapper
+
+object RenamedColumn {
+  def apply(originalColumn: ResolvableName, newResolvedName: TResolvedNameValue): RenamedColumn = {
+    RenamedColumn(originalColumn, newResolvedName.baseName, Some(newResolvedName))
+  }
+
+  def unwrap(column: ResolvableName): ResolvableName = {
+    column match {
+      case RenamedColumn(originalColumn, _, _) => unwrap(originalColumn)
+      case _ => column
+    }
+  }
+
+  def rename(column: ResolvableName, newNameFrom: ResolvableName): ResolvableName = {
+    rename(column, newNameFrom.resolvedName.get)
+  }
+
+  def rename(column: ResolvableName, newResolvedNameValue: TResolvedNameValue): ResolvableName = {
+    if (column.resolvedName.get == newResolvedNameValue)
+      column
+    else
+      RenamedColumn(column, newResolvedNameValue)
+  }
+}
 
 case class EmptyArray(dataTypeString: String) extends LeafExpression with ExpressionBase
 

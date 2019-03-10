@@ -3,6 +3,7 @@ package ingraph.compiler.sql
 import ingraph.compiler.sql.CompileSql.{getNodes, getSql}
 import ingraph.compiler.sql.GTopExtension._
 import ingraph.compiler.sql.IndentationPreservingStringInterpolation._
+import ingraph.compiler.sql.VertexColumnWithSeparateTableId.replaceWithVertexAttribute
 import ingraph.compiler.sql.driver.ValueJsonConversion
 import ingraph.compiler.test.CompilerTest
 import ingraph.model.expr._
@@ -343,14 +344,26 @@ object CompileSql {
 
           functionName + "(" + distinctPart + parametersString + ")"
         }
-        case EqualTo(VertexColumnWithSeparateTableId(v1, idColumn1), VertexColumnWithSeparateTableId(v2, idColumn2)) => {
-          getSql(And(EqualTo(idColumn1, idColumn2), EqualTo(v1, v2)), options)
+        case EqualTo(left: ResolvableName, right: ResolvableName)
+          if RenamedColumn.unwrap(left).isInstanceOf[VertexColumnWithSeparateTableId]
+            && RenamedColumn.unwrap(right).isInstanceOf[VertexColumnWithSeparateTableId] => {
+
+          val leftColumns = replaceWithVertexAttribute(VertexColumnWithSeparateTableId.replaceColumn(left))
+          val rightColumns = replaceWithVertexAttribute(VertexColumnWithSeparateTableId.replaceColumn(right))
+          assert(leftColumns.size == rightColumns.size)
+
+          val pairs = leftColumns.zip(rightColumns)
+          val equalTos = pairs.map(EqualTo.tupled)
+          val condition = equalTos.tail.foldLeft[Expression](equalTos.head)(And)
+
+          getSql(condition, options)
         }
         case EqualTo
           (
           SubqueryAttributeReference(subquery1, VertexColumnWithSeparateTableId(v1, idColumn1)),
           SubqueryAttributeReference(subquery2, VertexColumnWithSeparateTableId(v2, idColumn2)))
         => {
+          // TODO: handle RenamedColumn inside SubqueryAttributeReference
           getSql(
             And(
               EqualTo(

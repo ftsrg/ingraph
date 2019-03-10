@@ -497,17 +497,20 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
     else "BIGINT"
 
   val rightSrcOriginal = originalOutputColumns.find(_.resolvedName == edgesFNode.src.resolvedName).get
+  val rightSrcRenamed = right.output.find(_.resolvedName == currentFromColumnResolvedName).get
   val rightEdgeOriginal = originalOutputColumns.find(_.resolvedName == edgeListAttribute.resolvedName).get
   val rightEdgeRenamed = right.output.find(_.resolvedName == edgeIdColumnResolvedName).get
   val rightTrg = originalOutputColumns.find(_.resolvedName == edgesFNode.trg.resolvedName).get
 
   private val edgesTrgFromSubquery = SubqueryAttributeReference(edgesSubqueryName, rightTrg)
 
+  val nextFromColumn = RenamedColumn(rightTrg, nextFromColumnResolvedName)
+
   val nonRecursiveColumns =
     ensureVertexAndIdColumnsBothPresentInExpression(
       left.output
         :+ AliasWithNewResolvableName(EmptyArray(edgeType), edgeListAttribute.resolvedName.get)
-        :+ AliasWithNewResolvableName(rightSrcOriginal, TResolvedNameValue(nextFromColumnName, nextFromColumnName))
+        :+ AliasWithNewResolvableName(rightSrcOriginal, nextFromColumnResolvedName)
         :+ AliasWithNewResolvableName(rightSrcOriginal, rightTrg.resolvedName.get))
   val nonRecursiveColumnsPart = nonRecursiveColumns.map(getSql(_, options)).mkString(",\n")
 
@@ -515,9 +518,11 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
     ensureVertexAndIdColumnsBothPresentInExpression(
       left.output
         :+ AliasWithNewResolvableName(ConcatArray(edgeListAttribute, rightEdgeRenamed), edgeListAttribute.resolvedName.get)
-        :+ AliasWithNewResolvableName(edgesTrgFromSubquery, TResolvedNameValue(nextFromColumnName, nextFromColumnName))
+        :+ AliasWithNewResolvableName(edgesTrgFromSubquery, nextFromColumnResolvedName)
         :+ edgesTrgFromSubquery)
   val recursiveColumnsPart = recursiveColumns.map(getSql(_, options)).mkString(",\n")
+
+  val compareFromColumnsPart = getSql(EqualTo(nextFromColumn, rightSrcRenamed), options)
 
   override def innerSql: String =
     i"""WITH RECURSIVE recursive_table AS (
@@ -533,7 +538,7 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
        |  FROM $edgesSql AS $edgesSubqueryName
        |    INNER JOIN recursive_table
        |      ON $edgeIdColumnName <> ALL ($edgeListName) -- edge uniqueness
-       |         AND $nextFromColumnName = $currentFromColumnName
+       |         AND $compareFromColumnsPart
        |         $upperBoundConstraint
        |)
        |SELECT
@@ -549,6 +554,7 @@ object TransitiveJoinConstants {
   val edgeIdColumnResolvedName = Some(types.TResolvedNameValue(edgeIdColumnName, edgeIdColumnName))
   val edgesSubqueryName = "edges"
   val nextFromColumnName = "next_from"
+  val nextFromColumnResolvedName = TResolvedNameValue(nextFromColumnName, nextFromColumnName)
 }
 
 object TransitiveJoin extends SqlNodeCreator2[fplan.TransitiveJoin] {
