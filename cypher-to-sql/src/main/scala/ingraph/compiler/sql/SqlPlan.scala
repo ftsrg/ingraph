@@ -229,18 +229,19 @@ abstract class UnarySqlNodeFromFNode[+T <: UnaryFNode]
 }
 
 object UnarySqlNodeFromFNode {
-  def getChildColumnsFilteredByFlatSchema(child: SqlNode, fNode: FNode): Seq[ResolvableName] = {
+  def getSqlSpecificChildColumnsFilteredByFlatSchema(child: SqlNode, fNode: FNode): Seq[ResolvableName] = {
     val fNodeNames = fNode.flatSchema.map(_.resolvedName)
 
-    child.output.filter(childColumn => fNodeNames.contains(childColumn.resolvedName))
+    child.output.filter(childColumn =>
+      childColumn.isInstanceOf[SqlColumnWrapper] && fNodeNames.contains(childColumn.resolvedName))
   }
 
   def getChildColumnsExtendedWithFlatSchema(child: SqlNode, fNode: FNode): Seq[ResolvableName] = {
-    val childColumnsFilteredByFlatSchema = getChildColumnsFilteredByFlatSchema(child, fNode)
-    val childFilteredNames = childColumnsFilteredByFlatSchema.map(_.resolvedName)
+    val childSqlColumnsFilteredByFlatSchema = getSqlSpecificChildColumnsFilteredByFlatSchema(child, fNode)
+    val childFilteredNames = childSqlColumnsFilteredByFlatSchema.map(_.resolvedName)
 
     // use attributes from child and add remaining from FNode
-    childColumnsFilteredByFlatSchema ++
+    childSqlColumnsFilteredByFlatSchema ++
       fNode.flatSchema.filterNot(fNodeColumn => childFilteredNames.contains(fNodeColumn.resolvedName))
   }
 }
@@ -770,7 +771,7 @@ class Projection(val fNode: fplan.Projection,
 
   override def originalOutputColumns: Seq[ResolvableName] = childColumnsExtendedWithFlatSchema
 
-  val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
+  val renamePairs = output.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
 
   override def innerSql: String =
     getProjectionSql(renamePairs, childSql, options)
@@ -884,9 +885,21 @@ class Grouping(val fNode: fplan.Grouping,
 
   override def originalOutputColumns: Seq[ResolvableName] = childColumnsExtendedWithFlatSchema
 
-  val renamePairs = fNode.flatSchema.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
+  val renamePairs = output.map(proj => (getSql(proj, options), getQuotedColumnName(proj)))
   val projectionSql = getProjectionSql(renamePairs, childSql, options)
-  val groupByColumns = (fNode.nnode.aggregationCriteria ++ fNode.requiredProperties).map(getSql(_, options))
+
+  val groupByExpressions: Seq[Expression] = fNode.nnode.aggregationCriteria ++ fNode.requiredProperties
+  val outputNames = output.map(_.resolvedName)
+  val groupByColumns =
+  // use columns from output, if available, and make sure it contains extra nodes too
+    VertexColumnWithSeparateTableId.ensureVertexAndIdColumnsBothPresentInExpression(
+      groupByExpressions
+        .map {
+          case res: ResolvableName if outputNames.contains(res.resolvedName) =>
+            output.find(_.resolvedName == res.resolvedName).get
+          case expr => expr
+        })
+      .map(getSql(_, options))
   val groupByPart = if (groupByColumns.isEmpty)
     ""
   else
