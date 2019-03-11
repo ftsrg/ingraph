@@ -628,15 +628,18 @@ trait JoinLike extends BinarySqlNode {
 
   def joinConditions: Set[Expression] = columnConditions
 
+  // remove VertexTableIdColumn since getSql adds it
+  def joinConditionsFiltered: Set[Expression] = joinConditions.filterNot(_.isInstanceOf[VertexTableIdColumn])
+
   def conjunctedConditions =
-    if (joinConditions.isEmpty)
+    if (joinConditionsFiltered.isEmpty)
       Literal.TrueLiteral
     else
-      joinConditions.tail.fold(joinConditions.head)(And)
+      joinConditionsFiltered.tail.fold(joinConditionsFiltered.head)(And)
 
   // TODO: remove "ON TRUE" if possible
   def joinConditionPart =
-    if (joinConditions.isEmpty)
+    if (joinConditionsFiltered.isEmpty)
       "TRUE"
     else
       getSql(conjunctedConditions, options)
