@@ -19,7 +19,7 @@ case class VertexColumnWithSeparateTableId(vertexAttribute: VertexAttribute, ver
 }
 
 object VertexColumnWithSeparateTableId {
-  val postfixPattern = "_[^_#]+$".r
+  val postfixPattern = """\$[^$]+$""".r
 
   def replaceWithVertexAttribute(columns: Seq[ResolvableName]): Seq[ResolvableName] = {
     columns.map { originalCol =>

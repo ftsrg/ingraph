@@ -21,7 +21,7 @@ import org.opencypher.tools.tck.constants.TCKQueries
 import scala.collection.JavaConverters._
 
 object CompileSql {
-  val vertexTableIdPostfix = "_type"
+  val vertexTableIdPostfix = "$type"
   val edgeTypeSqlName = "edge_type"
 
   def escapeQuotes(name: String, toBeDoubled: String = "\"") = name.replace(toBeDoubled, toBeDoubled + toBeDoubled)
