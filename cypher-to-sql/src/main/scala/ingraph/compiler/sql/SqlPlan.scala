@@ -480,7 +480,7 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
       left.output.map(_.resolvedName) :+
         edgeListAttribute.resolvedName :+
         // exclude temporary columns from GetEdges
-        currentFromColumnResolvedName :+
+        currentCommonVertexResolvedName :+
         edgeIdColumnResolvedName
 
     (left.output :+ edgeListAttribute) ++
@@ -497,33 +497,45 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
     if (options.gTop.isDefined) edgeTypeSqlName
     else "BIGINT"
 
-  val rightSrcOriginal = originalOutputColumns.find(_.resolvedName == edgesFNode.src.resolvedName).get
-  val rightSrcRenamed = right.output.find(_.resolvedName == currentFromColumnResolvedName).get
+  private val rightNames = right.output.map(_.resolvedName)
+  private val edgesFNodeSrc = edgesFNode.src.resolvedName
+  private val edgesFNodeTrg = edgesFNode.trg.resolvedName
+  // the original name of the common vertex is not present in the right GetEdges-like node
+  val (commonVertexOriginalName, disjointVertexOriginalName) =
+    if (rightNames.contains(edgesFNodeTrg))
+      (edgesFNodeSrc, edgesFNodeTrg)
+    else if (rightNames.contains(edgesFNodeSrc))
+      (edgesFNodeTrg, edgesFNodeSrc)
+    else
+      throw new AssertionError()
+
+  val commonVertexOriginal = originalOutputColumns.find(_.resolvedName == commonVertexOriginalName).get
+  val commonVertexRenamed = right.output.find(_.resolvedName == currentCommonVertexResolvedName).get
   val rightEdgeOriginal = originalOutputColumns.find(_.resolvedName == edgeListAttribute.resolvedName).get
   val rightEdgeRenamed = right.output.find(_.resolvedName == edgeIdColumnResolvedName).get
-  val rightTrg = originalOutputColumns.find(_.resolvedName == edgesFNode.trg.resolvedName).get
+  val disjointVertex = originalOutputColumns.find(_.resolvedName == disjointVertexOriginalName).get
 
-  private val edgesTrgFromSubquery = SubqueryAttributeReference(edgesSubqueryName, rightTrg)
+  private val disjointVertexFromSubquery = SubqueryAttributeReference(edgesSubqueryName, disjointVertex)
 
-  val nextFromColumn = RenamedColumn(rightTrg, nextFromColumnResolvedName)
+  val nextCommonVertex = RenamedColumn(disjointVertex, nextVertexResolvedName)
 
   val nonRecursiveColumns =
     ensureVertexAndIdColumnsBothPresentInExpression(
       left.output
         :+ AliasWithNewResolvableName(EmptyArray(edgeType), edgeListAttribute.resolvedName.get)
-        :+ AliasWithNewResolvableName(rightSrcOriginal, nextFromColumnResolvedName)
-        :+ AliasWithNewResolvableName(rightSrcOriginal, rightTrg.resolvedName.get))
+        :+ AliasWithNewResolvableName(commonVertexOriginal, nextVertexResolvedName)
+        :+ AliasWithNewResolvableName(commonVertexOriginal, disjointVertex.resolvedName.get))
   val nonRecursiveColumnsPart = nonRecursiveColumns.map(getSql(_, options)).mkString(",\n")
 
   val recursiveColumns =
     ensureVertexAndIdColumnsBothPresentInExpression(
       left.output
         :+ AliasWithNewResolvableName(ConcatArray(edgeListAttribute, rightEdgeRenamed), edgeListAttribute.resolvedName.get)
-        :+ AliasWithNewResolvableName(edgesTrgFromSubquery, nextFromColumnResolvedName)
-        :+ edgesTrgFromSubquery)
+        :+ AliasWithNewResolvableName(disjointVertexFromSubquery, nextVertexResolvedName)
+        :+ disjointVertexFromSubquery)
   val recursiveColumnsPart = recursiveColumns.map(getSql(_, options)).mkString(",\n")
 
-  val compareFromColumnsPart = getSql(EqualTo(nextFromColumn, rightSrcRenamed), options)
+  val compareFromColumnsPart = getSql(EqualTo(nextCommonVertex, commonVertexRenamed), options)
 
   override def innerSql: String =
     i"""WITH RECURSIVE recursive_table AS (
@@ -549,13 +561,13 @@ class TransitiveJoin(val fNode: fplan.TransitiveJoin,
 }
 
 object TransitiveJoinConstants {
-  val currentFromColumnName = "current_from"
-  val currentFromColumnResolvedName = Some(types.TResolvedNameValue(currentFromColumnName, currentFromColumnName))
+  val currentCommonVertexName = "current_common_vertex"
+  val currentCommonVertexResolvedName = Some(types.TResolvedNameValue(currentCommonVertexName, currentCommonVertexName))
   val edgeIdColumnName = "edge_id"
   val edgeIdColumnResolvedName = Some(types.TResolvedNameValue(edgeIdColumnName, edgeIdColumnName))
   val edgesSubqueryName = "edges"
-  val nextFromColumnName = "next_from"
-  val nextFromColumnResolvedName = TResolvedNameValue(nextFromColumnName, nextFromColumnName)
+  val nextCommonVertexName = "next_common_vertex"
+  val nextVertexResolvedName = TResolvedNameValue(nextCommonVertexName, nextCommonVertexName)
 }
 
 object TransitiveJoin extends SqlNodeCreator2[fplan.TransitiveJoin] {
@@ -571,12 +583,25 @@ object TransitiveJoin extends SqlNodeCreator2[fplan.TransitiveJoin] {
     val origFNode = fNode.right
     val origNNode = origFNode.nnode
 
-    val origSrc = origNNode.src.copy(name = currentFromColumnName,
-      resolvedName = currentFromColumnResolvedName)
-    val origEdge = origNNode.edge.copy(name = edgeIdColumnName,
+    // commonAttributes of TransitiveJoin contains the attribute from the left, which can differ from its right counterpart
+    val (commonVertexFromJoin: VertexAttribute) :: Nil = fNode.commonAttributes
+    val commonVertexName = commonVertexFromJoin.resolvedName
+    val commonVertex = origNNode.output.find(_.resolvedName == commonVertexName).get.asInstanceOf[VertexAttribute]
+
+    val renamedCommonVertex = commonVertex.copy(name = currentCommonVertexName,
+      resolvedName = currentCommonVertexResolvedName)
+    val renamedEdge = origNNode.edge.copy(name = edgeIdColumnName,
       resolvedName = edgeIdColumnResolvedName)
 
-    val getEdgesNNode = origNNode.copy(src = origSrc, edge = origEdge)
+    val getEdgesNNode = (
+      if (commonVertex == origNNode.src)
+        origNNode.copy(src = renamedCommonVertex)
+      else if (commonVertex == origNNode.trg)
+        origNNode.copy(trg = renamedCommonVertex)
+      else throw new AssertionError()
+      )
+      .copy(edge = renamedEdge)
+
     val getEdgesFNode = origFNode.copy(nnode = getEdgesNNode)
 
     val (left, _) = SqlNode(fNode.left, options)
