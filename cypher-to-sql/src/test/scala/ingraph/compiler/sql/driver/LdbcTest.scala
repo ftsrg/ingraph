@@ -104,6 +104,7 @@ object LdbcTest {
     "knows-undirected",
     "tag-tagclass",
     "transitive-join",
+    "transitive-join_reversed",
     "getedges-post",
     "getedges-comment",
     "getedges-message",
