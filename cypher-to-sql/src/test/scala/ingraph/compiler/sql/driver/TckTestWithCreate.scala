@@ -238,6 +238,7 @@ object TckTestWithCreate {
     "Variable length optional relationships with bound nodes",
     "Variable length optional relationships with length predicates",
     "Variable length pattern checking labels on endnodes",
+    "Variable length patterns and nulls",
     "Variable length pattern with label predicate on both sides",
     "Walk alternative relationships",
     "WHERE after WITH can filter on top of an aggregation",

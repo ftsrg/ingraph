@@ -122,6 +122,7 @@ object LdbcTest {
     "interactive-complex-11",
     "interactive-complex-12",
     "interactive-short-1",
+    "interactive-short-2",
     "interactive-short-3",
     "interactive-short-4",
     "interactive-short-5",
